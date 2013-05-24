@@ -10,8 +10,17 @@
 		);
 	
 		function __construct() {
+		
+			if( file_exists( './mysql.ini' ) ) {
+				$credenciales = parse_ini_file( './mysql.ini' );
+			} else {
+				$credenciales = array(
+					'usuario' => 'root',
+					'clave' => ''
+				);
+			}
 
-			$this->db = new mysqli( 'localhost', 'root', '123456', 'is2' );
+			$this->db = new mysqli( 'localhost', $credenciales['usuario'], $credenciales['clave'], 'is2' );
 			if( $this->db->connect_errno ) {
 			    die( 'Failed to connect to MySQL: ' . $this->db->connect_error );
 			}
