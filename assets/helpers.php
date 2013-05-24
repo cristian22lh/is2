@@ -2,7 +2,7 @@
 
 	function __redirect( $url ) {
 		if( $url{0} !== '/' ) {
-			$url = '/' + $url;
+			$url = '/' . $url;
 		}
 		header( 'Location: ' . $url );
 		die();

@@ -17,7 +17,7 @@
 				box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 				margin: 20px auto 0;
 				max-width: 300px;
-				padding: 10px 20px;
+				padding: 0 20px;
 			}
 			.alert {
 				width: 350px;
@@ -27,6 +27,9 @@
 			}
 			.alert + div .form-signin {
 				margin: 0 auto;
+			}
+			.container {
+				text-align: center;
 			}
 		</style>
 	</head>
