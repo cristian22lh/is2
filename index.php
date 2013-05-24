@@ -35,15 +35,12 @@
 	
 	// routeamos
 	if( !$page || $page == 'login' ) {
-		// vamos a login
 		require './controllers/login.php';
 		
 	} else if( $page == 'logout' ) {
-		__endSession();
-		__redirect( '/login' );
+		require './controllers/logout.php';
 	
 	} else if( $page == 'app' ) {
-		// vamos a app
 		require './controllers/app.php';
 	}
 
