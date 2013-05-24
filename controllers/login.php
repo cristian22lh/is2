@@ -23,6 +23,7 @@
 		// hubo exito en la query
 		if( count( $res ) == 1 ) {
 			__setUserLogin();
+			__setUsername( $username );
 			// tiro un redirect a la aplicacion
 			__redirect( '/app' );
 	

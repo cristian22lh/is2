@@ -12,6 +12,9 @@
 		return $_SERVER['REQUEST_METHOD'] == 'POST' && count( $_POST ) > 0 && count( array_diff( $fields, array_keys( $_POST ) ) ) == 0;
 	}
 	
+// ************** /
+// TODO ESTO HACE USO $_SESSION
+// ************* /
 	function __initSession() {
 		session_start();
 	}
@@ -20,16 +23,20 @@
 		session_destroy();
 	}
 	
-	function __setSessionItem( $key, $value ) {
-		$_SESSION[$key] = $value;
-	}
-	
 	function __isUserLogged() {
 		return isset( $_SESSION['is_logged'] ) && $_SESSION['is_logged'] == true;
 	}
 	
 	function __setUserLogin() {
 		$_SESSION['is_logged'] = true;
+	}
+	
+	function __setUsername( $username ) {
+		$_SESSION['username'] = $username;
+	}
+	
+	function __getUsername() {
+		return $_SESSION['username'];
 	}
 
 ?>

@@ -13,6 +13,9 @@
 		</style>
 	</head>
 	<body>
+		<p>Hola, <?php echo $username; ?></p>
+		<a href="/logout">Salir</a>
+		
 		<div class="container">
 			
 		</div> <!-- /container -->

@@ -4,9 +4,9 @@ is2
 
 Configuración
 ============
-Para andar el proyecto se necesita tener los servicios *PHP*, *MySQL* y *Apache* funcionando. Yo recomiendo [WampServer](http://sourceforge.net/projects/wampserver/?source=directory)
+Para andar el proyecto se necesita tener los servicios **PHP**, **MySQL** y **Apache** funcionando. Yo recomiendo [WampServer](http://sourceforge.net/projects/wampserver/?source=directory)
 
-WampServer va a aparecer al lado del reloj de Window su iconito, donde desde ahi le vamos a meter mano para hacer andar la aplicación.
+**WampServer** va a aparecer al lado del reloj de Window su iconito, donde desde ahi le vamos a meter mano para hacer andar la aplicación.
 
 httpd.conf
 -------------

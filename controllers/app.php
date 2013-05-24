@@ -1,9 +1,7 @@
 <?php
-
-	// lo mando a login
-	if( !__isUserLogged() ) {
-		__redirect( '/' );
-	}
+	
+	// defaults variales que son usadas en la view
+	$username = __getUsername();
 	
 	// render
 	require './views/app.php';
