@@ -32,8 +32,8 @@ MySQL credenciales
 -------------------------
 Corran el archivo `mysql.credenciales.bat`, este les creara un archivo llamdo `mysql.ini` necesario para que PHP pueda acceder a la base de datos, si estan usando WampServer, las credenciales que deben usar son:
 
-	* usuario: `root`
-	* clave: ` ` (nada)
+1. usuario: `root`
+2. clave: ` ` (nada)
 	
 Creando la base de datos y sus tablas
 ------------------------------------------------
@@ -41,7 +41,7 @@ Para crear la base de datos que usara la aplicacion con sus respectivas tablas t
 
 `mysql -u %usuario% -p%clave% < _init_db.sql`
 
-* Tiene que reemplazar el `%usuario%` por el usuario de como se accede a la base de datos, por ejemplo **root** y si **no hay password** omitan el `-p`
+* Tiene que reemplazar el `%usuario%` y `%clave%` por los datos de usuario y contraseña que se usan para acceder a la base de datos, por ejemplo **root** como usuario y si **no hay password** omitan el `-p`
 * Sepan que deben estar ubicado desde la consola en la carpeta donde esta el archivo `_init_db.sql`
 
 Por ejemplo le quedaria algo como esto:
@@ -54,7 +54,7 @@ Pongan desde su navegador la direccion `localhost` ó `127.0.0.1`, van a tener q
 
 Los usuarios son dos:
 
-	* root
-	* admin
+1. root
+2. admin
 	
-Para ambos sus password son *123456*
+Para ambos sus password son **123456**
