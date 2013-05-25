@@ -29,7 +29,7 @@
 		
 		
 		function exec( $query, $replacements ) {
-		
+			
 			$res = array();
 			
 			if( $stmt = $this->db->prepare( $query ) ) {
