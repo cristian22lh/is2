@@ -1,11 +1,23 @@
 <?php
 	
-	// defaults variales que son usadas en la view
+// TODAS ESTAS SON VARIABLES QUE DEBEN USARSE EN LA VIEW //
 	$username = __getUsername();
 	$currentDate = date( 'd/m/Y' );
 	
+	$confirmSuccess = false;
+	$confirmError = false;
+	// aca veo si vengo de un confirmar-turno, el cual fue ok
+	// con esto mostrare los respectivos mensajes de exito...
+	if( __issetGETField( 'exito', 'confirmar-turno' ) ) {
+		$confirmSuccess = true;
+		
+	// ... o de error
+	} else if( __issetGETField( 'error', 'confirmar-turno' ) ) {
+		$confirmError = true;
+	}
+	
 	// debo tomar todos las rows con fecha actual + 7 dias
-	$turnos = $db->exec( 
+	$turnos = $db->select( 
 		'
 			SELECT 
 				t.id, t.fecha, t.hora, t.estado,

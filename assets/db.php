@@ -8,7 +8,8 @@
 			'string' => 's',
 			'double' => 'd'
 		);
-	
+		
+	// *** PUBLIC METHODS *** //
 		function __construct() {
 		
 			if( file_exists( './mysql.ini' ) ) {
@@ -27,18 +28,13 @@
 
 		}
 		
-		
-		function exec( $query, $replacements ) {
+		function select( $query, $replacements ) {
 			
 			$res = array();
 			
 			if( $stmt = $this->db->prepare( $query ) ) {
-				
-				// internamente aca se hace un $stmt->bind_param()
-				$this->_bindParams( $stmt, $this->_addParams( $replacements ) );
 			
-				// ejecutamos la consultado
-				$stmt->execute();
+				$this->_executeQuery( $stmt, $replacements );
 
 				// debo conseguir el nombre de las columnas
 				$metadata = $stmt->result_metadata();
@@ -72,6 +68,31 @@
 			return $res;
 		}
 		
+		function update( $query, $replacements ) {
+		
+			$rowsAffected = 0;
+			
+			if( $stmt = $this->db->prepare( $query ) ) {
+				
+				$this->_executeQuery( $stmt, $replacements );
+				
+				$rowsAffected = $stmt->affected_rows;
+				
+				$stmt->close();
+			}
+			
+			return $rowsAffected;
+		}
+		
+	// *** PRIVATE METHODS *** //
+		private function _executeQuery( $stmt, $replacements ) {
+			// internamente aca se hace un $stmt->bind_param()
+			$this->_bindParams( $stmt, $this->_addParams( $replacements ) );
+			
+			// ejecutamos la consultado
+			$stmt->execute();
+		}
+	
 		private function _addParams( $replacements ) {
 			$types = '';
 			$this->values = array();

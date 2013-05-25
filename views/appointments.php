@@ -40,7 +40,6 @@
 		</style>
 	</head>
 	<body>
-	
 		<header>
 			<div class="alert alert-info is2-welcome">
 				Hola, <strong><?php echo $username; ?>!</strong>
@@ -49,6 +48,18 @@
 		</header>
 	
 		<div class="container">
+			<?php if( $confirmSuccess ): ?>
+			<div class="alert alert-success">
+				<a class="close" data-dismiss="alert" href="#">&times;</a>
+				¡Turno ha sido confirmado satisfactoriamente!
+			</div>
+			<?php elseif( $confirmError ): ?>
+			<div class="alert alert-error">
+				<a class="close" data-dismiss="alert" href="#">&times;</a>
+				¡No se ha podido confirmar turno! Vuelva a intentarlo.
+			</div>
+			<?php endif; ?>
+		
 			<h3>Turnos</h3>
 			<div class="alert">
 				Se muestran los turnos desde día presente (<strong><?php echo $currentDate; ?></strong>) hasta los próximos 7 días.

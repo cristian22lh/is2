@@ -15,7 +15,7 @@
 		$password = $_POST['password'];
 		
 		// vemos si el usuario existe en la db
-		$res = $db->exec(
+		$res = $db->select(
 			'SELECT id FROM usuarios WHERE usuario = ? AND clave = SHA( ? )', 
 			array( $username, $password )
 		);

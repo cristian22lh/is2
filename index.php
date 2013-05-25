@@ -34,12 +34,18 @@
 	// routeamos
 	if( $page === '/' || $page == '/iniciar-sesion' ) {
 		require './controllers/login.php';
-		
 	} else if( $page == '/cerrar-sesion' ) {
 		require './controllers/logout.php';
 	
+// *** TURNOS *** //
 	} else if( $page == '/turnos' ) {
 		require './controllers/appointments.php';
+	} else if( $page == '/turnos/confirmar' ) {
+		require './controllers/appointments.confirm.php';
+	} else if( $page == '/turnos/cancelar' ) {
+		require './controllers/appointments.cancel.php';
+	} else if( $page == '/turnos/borrar' ) {
+		require './controllers/appointments.remove.php';
 	}
 
 ?>

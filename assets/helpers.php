@@ -12,6 +12,11 @@
 		return $_SERVER['REQUEST_METHOD'] == 'POST' && count( $_POST ) > 0 && count( array_diff( $fields, array_keys( $_POST ) ) ) == 0;
 	}
 	
+	// con este function me fijo si en el $_GET, existe $_GET[$name] = $value
+	function __issetGETField( $name, $value ) {
+		return count( $_GET ) > 0 && isset( $_GET[$name] ) && $_GET[$name] == $value;
+	}
+	
 // ************** /
 // TODO ESTO HACE USO $_SESSION
 // ************* /
