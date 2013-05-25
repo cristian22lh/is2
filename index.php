@@ -20,7 +20,7 @@
 	// solo puede ser accedida por usuarios loguedaos
 	// en este array tengo las paginas QUE NO!! necesitan
 	// de que el usuario este loguedo para verlas
-	$guestPages = array( '/', 'iniciar-sesion' );
+	$guestPages = array( '/', '/iniciar-sesion' );
 	for( $i = 0, $l = count( $guestPages ); $i < $l; $i++ ) {
 		$guest = $guestPages[$i];
 		// la pagina que quiere ver el usuario no necesita

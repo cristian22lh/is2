@@ -8,7 +8,7 @@
 		<header>
 			<div class="alert alert-info is2-welcome">
 				Hola, <strong>$username</strong>
-				<a href="/logout" class="btn btn-info btn-mini">Salir</a>
+				<a href="/cerrar-sesion" class="btn btn-info btn-mini">Salir</a>
 			</div>
 			<nav class="navbar">
 				<div class="navbar-inner">
