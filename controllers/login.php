@@ -2,7 +2,7 @@
 
 	// se quiere hacer el pillo
 	if( __isUserLogged() ) {
-		__redirect( '/app' );
+		__redirect( '/turnos' );
 	}
 
 	// defaults variales que son usadas en la view

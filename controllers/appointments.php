@@ -22,6 +22,6 @@
 	);
 	
 	// render
-	require './views/app.php';
+	require './views/appointments.php';
 
 ?>
