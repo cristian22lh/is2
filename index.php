@@ -46,6 +46,8 @@
 		require './controllers/appointments.cancel.php';
 	} else if( $page == '/turnos/borrar' ) {
 		require './controllers/appointments.remove.php';
+	} else if( $page == '/turnos/reiniciar' ) {
+		require './controllers/appointments.reset.php';
 	}
 
 ?>

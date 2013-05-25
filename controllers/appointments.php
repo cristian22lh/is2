@@ -10,6 +10,8 @@
 	$cancelError = false;
 	$removeSuccess = false;
 	$removeError = false;
+	$resetSuccess = false;
+	$resetError = false;
 	// aca veo si vengo de un confirmar-turno, el cual fue ok
 	// con esto mostrare los respectivos mensajes de exito...
 	if( __issetGETField( 'exito', 'confirmar-turno' ) ) {
@@ -25,9 +27,13 @@
 	
 	} else if( __issetGETField( 'exito', 'borrar-turno' ) ) {
 		$removeSuccess = true;
-	
 	} else if( __issetGETField( 'error', 'borrar-turno' ) ) {
 		$removeError = true;
+	
+	} else if( __issetGETField( 'exito', 'reiniciar-turno' ) ) {
+		$resetSuccess = true;
+	} else if( __issetGETField( 'error', 'reiniciar-turno' ) ) {
+		$resetError = true;
 	}
 	
 	// debo tomar todos las rows con fecha actual + 7 dias

@@ -78,6 +78,16 @@
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
 				¡No se ha podido borar el turno! Vuelva a intentarlo.
 			</div>
+			<?php elseif( $resetSuccess ): ?>
+			<div class="alert alert-success">
+				<a class="close" data-dismiss="alert" href="#">&times;</a>
+				¡El turno ha sido reiniciado satisfactoriamente!
+			</div>
+			<?php elseif( $resetError ): ?>
+			<div class="alert alert-error">
+				<a class="close" data-dismiss="alert" href="#">&times;</a>
+				¡No se ha podido reiniciar el turno! Vuelva a intentarlo.
+			</div>
 			<?php endif; ?>
 		
 			<h3>Turnos</h3>
@@ -105,10 +115,10 @@
 						<td>
 						<?php if( $turno['estado'] == 'confirmado' ): ?>
 							<button class="btn btn-success disabled"><i class="icon-ok"></i> Confirmado</button>
-							<button class="btn btn-mini btn-link">Deshacer acción</button>
+							<button class="btn btn-mini btn-link is2-trigger-restore" href="#is2-modal-restore" data-toggle="modal" data-appointment-id="<?php echo $turno['id']; ?>">Deshacer acción</button>
 						<?php elseif( $turno['estado'] == 'cancelado' ): ?>
 							<button class="btn btn-warning disabled"><i class="icon-exclamation-sign"></i> Cancelado</button>
-							<button class="btn btn-mini btn-link">Deshacer acción</button>
+							<button class="btn btn-mini btn-link is2-trigger-restore" href="#is2-modal-restore" data-toggle="modal" data-appointment-id="<?php echo $turno['id']; ?>">Deshacer acción</button>
 						<?php else: ?>
 							<a class="btn is2-trigger-confirm" href="#is2-modal-confirm" data-toggle="modal" data-appointment-id="<?php echo $turno['id']; ?>">Confirmar</a>
 							<a class="btn is2-trigger-cancel" href="#is2-modal-cancel" data-toggle="modal" data-appointment-id="<?php echo $turno['id']; ?>">Cancelar</a>
@@ -159,6 +169,18 @@
 			<input type="hidden" name="id">
 		</form>
 		
+		<form method="post" action="turnos/reiniciar" id="is2-modal-restore" class="modal hide fade">
+			<div class="modal-body">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<span><strong>Sepa que si confirma, el turno volverá a su estado original, ¿desea continuar?</strong></span>
+			</div>
+			<div class="modal-footer">
+				<button class="btn" data-dismiss="modal">No</a>
+				<button class="btn btn-primary" type="submit">Sí</a>
+			</div>
+			<input type="hidden" name="id">
+		</form>
+		
 	</body>
 </html>
 <script>
@@ -172,6 +194,8 @@
 	} ).delegate( '.is2-trigger-remove', 'click', function( e ) {
 		$( '#is2-modal-remove input' ).val( $( this ).attr( 'data-appointment-id' ) );
 		
+	} ).delegate( '.is2-trigger-restore', 'click', function( e ) {
+		$( '#is2-modal-restore input' ).val( $( this ).attr( 'data-appointment-id' ) );
 	} );
 
 </script>
