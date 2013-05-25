@@ -51,12 +51,32 @@
 			<?php if( $confirmSuccess ): ?>
 			<div class="alert alert-success">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
-				¡Turno ha sido confirmado satisfactoriamente!
+				¡El turno ha sido confirmado satisfactoriamente!
 			</div>
 			<?php elseif( $confirmError ): ?>
 			<div class="alert alert-error">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
-				¡No se ha podido confirmar turno! Vuelva a intentarlo.
+				¡No se ha podido confirmar el turno! Vuelva a intentarlo.
+			</div>
+			<?php elseif( $cancelSuccess ): ?>
+			<div class="alert alert-success">
+				<a class="close" data-dismiss="alert" href="#">&times;</a>
+				¡El turno ha sido cancelado satisfactoriamente!
+			</div>
+			<?php elseif( $cancelError ): ?>
+			<div class="alert alert-error">
+				<a class="close" data-dismiss="alert" href="#">&times;</a>
+				¡No se ha podido cancelar el turno! Vuelva a intentarlo.
+			</div>
+			<?php elseif( $removeSuccess ): ?>
+			<div class="alert alert-success">
+				<a class="close" data-dismiss="alert" href="#">&times;</a>
+				¡El turno ha sido borrado satisfactoriamente!
+			</div>
+			<?php elseif( $removeError ): ?>
+			<div class="alert alert-error">
+				<a class="close" data-dismiss="alert" href="#">&times;</a>
+				¡No se ha podido borar el turno! Vuelva a intentarlo.
 			</div>
 			<?php endif; ?>
 		
@@ -106,7 +126,7 @@
 		<form method="post" action="turnos/confirmar" id="is2-modal-confirm" class="modal hide fade">
 			<div class="modal-body">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<span><strong>¿Desea confirmar turno?</strong></span>
+				<span><strong>¿Estás seguro que confirmar el turno?</strong></span>
 			</div>
 			<div class="modal-footer">
 				<button class="btn" data-dismiss="modal">No</a>
@@ -118,7 +138,7 @@
 		<form method="post" action="turnos/cancelar" id="is2-modal-cancel" class="modal hide fade">
 			<div class="modal-body">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<span><strong>¿Desea cancelar turno?</strong></span>
+				<span><strong>¿Estás seguro que desea cancelar el turno?</strong></span>
 			</div>
 			<div class="modal-footer">
 				<button class="btn" data-dismiss="modal">No</a>
@@ -130,7 +150,7 @@
 		<form method="post" action="turnos/borrar" id="is2-modal-remove" class="modal hide fade">
 			<div class="modal-body">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<span><strong>¿Desea borrar turno?</strong></span>
+				<span><strong>¿Estás seguro que desea borrar el turno?</strong></span>
 			</div>
 			<div class="modal-footer">
 				<button class="btn" data-dismiss="modal">No</a>
@@ -143,11 +163,15 @@
 </html>
 <script>
 	$( '.is2-grid' ).delegate( '.is2-trigger-confirm', 'click', function( e ) {
-		// get id turno
-		var $el = $( this ),
-			appointmentID = $el.attr( 'data-appointment-id' );
-
-		$( '#is2-modal-confirm input' ).val( appointmentID );
+		// hay que poner el turno id en input hidden
+		$( '#is2-modal-confirm input' ).val( $( this ).attr( 'data-appointment-id' ) );
+	
+	} ).delegate( '.is2-trigger-cancel', 'click', function( e ) {
+		$( '#is2-modal-cancel input' ).val( $( this ).attr( 'data-appointment-id' ) );
+	
+	} ).delegate( '.is2-trigger-remove', 'click', function( e ) {
+		$( '#is2-modal-remove input' ).val( $( this ).attr( 'data-appointment-id' ) );
+		
 	} );
 
 </script>

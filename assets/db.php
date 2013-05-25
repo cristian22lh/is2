@@ -84,6 +84,10 @@
 			return $rowsAffected;
 		}
 		
+		function delete( $query, $replacements ) {
+			return $this->update( $query, $replacements );
+		}
+		
 	// *** PRIVATE METHODS *** //
 		private function _executeQuery( $stmt, $replacements ) {
 			// internamente aca se hace un $stmt->bind_param()
