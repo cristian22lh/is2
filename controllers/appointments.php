@@ -1,4 +1,61 @@
 <?php
+
+// PIDO LOS TURNOS DEPEDIENDO LO QUE HAYA EN $_GET 
+	$orderByField = 'fecha';
+	$orderByType = 'ASC';
+	// siempre ordernamos por hora
+	$orderByTimeType = 'ASC';
+	// usada para mostrar turnos segun su estado
+	$statusValue = false;
+	// me fijo si la grid esta siendo ordenado por algun tipo de orden
+	if( __issetGETField( 'fecha', 'desc' ) ) {
+		$orderByField = 'fecha';
+		$orderByType = 'DESC';
+		
+	// notecese que no hay $orderByField = 'hora'
+	// esto es porque siempre ordenamos por hora
+	// no puede faltar nunca
+	} else if( __issetGETField( 'hora', 'desc' ) ) {
+		$orderByTimeType = 'DESC';
+
+	} else if( __issetGETField( 'medico', 'asc' ) ) {
+		$orderByField = 'm.apellidos';
+		$orderByType = 'ASC';
+	} else if( __issetGETField( 'medico', 'desc' ) ) {
+		$orderByField = 'm.apellidos';
+		$orderByType = 'DESC';
+		
+	} else if( __issetGETField( 'paciente', 'asc' ) ) {
+		$orderByField = 'm.apellidos';
+		$orderByType = 'ASC';
+	} else if( __issetGETField( 'paciente', 'desc' ) ) {
+		$orderByField = 'p.apellidos';
+		$orderByType = 'DESC';
+	
+	} else if( __issetGETField( 'estado', 'confirmados' ) ) {
+		$statusValue = 'confirmado';
+	} else if( __issetGETField( 'estado', 'cancelados' ) ) {
+		$statusValue = 'cancelado';
+	}
+	
+	// debo tomar todos las rows con fecha actual + 7 dias
+	$turnos = $db->select( 
+		'
+			SELECT 
+				t.id, t.fecha, t.hora, t.estado,
+				m.nombres AS medicoNombres, m.apellidos AS medicoApellidos,
+				p.nombres AS pacienteNombres, p.apellidos AS pacienteApellidos
+			FROM turnos AS t 
+				INNER JOIN medicos AS m 
+					ON m.id = t.idMedico 
+				INNER JOIN pacientes AS p 
+					ON p.id = t.idPaciente 
+			WHERE fecha >= ? AND fecha <= ? ' . ( $statusValue ? "AND t.estado = '$statusValue'" : '' ) . ' ' .
+			'ORDER BY ' .
+				"$orderByField $orderByType" . ( $orderByField != 'hora' ? ", t.hora $orderByTimeType" : '' )
+		,
+		array( date( 'Y-m-d' ), date( 'Y-m-d', strtotime( '+7 days' ) ) )
+	);
 	
 // TODAS ESTAS SON VARIABLES QUE DEBEN USARSE EN LA VIEW //
 	$username = __getUsername();
@@ -35,23 +92,6 @@
 	} else if( __issetGETField( 'error', 'reiniciar-turno' ) ) {
 		$resetError = true;
 	}
-	
-	// debo tomar todos las rows con fecha actual + 7 dias
-	$turnos = $db->select( 
-		'
-			SELECT 
-				t.id, t.fecha, t.hora, t.estado,
-				m.nombres AS medicoNombres, m.apellidos AS medicoApellidos,
-				p.nombres AS pacienteNombres, p.apellidos AS pacienteApellidos
-			FROM turnos AS t 
-				INNER JOIN medicos AS m 
-					ON m.id = t.idMedico 
-				INNER JOIN pacientes AS p 
-					ON p.id = t.idPaciente 
-			WHERE fecha >= ? AND fecha <= ?
-		',
-		array( date( 'Y-m-d' ), date( 'Y-m-d', strtotime( '+7 days' ) ) )
-	);
 	
 	// render
 	require './views/appointments.php';

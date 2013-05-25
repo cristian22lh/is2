@@ -29,7 +29,7 @@
 		}
 		
 		function select( $query, $replacements ) {
-			
+
 			$res = array();
 			
 			if( $stmt = $this->db->prepare( $query ) ) {
@@ -61,8 +61,8 @@
 					}
 					$i++;
 				}
+				
 				$stmt->close();
-
 			}
 			
 			return $res;
@@ -125,7 +125,7 @@
 		}
 		
 		private function _bindResult( &$stmt, &$args ) {
-			call_user_func_array( array($stmt, 'bind_result') , $args );
+			call_user_func_array( array( $stmt, 'bind_result' ) , $args );
 		}
 	}
 	

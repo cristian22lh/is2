@@ -56,6 +56,21 @@
 				font-size: 11px;
 				text-shadow: 0 -1px 0 #fff;
 			}
+			
+			.is2-ascdescmenu, .is2-statusmenu {
+				float: right;
+				padding: 0;
+			}
+			.is2-ascdescmenu a.dropdown-toggle,
+			.is2-statusmenu a.dropdown-toggle {
+				padding: 0 6px;
+				display: inline-block;
+			}
+			.is2-statusmenu .dropdown-menu {
+				right: 0;
+				left: inherit;
+			}
+			
 		</style>
 	</head>
 	<body>
@@ -108,15 +123,30 @@
 			<div class="alert">
 				Se muestran los turnos desde día presente (<strong><?php echo $currentDate; ?></strong>) hasta los próximos 7 días.
 			</div>
-			
+
 			<table class="table table-striped is2-grid">
 				<thead>
 					<tr>
-						<th>Dia</th>
-						<th>Hora</th>
-						<th>Médico</th>
-						<th>Paciente</th>
-						<th>Acciones</th>
+						<th>
+							Fecha
+							<?php t_ascDescMenu( 'fecha' ); ?>
+						</th>
+						<th>
+							Hora
+							<?php t_ascDescMenu( 'hora' ); ?>
+						</th>
+						<th>
+							Médico
+							<?php t_ascDescMenu( 'medico' ); ?>
+						</th>
+						<th>
+							Paciente
+							<?php t_ascDescMenu( 'paciente' ); ?>
+						</th>
+						<th>
+							Acciones
+							<?php t_statusMenu(); ?>
+						</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -129,10 +159,10 @@
 						<td>
 						<?php if( $turno['estado'] == 'confirmado' ): ?>
 							<button class="btn btn-success disabled"><i class="icon-ok"></i> Confirmado</button>
-							<button class="btn btn-mini btn-link is2-trigger-restore" href="#is2-modal-restore" data-toggle="modal" data-appointment-id="<?php echo $turno['id']; ?>">Deshacer acción</button>
+							<a class="btn btn-mini btn-link is2-trigger-restore" href="#is2-modal-restore" data-toggle="modal" data-appointment-id="<?php echo $turno['id']; ?>">Deshacer acción</a>
 						<?php elseif( $turno['estado'] == 'cancelado' ): ?>
 							<button class="btn btn-warning disabled"><i class="icon-exclamation-sign"></i> Cancelado</button>
-							<button class="btn btn-mini btn-link is2-trigger-restore" href="#is2-modal-restore" data-toggle="modal" data-appointment-id="<?php echo $turno['id']; ?>">Deshacer acción</button>
+							<a class="btn btn-mini btn-link is2-trigger-restore" href="#is2-modal-restore" data-toggle="modal" data-appointment-id="<?php echo $turno['id']; ?>">Deshacer acción</a>
 						<?php else: ?>
 							<a class="btn is2-trigger-confirm" href="#is2-modal-confirm" data-toggle="modal" data-appointment-id="<?php echo $turno['id']; ?>">Confirmar</a>
 							<a class="btn is2-trigger-cancel" href="#is2-modal-cancel" data-toggle="modal" data-appointment-id="<?php echo $turno['id']; ?>">Cancelar</a>
@@ -153,8 +183,8 @@
 				<span><strong>¿Estás seguro que confirmar el turno?</strong></span>
 			</div>
 			<div class="modal-footer">
-				<button class="btn" data-dismiss="modal">No</a>
-				<button class="btn btn-primary" type="submit">Sí</a>
+				<button class="btn" data-dismiss="modal">No</button>
+				<button class="btn btn-primary" type="submit">Sí</button>
 			</div>
 			<input type="hidden" name="id">
 		</form>
@@ -165,8 +195,8 @@
 				<span><strong>¿Estás seguro que desea cancelar el turno?</strong></span>
 			</div>
 			<div class="modal-footer">
-				<button class="btn" data-dismiss="modal">No</a>
-				<button class="btn btn-primary" type="submit">Sí</a>
+				<button class="btn" data-dismiss="modal">No</button>
+				<button class="btn btn-primary" type="submit">Sí</button>
 			</div>
 			<input type="hidden" name="id">
 		</form>
@@ -177,8 +207,8 @@
 				<span><strong>¿Estás seguro que desea borrar el turno?</strong></span>
 			</div>
 			<div class="modal-footer">
-				<button class="btn" data-dismiss="modal">No</a>
-				<button class="btn btn-primary" type="submit">Sí</a>
+				<button class="btn" data-dismiss="modal">No</button>
+				<button class="btn btn-primary" type="submit">Sí</button>
 			</div>
 			<input type="hidden" name="id">
 		</form>
@@ -189,8 +219,8 @@
 				<span><strong>Sepa que si confirma, el turno volverá a su estado original, ¿desea continuar?</strong></span>
 			</div>
 			<div class="modal-footer">
-				<button class="btn" data-dismiss="modal">No</a>
-				<button class="btn btn-primary" type="submit">Sí</a>
+				<button class="btn" data-dismiss="modal">No</button>
+				<button class="btn btn-primary" type="submit">Sí</button>
 			</div>
 			<input type="hidden" name="id">
 		</form>
@@ -200,6 +230,7 @@
 	</body>
 </html>
 <script>
+(function() {
 	$( '.is2-grid' ).delegate( '.is2-trigger-confirm', 'click', function( e ) {
 		// hay que poner el turno id en input hidden
 		$( '#is2-modal-confirm input' ).val( $( this ).attr( 'data-appointment-id' ) );
@@ -213,5 +244,42 @@
 	} ).delegate( '.is2-trigger-restore', 'click', function( e ) {
 		$( '#is2-modal-restore input' ).val( $( this ).attr( 'data-appointment-id' ) );
 	} );
+	
+	$( '.is2-trigger-orderby' ).on( 'click', function( e ) {
+		e.preventDefault();
+		var $el = $( this ),
+			fieldName = $el.attr( 'data-field-name' ),
+			orderBy = $el.attr( 'data-orderby' ),
+			res = getQueryString();
 
+		window.location = '/turnos?' + ( res.length ? res.join( '&' ) + '&' : '' ) + fieldName + '=' + orderBy;
+	} );
+	
+	$( '.is2-trigger-status' ).on( 'click', function( e ) {
+		e.preventDefault();
+		var $el = $( this ),
+			fieldName = $el.attr( 'data-field-name' ),
+			fieldValue = $el.attr( 'data-field-value' ),
+			res = getQueryString();
+			
+		window.location = '/turnos?' + ( res.length ? res.join( '&' ) + '&' : '' ) + fieldName + '=' + fieldValue;
+	} );
+	
+	var getQueryString = function() {
+		// tiro un redirect
+		var queryString = window.location.search.replace( /^\?/, '' ),
+			segs = queryString ? queryString.split( '&' ) : [], seg,
+			pat = /(?:(?:fecha|hora|medico|paciente)=(?:asc|desc)|estado=(?:confirmados|cancelados)|(?:exito|error)=[^$]+)/,
+			res = [];
+		
+		while( segs.length ) {
+			seg = segs.shift();
+			if( !pat.test( seg ) ) {
+				res.push( seg );
+			}
+		}
+		
+		return res;
+	};
+})();
 </script>
