@@ -19,16 +19,22 @@
 				clear: both;
 				box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 			}
+			
 			header {
 				width: 980px;
 				margin: 0 auto;
 			}
-			.is2-welcome {
+			header .navbar {
+				margin: 10px 0;
+				float: left;
+			}
+			header .is2-welcome {
 				float: right;
 				text-align: right;
 				margin: 10px 0;
 				padding-right: 14px;
 			}
+			
 			.table td:not( :last-child ) {
 				vertical-align: middle;
 				text-transform: capitalize;
@@ -40,12 +46,7 @@
 		</style>
 	</head>
 	<body>
-		<header>
-			<div class="alert alert-info is2-welcome">
-				Hola, <strong><?php echo $username; ?>!</strong>
-				<a href="/logout" class="btn btn-info btn-mini">Salir</a>
-			</div>
-		</header>
+		<?php t_headerTag( $username, 'appointments' ); ?>
 	
 		<div class="container">
 			<?php if( $confirmSuccess ): ?>
@@ -122,7 +123,7 @@
 						<?php else: ?>
 							<a class="btn is2-trigger-confirm" href="#is2-modal-confirm" data-toggle="modal" data-appointment-id="<?php echo $turno['id']; ?>">Confirmar</a>
 							<a class="btn is2-trigger-cancel" href="#is2-modal-cancel" data-toggle="modal" data-appointment-id="<?php echo $turno['id']; ?>">Cancelar</a>
-							<a class="btn btn-inverse is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-appointment-id="<?php echo $turno['id']; ?>">Borrar</a>
+							<a class="btn btn-danger is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-appointment-id="<?php echo $turno['id']; ?>">Borrar</a>
 						</td>
 						<?php endif; ?>
 					</tr>
@@ -133,7 +134,7 @@
 		</div> <!-- /container -->
 		
 		<!-- modals -->
-		<form method="post" action="turnos/confirmar" id="is2-modal-confirm" class="modal hide fade">
+		<form method="post" action="/turnos/confirmar" id="is2-modal-confirm" class="modal hide fade">
 			<div class="modal-body">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<span><strong>¿Estás seguro que confirmar el turno?</strong></span>
@@ -145,7 +146,7 @@
 			<input type="hidden" name="id">
 		</form>
 		
-		<form method="post" action="turnos/cancelar" id="is2-modal-cancel" class="modal hide fade">
+		<form method="post" action="/turnos/cancelar" id="is2-modal-cancel" class="modal hide fade">
 			<div class="modal-body">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<span><strong>¿Estás seguro que desea cancelar el turno?</strong></span>
@@ -157,7 +158,7 @@
 			<input type="hidden" name="id">
 		</form>
 		
-		<form method="post" action="turnos/borrar" id="is2-modal-remove" class="modal hide fade">
+		<form method="post" action="/turnos/borrar" id="is2-modal-remove" class="modal hide fade">
 			<div class="modal-body">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<span><strong>¿Estás seguro que desea borrar el turno?</strong></span>
@@ -169,7 +170,7 @@
 			<input type="hidden" name="id">
 		</form>
 		
-		<form method="post" action="turnos/reiniciar" id="is2-modal-restore" class="modal hide fade">
+		<form method="post" action="/turnos/reiniciar" id="is2-modal-restore" class="modal hide fade">
 			<div class="modal-body">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<span><strong>Sepa que si confirma, el turno volverá a su estado original, ¿desea continuar?</strong></span>

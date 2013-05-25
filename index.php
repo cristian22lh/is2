@@ -7,6 +7,10 @@
 	require './assets/helpers.php';
 	// mas inits
 	__initSession();
+	// aca tengo funciones que escupen HTML para las views
+	// para no ir repitiendo codigo HTML en cada view
+	// tienen como prefijo el t_
+	require './views/_template.php';
 	
 	// veo adonde quiere ir el usuario
 	$reqURI = parse_url( $_SERVER['REQUEST_URI'] );
