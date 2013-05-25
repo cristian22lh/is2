@@ -24,6 +24,9 @@
 				width: 980px;
 				margin: 0 auto;
 			}
+			header h1 {
+				text-shadow: 0 1px 0 #fff;
+			}
 			header .navbar {
 				margin: 10px 0;
 				float: left;
@@ -42,6 +45,16 @@
 			.modal-backdrop, .modal-backdrop.fade.in {
 				background-color: #f1f1f1;
 				opacity: .4;
+			}
+			
+			footer {
+				width: 900px;
+				margin: 10px auto;
+			}
+			footer span {
+				float: right;
+				font-size: 11px;
+				text-shadow: 0 -1px 0 #fff;
 			}
 		</style>
 	</head>
@@ -181,6 +194,8 @@
 			</div>
 			<input type="hidden" name="id">
 		</form>
+		
+		<?php t_footerTag(); ?>
 		
 	</body>
 </html>

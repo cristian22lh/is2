@@ -25,7 +25,7 @@
 			__setUserLogin();
 			__setUsername( $username );
 			// tiro un redirect a la aplicacion
-			__redirect( '/app' );
+			__redirect( '/turnos' );
 	
 		} else {
 			$isErrorLogin = true;

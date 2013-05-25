@@ -15,7 +15,7 @@
 				border: 1px solid #E5E5E5;
 				border-radius: 5px 5px 5px 5px;
 				box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-				margin: 20px auto 0;
+				margin: 0 auto;
 				max-width: 300px;
 				padding: 0 20px;
 			}
@@ -31,6 +31,19 @@
 			.container {
 				text-align: center;
 			}
+			
+			footer {
+				width: 300px;
+				margin: 10px auto;
+			}
+			footer span {
+				font-size: 11px;
+				text-shadow: 0 -1px 0 #fff;
+				float: right;
+			}
+			h1 {
+				text-shadow: 0 1px 0 #fff;
+			}
 		</style>
 	</head>
 	<body>
@@ -40,6 +53,7 @@
 				¡Nombre de usario y/o contraseña no son validos!
 			</div>
 			<?php endif; ?>
+			<h1>Climedis</h1>
 			<div>
 				<form class="form-signin" method="post">
 					<h3>Iniciar sesión</h3>
@@ -57,4 +71,9 @@
 				</form>
 			</div>
 		</div> <!-- /container -->
+		
+		<footer>
+			<img src="/img/logo.footer.png">
+			<span>Todos los derechos reservados &copy 2013</span>
+		</footer>
 </html>
