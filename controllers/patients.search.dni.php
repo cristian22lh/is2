@@ -6,7 +6,7 @@
 		__echoJSON( array( 'success' => false ) );
 	}
 
-	$dni = $_POST['dni'];
+	$dni = __cleanDNI( $_POST['dni'] );
 	$patients = $db->select(
 		'
 			SELECT
