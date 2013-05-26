@@ -91,6 +91,17 @@
 			.is2-doctors-listbox {
 				min-height: 150px;
 			}
+			
+			.is2-pagetitle {
+				margin: 0 0 10px 0;
+			}
+			.is2-pagetitle h3 {
+				float: left;
+				margin: 0;
+			}
+			.is2-pagetitle .btn {
+				margin: 7px 0 0 0;
+			}
 		</style>
 	</head>
 	<body>
@@ -144,7 +155,10 @@
 			</div>
 			<?php endif; ?>
 		
-			<h3>Turnos</h3>
+			<div class="is2-pagetitle clearfix">
+				<h3>Turnos</h3>
+				<a class="btn btn-primary pull-right" href="/turnos/crear">Crear un nuevo turno</a>
+			</div>
 			
 			<div id="is2-search-appointments-wrapper" class="accordion">
 				<div class="accordion-group">
