@@ -52,6 +52,8 @@
 		require './controllers/appointments.remove.php';
 	} else if( $page == '/turnos/reiniciar' ) {
 		require './controllers/appointments.reset.php';
+	} else if( $page == '/turnos/buscar' ) {
+		require './controllers/appointments.search.php';
 	}
 
 ?>

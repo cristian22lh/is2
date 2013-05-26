@@ -6,6 +6,11 @@
 		<link href="css/bootstrap.css" rel="stylesheet">
 		<script src="js/jquery-2.0.0.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
+		<script src="js/bootstrap-datepicker.js"></script>
+		<script src="js/bootstrap-datepicker.es.js"></script>
+		<link href="css/datepicker.css" rel="stylesheet">
+		<script src="js/bootstrap-timepicker.js"></script>
+		<link href="css/bootstrap-timepicker.css" rel="stylesheet">
 		<style>
 			body {
 				background-color: #eee;
@@ -56,6 +61,11 @@
 				font-size: 11px;
 				text-shadow: 0 -1px 0 #fff;
 			}
+			legend {
+				font-size: 18px;
+				line-height: 30px;
+				margin-bottom: 10px;
+			}
 			
 			.is2-ascdescmenu, .is2-statusmenu {
 				float: right;
@@ -71,6 +81,16 @@
 				left: inherit;
 			}
 			
+			.is2-search-trigger {
+				float: right;
+				margin: 0 0 10px 0;
+			}
+			.bootstrap-timepicker {
+				display: inline-block;
+			}
+			.is2-doctors-listbox {
+				min-height: 150px;
+			}
 		</style>
 	</head>
 	<body>
@@ -117,13 +137,115 @@
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
 				¡No se ha podido reiniciar el turno! Vuelva a intentarlo.
 			</div>
+			<?php elseif( $searchError ): ?>
+			<div class="alert alert-error">
+				<a class="close" data-dismiss="alert" href="#">&times;</a>
+				¡No se ha podido realizar la búsqueda! Vuelva a intentarlo.
+			</div>
 			<?php endif; ?>
 		
 			<h3>Turnos</h3>
+			
+			<div id="is2-search-appointments-wrapper" class="accordion">
+				<div class="accordion-group">
+					<div class="accordion-heading">
+						<a class="accordion-toggle" data-toggle="collapse" href="#is2-search-appointments" data-parent="#is2-search-appointments-wrapper">
+							Buscar turnos...
+						</a>
+					</div>
+					<div id="is2-search-appointments" class="accordion-body collapse<?php echo $searchError ? ' in ' : ' out'; ?>">
+						<form class="accordion-inner" method="post" action="/turnos/buscar">
+							<fieldset class="form-inline">
+								<legend>Rango de fechas</legend>
+								<div class="alert alert-info">
+									Deje en blanco estos campos, si no desea buscar por rango de fechas
+								</div>
+								<label>Desde:
+									<input type="text" class="input-small datepicker" name="fromDate">
+								</label>
+								<label>hasta:
+									<input type="text" class="input-small datepicker" name="toDate">
+								</label>
+							</fieldset>
+							<fieldset class="form-inline">
+								<legend>Rango de horas</legend>
+								<div class="alert alert-info">
+									Deje en blanco estos campos, si no desea buscar por rango de horas
+								</div>
+								<div class="bootstrap-timepicker">
+									<label>Desde:
+										<input type="text" class="input-mini timepicker" name="fromTime">
+									</label>
+								</div>
+								<div class="bootstrap-timepicker">
+									<label>hasta:
+										<input type="text" class="input-mini timepicker" name="toTime">
+									</label>
+								</div>
+							</fieldset>
+							<fieldset>
+								<legend>Médicos</legend>
+								<label class="radio">
+									<input type="radio" name="doctorsSearch" value="all" checked class="is2-doctors-all">
+									Todos
+								</label>
+								<label class="radio">
+									<input type="radio" name="doctorsSearch" value="custom" class="is2-doctors-custom">
+									Solos los turnos que tenga asociados estos médicos...
+								</label>
+								<select multiple="multiple" class="input-xxlarge is2-doctors-listbox" name="doctorsList[]">
+								<?php foreach( $doctors as $doctor ): ?>
+								<option value="<?php echo $doctor['id']; ?>"><?php echo $doctor['apellidos'] . ', ' . $doctor['nombres']; ?></option>
+								<?php endforeach; ?>
+								</select>
+								<div class="alert alert-info">
+									Mantenga apretada la tecla <strong>Ctrl (Control)</strong> para seleccionar multíples médicos a la vez cada vez que hace click sobre el nombre de algun médico
+								</div>
+							</fieldset>
+							<fieldset>
+								<legend>Pacientes</legend>
+								<label class="radio">
+									<input type="radio" name="patientsSearch" value="" checked>
+									Todos
+								</label>
+								<label class="radio">
+									<input type="radio" name="patientsSearch" value="custom">
+									Solos los turnos que tenga asociados estos pacientes con DNI...
+								</label>
+								<input class="input-xxlarge" type="text" placeholder="Separe con espacios cada DNI de los pacientes" name="patientsList">
+								<div class="alert alert-info">
+									Si desea buscar varios pacientes a la vez, ingrese los DNI en cuestión separados por espacios, por ejemplo: <strong>7.432.211 4.533.667 7.667.888</strong> <em>(no es necesario que los escriba con puntos)</em>
+								</div>
+							</fieldset>
+							<fieldset>
+								<legend>Estado del turno</legend>
+								<label class="radio">
+									<input type="radio" name="status" value="" checked>
+									Mostrar todos los turnos
+								</label>
+								<label class="radio">
+									<input type="radio" name="status" value="confirmados">
+									Mostrar solo los turnos que estén confirmados
+								</label>
+								<label class="radio">
+									<input type="radio" name="status" value="cancelados">
+									Mostrar solo los turnos que estén cancelados
+								</label>
+							</fieldset>
+							
+							<button type="submit" class="btn btn-large btn-primary is2-search-trigger">Buscar</button>
+						</form>
+					</div>
+				</div>
+			</div>
+			
+			<?php if( $currentDate ): ?>
 			<div class="alert">
 				Se muestran los turnos desde día presente (<strong><?php echo $currentDate; ?></strong>) hasta los próximos 7 días.
 			</div>
-
+			<?php endif; ?>
+			
+			<?php if( count( $appointments ) ): ?>
 			<table class="table table-striped is2-grid">
 				<thead>
 					<tr>
@@ -150,29 +272,34 @@
 					</tr>
 				</thead>
 				<tbody>
-				<?php foreach( $turnos as $turno ): ?>
-					<tr data-appointment-id="<?php echo $turno['id']; ?>">
-						<td><?php echo date( 'd/m/Y', strtotime( $turno['fecha'] ) ); ?></td>
-						<td><?php echo substr( $turno['hora'], 0, 5 ); ?></td>
-						<td><?php echo $turno['medicoApellidos'] . ', ' .  $turno['medicoNombres']; ?></td>
-						<td><?php echo $turno['pacienteApellidos'] . ', ' .  $turno['pacienteNombres']; ?></td>
+				<?php foreach( $appointments as $appointment ): ?>
+					<tr data-appointment-id="<?php echo $appointment['id']; ?>">
+						<td><?php echo date( 'd/m/Y', strtotime( $appointment['fecha'] ) ); ?></td>
+						<td><?php echo substr( $appointment['hora'], 0, 5 ); ?></td>
+						<td><?php echo $appointment['medicoApellidos'] . ', ' .  $appointment['medicoNombres']; ?></td>
+						<td><?php echo $appointment['pacienteApellidos'] . ', ' .  $appointment['pacienteNombres']; ?></td>
 						<td>
-						<?php if( $turno['estado'] == 'confirmado' ): ?>
+						<?php if( $appointment['estado'] == 'confirmado' ): ?>
 							<button class="btn btn-success disabled"><i class="icon-ok"></i> Confirmado</button>
-							<a class="btn btn-mini btn-link is2-trigger-restore" href="#is2-modal-restore" data-toggle="modal" data-appointment-id="<?php echo $turno['id']; ?>">Deshacer acción</a>
-						<?php elseif( $turno['estado'] == 'cancelado' ): ?>
+							<a class="btn btn-mini btn-link is2-trigger-restore" href="#is2-modal-restore" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Deshacer acción</a>
+						<?php elseif( $appointment['estado'] == 'cancelado' ): ?>
 							<button class="btn btn-warning disabled"><i class="icon-exclamation-sign"></i> Cancelado</button>
-							<a class="btn btn-mini btn-link is2-trigger-restore" href="#is2-modal-restore" data-toggle="modal" data-appointment-id="<?php echo $turno['id']; ?>">Deshacer acción</a>
+							<a class="btn btn-mini btn-link is2-trigger-restore" href="#is2-modal-restore" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Deshacer acción</a>
 						<?php else: ?>
-							<a class="btn is2-trigger-confirm" href="#is2-modal-confirm" data-toggle="modal" data-appointment-id="<?php echo $turno['id']; ?>">Confirmar</a>
-							<a class="btn is2-trigger-cancel" href="#is2-modal-cancel" data-toggle="modal" data-appointment-id="<?php echo $turno['id']; ?>">Cancelar</a>
-							<a class="btn btn-danger is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-appointment-id="<?php echo $turno['id']; ?>">Borrar</a>
+							<a class="btn is2-trigger-confirm" href="#is2-modal-confirm" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Confirmar</a>
+							<a class="btn is2-trigger-cancel" href="#is2-modal-cancel" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Cancelar</a>
+							<a class="btn btn-danger is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Borrar</a>
 						</td>
 						<?php endif; ?>
 					</tr>
 				<?php endforeach; ?>
 				</tbody>
 			</table>
+			<?php else: ?>
+			<div class="alert alert-error">
+				No se han encontrado turnos según el criterio de búsqueda específicado
+			</div>
+			<?php endif; ?>
 
 		</div> <!-- /container -->
 		
@@ -231,6 +358,7 @@
 </html>
 <script>
 (function() {
+// *** ACA PARA CUANDO MUESTRO LOS MODALS *** //
 	$( '.is2-grid' ).delegate( '.is2-trigger-confirm', 'click', function( e ) {
 		// hay que poner el turno id en input hidden
 		$( '#is2-modal-confirm input' ).val( $( this ).attr( 'data-appointment-id' ) );
@@ -244,7 +372,7 @@
 	} ).delegate( '.is2-trigger-restore', 'click', function( e ) {
 		$( '#is2-modal-restore input' ).val( $( this ).attr( 'data-appointment-id' ) );
 	} );
-	
+// *** ACA PARA CUANDO SORTEO LA GRID *** //
 	$( '.is2-trigger-orderby' ).on( 'click', function( e ) {
 		e.preventDefault();
 		var $el = $( this ),
@@ -281,5 +409,22 @@
 		
 		return res;
 	};
+	
+// *** ACA PARA LA BUSQUEDA DE TURNOS *** //
+	$( '.datepicker' ).datepicker( {
+		format: 'dd/mm/yyyy',
+		language: 'es'
+	} );
+	$( '.timepicker' ).timepicker( {
+		showInputs: false,
+		defaultTime: false
+	});
+	$( '.is2-doctors-listbox' ).on( 'click', function( e ) {
+		$( '.is2-doctors-custom' ).click();
+	} );
+	$( '.is2-doctors-all' ).on( 'click', function( e ) {
+		$( '.is2-doctors-listbox' )[0].selectedIndex = -1;
+	} );
+	
 })();
 </script>

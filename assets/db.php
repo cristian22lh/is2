@@ -28,12 +28,12 @@
 
 		}
 		
-		function select( $query, $replacements ) {
+		function select( $query, $replacements = array() ) {
 
 			$res = array();
 			
 			if( $stmt = $this->db->prepare( $query ) ) {
-			
+
 				$this->_executeQuery( $stmt, $replacements );
 
 				// debo conseguir el nombre de las columnas
@@ -90,8 +90,11 @@
 		
 	// *** PRIVATE METHODS *** //
 		private function _executeQuery( $stmt, $replacements ) {
-			// internamente aca se hace un $stmt->bind_param()
-			$this->_bindParams( $stmt, $this->_addParams( $replacements ) );
+			// capaz que no hay tokens a reemplezar
+			if( count( $replacements ) ) {
+				// internamente aca se hace un $stmt->bind_param()
+				$this->_bindParams( $stmt, $this->_addParams( $replacements ) );
+			}
 			
 			// ejecutamos la consultado
 			$stmt->execute();
