@@ -1,6 +1,6 @@
 <?php
 
-// ESTA PARTE ES CUANDO SE ESTA FILTRANDO LAS COLUMANS DE LA GRID
+// ESTA PARTE ES CUANDO SE ESTA FILTRANDO LOS TURNOS MEDIANTE LAS COLUMNAS DE LA GRID
 	$orderByClause = array();
 	$isOrderByTime = false;
 	$isOrderByDate = false;
@@ -30,11 +30,11 @@
 	} else if( __issetGETField( 'estado', 'cancelados' ) ) {
 		$statusValue = 'cancelados';
 	}
-	// siempre se debe ordernar por hora SOLO SI NO SE ESTA ORDENANDO
+	// siempre se debe ordernar por fecha SOLO SI NO SE ESTA ORDENANDO POR ALGO
 	if( !$isOrderByDate && !count( $orderByClause ) ) {
 		$orderByClause[] = ' t.fecha ASC ';
 	}
-	// siempre se debe ordernar por ahora
+	// siempre se debe ordernar por ahora SI O SI
 	if( !$isOrderByTime ) {
 		$orderByClause[] = ' t.hora ASC ';
 	}
@@ -97,26 +97,23 @@
 		if( count( $patientsOrClause ) > 0 ) {
 			$whereClause[]	= ' ( ' . implode( ' OR ', $patientsOrClause ) . ' ) ';
 		}
-		// la quinta parte el estado del turno
-		// esto se hace afuera de este if porque
-		// puede haber cloflicto cuando tambien se quire filtar la grid
+		// la quinta parte es el estado del turno
 		if( $searchParts[4] ) {
 			$statusValue = $searchParts[4];
 		};
 		
-	// ESTE ES EL NORMAL WHERE CUANDO SE ESTA ACCEDIENDO DIRECTAMENTE A /turnos
-	// OSEA NO SE HA HECHO UNA BUSQUEDA
+	// ESTE ES EL WHERE NORMAL, OSEA CUANDO SE ESTA ACCEDIENDO DIRECTAMENTE A /turnos
 	} else {
 		$isSearch = false;
 	
 		$whereClause[] = ' t.fecha >= ? ';
 		$replacements[] = date( 'Y-m-d' );
 		$whereClause[] = ' t.fecha <= ? ';
-		// debo tomar todos las rows con fecha actual + 7 dias
+		// en modo normal se muestran los turnos desde la fecha actual hasta + 7 dias
 		$replacements[] = date( 'Y-m-d', strtotime( '+7 days' ) );
 	}
 	
-	// SE PUEDE FILTAR LOS TURNOS MEDIANTE LA COLUMNA "ACCIONES" O MEDINATE UNA BUSQUEDA
+	// SE PUEDEN FILTAR LOS TURNOS MEDIANTE LA COLUMNA "ACCIONES" O MEDINATE UNA BUSQUEDA
 	if( $statusValue == 'confirmados' ) {
 		$whereClause[] = ' t.estado = ? ';
 		$replacements[] = 'confirmado';
@@ -198,9 +195,9 @@
 		$isSearch = true;
 	}
 	
-	// esto es usado para mostrar un mensaje sobre que
-	// los turnos que esta viendo son los desde dia presente
-	// hasta los siguiete 7 dias (solo pasa si no se ha hecho una busqueda)
+	// esto es usado para mostrar un mensaje cuando se accede a /turnos
+	// sobre de que los turnos que estan siendo mostrados son los desde la
+	// la fecha actual hasta los siguiente 7 dias
 	$currentDate = !$isSearch ? date( 'd/m/Y' ) : false;
 	
 	// render
