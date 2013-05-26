@@ -42,6 +42,18 @@
 // ACA CONSTRUYO EL WHERE DE MI QUERY
 	$replacements = array();
 	$whereClause = array( ' 1=1 ' );
+	// aca voy a guardar los parametros de busqueda (fecha, hora, etc)
+	// para luego utilizarlo para rellenar el formulario de busqueda
+	$persistValues = array(
+		'fromDate' => '',
+		'toDate' => '',
+		'fromTime' => '',
+		'toTime' => '',
+		'doctorsList' => array(),
+		'patientsDNI' => '',
+		'status' => ''
+	);
+
 	// ESTO ES CUANDO EL USUARIO HA HECHO CLICK EN EL BOTON BUSCAR
 	if( ( $search = __GETField( 'search' ) ) ) {
 		$isSearch = true;
@@ -55,21 +67,21 @@
 		// no pasa nada si se mete mano en estos datos
 		if( isset( $dateRange[0] ) && $dateRange[0] ) {
 			$whereClause[] = ' t.fecha >= ? ';
-			$replacements[] = $dateRange[0];
+			$replacements[] = $persistValues['fromDate'] = $dateRange[0];
 		}
 		if( isset( $dateRange[1] ) && $dateRange[1] ) {
 			$whereClause[] = ' t.fecha <= ? ';
-			$replacements[] = $dateRange[1];
+			$replacements[] = $persistValues['toDate'] = $dateRange[1];
 		}
 		// la segunda parte el time range
 		$timeRange = explode( '@', $searchParts[1] );
 		if( isset( $timeRange[0] ) && $timeRange[0] ) {
 			$whereClause[] = ' t.hora >= ? ';
-			$replacements[] = $timeRange[0];
+			$replacements[] = $persistValues['fromTime'] = $timeRange[0];
 		}
 		if( isset( $timeRange[1] ) && $timeRange[1] ) {
 			$whereClause[] = ' t.hora <= ? ';
-			$replacements[] = $timeRange[1];
+			$replacements[] = $persistValues['toTime'] = $timeRange[1];
 		}
 		// la tercera parte es una lista de doctores
 		$doctorsLists = explode( '-', $searchParts[2] );
@@ -78,7 +90,7 @@
 		foreach( $doctorsLists as $doctorID ) {
 			if( $doctorID ) {
 				$doctorsOrClause[] = ' m.id = ? ';
-				$replacements[] = $doctorID;
+				$replacements[] = $persistValues['doctorsList'][$doctorID] = $doctorID;
 			}
 		}
 		if( count( $doctorsOrClause ) > 0 ) {
@@ -91,15 +103,16 @@
 		foreach( $patientsDNI as $dni ) {
 			if( $dni ) {
 				$patientsOrClause[] = ' p.dni = ? ';
-				$replacements[] = $dni;
+				$replacements[] = $persistValues['patientsDNI'][] = $dni;
 			}
 		}
 		if( count( $patientsOrClause ) > 0 ) {
 			$whereClause[]	= ' ( ' . implode( ' OR ', $patientsOrClause ) . ' ) ';
+			$persistValues['patientsDNI'] = implode( ' ', $persistValues['patientsDNI'] );
 		}
 		// la quinta parte es el estado del turno
 		if( $searchParts[4] ) {
-			$statusValue = $searchParts[4];
+			$statusValue = $persistValues['status'] = $searchParts[4];
 		};
 		
 	// ESTE ES EL WHERE NORMAL, OSEA CUANDO SE ESTA ACCEDIENDO DIRECTAMENTE A /turnos

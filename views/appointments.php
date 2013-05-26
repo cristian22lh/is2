@@ -28,19 +28,24 @@
 			header {
 				width: 980px;
 				margin: 0 auto;
+				position: relative;
+				padding: 50px 0 0 0;
 			}
 			header h1 {
 				text-shadow: 0 1px 0 #fff;
+				float: left;
 			}
 			header .navbar {
 				margin: 10px 0;
-				float: left;
+				float: right;
 			}
 			header .is2-welcome {
-				float: right;
-				text-align: right;
+				position: absolute;
+				right: 0;
+				top: 0;
 				margin: 10px 0;
-				padding-right: 14px;
+				padding: 5px;
+				font-size: 12px;
 			}
 			
 			.table td:not( :last-child ) {
@@ -157,7 +162,7 @@
 		
 			<div class="is2-pagetitle clearfix">
 				<h3>Turnos</h3>
-				<a class="btn btn-primary pull-right" href="/turnos/crear">Crear un nuevo turno</a>
+				<a class="btn pull-right" href="/turnos/crear"><i class="icon-plus"></i> Crear un nuevo turno</a>
 			</div>
 			
 			<div id="is2-search-appointments-wrapper" class="accordion">
@@ -175,10 +180,10 @@
 									Deje en blanco estos campos, si no desea buscar por rango de fechas
 								</div>
 								<label>Desde:
-									<input type="text" class="input-small datepicker" name="fromDate">
+									<input type="text" class="input-small datepicker" name="fromDate" value="<?php echo __dateISOToLocale( __sanitizeValue( $persistValues['fromDate'] ) ); ?>">
 								</label>
 								<label>hasta:
-									<input type="text" class="input-small datepicker" name="toDate">
+									<input type="text" class="input-small datepicker" name="toDate" value="<?php echo __dateISOToLocale( __sanitizeValue( $persistValues['toDate'] ) ); ?>">
 								</label>
 							</fieldset>
 							<fieldset class="form-inline">
@@ -188,28 +193,28 @@
 								</div>
 								<div class="bootstrap-timepicker">
 									<label>Desde:
-										<input type="text" class="input-mini timepicker" name="fromTime">
+										<input type="text" class="input-mini timepicker" name="fromTime" value="<?php echo __timeISOToLocale( __sanitizeValue( $persistValues['fromTime'] ) ); ?>">
 									</label>
 								</div>
 								<div class="bootstrap-timepicker">
 									<label>hasta:
-										<input type="text" class="input-mini timepicker" name="toTime">
+										<input type="text" class="input-mini timepicker" name="toTime" value="<?php echo __timeISOToLocale( __sanitizeValue( $persistValues['toTime'] ) ); ?>">
 									</label>
 								</div>
 							</fieldset>
 							<fieldset>
 								<legend>Médicos</legend>
 								<label class="radio">
-									<input type="radio" name="doctorsSearch" value="all" checked class="is2-doctors-all">
+									<input type="radio" name="doctorsSearch" value="all" class="is2-doctors-all" <?php echo !count( $persistValues['doctorsList'] ) ? 'checked' : ''; ?>>
 									Todos
 								</label>
 								<label class="radio">
-									<input type="radio" name="doctorsSearch" value="custom" class="is2-doctors-custom">
+									<input type="radio" name="doctorsSearch" value="custom" class="is2-doctors-custom" <?php echo count( $persistValues['doctorsList'] ) ? 'checked' : ''; ?>>
 									Solos los turnos que tenga asociados estos médicos...
 								</label>
 								<select multiple="multiple" class="input-xxlarge is2-doctors-listbox" name="doctorsList[]">
 								<?php foreach( $doctors as $doctor ): ?>
-								<option value="<?php echo $doctor['id']; ?>"><?php echo $doctor['apellidos'] . ', ' . $doctor['nombres']; ?></option>
+									<option value="<?php echo $doctor['id']; ?>" <?php echo isset( $persistValues['doctorsList'][$doctor['id']] ) ? 'selected' : ''; ?>><?php echo $doctor['apellidos'] . ', ' . $doctor['nombres']; ?></option>
 								<?php endforeach; ?>
 								</select>
 								<div class="alert alert-info">
@@ -219,14 +224,14 @@
 							<fieldset>
 								<legend>Pacientes</legend>
 								<label class="radio">
-									<input type="radio" name="patientsSearch" value="" checked>
+									<input type="radio" name="patientsSearch" value="" <?php echo !$persistValues['patientsDNI'] ? 'checked' : ''; ?>>
 									Todos
 								</label>
 								<label class="radio">
-									<input type="radio" name="patientsSearch" value="custom">
+									<input type="radio" name="patientsSearch" value="custom" class="is2-patients-custom" <?php echo $persistValues['patientsDNI'] ? 'checked' : ''; ?>>
 									Solos los turnos que tenga asociados estos pacientes con DNI...
 								</label>
-								<input class="input-xxlarge" type="text" placeholder="Separe con espacios cada DNI de los pacientes" name="patientsList">
+								<input class="input-xxlarge is2-patients-search" type="text" placeholder="Separe con espacios cada DNI de los pacientes" name="patientsList" value="<?php echo __sanitizeValue( $persistValues['patientsDNI'] ); ?>">
 								<div class="alert alert-info">
 									Si desea buscar varios pacientes a la vez, ingrese los DNI en cuestión separados por espacios, por ejemplo: <strong>7.432.211 4.533.667 7.667.888</strong> <em>(no es necesario que los escriba con puntos)</em>
 								</div>
@@ -234,15 +239,15 @@
 							<fieldset>
 								<legend>Estado del turno</legend>
 								<label class="radio">
-									<input type="radio" name="status" value="" checked>
+									<input type="radio" name="status" value="" <?php echo !$persistValues['status'] ? 'checked' : ''; ?>>
 									Mostrar todos los turnos
 								</label>
 								<label class="radio">
-									<input type="radio" name="status" value="confirmados">
+									<input type="radio" name="status" value="confirmados" <?php echo $persistValues['status'] == 'confirmados' ? 'checked' : ''; ?>>
 									Mostrar solo los turnos que estén confirmados
 								</label>
 								<label class="radio">
-									<input type="radio" name="status" value="cancelados">
+									<input type="radio" name="status" value="cancelados" <?php echo $persistValues['status'] == 'cancelados' ? 'checked' : ''; ?>>
 									Mostrar solo los turnos que estén cancelados
 								</label>
 							</fieldset>
@@ -431,6 +436,7 @@
 	} );
 	$( '.timepicker' ).timepicker( {
 		showInputs: false,
+		disableFocus: true,
 		defaultTime: false
 	});
 	$( '.is2-doctors-listbox' ).on( 'click', function( e ) {
@@ -438,6 +444,9 @@
 	} );
 	$( '.is2-doctors-all' ).on( 'click', function( e ) {
 		$( '.is2-doctors-listbox' )[0].selectedIndex = -1;
+	} );
+	$( '.is2-patients-search' ).on( 'click', function( e ) {
+		$( '.is2-patients-custom' ).click();
 	} );
 	
 })();

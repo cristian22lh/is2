@@ -78,6 +78,14 @@
 		return $year . '-' . $month . '-' . $date;
 	}
 	
+	function __dateISOToLocale( $value ) {
+		$value = explode( '-', $value );
+		if( count( $value ) != 3 ) {
+			return '';
+		}
+		return $value[2] . '/' . $value[1] . '/' . $value[0];
+	}
+	
 	function __toISOTime( $value ) {
 		if( !preg_match( '/^(\d{2}):(\d{2}) (PM|AM)$/i', trim( $value ), $m ) ) {
 			return false;
@@ -94,9 +102,32 @@
 		
 		return $hours . ':' . $minutes . ':00';
 	}
+	
+	function __timeISOToLocale( $value ) {
+		$value = explode( ':', $value );
+		if( count( $value ) != 3 ) {
+			return '';
+		}
+		$hours = $value[0];
+		if( $hours > 12 ) {
+			$hours = $hours - 12;
+			$meridian = 'PM';
+		} else {
+			$meridian = 'AM';
+		}
+		if( $hours < 10 ) {
+			$hours = '0' . (int) $hours;
+		}
+		
+		return $hours . ':' . $value[1] . ' ' . $meridian;
+	}
 
 	function __cleanDNI( $value ) {
 		return str_replace( '.', '', $value );
+	}
+	
+	function __sanitizeValue( $value ) {
+		return htmlspecialchars( $value );
 	}
 
 ?>
