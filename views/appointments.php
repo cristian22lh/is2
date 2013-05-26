@@ -3,10 +3,6 @@
 	<head>
 		<?php t_headTag( 'Turnos' ); ?>
 		<style>
-			.table td:not( :last-child ) {
-				vertical-align: middle;
-				text-transform: capitalize;
-			}
 			.is2-ascdescmenu, .is2-statusmenu {
 				float: right;
 				padding: 0;

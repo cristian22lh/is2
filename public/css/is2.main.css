@@ -34,6 +34,11 @@ header .is2-welcome {
 	font-size: 12px;
 }
 
+.table td:not( :last-child ) {
+	vertical-align: middle;
+	text-transform: capitalize;
+}
+
 .modal-backdrop, .modal-backdrop.fade.in {
 	background-color: #f1f1f1;
 	opacity: .4;

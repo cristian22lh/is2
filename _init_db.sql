@@ -94,3 +94,21 @@ INSERT INTO obraSociales VALUES
 	( null, 'IOMA', 'IOMA' ),
 	( null, 'PAMI', 'PAMI' )
 ;
+--##########
+--##########
+DROP TABLE IF EXISTS especialidades;
+CREATE TABLE especialidades(
+	id INTEGER PRIMARY KEY AUTO_INCREMENT,
+	nombre VARCHAR( 255 ) UNIQUE
+) ENGINE=InnoDB;
+
+INSERT INTO especialidades VALUES
+	( null, 'Otorrinolaringología' ),
+	( null, 'Odontología' ),
+	( null, 'Nefrología' ),
+	( null, 'Endocrinología' ),
+	( null, 'Urología' ),
+	( null, 'Oftalmología' ),
+	( null, 'Pediatría' ),
+	( null, 'Psiquiatría' )
+;

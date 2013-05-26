@@ -27,7 +27,7 @@ HEADER;
 			echo			'<li class="' . ( $currentTab == 'insurances' ? 'active' : '' ) . '">' .
 							'<a href="/obras-sociales">Obras sociales</a>' .
 						'</li>';
-			echo			'<li class="' . ( $currentTab == 'speciality' ? 'active' : '' ) . '">' .
+			echo			'<li class="' . ( $currentTab == 'specialities' ? 'active' : '' ) . '">' .
 							'<a href="/especialidades">Especialidades</a>' .
 						'</li>';
 			echo <<<HEADER

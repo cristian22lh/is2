@@ -60,6 +60,16 @@
 // *** PACIENTES *** //
 	} else if( $page == '/pacientes/buscar/dni' ) {
 		require './controllers/patients.search.dni.php';
+	
+// *** ESPECIALIDADES *** //
+	} else if( $page == '/especialidades' ) {
+		require './controllers/specialities.php';
+	} else if( $page == '/especialidades/crear' ) {
+		require './controllers/specialities.new.php';
+	} else if( $page == '/especialidades/editar' ) {
+		require './controllers/specialities.edit.php';
+	} else if( $page == '/especialidades/borrar' ) {
+		require './controllers/specialities.remove.php';
 	}
 
 ?>
