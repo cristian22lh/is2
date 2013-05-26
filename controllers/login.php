@@ -26,10 +26,9 @@
 			__setUsername( $username );
 			// tiro un redirect a la aplicacion
 			__redirect( '/turnos' );
-	
-		} else {
-			$isErrorLogin = true;
 		}
+		
+		$isErrorLogin = true;
 	}
 	
 	// render
