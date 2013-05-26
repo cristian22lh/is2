@@ -39,10 +39,10 @@ DROP TABLE IF EXISTS medicos;
 CREATE TABLE medicos(
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
 	idEspecialidad INTEGER,
-	nombres VARCHAR( 100 ),
 	apellidos VARCHAR( 100 ),
+	nombres VARCHAR( 100 ),
 	matricula VARCHAR( 20 )
-);
+) ENGINE=InnoDB;
 
 INSERT INTO medicos VALUES
 	( null, 1, 'Marcelo', 'Rodríguez', '122434/21' ),
@@ -59,26 +59,38 @@ INSERT INTO medicos VALUES
 DROP TABLE IF EXISTS pacientes;
 CREATE TABLE pacientes(
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
-	nombres VARCHAR( 100 ),
 	apellidos VARCHAR( 100 ),
+	nombres VARCHAR( 100 ),
 	sexo ENUM( 'F', 'M' ),
-	dni VARCHAR( 20 ),
+	dni VARCHAR( 20 ) UNIQUE,
 	fechaNacimiento DATE,
 	telefono VARCHAR( 100 ),
 	email VARCHAR( 255 ),
 	idObraSocial INTEGER,
 	nroAfiliado VARCHAR( 255 )
-);
+) ENGINE=InnoDB;
 	
 INSERT INTO pacientes VALUES
-	( null, 'Ivan', 'Gómez', 'M', FLOOR( RAND() * 10000000 ), '1947-10-10', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), CONCAT( SUBSTRING(MD5( RAND() ) FROM 1 FOR 6 ), '@gmail.com' ), 1, MD5( RAND() ) ),
-	( null, 'Damián', 'Antúnez', 'M', FLOOR( RAND() * 10000000 ), '1949-03-30', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), CONCAT( SUBSTRING(MD5( RAND() ) FROM 1 FOR 6 ), '@gmail.com' ), 2, MD5( RAND() ) ),
-	( null, 'Federico', 'López', 'M', FLOOR( RAND() * 10000000 ), '1951-11-01', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), CONCAT( SUBSTRING(MD5( RAND() ) FROM 1 FOR 6 ), '@gmail.com' ), 2, MD5( RAND() ) ),
-	( null, 'Fabián', 'Meléndez', 'M', FLOOR( RAND() * 10000000 ), '1951-01-12', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), CONCAT( SUBSTRING(MD5( RAND() ) FROM 1 FOR 6 ), '@gmail.com' ), 1, MD5( RAND() ) ),
-	( null, 'José', 'Fagúndez', 'M', FLOOR( RAND() * 10000000 ), '1945-06-24', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), CONCAT( SUBSTRING(MD5( RAND() ) FROM 1 FOR 6 ), '@gmail.com' ), 1, MD5( RAND() ) ),
-	( null, 'María Clara', 'Cortéz', 'F', FLOOR( RAND() * 10000000 ), '1951-04-05', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), CONCAT( SUBSTRING(MD5( RAND() ) FROM 1 FOR 6 ), '@gmail.com' ), 2, MD5( RAND() ) ),
-	( null, 'Maria Laura', 'Valdéz', 'F', FLOOR( RAND() * 10000000 ), '1950-12-12', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), CONCAT( SUBSTRING(MD5( RAND() ) FROM 1 FOR 6 ), '@gmail.com' ), 2, MD5( RAND() ) ),
-	( null, 'Marina', 'Chávez', 'F', FLOOR( RAND() * 10000000 ), '1947-05-24', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), CONCAT( SUBSTRING(MD5( RAND() ) FROM 1 FOR 6 ), '@gmail.com' ), 3, MD5( RAND() ) )
+	( null, 'Ivan', 'Gómez', 'M', 1, '1947-10-10', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), CONCAT( SUBSTRING(MD5( RAND() ) FROM 1 FOR 6 ), '@gmail.com' ), 1, MD5( RAND() ) ),
+	( null, 'Damián', 'Antúnez', 'M', 2, '1949-03-30', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), CONCAT( SUBSTRING(MD5( RAND() ) FROM 1 FOR 6 ), '@gmail.com' ), 2, MD5( RAND() ) ),
+	( null, 'Federico', 'López', 'M', 3, '1951-11-01', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), CONCAT( SUBSTRING(MD5( RAND() ) FROM 1 FOR 6 ), '@gmail.com' ), 2, MD5( RAND() ) ),
+	( null, 'Fabián', 'Meléndez', 'M', 4, '1951-01-12', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), CONCAT( SUBSTRING(MD5( RAND() ) FROM 1 FOR 6 ), '@gmail.com' ), 1, MD5( RAND() ) ),
+	( null, 'José', 'Fagúndez', 'M', 5, '1945-06-24', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), CONCAT( SUBSTRING(MD5( RAND() ) FROM 1 FOR 6 ), '@gmail.com' ), 1, MD5( RAND() ) ),
+	( null, 'María Clara', 'Cortéz', 'F', 6, '1951-04-05', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), CONCAT( SUBSTRING(MD5( RAND() ) FROM 1 FOR 6 ), '@gmail.com' ), 2, MD5( RAND() ) ),
+	( null, 'Maria Laura', 'Valdéz', 'F', 7, '1950-12-12', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), CONCAT( SUBSTRING(MD5( RAND() ) FROM 1 FOR 6 ), '@gmail.com' ), 2, MD5( RAND() ) ),
+	( null, 'Marina', 'Chávez', 'F', 8, '1947-05-24', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), CONCAT( SUBSTRING(MD5( RAND() ) FROM 1 FOR 6 ), '@gmail.com' ), 3, MD5( RAND() ) )
 ;
+--##########
+--##########
+DROP TABLE IF EXISTS obraSociales;
+CREATE TABLE obraSociales(
+	id INTEGER PRIMARY KEY AUTO_INCREMENT,
+	nombreCorto VARCHAR( 255 ),
+	nombreCompleto TEXT
+) ENGINE=InnoDB;
 	
-	
+INSERT INTO obraSociales VALUES
+	( null, 'LIBRE', 'LIBRE' ),
+	( null, 'IOMA', 'IOMA' ),
+	( null, 'PAMI', 'PAMI' )
+;

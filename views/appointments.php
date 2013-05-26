@@ -1,77 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
 	<head>
-		<meta charset="utf-8">
-		<title>Aplicacion - Turnos</title>
-		<link href="css/bootstrap.css" rel="stylesheet">
-		<script src="js/jquery-2.0.0.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
-		<script src="js/bootstrap-datepicker.js"></script>
-		<script src="js/bootstrap-datepicker.es.js"></script>
-		<link href="css/datepicker.css" rel="stylesheet">
-		<script src="js/bootstrap-timepicker.js"></script>
-		<link href="css/bootstrap-timepicker.css" rel="stylesheet">
+		<?php t_headTag( 'Turnos' ); ?>
 		<style>
-			body {
-				background-color: #eee;
-			}
-			.container {
-				width: 940px;
-				margin: 0 auto;
-				background-color: #fff;
-				padding: 20px;
-				border-radius: 5px;
-				clear: both;
-				box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-			}
-			
-			header {
-				width: 980px;
-				margin: 0 auto;
-				position: relative;
-				padding: 50px 0 0 0;
-			}
-			header h1 {
-				text-shadow: 0 1px 0 #fff;
-				float: left;
-			}
-			header .navbar {
-				margin: 10px 0;
-				float: right;
-			}
-			header .is2-welcome {
-				position: absolute;
-				right: 0;
-				top: 0;
-				margin: 10px 0;
-				padding: 5px;
-				font-size: 12px;
-			}
-			
 			.table td:not( :last-child ) {
 				vertical-align: middle;
 				text-transform: capitalize;
 			}
-			.modal-backdrop, .modal-backdrop.fade.in {
-				background-color: #f1f1f1;
-				opacity: .4;
-			}
-			
-			footer {
-				width: 900px;
-				margin: 10px auto;
-			}
-			footer span {
-				float: right;
-				font-size: 11px;
-				text-shadow: 0 -1px 0 #fff;
-			}
-			legend {
-				font-size: 18px;
-				line-height: 30px;
-				margin-bottom: 10px;
-			}
-			
 			.is2-ascdescmenu, .is2-statusmenu {
 				float: right;
 				padding: 0;
@@ -85,27 +20,16 @@
 				right: 0;
 				left: inherit;
 			}
-			
+
 			.is2-search-trigger {
 				float: right;
 				margin: 0 0 10px 0;
 			}
-			.bootstrap-timepicker {
-				display: inline-block;
-			}
 			.is2-doctors-listbox {
 				min-height: 150px;
 			}
-			
-			.is2-pagetitle {
-				margin: 0 0 10px 0;
-			}
-			.is2-pagetitle h3 {
-				float: left;
-				margin: 0;
-			}
-			.is2-pagetitle .btn {
-				margin: 7px 0 0 0;
+			.bootstrap-timepicker {
+				display: inline-block;
 			}
 		</style>
 	</head>
@@ -372,7 +296,6 @@
 		</form>
 		
 		<?php t_footerTag(); ?>
-		
 	</body>
 </html>
 <script>

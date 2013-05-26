@@ -8,6 +8,15 @@
 		die();
 	}
 	
+	function __echoJSON( $data ) {
+		header( 'content-type: application/json' );
+		echo json_encode( $data );
+		die();
+	}
+		
+// ************** /
+// $_GET & $_POST
+// ************* /
 	function __issetPOST( $fields ) {
 		return $_SERVER['REQUEST_METHOD'] == 'POST' && count( $_POST ) > 0 && count( array_diff( $fields, array_keys( $_POST ) ) ) == 0;
 	}
@@ -128,6 +137,10 @@
 	
 	function __sanitizeValue( $value ) {
 		return htmlspecialchars( $value );
+	}
+	
+	function __validateID( $value ) {
+		return $value > 0 ? (int) $value : false;
 	}
 
 ?>

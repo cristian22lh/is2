@@ -88,6 +88,22 @@
 			return $this->update( $query, $replacements );
 		}
 		
+		function insert( $query, $replacements ) {
+		
+			$insertId = null;
+			
+			if( $stmt = $this->db->prepare( $query ) ) {
+				
+				$this->_executeQuery( $stmt, $replacements );
+				
+				$insertId = $stmt->insert_id;
+				
+				$stmt->close();
+			}
+			
+			return $insertId;
+		}
+		
 	// *** PRIVATE METHODS *** //
 		private function _executeQuery( $stmt, $replacements ) {
 			// capaz que no hay tokens a reemplezar

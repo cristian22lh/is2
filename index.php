@@ -54,6 +54,12 @@
 		require './controllers/appointments.reset.php';
 	} else if( $page == '/turnos/buscar' ) {
 		require './controllers/appointments.search.php';
+	} else if( $page == '/turnos/crear' ) {
+		require './controllers/appointments.new.php';
+	
+// *** PACIENTES *** //
+	} else if( $page == '/pacientes/buscar/dni' ) {
+		require './controllers/patients.search.dni.php';
 	}
 
 ?>

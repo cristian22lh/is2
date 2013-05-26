@@ -53,7 +53,8 @@
 		'patientsDNI' => '',
 		'status' => ''
 	);
-
+	$isSearch = false;
+	
 	// ESTO ES CUANDO EL USUARIO HA HECHO CLICK EN EL BOTON BUSCAR
 	if( ( $search = __GETField( 'search' ) ) ) {
 		$isSearch = true;
@@ -114,10 +115,16 @@
 		if( $searchParts[4] ) {
 			$statusValue = $persistValues['status'] = $searchParts[4];
 		};
-		
+	
+	// ESTE ES CUANDO VENGO DE CREAR UN TURNO
+	} else if( ( $newAppointment = __GETField( 'id' ) ) && __validateID( $newAppointment ) ) {
+		$isSearch = true;
+	
+		$whereClause[] = ' t.id = ? ';
+		$replacements[] = $newAppointment;
+	
 	// ESTE ES EL WHERE NORMAL, OSEA CUANDO SE ESTA ACCEDIENDO DIRECTAMENTE A /turnos
 	} else {
-		$isSearch = false;
 	
 		$whereClause[] = ' t.fecha >= ? ';
 		$replacements[] = date( 'Y-m-d' );
