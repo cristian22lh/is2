@@ -70,6 +70,17 @@
 		require './controllers/specialities.edit.php';
 	} else if( $page == '/especialidades/borrar' ) {
 		require './controllers/specialities.remove.php';
+
+// *** OBRA SOCIALES *** //
+	} else if( $page == '/obras-sociales' ) {
+		require './controllers/insurances.php';
+	} else if( $page == '/obras-sociales/crear' ) {
+		require './controllers/insurances.new.php';
+	} else if( $page == '/obras-sociales/editar' ) {
+		require './controllers/insurances.edit.php';
+	} else if( $page == '/obras-sociales/borrar' ) {
+		require './controllers/insurances.remove.php';
 	}
+	
 
 ?>

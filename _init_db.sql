@@ -82,14 +82,14 @@ INSERT INTO pacientes VALUES
 ;
 --##########
 --##########
-DROP TABLE IF EXISTS obraSociales;
-CREATE TABLE obraSociales(
+DROP TABLE IF EXISTS obrasSociales;
+CREATE TABLE obrasSociales(
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
-	nombreCorto VARCHAR( 255 ),
+	nombreCorto VARCHAR( 255 ) UNIQUE,
 	nombreCompleto TEXT
 ) ENGINE=InnoDB;
 	
-INSERT INTO obraSociales VALUES
+INSERT INTO obrasSociales VALUES
 	( null, 'LIBRE', 'LIBRE' ),
 	( null, 'IOMA', 'IOMA' ),
 	( null, 'PAMI', 'PAMI' )

@@ -5,13 +5,13 @@
 			$url = '/' . $url;
 		}
 		header( 'Location: ' . $url );
-		die();
+		die;
 	}
 	
 	function __echoJSON( $data ) {
 		header( 'content-type: application/json' );
 		echo json_encode( $data );
-		die();
+		die;
 	}
 		
 // ************** /

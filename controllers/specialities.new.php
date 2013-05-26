@@ -16,7 +16,7 @@
 			VALUES
 				( null, ? )
 		',
-		array( $speciality )
+		array( strtolower( $speciality ) )
 	);
 	
 	// maybe a constraint error

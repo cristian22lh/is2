@@ -1,6 +1,6 @@
 <?php
 
-// TENER EN CUENTA QUE ESTE BUSCA UN SOLO PACIENTE, NO VARIOS!!!
+// TENER EN CUENTA QUE ESTO SOLO DEVUELVE UN SOLO PACIENTE, NO VARIOS!!!
 
 	if( !__issetPOST( array( 'dni' ) ) ) {
 		__echoJSON( array( 'success' => false ) );
@@ -14,7 +14,7 @@
 				os.nombreCorto AS obraSocialNombre
 			FROM
 				pacientes AS p
-			INNER JOIN obraSociales AS os
+			INNER JOIN obrasSociales AS os
 				ON os.id = p.idObraSocial
 			WHERE
 				dni = ?
