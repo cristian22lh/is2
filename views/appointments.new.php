@@ -15,8 +15,12 @@
 			<?php if( $createError ): ?>
 			<div class="alert alert-error">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
-				<strong>¡Ha fallado la creación del nuevo turno!</strong>
-				<span>Verifique que todos los campos sean correctos</span>
+				<p><strong>¡Ha fallado la creación del nuevo turno!</strong></p>
+				<ul>
+					<li>Verifique que la fecha del turno este dentro del rango de 7 días hacia adelante a partir de hoy</li>
+					<li>No puede crear un turno con un mismo médico a la misma hora y fecha que ya exista en el sistema</li>
+					<li>Verifique que la hora esté dentro del rango de horarios que posee el médico</li>
+				</ul>
 			</div>
 			<?php endif; ?>
 			<div class="is2-pagetitle clearfix">
@@ -25,27 +29,41 @@
 			</div>
 			
 			<form class="form-horizontal is2-appointment-form" method="post" action="">
-				<div class="control-group">
+				<div class="alert">
+					Sepa que no se pueden dar turnos más allá de la próxima semana desde la fecha actual
+				</div>
+				<div class="control-group is2-date">
 					<label class="control-label">Fecha</label>
 					<div class="controls">
-						<input type="text" class="input-small datepicker" placeholder="Fecha" name="fecha">
+						<input type="text" class="input-small datepicker is2-availability-date" placeholder="Fecha" name="fecha">
 					</div>
 				</div>
-				<div class="control-group">
+				<div class="control-group is2-time">
 					<label class="control-label">Hora</label>
 					<div class="controls bootstrap-timepicker">
-						<input type="text" class="input-small timepicker" placeholder="Hora" name="hora">
+						<input type="text" class="input-small timepicker is2-availability-time" placeholder="Hora" name="hora">
 					</div>
 				</div>
 				<div class="control-group">
+					<div class="alert alert-info">
+						Tenga en cuenta debe estar disponible en la fecha y hora especifícadas para poder crear el turno
+					</div>
 					<label class="control-label">Medico</label>
 					<div class="controls">
-						<select class="input-xlarge" name="idMedico">
+						<select class="input-xlarge is2-availability-doctor" name="idMedico">
 						<?php foreach( $doctors as $doctor ): ?>
 							<option value="<?php echo $doctor['id']; ?>"><?php echo $doctor['apellidos'] . ', ' . $doctor['nombres']; ?></option>
 						<?php endforeach; ?>
 						</select>
+						<button type="button" class="btn btn-info is2-availability-trigger">Comprobar disponibilidad</button>
+						<span class="is2-preloader is2-availability-preloader"></span>
 					</div>
+				</div>
+				<div class="alert alert-error is2-availability-error" style="display:none">
+					<strong>El medico no esta disponible para la fecha y hora especifícado</strong>
+				</div>
+				<div class="alert alert-success is2-availability-success" style="display:none">
+					<strong>El medico esta disponible para la fecha y hora especifícado</strong>
 				</div>
 				<div class="control-group is2-dni">
 					<div class="alert alert-info">
@@ -55,12 +73,12 @@
 					<div class="controls">
 						<input type="text" class="input-xlarge is2-patients-search-value" placeholder="Buscar paciente por DNI...">
 						<input type="hidden" class="is2-patients-search-result" name="idPaciente">
-						<button type="button" class="btn btn-info is2-patients-search-trigger">Buscar</button>
-						<span class="is2-preloader"></span>
+						<button type="button" class="btn btn-info is2-patients-search-trigger">Buscar paciente</button>
+						<span class="is2-preloader is2-patients-search-preloader"></span>
 					</div>
 				</div>
 				<div class="alert is2-patient-search-info">
-					Aquí aparecer el paciente en cuestión si la búsqueda es satisfactoria
+					Aquí va a aparecer el paciente que se asociará a este turno en cuestión si la búsqueda es satisfactoria
 				</div>
 				<div class="alert alert-error is2-patient-search-error" style="display:none">
 					<strong>¡No se ha encontrado paciente con tal número de DNI!</strong>
@@ -68,7 +86,7 @@
 				</div>
 				<div class="alert alert-success is2-patient-search-success" style="display:none">
 					<strong>¡Paciente encontrado!</strong>
-					<p>Acontinuación se muestran los datos del paciente a asociar con éste turno</p>
+					<p>Acontinuación se muestran los datos del paciente que se asociará a éste turno</p>
 					<ul>
 						<li>
 							<strong>Nombre completo:</strong>
@@ -130,11 +148,11 @@
 		disableFocus: true,
 	});
 	
-// *** LA BUSQUEDA SE HACE EN AJAX *** //
+// *** LA BUSQUEDA DE PACIENTE SE HACE MEDIATE AJAX *** //
 	var isWaiting = false;
 	var $dni = $( '.is2-patients-search-value' );
 	var $dniGroupControl = $( '.control-group.is2-dni' );
-	var $preloader = $( '.is2-preloader' );
+	var $preloaderSearch = $( '.is2-patients-search-preloader' );
 	var $search = $( '.is2-patients-search-trigger' );
 	var $errorMsg = $( '.is2-patient-search-error' );
 	var $successMsg = $( '.is2-patient-search-success' );
@@ -142,7 +160,7 @@
 	
 	var searchedPatient = function( dataResponse ) {
 		isWaiting = false;
-		$preloader.css( 'visibility', 'hidden' );
+		$preloaderSearch.css( 'visibility', 'hidden' );
 		
 		if( !dataResponse.success ) {
 			return;
@@ -182,7 +200,7 @@
 		}
 		
 		$dniGroupControl.removeClass( 'error' );
-		$preloader.css( 'visibility', 'visible' );
+		$preloaderSearch.css( 'visibility', 'visible' );
 		isWaiting = true;
 		
 		$.ajax( {
@@ -192,11 +210,74 @@
 			},
 			dataType: 'json',
 			type: 'POST',
-			success: searchedPatient
+			success: searchedPatient,
+			error: searchedPatient
 		} );
 		
 	} );
 	
+// *** EL CHECKEO DE DISPONIBLIDAD SE HACE MEDIANTE AJAX *** //
+	var $date = $( '.is2-availability-date' );
+	var $dateGroupControl = $( '.is2-date' );
+	var $time = $( '.is2-availability-time' );
+	var $timeGroupControl = $( '.is2-date' );
+	var $doctor = $( '.is2-availability-doctor' );
+	var $preloaderAvailability = $( '.is2-availability-preloader' );
+	var $availabilityErrorMsg = $( '.is2-availability-error' );
+	var $availabilitySuccessMsg = $( '.is2-availability-success' );
+	
+	var checkedAvailability = function( dataResponse ) {
+		isWaiting = false;
+		$preloaderAvailability.css( 'visibility', 'hidden' );
+		
+		if( !dataResponse.success ) {
+			$availabilitySuccessMsg.hide();
+			$availabilityErrorMsg.show();
+			
+		} else {
+			$availabilitySuccessMsg.show();
+			$availabilityErrorMsg.hide();
+		}
+	};
+	
+	$( '.is2-availability-trigger' ).on( 'click', function( e ) {
+		if( isWaiting ) {
+			return;
+		}
+		
+		var date = $date.val().trim(),
+			time = $time.val().trim(),
+			doctorID = $doctor.val();
+			
+		if( !date ) {
+			$dateGroupControl.addClass( 'error' );
+			return;
+		}
+		$dateGroupControl.removeClass( 'error' );
+		if( !time ) {
+			$timeGroupControl.addClass( 'error' );
+			return;
+		}
+		$timeGroupControl.removeClass( 'error' );
+		
+		$preloaderAvailability.css( 'visibility', 'visible' );
+		isWaiting = true;
+		
+		$.ajax( {
+			url: '/medicos/comprobar-horarios-disponibilidad',
+			data: {
+				date: date,
+				time: time,
+				doctorID: doctorID
+			},
+			dataType: 'json',
+			type: 'POST',
+			success: checkedAvailability,
+			error: checkedAvailability
+		} );
+	} );
+	
+// *** OTRAS YERBAS *** //
 	// esto es por si apreta <ENTER> estando en DNI, evito que submitte el form
 	$dni.on( 'keydown', function( e ) {
 		if( e.keyCode === 13 ) {
@@ -211,9 +292,35 @@
 		if( !$patientID.val().trim() ) {
 			e.preventDefault();
 			$dniGroupControl.addClass( 'error' );
-		} else {
-			$dniGroupControl.removeClass( 'error' );
+			$dni.tooltip( { title: 'Debe tener un paciente seleccionado para crear el turno' } );
+			return;
 		}
+		$dniGroupControl.removeClass( 'error' );
+		
+		var date = $date.val(),
+			target,
+			base = new Date();
+		
+		date = date.split( '/' );
+		if( date.length !== 3 ) {
+			e.preventDefault();
+			$dateGroupControl.addClass( 'error' );
+			$date.tooltip( { title: 'Debe seleccionar una fecha para poder crear el turno' } );
+			return;
+		}
+		target = new Date();
+		target.setDate( 1 );
+		target.setFullYear( date[2] );
+		target.setMonth( date[1]-1 );
+		target.setDate( date[0] );
+
+		if( base > target || target - base > 604800000 ) {
+			e.preventDefault();
+			$dateGroupControl.addClass( 'error' );
+			$date.tooltip( { title: 'La fecha elegida no esta dentro del rango permitdo' } );
+			return;
+		}
+		$dateGroupControl.removeClass( 'error' );
 	} );
 	
 })();

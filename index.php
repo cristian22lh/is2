@@ -56,6 +56,10 @@
 		require './controllers/appointments.search.php';
 	} else if( $page == '/turnos/crear' ) {
 		require './controllers/appointments.new.php';
+
+// *** MEDICOS *** //
+	} else if( $page == '/medicos/comprobar-horarios-disponibilidad' ) {
+		require './controllers/doctors.check.availability.php';
 	
 // *** PACIENTES *** //
 	} else if( $page == '/pacientes/buscar/dni' ) {

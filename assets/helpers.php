@@ -4,7 +4,7 @@
 		if( $url{0} != '/' ) {
 			$url = '/' . $url;
 		}
-		header( 'Location: ' . $url );
+		header( 'location: ' . $url );
 		die;
 	}
 	
@@ -27,7 +27,7 @@
 	}
 
 	function __GETField( $name ) {
-		return count( $_GET ) > 0 && isset( $_GET[$name] ) ? $_GET[$name] : null;
+		return count( $_GET ) > 0 && isset( $_GET[$name] ) ? $_GET[$name] : false;
 	}
 	
 // ************** /

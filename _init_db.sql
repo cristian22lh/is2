@@ -56,6 +56,27 @@ INSERT INTO medicos VALUES
 ;
 --##########
 --##########
+DROP TABLE IF EXISTS horarios;
+CREATE TABLE horarios(
+	id INTEGER PRIMARY KEY AUTO_INCREMENT,
+	idMedico INTEGER,
+	horaIngreso TIME,
+	horaEgreso TIME,
+	dia ENUM( '1', '2', '3', '4', '5', '6', '7' )
+) ENGINE=InnoDB;
+
+INSERT INTO horarios VALUES
+	( null, 1, '11:00:00', '17:00:00', 1 ),
+	( null, 2, '12:00:00', '15:00:00', 2 ),
+	( null, 3, '08:00:00', '20:00:00', 3 ),
+	( null, 4, '15:00:00', '20:00:00', 5 ),
+	( null, 5, '15:00:00', '19:00:00', 6 ),
+	( null, 6, '16:00:00', '18:00:00', 4 ),
+	( null, 7, '08:00:00', '13:00:00', 1 ),
+	( null, 8, '09:00:00', '14:00:00', 2 )
+;
+--##########
+--##########
 DROP TABLE IF EXISTS pacientes;
 CREATE TABLE pacientes(
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -112,3 +133,20 @@ INSERT INTO especialidades VALUES
 	( null, 'Pediatría' ),
 	( null, 'Psiquiatría' )
 ;
+--##########
+--##########
+--## AHORA LAS REFERENCES
+--##########
+ALTER TABLE turnos
+	ADD CONSTRAINT turnos_idMedico
+	FOREIGN KEY( idMedico )
+		REFERENCES medicos( id );
+ALTER TABLE turnos
+	ADD CONSTRAINT turnos_idPaciente
+	FOREIGN KEY( idPaciente )
+		REFERENCES pacientes( id );
+
+ALTER TABLE horarios
+	ADD CONSTRAINT horarios_idMedico
+	FOREIGN KEY( idMedico )
+		REFERENCES medicos( id );

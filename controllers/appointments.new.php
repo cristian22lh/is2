@@ -1,12 +1,59 @@
 <?php
 
 	if( __issetPOST( array( 'fecha', 'hora', 'idMedico', 'idPaciente' ) ) ) {
-		$fecha = __toISODate( $_POST['fecha'] );
-		$hora = __toISOTime( $_POST['hora'] );
-		$idMedico = __validateID( $_POST['idMedico'] );
-		$idPaciente = __validateID( $_POST['idPaciente'] );
+		$date = __toISODate( $_POST['fecha'] );
+		$time = __toISOTime( $_POST['hora'] );
+		$doctorID = __validateID( $_POST['idMedico'] );
+		$patientID = __validateID( $_POST['idPaciente'] );
 		
-		if( !$fecha || !$hora || !$idMedico || !$idPaciente ) {
+		if( !$date || !$time || !$doctorID || !$patientID ) {
+			__redirect( '/turnos/crear?error=crear-turno' );
+		}
+		
+		// debo hacer un par de comprobaciones
+		// 1) no puedo crear un turno donde el medico
+		// no este disponible para ese dia y hora
+		$day = date( 'N', strtotime( $date ) );
+
+		$res = $db->select( 
+			'
+				SELECT
+					id
+				FROM
+					horarios
+				WHERE
+					idMedico = ? AND ? >= horaIngreso AND ? <= horaEgreso AND dia = ?
+			',
+			array( $doctorID, $time, $time, $day )
+		);
+
+		// el medico no tiene tal horario
+		if( !count( $res ) ) {
+			__redirect( '/turnos/crear?error=crear-turno' );
+		}
+		
+		// 2) ahora debo fijarme que no exista ya un turno con
+		// mismo dia y hora
+		$res = $db->select(
+			'
+				SELECT
+					id
+				FROM
+					turnos AS t
+				WHERE
+					t.idMedico = ? AND t.hora = ? AND t.fecha = ?
+			',
+			array( $doctorID, $time, $date )
+		);
+
+		// hay un turno
+		if( count( $res ) ) {
+			__redirect( '/turnos/crear?error=crear-turno' );
+		}
+		
+		// 3) no puedo crear un turno mayor a 7 dias desde el dia actual
+		$diff = date_diff( date_create(), date_create( $date ) )->format( '%d' );
+		if( $diff <= 0 || $diff > 7 ) {
 			__redirect( '/turnos/crear?error=crear-turno' );
 		}
 		
@@ -17,7 +64,7 @@
 				VALUES
 					( null, ?, ?, ?, ?, ? )
 			',
-			array( $fecha, $hora, $idMedico, $idPaciente, 'esperando' )
+			array( $date, $time, $doctorID, $patientID, 'esperando' )
 		);
 		
 		if( !$insertId ) {

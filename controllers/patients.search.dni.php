@@ -7,6 +7,10 @@
 	}
 
 	$dni = __cleanDNI( $_POST['dni'] );
+	if( !$dni ) {
+		__echoJSON( array( 'success' => false ) );
+	}
+	
 	$patients = $db->select(
 		'
 			SELECT
