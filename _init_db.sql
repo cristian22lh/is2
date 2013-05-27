@@ -10,7 +10,7 @@ CREATE TABLE usuarios(
 	clave CHAR( 40 )
 );
 
-INSERT INTO usuarios VALUES( null, "admin", SHA( 123456 ) ), ( null, "root", SHA( 123456 ) );
+INSERT INTO usuarios VALUES( null, 'admin', SHA( 123456 ) ), ( null, 'root', SHA( 123456 ) );
 --##########
 --##########
 DROP TABLE IF EXISTS turnos;
@@ -20,7 +20,8 @@ CREATE TABLE turnos(
 	hora TIME,
 	idMedico INTEGER,
 	idPaciente INTEGER,
-	estado ENUM( 'confirmado', 'cancelado', 'esperando' )
+	estado ENUM( 'confirmado', 'cancelado', 'esperando' ),
+	UNIQUE( fecha,  hora, idMedico )
 ) ENGINE=InnoDB;
 
 INSERT INTO turnos VALUES

@@ -32,26 +32,7 @@
 			__redirect( '/turnos/crear?error=crear-turno' );
 		}
 		
-		// 2) ahora debo fijarme que no exista ya un turno con
-		// mismo dia y hora
-		$res = $db->select(
-			'
-				SELECT
-					id
-				FROM
-					turnos AS t
-				WHERE
-					t.idMedico = ? AND t.hora = ? AND t.fecha = ?
-			',
-			array( $doctorID, $time, $date )
-		);
-
-		// hay un turno
-		if( count( $res ) ) {
-			__redirect( '/turnos/crear?error=crear-turno' );
-		}
-		
-		// 3) no puedo crear un turno mayor a 7 dias desde el dia actual
+		// 2) no puedo crear un turno mayor a 7 dias desde el dia actual
 		$diff = date_diff( date_create(), date_create( $date ) )->format( '%d' );
 		if( $diff <= 0 || $diff > 7 ) {
 			__redirect( '/turnos/crear?error=crear-turno' );
