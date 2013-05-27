@@ -14,19 +14,7 @@
 		// 1) no puedo crear un turno donde el medico
 		// no este disponible para ese dia y hora
 		$day = date( 'N', strtotime( $date ) );
-
-		$res = $db->select( 
-			'
-				SELECT
-					id
-				FROM
-					horarios
-				WHERE
-					idMedico = ? AND ? >= horaIngreso AND ? <= horaEgreso AND dia = ?
-			',
-			array( $doctorID, $time, $time, $day )
-		);
-
+		$res = q_checkDoctorAvailability( array( $doctorID, $time, $time, $day ) );
 		// el medico no tiene tal horario
 		if( !count( $res ) ) {
 			__redirect( '/turnos/crear?error=crear-turno' );
@@ -56,16 +44,7 @@
 	}
 
 // PIDO LA LISTA DE DOCTORES
-	$doctors = $db->select(
-		'
-			SELECT
-				*
-			FROM 
-				medicos
-			ORDER BY
-				apellidos, nombres
-		'
-	);
+	$doctors = q_getAllDoctors();
 
 // TODAS ESTAS SON VARIABLES QUE DEBEN USARSE EN LA VIEW //
 	$username = __getUsername();

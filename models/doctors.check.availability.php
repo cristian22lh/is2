@@ -14,19 +14,7 @@
 	
 	// debo saber cual es dia en donde case $date
 	$day = date( 'N', strtotime( $date ) );
-
-	$res = $db->select( 
-		'
-			SELECT
-				id
-			FROM
-				horarios
-			WHERE
-				idMedico = ? AND ? >= horaIngreso AND ? <= horaEgreso AND dia = ?
-		',
-		array( $doctorID, $time, $time, $day )
-	);
-	
+	$res = q_checkDoctorAvailability( array( $doctorID, $time, $time, $day ) );
 	// el doctor no antiende tal dia
 	if( !count( $res ) ) {
 		__echoJSON( array( 'success' => false, 'type' => 'range' ) );

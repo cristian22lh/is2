@@ -164,16 +164,7 @@
 
 // PIDO LOS MEDICOS, ESTOS ES DEBIDO A QUE LA BUSQUEDA DESPLIEGA UNA
 // LISTA QUE CONTIENE TODOS LOS MEDICOS EN EL SISTEMA
-	$doctors = $db->select(
-		'
-			SELECT
-				*
-			FROM 
-				medicos
-			ORDER BY
-				apellidos, nombres
-		'
-	);
+	$doctors = q_getAllDoctors();
 	
 // TODAS ESTAS SON VARIABLES QUE DEBEN USARSE EN LA VIEW //
 	$username = __getUsername();

@@ -8,8 +8,10 @@
 	require './assets/db.php';
 	// las funciones helpers tienen como prefijo __
 	require './assets/helpers.php';
-	// las funciones template tienen como prefijo __
+	// las funciones template tienen como prefijo t_
 	require './views/_template.php';
+	// las queries tienen como prefijo q_
+	require './assets/queries.php';
 	// init
 	$db = new DB();
 	__initSession();
@@ -40,55 +42,55 @@
 
 	// routeamos
 	if( $page === '/' || $page == '/iniciar-sesion' ) {
-		require './controllers/login.php';
+		require './models/login.php';
 	} else if( $page == '/cerrar-sesion' ) {
-		require './controllers/logout.php';
+		require './models/logout.php';
 	
 // *** TURNOS *** //
 	} else if( $page == '/turnos' ) {
-		require './controllers/appointments.php';
+		require './models/appointments.php';
 	} else if( $page == '/turnos/confirmar' ) {
-		require './controllers/appointments.confirm.php';
+		require './models/appointments.confirm.php';
 	} else if( $page == '/turnos/cancelar' ) {
-		require './controllers/appointments.cancel.php';
+		require './models/appointments.cancel.php';
 	} else if( $page == '/turnos/borrar' ) {
-		require './controllers/appointments.remove.php';
+		require './models/appointments.remove.php';
 	} else if( $page == '/turnos/reiniciar' ) {
-		require './controllers/appointments.reset.php';
+		require './models/appointments.reset.php';
 	} else if( $page == '/turnos/buscar' ) {
-		require './controllers/appointments.search.php';
+		require './models/appointments.search.php';
 	} else if( $page == '/turnos/crear' ) {
-		require './controllers/appointments.new.php';
+		require './models/appointments.new.php';
 
 // *** MEDICOS *** //
 	} else if( $page == '/medicos/comprobar-horarios-disponibilidad' ) {
-		require './controllers/doctors.check.availability.php';
+		require './models/doctors.check.availability.php';
 	
 // *** PACIENTES *** //
 	} else if( $page == '/pacientes' ) {
-		require './controllers/patients.php';
+		require './models/patients.php';
 	} else if( $page == '/pacientes/buscar/dni' ) {
-		require './controllers/patients.search.dni.php';
+		require './models/patients.search.dni.php';
 	
 // *** ESPECIALIDADES *** //
 	} else if( $page == '/especialidades' ) {
-		require './controllers/specialities.php';
+		require './models/specialities.php';
 	} else if( $page == '/especialidades/crear' ) {
-		require './controllers/specialities.new.php';
+		require './models/specialities.new.php';
 	} else if( $page == '/especialidades/editar' ) {
-		require './controllers/specialities.edit.php';
+		require './models/specialities.edit.php';
 	} else if( $page == '/especialidades/borrar' ) {
-		require './controllers/specialities.remove.php';
+		require './models/specialities.remove.php';
 
 // *** OBRA SOCIALES *** //
 	} else if( $page == '/obras-sociales' ) {
-		require './controllers/insurances.php';
+		require './models/insurances.php';
 	} else if( $page == '/obras-sociales/crear' ) {
-		require './controllers/insurances.new.php';
+		require './models/insurances.new.php';
 	} else if( $page == '/obras-sociales/editar' ) {
-		require './controllers/insurances.edit.php';
+		require './models/insurances.edit.php';
 	} else if( $page == '/obras-sociales/borrar' ) {
-		require './controllers/insurances.remove.php';
+		require './models/insurances.remove.php';
 	}
 	
 
