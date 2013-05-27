@@ -35,8 +35,20 @@
 	} else if( __issetGETField( 'error', 'borrar-especialidad' ) ) {
 		$removeError = true;
 	}
-
-	// render
-	require './views/specialities.php';
+	
+// LOAD THE VIEW
+	__render( 
+		'specialities', 
+		array(
+			'username' => $username,
+			'createSuccess' => $createSuccess,
+			'createError' => $createError,
+			'editSuccess' => $editSuccess,
+			'editError' => $editError,
+			'removeSuccess' => $removeSuccess,
+			'removeError' => $removeError,
+			'specialities' => $specialities
+		)
+	);
 
 ?>

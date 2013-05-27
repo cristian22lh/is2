@@ -35,8 +35,20 @@
 	} else if( __issetGETField( 'error', 'borrar-obra-social' ) ) {
 		$removeError = true;
 	}
-
-	// render
-	require './views/insurances.php';
+	
+// LOAD THE VIEW
+	__render( 
+		'insurances', 
+		array(
+			'username' => $username,
+			'createSuccess' => $createSuccess,
+			'createError' => $createError,
+			'editSuccess' => $editSuccess,
+			'editError' => $editError,
+			'removeSuccess' => $removeSuccess,
+			'removeError' => $removeError,
+			'insurances' => $insurances
+		)
+	);
 
 ?>

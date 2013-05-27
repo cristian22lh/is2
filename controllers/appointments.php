@@ -220,7 +220,24 @@
 	// la fecha actual hasta los siguiente 7 dias
 	$currentDate = !$isSearch ? date( 'd/m/Y' ) : false;
 	
-	// render
-	require './views/appointments.php';
+// LOAD THE VIEW
+	__render( 
+		'appointments', 
+		array(
+			'username' => $username,
+			'currentDate' => $currentDate,
+			'confirmSuccess' => $confirmSuccess,
+			'confirmError' => $confirmError,
+			'cancelSuccess' => $cancelSuccess,
+			'cancelError' => $cancelError,
+			'removeSuccess' =>$removeSuccess,
+			'removeError' => $removeError,
+			'resetSuccess' => $resetSuccess,
+			'resetError' => $resetError,
+			'searchError' => $searchError,
+			'appointments' => $appointments,
+			'doctors' => $doctors
+		)
+	);
 
 ?>

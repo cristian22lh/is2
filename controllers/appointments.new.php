@@ -76,8 +76,15 @@
 	} else {
 		$createError = false;
 	}
-
-	// render
-	require './views/appointments.new.php';
+	
+// LOAD THE VIEW
+	__render( 
+		'appointments.new', 
+		array(
+			'username' => $username,
+			'createError' => $createError,
+			'doctors' => $doctors,
+		)
+	);
 	
 ?>

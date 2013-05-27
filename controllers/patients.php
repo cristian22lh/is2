@@ -17,7 +17,13 @@
 		'
 	);
 
-	// render
-	require './views/patients.php';
+// LOAD THE VIEW
+	__render( 
+		'patients', 
+		array(
+			'username' => $username,
+			'patients' => $patients
+		)
+	);
 
 ?>

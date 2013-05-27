@@ -160,5 +160,18 @@
 	function __validateID( $value ) {
 		return $value > 0 ? (int) $value : false;
 	}
-
+	
+// ************** /
+// RENDER VIEWS
+// ************* /
+	function __render( $filename, $vars ) {
+		extract( $vars );
+		
+		$fullPath =  './views/' . $filename . '.php';
+		if( !file_exists( $fullPath ) ) {
+			die( 'Specified view: "' . $filename . '" does not exists at the path: "' . $fullPath . '"' );
+		}
+		
+		require $fullPath;
+	}
 ?>

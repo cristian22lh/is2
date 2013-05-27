@@ -31,7 +31,12 @@
 		$isErrorLogin = true;
 	}
 	
-	// render
-	require './views/login.php';
+// LOAD THE VIEW
+	__render( 
+		'login', 
+		array(
+			'isErrorLogin' => $isErrorLogin
+		)
+	);
 
 ?>
