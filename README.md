@@ -58,3 +58,14 @@ Los usuarios son dos:
 2. admin
 	
 Para ambos sus password son **123456**
+
+DEBUG
+======
+Para debuggear la aplicacion tienen que:
+
+1. Usar Firefox
+2. Tenerle instalado el plugin [FireBug](https://addons.mozilla.org/es/firefox/addon/firebug/)
+3. Tener instalado el addon para FireBug, [FirePHP](https://addons.mozilla.org/en-US/firefox/addon/firephp/)
+3. Listo
+
+Para tirarle mensajes a FirePHP y que estos se vean en la consola de FireBug, deben llamar a la funcion `__log` en donde mas lo quieran en su codigo PHP.

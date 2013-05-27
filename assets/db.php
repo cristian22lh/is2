@@ -29,7 +29,9 @@
 		}
 		
 		function select( $query, $replacements = array() ) {
-
+		
+			$this->_log( $query, $replacements );
+	
 			$res = array();
 			
 			if( $stmt = $this->db->prepare( $query ) ) {
@@ -70,6 +72,8 @@
 		
 		function update( $query, $replacements ) {
 		
+			$this->_log( $query, $replacements );
+		
 			$rowsAffected = 0;
 			
 			if( $stmt = $this->db->prepare( $query ) ) {
@@ -89,6 +93,8 @@
 		}
 		
 		function insert( $query, $replacements ) {
+		
+			$this->_log( $query, $replacements );
 		
 			$insertId = null;
 			
@@ -145,6 +151,13 @@
 		
 		private function _bindResult( &$stmt, &$args ) {
 			call_user_func_array( array( $stmt, 'bind_result' ) , $args );
+		}
+		
+		private function _log( $query, $replacements ) {
+			__log( 'executing the query: ' );
+			__log( $query );
+			__log( 'with the params: ' );
+			__log( $replacements );
 		}
 	}
 	

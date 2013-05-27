@@ -55,7 +55,6 @@
 		__redirect( '/turnos?id=' . $insertId );
 	}
 
-
 // PIDO LA LISTA DE DOCTORES
 	$doctors = $db->select(
 		'

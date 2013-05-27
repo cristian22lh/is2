@@ -1,5 +1,10 @@
 <?php
 
+	// con este variable puedo tirale mensaje a FirePHP
+	// https://addons.mozilla.org/en-US/firefox/addon/firephp
+	// los mensajes se tiran llamando a la funcion __log( 'message' );
+	$DEBUG = true;
+	
 	require './assets/db.php';
 	// las funciones helpers tienen como prefijo __
 	require './assets/helpers.php';
@@ -8,6 +13,7 @@
 	// init
 	$db = new DB();
 	__initSession();
+	__initDebugging();
 	
 	// veo adonde quiere ir el usuario
 	$reqURI = parse_url( $_SERVER['REQUEST_URI'] );

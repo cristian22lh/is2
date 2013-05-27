@@ -4,7 +4,7 @@
 		if( $url{0} != '/' ) {
 			$url = '/' . $url;
 		}
-		header( 'location: ' . $url );
+		header( 'location: ' . $url, true );
 		die;
 	}
 	
@@ -13,7 +13,25 @@
 		echo json_encode( $data );
 		die;
 	}
-		
+
+// ************** /
+// FIREPHP funcionality
+// ************* /
+	function __initDebugging() {
+		global $DEBUG;
+		if( $DEBUG ) {
+			ob_start();
+		}
+	}
+	function __log( $msg ) {
+		global $DEBUG;
+		if( $DEBUG ) {
+			require_once './debug/FirePHP.class.php';
+			$firephp = FirePHP::getInstance( true );
+			$firephp->log( $msg );
+		}
+	}
+	
 // ************** /
 // $_GET & $_POST
 // ************* /
