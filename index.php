@@ -1,16 +1,13 @@
 <?php
-	
-	// init
+
 	require './assets/db.php';
-	$db = new DB();
 	// las funciones helpers tienen como prefijo __
 	require './assets/helpers.php';
-	// mas inits
-	__initSession();
-	// aca tengo funciones que escupen HTML para las views
-	// para no ir repitiendo codigo HTML en cada view
-	// tienen como prefijo el t_
+	// las funciones template tienen como prefijo __
 	require './views/_template.php';
+	// init
+	$db = new DB();
+	__initSession();
 	
 	// veo adonde quiere ir el usuario
 	$reqURI = parse_url( $_SERVER['REQUEST_URI'] );
@@ -62,6 +59,8 @@
 		require './controllers/doctors.check.availability.php';
 	
 // *** PACIENTES *** //
+	} else if( $page == '/pacientes' ) {
+		require './controllers/patients.php';
 	} else if( $page == '/pacientes/buscar/dni' ) {
 		require './controllers/patients.search.dni.php';
 	
