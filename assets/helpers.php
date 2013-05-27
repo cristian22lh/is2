@@ -60,7 +60,7 @@
 	}
 	
 	function __isUserLogged() {
-		return isset( $_SESSION['is_logged'] ) && $_SESSION['is_logged'] == true;
+		return isset( $_SESSION['is_logged'] ) && $_SESSION['is_logged'];
 	}
 	
 	function __setUserLogin() {
@@ -164,14 +164,14 @@
 // ************** /
 // RENDER VIEWS
 // ************* /
-	function __render( $filename, $vars ) {
-		extract( $vars );
+	function __render( $__filename__, $vars ) {
 		
-		$fullPath =  './views/' . $filename . '.php';
-		if( !file_exists( $fullPath ) ) {
-			die( 'Specified view: "' . $filename . '" does not exists at the path: "' . $fullPath . '"' );
+		$__fullPath__ =  './views/' . $__filename__ . '.php';
+		if( !file_exists( $__fullPath__ ) ) {
+			die( 'Specified view: "' . $__filename__ . '" does not exists at the path: "' . $__fullPath__ . '"' );
 		}
 		
-		require $fullPath;
+		extract( $vars );
+		require $__fullPath__;
 	}
 ?>
