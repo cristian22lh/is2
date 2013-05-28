@@ -78,9 +78,11 @@
 					<tr data-speciality-id="<?php echo $speciality['id']; ?>">
 						<td class="is2-speciality-name"><?php echo $speciality['nombre']; ?></td>
 						<td>
+						<?php if( $speciality['id'] != 1 ): ?>
 							<a class="btn is2-trigger-edit" href="#is2-modal-edit" data-toggle="modal" data-speciality-id="<?php echo $speciality['id']; ?>">Editar</a>
 							<a class="btn btn-danger is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-speciality-id="<?php echo $speciality['id']; ?>">Borrar</a>
 						</td>
+						<?php endif; ?>
 					</tr>
 				<?php endforeach; ?>
 				</tbody>

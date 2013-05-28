@@ -125,6 +125,7 @@ CREATE TABLE especialidades(
 ) ENGINE=InnoDB;
 
 INSERT INTO especialidades VALUES
+	( null, '---' ),
 	( null, 'Otorrinolaringología' ),
 	( null, 'Odontología' ),
 	( null, 'Nefrología' ),
@@ -167,7 +168,7 @@ ALTER TABLE pacientes
 ;
 --## Cuando se borrar una obra social los pacientes que estaban vinculados
 --## a esa obra social deben pasarse todos a la obra social LIBRE (la de ID = 1 )
-CREATE TRIGGER obrasSociales_reestablecerObraSocial
+CREATE TRIGGER pacientes_reestablecerObraSocial
 	AFTER DELETE ON obrasSociales
 	FOR EACH ROW
 		UPDATE 
@@ -179,3 +180,21 @@ CREATE TRIGGER obrasSociales_reestablecerObraSocial
 			idObraSocial IS NULL;
 ;
 
+ALTER TABLE medicos
+	ADD CONSTRAINT medicos_idEspecialidad
+	FOREIGN KEY( idEspecialidad )
+		REFERENCES especialidades( id )
+		ON DELETE SET NULL
+;
+--## Cuando borro una especialidad la cual este asociado a un medico
+--## este debe pasar a la especialiad por defecto ( la de ID = 1 )
+CREATE TRIGGER medicos_reestablecerEspecialidad
+	AFTER DELETE ON especialidades
+	FOR EACH ROW
+		UPDATE 
+			medicos 
+		SET 
+			idEspecialidad = 1
+		WHERE 
+			idEspecialidad IS NULL;
+;
