@@ -23,12 +23,22 @@
 			ob_start();
 		}
 	}
+	
 	function __log( $msg ) {
 		global $DEBUG;
 		if( $DEBUG ) {
 			require_once './debug/FirePHP.class.php';
 			$firephp = FirePHP::getInstance( true );
 			$firephp->log( $msg );
+		}
+	}
+	
+	function __err( $msg ) {
+		global $DEBUG;
+		if( $DEBUG ) {
+			require_once './debug/FirePHP.class.php';
+			$firephp = FirePHP::getInstance( true );
+			$firephp->error( $msg );
 		}
 	}
 	

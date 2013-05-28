@@ -65,6 +65,9 @@
 				}
 				
 				$stmt->close();
+				
+			} else {
+				$this->_err( $this->db->error );
 			}
 			
 			return $res;
@@ -73,7 +76,7 @@
 		function update( $query, $replacements ) {
 		
 			$this->_log( $query, $replacements );
-		
+
 			$rowsAffected = 0;
 			
 			if( $stmt = $this->db->prepare( $query ) ) {
@@ -83,6 +86,9 @@
 				$rowsAffected = $stmt->affected_rows;
 				
 				$stmt->close();
+				
+			} else {
+				$this->_err( $this->db->error );
 			}
 			
 			return $rowsAffected;
@@ -105,6 +111,9 @@
 				$insertId = $stmt->insert_id;
 				
 				$stmt->close();
+				
+			} else {
+				$this->_err( $this->db->error );
 			}
 			
 			return $insertId;
@@ -119,7 +128,9 @@
 			}
 			
 			// ejecutamos la consultado
-			$stmt->execute();
+			if( !$stmt->execute() ) {
+				$this->_err( $stmt->error );
+			}
 		}
 	
 		private function _addParams( $replacements ) {
@@ -158,6 +169,11 @@
 			__log( $query );
 			__log( 'with the params: ' );
 			__log( $replacements );
+		}
+		
+		private function _err( $msg ) {
+			__err( $msg );
+			die;
 		}
 	}
 	

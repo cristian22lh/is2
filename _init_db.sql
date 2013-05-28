@@ -141,13 +141,20 @@ INSERT INTO especialidades VALUES
 ALTER TABLE turnos
 	ADD CONSTRAINT turnos_idMedico
 	FOREIGN KEY( idMedico )
-		REFERENCES medicos( id );
+		REFERENCES medicos( id )
+		ON DELETE CASCADE
+;
+		
 ALTER TABLE turnos
 	ADD CONSTRAINT turnos_idPaciente
 	FOREIGN KEY( idPaciente )
-		REFERENCES pacientes( id );
+		REFERENCES pacientes( id )
+		ON DELETE CASCADE
+;
 
 ALTER TABLE horarios
 	ADD CONSTRAINT horarios_idMedico
 	FOREIGN KEY( idMedico )
-		REFERENCES medicos( id );
+		REFERENCES medicos( id )
+		ON DELETE CASCADE
+;

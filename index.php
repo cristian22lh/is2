@@ -71,6 +71,8 @@
 		require './models/patients.php';
 	} else if( $page == '/pacientes/buscar/dni' ) {
 		require './models/patients.search.dni.php';
+	} else if( $page == '/pacientes/borrar' ) {
+		require './models/patients.remove.php';
 	
 // *** ESPECIALIDADES *** //
 	} else if( $page == '/especialidades' ) {

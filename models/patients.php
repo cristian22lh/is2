@@ -16,13 +16,24 @@
 				p.apellidos
 		'
 	);
+	
+	$removeSuccess = false;
+	$removeError = false;
+	if( __issetGETField( 'exito', 'borrar-paciente' ) ) {
+		$removeSuccess = true;
+	// ... o de error
+	} else if( __issetGETField( 'error', 'borrar-paciente' ) ) {
+		$removeError = true;
+	}
 
 // LOAD THE VIEW
 	__render( 
 		'patients', 
 		array(
 			'username' => $username,
-			'patients' => $patients
+			'patients' => $patients,
+			'removeSuccess' => $removeSuccess,
+			'removeError' => $removeError
 		)
 	);
 
