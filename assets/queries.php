@@ -31,5 +31,19 @@
 			$replacements
 		);
 	}
+	
+	function q_getAllInsurances() {
+		global $db;
+		return $db->select(
+			'
+				SELECT
+					*
+				FROM
+					obrasSociales
+				ORDER BY
+					nombreCorto
+			'
+		);
+	}
 
 ?>

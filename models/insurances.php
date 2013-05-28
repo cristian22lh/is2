@@ -3,16 +3,7 @@
 // ESTAS VARIABLES SON LAS QUE SE USAN EL VIEW
 	$username = __getUsername();
 	
-	$insurances = $db->select(
-		'
-			SELECT
-				*
-			FROM
-				obrasSociales
-			ORDER BY
-				nombreCorto
-		'
-	);
+	$insurances = q_getAllInsurances();
 	
 	$createSuccess = false;
 	$createError = false;

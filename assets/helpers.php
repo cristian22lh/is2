@@ -171,6 +171,15 @@
 		return $value > 0 ? (int) $value : false;
 	}
 	
+	function __validateGender( $value ) {
+		$value = strtoupper( $value );
+		return in_array( $value, array( 'F', 'M' ) ) ? $value : false;
+	}
+	
+	function __validateEmail( $value ) {
+		return preg_match( '/^[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]+$/i', trim( $value ) ) ? $value : false;
+	}
+	
 // ************** /
 // RENDER VIEWS
 // ************* /

@@ -1,5 +1,17 @@
 <?php
 
+	$whereCluase = array();
+	$replacements = array();
+
+// ESTE ES CUANDO VENGO DE CREAR UN TURNO
+	if( ( $newPatient = __GETField( 'id' ) ) && __validateID( $newPatient ) ) {
+		$whereCluase[] = ' p.id = ? ';
+		$replacements[] = $newPatient;
+		
+	} else {
+		$whereCluase[] = ' 1 = 1 ';
+	}
+
 // ESTAS VARIABLES SON LAS QUE SE USAN EL VIEW
 	$username = __getUsername();
 	
@@ -12,9 +24,13 @@
 				pacientes AS p
 			INNER JOIN obrasSociales AS os
 				ON os.id = p.idObraSocial
+			WHERE ' .
+				implode( ' AND ', $whereCluase ) .
+			'
 			ORDER BY
 				p.apellidos
-		'
+		',
+		$replacements
 	);
 	
 	$removeSuccess = false;

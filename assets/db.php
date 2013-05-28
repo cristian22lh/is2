@@ -173,7 +173,6 @@
 		
 		private function _err( $msg ) {
 			__err( $msg );
-			die;
 		}
 	}
 	
