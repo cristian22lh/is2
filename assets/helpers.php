@@ -13,7 +13,7 @@
 		echo json_encode( $data );
 		die;
 	}
-
+	
 // ************** /
 // FIREPHP funcionality
 // ************* /

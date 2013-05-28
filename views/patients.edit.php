@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 	<head>
-		<?php t_headTag( 'Pacientes - Crear' ); ?>
+		<?php t_headTag( 'Pacientes - Editar' ); ?>
 		<style>
 			label {
 				cursor: default;
@@ -12,19 +12,24 @@
 		<?php t_headerTag( $username, 'patients' ); ?>
 	
 		<div class="container">
-			<?php if( $createError ): ?>
+			<?php if( $editSuccess ): ?>
+			<div class="alert alert-success">
+				<a class="close" data-dismiss="alert" href="#">&times;</a>
+				<strong>¡El paciente ha sido editado con satisfactoriamente!</strong>
+			</div>
+			<?php elseif( $editError ): ?>
 			<div class="alert alert-error">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
-				<p><strong>¡Ha fallado la creación del nuevo paciente!</strong></p>
+				<p><strong>¡Ha fallado la edición del paciente en cuestión!</strong></p>
 				<ul>
-					<li>Sepa que no puede crear un paciente con un DNI el cual ya exista otro paciente con ese mismo DNI en el sistema</li>
+					<li>Sepa que el número de DNI debe ser único</li>
 					<li>Verifique que la fecha de nacimiento sea válida y con el formato: dd/mm/yyyy</li>
 					<li>Verifique que el correo electrónico sea uno válido</li>
 				</ul>
 			</div>
 			<?php endif; ?>
 			<div class="is2-pagetitle clearfix">
-				<h3>Pacientes - Crear</h3>
+				<h3>Pacientes - Editar</h3>
 				<a class="btn pull-right" href="/pacientes"><i class="icon-arrow-left"></i> Listar pacientes</a>
 			</div>
 			
@@ -32,46 +37,46 @@
 				<div class="control-group">
 					<label class="control-label">Apellidos</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" placeholder="Apellidos" name="lastName">
+						<input type="text" class="input-xlarge" placeholder="Apellidos" name="lastName" value="<?php echo $patient['apellidos']; ?>">
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label">Nombres</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" placeholder="Nombres" name="firstName">
+						<input type="text" class="input-xlarge" placeholder="Nombres" name="firstName" value="<?php echo $patient['nombres']; ?>">
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label">Sexo</label>
 					<div class="controls">
 						<select type="text" class="input-mini" name="gender">
-							<option value="f">F</option>
-							<option value="m">M</option>
+							<option value="F" <?php echo $patient['sexo'] == 'F' ? 'selected' : ''; ?>>F</option>
+							<option value="M" <?php echo $patient['sexo'] == 'M' ? 'selected' : ''; ?>>M</option>
 						</select>
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label">DNI</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" placeholder="Número de DNI" name="dni">
+						<input type="text" class="input-xlarge" placeholder="Número de DNI" name="dni" value="<?php echo $patient['dni']; ?>">
 					</div>
 				</div>
 				<div class="control-group is2-patient-birthdate-wrapper">
 					<label class="control-label">Fecha de nacimiento</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge datepicker is2-patient-birthdate" placeholder="Fecha de nacimiento" name="birthDate">
+						<input type="text" class="input-xlarge datepicker is2-patient-birthdate" placeholder="Fecha de nacimiento" name="birthDate" value="<?php echo __dateISOToLocale( $patient['fechaNacimiento'] ); ?>">
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label">Teléfono</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" placeholder="Teléfono" name="phone">
+						<input type="text" class="input-xlarge" placeholder="Teléfono" name="phone" value="<?php echo $patient['telefono']; ?>">
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label">Correo electrónico</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" placeholder="Correo electrónico" name="email">
+						<input type="text" class="input-xlarge" placeholder="Correo electrónico" name="email" value="<?php echo $patient['email']; ?>">
 					</div>
 				</div>
 				<div class="alert">
@@ -82,7 +87,7 @@
 					<div class="controls">
 						<select type="text" class="input-xlarge is2-insurances-list" name="insuranceID">
 						<?php foreach( $insurances as $insurance ): ?>
-							<option value="<?php echo $insurance['id']; ?>" <?php echo $insurance['id'] == 1 ? 'selected' : ''; ?>><?php echo $insurance['nombreCorto'] . ' (' . $insurance['nombreCompleto'] . ')'; ?></option>
+							<option value="<?php echo $insurance['id']; ?>" <?php echo $insurance['id'] == $patient['idObraSocial'] ? 'selected' : ''; ?>><?php echo $insurance['nombreCorto'] . ' (' . $insurance['nombreCompleto'] . ')'; ?></option>
 						<?php endforeach; ?>
 						</select>
 					</div>
@@ -91,14 +96,15 @@
 				<div class="control-group">
 					<label class="control-label">Número de afiliado</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge is2-insurance-number" placeholder="Número de afiliado" name="insuranceNumber" value="---">
+						<input type="text" class="input-xlarge is2-insurance-number" placeholder="Número de afiliado" name="insuranceNumber" value="<?php echo $patient['nroAfiliado']; ?>">
 					</div>
 				</div>
 				<div class="control-group">
 					<div class="controls">
-						<button type="submit" class="btn">Crear paciente</button>
+						<button type="submit" class="btn">Editar paciente</button>
 					</div>
 				</div>
+				<input type="hidden" name="id" value="<?php echo $patient['id']; ?>">
 			</form>
 		</div>
 		
@@ -130,8 +136,6 @@
 		// es LIBRE
 		if( $insurancesList.find( 'option' ).eq( $insurancesList[0].selectedIndex ).val() == 1 ) {
 			$insuranceNumber.val( '---' );
-		} else {
-			$insuranceNumber.val( '' );
 		}
 	} );
 	

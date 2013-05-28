@@ -6,6 +6,7 @@
 	$DEBUG = true;
 	
 	require './assets/db.php';
+	require './assets/matcher.php';
 	// las funciones helpers tienen como prefijo __
 	require './assets/helpers.php';
 	// las funciones template tienen como prefijo t_
@@ -14,6 +15,7 @@
 	require './assets/queries.php';
 	// init
 	$db = new DB();
+	$matcher = new Matcher();
 	__initSession();
 	__initDebugging();
 	
@@ -75,7 +77,9 @@
 		require './models/patients.remove.php';
 	} else if( $page == '/pacientes/crear' ) {
 		require './models/patients.new.php';
-	
+	} else if( $matcher->test( '/pacientes/editar/:id', $page ) ) {
+		require './models/patients.edit.php';
+
 // *** ESPECIALIDADES *** //
 	} else if( $page == '/especialidades' ) {
 		require './models/specialities.php';

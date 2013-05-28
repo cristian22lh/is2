@@ -125,7 +125,6 @@
 	
 	// ESTE ES EL WHERE NORMAL, OSEA CUANDO SE ESTA ACCEDIENDO DIRECTAMENTE A /turnos
 	} else {
-	
 		$whereClause[] = ' t.fecha >= ? ';
 		$replacements[] = date( 'Y-m-d' );
 		$whereClause[] = ' t.fecha <= ? ';

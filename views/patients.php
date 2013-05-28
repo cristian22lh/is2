@@ -71,6 +71,11 @@
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
 				¡No se ha podido borrar al paciente! Vuelva a intentarlo.
 			</div>
+			<?php elseif( $editError ): ?>
+			<div class="alert alert-error">
+				<a class="close" data-dismiss="alert" href="#">&times;</a>
+				<strong>No existe paciente con tal identificador cargado en el sistema.</strong>
+			</div>
 			<?php endif; ?>
 		
 			<div class="is2-pagetitle clearfix">
@@ -88,6 +93,7 @@
 				</ul>
 			</div>
 			
+			<?php if( count( $patients ) ): ?>
 			<table class="table table-striped is2-grid">
 				<thead>
 					<tr>
@@ -131,6 +137,11 @@
 				<?php endforeach; ?>
 				</tbody>
 			</table>
+			<?php else: ?>
+			<div class="alert alert-error">
+				No se han encontrado pacientes según el criterio de búsqueda específicado
+			</div>
+			<?php endif; ?>
 
 		</div>
 		

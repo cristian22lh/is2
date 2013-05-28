@@ -45,5 +45,26 @@
 			'
 		);
 	}
+	
+	function q_getPatients( $whereCluase, $replacements ) {
+		global $db;
+		return $db->select(
+			'
+				SELECT
+					p.id, p.apellidos, p.nombres, p.sexo, p.dni, p.idObraSocial, p.fechaNacimiento, p.email, p.telefono, p.nroAfiliado,
+					os.nombreCorto AS obraSocialNombre
+				FROM
+					pacientes AS p
+				INNER JOIN obrasSociales AS os
+					ON os.id = p.idObraSocial
+				WHERE ' .
+					implode( ' AND ', $whereCluase ) .
+				'
+				ORDER BY
+					p.apellidos
+			',
+			$replacements
+		);
+	}
 
 ?>

@@ -15,31 +15,18 @@
 // ESTAS VARIABLES SON LAS QUE SE USAN EL VIEW
 	$username = __getUsername();
 	
-	$patients = $db->select(
-		'
-			SELECT
-				p.id, p.apellidos, p.nombres, p.sexo, p.dni, p.idObraSocial, p.fechaNacimiento, p.email, p.telefono, p.nroAfiliado,
-				os.nombreCorto AS obraSocialNombre
-			FROM
-				pacientes AS p
-			INNER JOIN obrasSociales AS os
-				ON os.id = p.idObraSocial
-			WHERE ' .
-				implode( ' AND ', $whereCluase ) .
-			'
-			ORDER BY
-				p.apellidos
-		',
-		$replacements
-	);
+	$patients = q_getPatients( $whereCluase, $replacements );
 	
 	$removeSuccess = false;
 	$removeError = false;
+	$editError = false;
 	if( __issetGETField( 'exito', 'borrar-paciente' ) ) {
 		$removeSuccess = true;
 	// ... o de error
 	} else if( __issetGETField( 'error', 'borrar-paciente' ) ) {
 		$removeError = true;
+	} else if( __issetGETField( 'error', 'editar-paciente' ) ) {
+		$editError = true;
 	}
 
 // LOAD THE VIEW
@@ -49,7 +36,8 @@
 			'username' => $username,
 			'patients' => $patients,
 			'removeSuccess' => $removeSuccess,
-			'removeError' => $removeError
+			'removeError' => $removeError,
+			'editError' => $editError
 		)
 	);
 

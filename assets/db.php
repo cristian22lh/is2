@@ -74,16 +74,16 @@
 		}
 		
 		function update( $query, $replacements ) {
-		
+
 			$this->_log( $query, $replacements );
 
-			$rowsAffected = 0;
+			$rowsAffected = -1;
 			
 			if( $stmt = $this->db->prepare( $query ) ) {
 				
-				$this->_executeQuery( $stmt, $replacements );
-				
-				$rowsAffected = $stmt->affected_rows;
+				if( $this->_executeQuery( $stmt, $replacements ) ) {
+					$rowsAffected = $stmt->affected_rows;
+				}
 				
 				$stmt->close();
 				
@@ -106,9 +106,9 @@
 			
 			if( $stmt = $this->db->prepare( $query ) ) {
 				
-				$this->_executeQuery( $stmt, $replacements );
-				
-				$insertId = $stmt->insert_id;
+				if( $this->_executeQuery( $stmt, $replacements ) ) {
+					$insertId = $stmt->insert_id;
+				}
 				
 				$stmt->close();
 				
@@ -130,7 +130,10 @@
 			// ejecutamos la consultado
 			if( !$stmt->execute() ) {
 				$this->_err( $stmt->error );
+				return false;
 			}
+			
+			return true;
 		}
 	
 		private function _addParams( $replacements ) {
@@ -148,12 +151,12 @@
 		
 		private function _gettype( $value ) {
 			$type = gettype( $value );
-			
+
 			if( isset( $this->typesDict[$type] ) ) {
 				return $this->typesDict[$type];
 			}
 			
-			die( 'Invalid data type' );
+			$this->_err( 'Invalid data type: ' . $type );
 		}
 		
 		private function _bindParams( &$stmt, &$args ) {
