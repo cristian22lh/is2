@@ -18,8 +18,8 @@ CREATE TABLE turnos(
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
 	fecha DATE,
 	hora TIME,
-	idMedico INTEGER,
-	idPaciente INTEGER,
+	idMedico INTEGER NULL,
+	idPaciente INTEGER NULL,
 	estado ENUM( 'confirmado', 'cancelado', 'esperando' ),
 	UNIQUE( fecha,  hora, idMedico )
 ) ENGINE=InnoDB;
@@ -39,7 +39,7 @@ INSERT INTO turnos VALUES
 DROP TABLE IF EXISTS medicos;
 CREATE TABLE medicos(
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
-	idEspecialidad INTEGER,
+	idEspecialidad INTEGER NULL,
 	apellidos VARCHAR( 100 ),
 	nombres VARCHAR( 100 ),
 	matricula VARCHAR( 20 )
@@ -60,7 +60,7 @@ INSERT INTO medicos VALUES
 DROP TABLE IF EXISTS horarios;
 CREATE TABLE horarios(
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
-	idMedico INTEGER,
+	idMedico INTEGER NULL,
 	horaIngreso TIME,
 	horaEgreso TIME,
 	dia ENUM( '1', '2', '3', '4', '5', '6', '7' )
@@ -88,8 +88,8 @@ CREATE TABLE pacientes(
 	fechaNacimiento DATE,
 	telefono VARCHAR( 100 ),
 	email VARCHAR( 255 ),
-	idObraSocial INTEGER,
-	nroAfiliado VARCHAR( 255 )
+	idObraSocial INTEGER NULL,
+	nroAfiliado VARCHAR( 255 ) NULL
 ) ENGINE=InnoDB;
 	
 INSERT INTO pacientes VALUES
@@ -175,7 +175,7 @@ CREATE TRIGGER pacientes_reestablecerObraSocial
 			pacientes 
 		SET 
 			idObraSocial = 1,
-			nroAfiliado = '---'
+			nroAfiliado = NULL
 		WHERE 
 			idObraSocial IS NULL;
 ;

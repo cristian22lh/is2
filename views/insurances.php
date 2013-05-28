@@ -1,23 +1,19 @@
-<!DOCTYPE html>
-<html lang="es">
-	<head>
-		<?php t_headTag( 'Obra sociales' ); ?>
-		<style>
-			label {
-				cursor: default;
-			}
-			.table td:first-child {
-				text-transform: uppercase;
-			}
-			.table td:not( :first-child ) {
-				text-transform: none;
-			}
-		</style>
-	</head>
-	<body>
-		<?php t_headerTag( $username, 'insurances' ); ?>
-	
-		<div class="container">
+<?php t_startHead( 'Obras sociales' ); ?>
+	<style>
+		label {
+			cursor: default;
+		}
+		.table td:first-child {
+			text-transform: uppercase;
+		}
+		.table td:not( :first-child ) {
+			text-transform: none;
+		}
+	</style>
+<?php t_endHead(); ?>
+<?php t_startBody( $username, 'insurances'  ); ?>
+
+		<?php t_startWrapper(); ?>
 			<?php if( $createSuccess ): ?>
 			<div class="alert alert-success">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
@@ -109,8 +105,8 @@
 				</tbody>
 			</table>
 			
-		</div>
-		
+		<?php t_endWrapper(); ?>
+
 		<!-- los modals -->
 		<form method="post" action="/obras-sociales/editar" id="is2-modal-edit" class="modal hide fade">
 			<div class="modal-header">
@@ -151,9 +147,9 @@
 			<input type="hidden" name="id">
 		</form>
 		
-		<?php t_footerTag(); ?>
-	</body>
-</html>
+		
+<?php t_endBody(); ?>
+
 <script>
 (function() {
 	$( '.is2-grid' ).delegate( '.is2-trigger-edit', 'click', function( e ) {

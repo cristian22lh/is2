@@ -1,7 +1,7 @@
 <?php
 
-	// get the /pacientes/editar/122
-	$patientID = $matcher->seg( 3 );
+	// get last seg from /pacientes/editar/122
+	$patientID = $g_router->seg( 3 );
 
 	if( __issetPOST( array( 'lastName', 'firstName', 'gender', 'dni', 'birthDate', 'phone', 'email', 'insuranceID', 'insuranceNumber' ) ) ) {
 		$lastName = __sanitizeValue( $_POST['lastName'] );
@@ -22,7 +22,7 @@
 			__redirect( '/pacientes/editar/' . $patientID .'?error=editar-paciente' );
 		}
 		
-		$rowsAffected = $db->update( 
+		$rowsAffected = $g_db->update( 
 			'
 				UPDATE
 					pacientes
@@ -51,7 +51,6 @@
 	}
 
 // DEBO PEDIR EL PACIENTE QUE ESTA EN LA URL
-	$patientID = $matcher->seg( 3 );
 	$patients = q_getPatients( array( ' p.id = ? ' ), array( $patientID ) );
 	if( !count( $patients ) ) {
 		__redirect( '/pacientes?error=editar-paciente' );

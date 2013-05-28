@@ -9,7 +9,7 @@
 		__redirect( '/pacientes?error=borrar-paciente' );
 	}
 
-	$rowsAffected = $db->delete(
+	$rowsAffected = $g_db->delete(
 		'
 			DELETE FROM
 				pacientes

@@ -141,7 +141,7 @@
 		$replacements[] = 'cancelado';
 	}
 
-	$appointments = $db->select( 
+	$appointments = $g_db->select( 
 		'
 			SELECT 
 				t.id, t.fecha, t.hora, t.estado,

@@ -10,7 +10,7 @@
 		__redirect( '/especialidades?error=editar-especialidad' );
 	}
 	
-	$rowsAffected = $db->update(
+	$rowsAffected = $g_db->update(
 		'
 			UPDATE
 				especialidades

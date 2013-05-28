@@ -8,7 +8,7 @@
 	// id del turno
 	$id = $_POST['id'];
 	
-	$rowsAffected = $db->delete(
+	$rowsAffected = $g_db->delete(
 		'DELETE FROM turnos WHERE id = ?',
 		array( $id )
 	);

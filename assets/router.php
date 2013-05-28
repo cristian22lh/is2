@@ -1,14 +1,20 @@
 <?php
 
-	class Matcher {
+	class Router {
 	
 		// aca se guarda el matcheo de la url
-		private $m = array();
+		private $m;
 		
 		function __construct() {
 		}
 		
 		function test( $pat, $page ) {
+			$this->m = array();
+		
+			// just a /clients/list == /clients/list
+			if( $pat == $page ) {
+				return true;
+			}
 			// aca tengo algo como /clients/edit/:id
 			$pat = explode( '/', $pat );
 			// aca tengo algo cmo /clients/edit/123

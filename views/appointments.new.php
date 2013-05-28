@@ -1,17 +1,13 @@
-<!DOCTYPE html>
-<html lang="es">
-	<head>
-		<?php t_headTag( 'Turnos - Crear' ); ?>
-		<style>
-			label {
-				cursor: default;
-			}
-		</style>
-	</head>
-	<body>
-		<?php t_headerTag( $username, 'appointments' ); ?>
+<?php t_startHead( 'Turnos - Crear' ); ?>
+	<style>
+		label {
+			cursor: default;
+		}
+	</style>
+<?php t_endHead(); ?>
+<?php t_startBody( $username, 'appointments'  ); ?>
 	
-		<div class="container">
+		<?php t_startWrapper(); ?>
 			<?php if( $createError ): ?>
 			<div class="alert alert-error">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
@@ -132,11 +128,10 @@
 					</div>
 				</div>
 			</form>
-		</div>
+		<?php t_endWrapper(); ?>
 		
-		<?php t_footerTag(); ?>
-	</body>
-</html>
+<?php t_endBody(); ?>
+
 <script>
 (function() {
 	$( '.datepicker' ).datepicker( {

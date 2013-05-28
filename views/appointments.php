@@ -1,38 +1,36 @@
-<!DOCTYPE html>
-<html lang="es">
-	<head>
-		<?php t_headTag( 'Turnos' ); ?>
-		<style>
-			.is2-ascdescmenu, .is2-statusmenu {
-				float: right;
-				padding: 0;
-			}
-			.is2-ascdescmenu a.dropdown-toggle,
-			.is2-statusmenu a.dropdown-toggle {
-				padding: 0 6px;
-				display: inline-block;
-			}
-			.is2-statusmenu .dropdown-menu {
-				right: 0;
-				left: inherit;
-			}
+<?php t_startHead( 'Turnos' ); ?>
 
-			.is2-search-trigger {
-				float: right;
-				margin: 0 0 10px 0;
-			}
-			.is2-doctors-listbox {
-				min-height: 150px;
-			}
-			.bootstrap-timepicker {
-				display: inline-block;
-			}
-		</style>
-	</head>
-	<body>
-		<?php t_headerTag( $username, 'appointments' ); ?>
-	
-		<div class="container">
+	<style>
+		.is2-ascdescmenu, .is2-statusmenu {
+			float: right;
+			padding: 0;
+		}
+		.is2-ascdescmenu a.dropdown-toggle,
+		.is2-statusmenu a.dropdown-toggle {
+			padding: 0 6px;
+			display: inline-block;
+		}
+		.is2-statusmenu .dropdown-menu {
+			right: 0;
+			left: inherit;
+		}
+
+		.is2-search-trigger {
+			float: right;
+			margin: 0 0 10px 0;
+		}
+		.is2-doctors-listbox {
+			min-height: 150px;
+		}
+		.bootstrap-timepicker {
+			display: inline-block;
+		}
+	</style>
+		
+<?php t_endHead(); ?>
+<?php t_startBody( $username, 'appointments'  ); ?>
+
+		<?php t_startWrapper(); ?>
 			<?php if( $confirmSuccess ): ?>
 			<div class="alert alert-success">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
@@ -240,7 +238,7 @@
 			</div>
 			<?php endif; ?>
 
-		</div> <!-- /container -->
+		<?php t_endWrapper(); ?>
 		
 		<!-- modals -->
 		<form method="post" action="/turnos/confirmar" id="is2-modal-confirm" class="modal hide fade">
@@ -291,9 +289,8 @@
 			<input type="hidden" name="id">
 		</form>
 		
-		<?php t_footerTag(); ?>
-	</body>
-</html>
+<?php t_endBody(); ?>
+
 <script>
 (function() {
 // *** ACA PARA CUANDO MUESTRO LOS MODALS *** //

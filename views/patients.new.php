@@ -1,17 +1,13 @@
-<!DOCTYPE html>
-<html lang="es">
-	<head>
-		<?php t_headTag( 'Pacientes - Crear' ); ?>
-		<style>
-			label {
-				cursor: default;
-			}
-		</style>
-	</head>
-	<body>
-		<?php t_headerTag( $username, 'patients' ); ?>
+<?php t_startHead( 'Pacientes - Crear' ); ?>
+	<style>
+		label {
+			cursor: default;
+		}
+	</style>
+<?php t_endHead(); ?>
+<?php t_startBody( $username, 'patients'  ); ?>
 	
-		<div class="container">
+		<?php t_startWrapper(); ?>
 			<?php if( $createError ): ?>
 			<div class="alert alert-error">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
@@ -102,9 +98,10 @@
 			</form>
 		</div>
 		
-		<?php t_footerTag(); ?>
-	</body>
-</html>
+		<?php t_endWrapper(); ?>
+		
+<?php t_endBody(); ?>
+
 <script>
 (function() {
 	$( '.datepicker' ).datepicker( {

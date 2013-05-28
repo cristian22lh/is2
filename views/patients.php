@@ -1,7 +1,4 @@
-<!DOCTYPE html>
-<html lang="es">
-	<head>
-		<?php t_headTag( 'Pacientes' ); ?>
+<?php t_startHead( 'Pacientes' ); ?>
 		<style>
 			label {
 				cursor: default;
@@ -56,11 +53,10 @@
 				margin: 20px 0 0 0;
 			}
 		</style>
-	</head>
-	<body>
-		<?php t_headerTag( $username, 'patients' ); ?>
+<?php t_endHead(); ?>
+<?php t_startBody( $username, 'patients'  ); ?>
 	
-		<div class="container">
+		<?php t_startWrapper(); ?>
 			<?php if( $removeSuccess ): ?>
 			<div class="alert alert-success">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
@@ -143,7 +139,7 @@
 			</div>
 			<?php endif; ?>
 
-		</div>
+		<?php t_endWrapper(); ?>
 		
 		<!-- los modals -->
 		<form method="post" action="/pacientes/borrar" id="is2-modal-remove" class="modal hide fade">
@@ -158,9 +154,8 @@
 			<input type="hidden" name="id">
 		</form>
 		
-		<?php t_footerTag(); ?>
-	</body>
-</html>
+<?php t_endBody(); ?>
+
 <script>
 (function() {
 	$( '.is2-grid' ).delegate( 'span', 'mouseover', function( e ) {

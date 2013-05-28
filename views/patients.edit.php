@@ -1,17 +1,13 @@
-<!DOCTYPE html>
-<html lang="es">
-	<head>
-		<?php t_headTag( 'Pacientes - Editar' ); ?>
-		<style>
-			label {
-				cursor: default;
-			}
-		</style>
-	</head>
-	<body>
-		<?php t_headerTag( $username, 'patients' ); ?>
+<?php t_startHead( 'Pacientes - Editar' ); ?>
+	<style>
+		label {
+			cursor: default;
+		}
+	</style>
+<?php t_endHead(); ?>
+<?php t_startBody( $username, 'patients'  ); ?>
 	
-		<div class="container">
+		<?php t_startWrapper(); ?>
 			<?php if( $editSuccess ): ?>
 			<div class="alert alert-success">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
@@ -106,11 +102,11 @@
 				</div>
 				<input type="hidden" name="id" value="<?php echo $patient['id']; ?>">
 			</form>
-		</div>
+			
+		<?php t_endWrapper(); ?>
 		
-		<?php t_footerTag(); ?>
-	</body>
-</html>
+<?php t_endBody(); ?>
+
 <script>
 (function() {
 	$( '.datepicker' ).datepicker( {

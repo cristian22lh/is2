@@ -10,7 +10,7 @@
 		__redirect( '/obras-sociales?error=crear-obra-social' );
 	}
 	
-	$insertId = $db->insert(
+	$insertId = $g_db->insert(
 		'
 			INSERT INTO
 				obrasSociales

@@ -6,16 +6,16 @@
 	$DEBUG = true;
 	
 	require './assets/db.php';
-	require './assets/matcher.php';
+	require './assets/router.php';
 	// las funciones helpers tienen como prefijo __
 	require './assets/helpers.php';
 	// las funciones template tienen como prefijo t_
 	require './views/_template.php';
 	// las queries tienen como prefijo q_
 	require './assets/queries.php';
-	// init
-	$db = new DB();
-	$matcher = new Matcher();
+	// mis globales
+	$g_db = new DB();
+	$g_router = new Router();
 	__initSession();
 	__initDebugging();
 	
@@ -41,65 +41,52 @@
 	if( $i == $l && !__isUserLogged() ) {
 		__redirect( '/iniciar-sesion' );
 	}
-
-	// routeamos
-	if( $page === '/' || $page == '/iniciar-sesion' ) {
-		require './models/login.php';
-	} else if( $page == '/cerrar-sesion' ) {
-		require './models/logout.php';
 	
+	$routes = array(
+		'/' => 'login',
+		'/iniciar-sesion' => 'login',
+		'/cerrar-sesion' => 'logout',
+		
 // *** TURNOS *** //
-	} else if( $page == '/turnos' ) {
-		require './models/appointments.php';
-	} else if( $page == '/turnos/confirmar' ) {
-		require './models/appointments.confirm.php';
-	} else if( $page == '/turnos/cancelar' ) {
-		require './models/appointments.cancel.php';
-	} else if( $page == '/turnos/borrar' ) {
-		require './models/appointments.remove.php';
-	} else if( $page == '/turnos/reiniciar' ) {
-		require './models/appointments.reset.php';
-	} else if( $page == '/turnos/buscar' ) {
-		require './models/appointments.search.php';
-	} else if( $page == '/turnos/crear' ) {
-		require './models/appointments.new.php';
+		'/turnos' => 'appointments',
+		'/turnos/confirmar' => 'appointments.confirm',
+		'/turnos/cancelar' => 'appointments.cancel',
+		'/turnos/borrar' => 'appointments.remove',
+		'/turnos/reiniciar' => 'appointments.reset',
+		'/turnos/buscar' => 'appointments.search',
+		'/turnos/crear' => 'appointments.new',
 
 // *** MEDICOS *** //
-	} else if( $page == '/medicos/comprobar-horarios-disponibilidad' ) {
-		require './models/doctors.check.availability.php';
-	
+		'/medicos/comprobar-horarios-disponibilidad' => 'doctors.check.availability',
+		
 // *** PACIENTES *** //
-	} else if( $page == '/pacientes' ) {
-		require './models/patients.php';
-	} else if( $page == '/pacientes/buscar/dni' ) {
-		require './models/patients.search.dni.php';
-	} else if( $page == '/pacientes/borrar' ) {
-		require './models/patients.remove.php';
-	} else if( $page == '/pacientes/crear' ) {
-		require './models/patients.new.php';
-	} else if( $matcher->test( '/pacientes/editar/:id', $page ) ) {
-		require './models/patients.edit.php';
+		'/pacientes' => 'patients',
+		'/pacientes/buscar/dni' => 'patients.search.dni',
+		'/pacientes/borrar' => 'patients.remove',
+		'/pacientes/crear' => 'patients.new',
+		'/pacientes/editar/:id' => 'patients.edit',
 
 // *** ESPECIALIDADES *** //
-	} else if( $page == '/especialidades' ) {
-		require './models/specialities.php';
-	} else if( $page == '/especialidades/crear' ) {
-		require './models/specialities.new.php';
-	} else if( $page == '/especialidades/editar' ) {
-		require './models/specialities.edit.php';
-	} else if( $page == '/especialidades/borrar' ) {
-		require './models/specialities.remove.php';
+		'/especialidades' => 'specialities',
+		'/especialidades/crear' => 'specialities.new',
+		'/especialidades/editar' => 'specialities.edit',
+		'/especialidades/borrar' => 'specialities.remove',
 
 // *** OBRA SOCIALES *** //
-	} else if( $page == '/obras-sociales' ) {
-		require './models/insurances.php';
-	} else if( $page == '/obras-sociales/crear' ) {
-		require './models/insurances.new.php';
-	} else if( $page == '/obras-sociales/editar' ) {
-		require './models/insurances.edit.php';
-	} else if( $page == '/obras-sociales/borrar' ) {
-		require './models/insurances.remove.php';
-	}
+		'/obras-sociales' => 'insurances',
+		'/obras-sociales/crear' => 'insurances.new',
+		'/obras-sociales/editar' => 'insurances.edit',
+		'/obras-sociales/borrar' => 'insurances.remove'
+	);
 	
+	foreach( $routes as $route => $model ) {
+		if( $g_router->test( $route, $page ) ) {
+			$path = './models/' . $model . '.php';
+			if( !file_exists( $path ) ) {
+				die( 'Specified model "' . $model . '" does not exists at "' . $path . '"' );
+			}
+			require $path;
+		}
+	}
 
 ?>

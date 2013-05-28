@@ -3,7 +3,7 @@
 // ESTAS VARIABLES SON LAS QUE SE USAN EL VIEW
 	$username = __getUsername();
 	
-	$specialities = $db->select(
+	$specialities = $g_db->select(
 		'
 			SELECT
 				*

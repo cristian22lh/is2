@@ -35,33 +35,33 @@
 			$res = array();
 			
 			if( $stmt = $this->db->prepare( $query ) ) {
-
-				$this->_executeQuery( $stmt, $replacements );
-
-				// debo conseguir el nombre de las columnas
-				$metadata = $stmt->result_metadata();
-				$columns = array();
-				while( $field = $metadata->fetch_field() ) {
-					$columns[] = $field->name;
-				}
-				// ahora por cada nombre de columna
-				// creo una variable con ese nombre de columna
-				foreach( $columns as $field ) {
-				    $values[] = &${$field};
-				}
-				
-				// internamente hace un $stmt->bind_result
-				$this->_bindResult( $stmt, $values );
-			       
-				// lito, solo queda iterar cada fila y guardarla en $res
-				$res = array();
-				$i = 0;
-				// pido la fila actual y la proceso
-				while( $stmt->fetch() ) {
-					foreach( $columns as $field ) {
-						$res[$i][$field] = $$field;
+			
+				if( $this->_executeQuery( $stmt, $replacements ) ) {
+					// debo conseguir el nombre de las columnas
+					$metadata = $stmt->result_metadata();
+					$columns = array();
+					while( $field = $metadata->fetch_field() ) {
+						$columns[] = $field->name;
 					}
-					$i++;
+					// ahora por cada nombre de columna
+					// creo una variable con ese nombre de columna
+					foreach( $columns as $field ) {
+					    $values[] = &${$field};
+					}
+					
+					// internamente hace un $stmt->bind_result
+					$this->_bindResult( $stmt, $values );
+				       
+					// lito, solo queda iterar cada fila y guardarla en $res
+					$res = array();
+					$i = 0;
+					// pido la fila actual y la proceso
+					while( $stmt->fetch() ) {
+						foreach( $columns as $field ) {
+							$res[$i][$field] = $$field;
+						}
+						$i++;
+					}
 				}
 				
 				$stmt->close();
@@ -146,7 +146,8 @@
 			}
 
 			// esto sera el argumento para $stmt->bind_param();
-			return array_merge( array( $types ), $this->values );
+			$args = array_merge( array( $types ), $this->values );
+			return $args;
 		}
 		
 		private function _gettype( $value ) {
@@ -159,11 +160,11 @@
 			$this->_err( 'Invalid data type: ' . $type );
 		}
 		
-		private function _bindParams( &$stmt, &$args ) {
+		private function _bindParams( $stmt, $args ) {
 			call_user_func_array( array( $stmt, 'bind_param' ), $args );
 		}
 		
-		private function _bindResult( &$stmt, &$args ) {
+		private function _bindResult( $stmt, $args ) {
 			call_user_func_array( array( $stmt, 'bind_result' ) , $args );
 		}
 		

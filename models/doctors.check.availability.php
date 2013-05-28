@@ -21,7 +21,7 @@
 	}
 	
 	// ahora debp fijarme que no tenga ya un turno para ese ida
-	$res = $db->select(
+	$res = $g_db->select(
 		'
 			SELECT
 				id

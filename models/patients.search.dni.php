@@ -11,7 +11,7 @@
 		__echoJSON( array( 'success' => false ) );
 	}
 	
-	$patients = $db->select(
+	$patients = $g_db->select(
 		'
 			SELECT
 				p.id, p.apellidos, p.nombres, p.sexo, p.dni, p.idObraSocial, p.fechaNacimiento, p.email, p.telefono, p.nroAfiliado,

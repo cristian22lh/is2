@@ -4,8 +4,8 @@
 // VEZ POR LOS DIFERENTES MODELOS
 
 	function q_getAllDoctors() {
-		global $db;
-		return $db->select(
+		global $g_db;
+		return $g_db->select(
 			'
 				SELECT
 					*
@@ -18,8 +18,8 @@
 	}
 	
 	function q_checkDoctorAvailability( $replacements ) {
-		global $db;
-		return $db->select( 
+		global $g_db;
+		return $g_db->select( 
 			'
 				SELECT
 					id
@@ -33,8 +33,8 @@
 	}
 	
 	function q_getAllInsurances() {
-		global $db;
-		return $db->select(
+		global $g_db;
+		return $g_db->select(
 			'
 				SELECT
 					*
@@ -47,8 +47,8 @@
 	}
 	
 	function q_getPatients( $whereCluase, $replacements ) {
-		global $db;
-		return $db->select(
+		global $g_db;
+		return $g_db->select(
 			'
 				SELECT
 					p.id, p.apellidos, p.nombres, p.sexo, p.dni, p.idObraSocial, p.fechaNacimiento, p.email, p.telefono, p.nroAfiliado,

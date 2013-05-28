@@ -7,3 +7,5 @@ PACIENTES
 Al momento de borrar un paciente tambien debe borrarse sus turnos asociados?? en el sistema actualmente se hace esto
 
 Es necesario que los pacientes tengan si o si un correo?
+
+Se necesitan tener una direccion para los pacientes?

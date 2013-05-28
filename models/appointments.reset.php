@@ -8,7 +8,7 @@
 	// id del turno
 	$id = $_POST['id'];
 	
-	$rowsAffected = $db->update(
+	$rowsAffected = $g_db->update(
 		'UPDATE turnos SET estado = ? WHERE id = ?',
 		array( 'esperando', $id )
 	);

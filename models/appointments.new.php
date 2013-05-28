@@ -26,7 +26,7 @@
 			__redirect( '/turnos/crear?error=crear-turno' );
 		}
 		
-		$insertId = $db->insert(
+		$insertId = $g_db->insert(
 			'
 				INSERT INTO 
 					turnos
