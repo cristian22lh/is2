@@ -8,19 +8,19 @@
 			<nav class="navbar">
 				<div class="navbar-inner">
 					<ul class="nav">
-<li class="'<?php echo $currentTab == 'appointments' ? 'active' : ''; ?>">
+<li class="<?php echo $currentTab == 'appointments' ? 'active' : ''; ?>">
 							<a href="/turnos">Turnos</a>
 						</li>
-<li class="'<?php echo $currentTab == 'doctors' ? 'active' : ''; ?>">
+<li class="<?php echo $currentTab == 'doctors' ? 'active' : ''; ?>">
 							<a href="/medicos">Médicos</a>
 						</li>
-<li class="'<?php echo $currentTab == 'patients' ? 'active' : ''; ?>">
+<li class="<?php echo $currentTab == 'patients' ? 'active' : ''; ?>">
 							<a href="/pacientes">Pacientes</a>
 						</li>
-<li class="'<?php echo $currentTab == 'insurances' ? 'active' : ''; ?>">
+<li class="<?php echo $currentTab == 'insurances' ? 'active' : ''; ?>">
 							<a href="/obras-sociales">Obras sociales</a>
 						</li>
-<li class="'<?php echo $currentTab == 'specialities' ? 'active' : ''; ?>">
+<li class="<?php echo $currentTab == 'specialities' ? 'active' : ''; ?>">
 							<a href="/especialidades">Especialidades</a>
 						</li>
 					</ul>

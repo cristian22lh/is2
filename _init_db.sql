@@ -91,7 +91,8 @@ CREATE TABLE pacientes(
 	idObraSocial INTEGER NULL,
 	nroAfiliado VARCHAR( 255 ) NULL
 ) ENGINE=InnoDB;
-	
+
+--## REFERS TO TO FILE patients.sql TO POPULATE THIS TABLE WITH 1000 PATIENTS
 INSERT INTO pacientes VALUES
 	( null, 'Ivan', 'Gómez', 'M', 1, '1947-10-10', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), CONCAT( SUBSTRING(MD5( RAND() ) FROM 1 FOR 6 ), '@gmail.com' ), 1, MD5( RAND() ) ),
 	( null, 'Damián', 'Antúnez', 'M', 2, '1949-03-30', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), CONCAT( SUBSTRING(MD5( RAND() ) FROM 1 FOR 6 ), '@gmail.com' ), 2, MD5( RAND() ) ),
@@ -102,6 +103,7 @@ INSERT INTO pacientes VALUES
 	( null, 'Maria Laura', 'Valdéz', 'F', 7, '1950-12-12', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), CONCAT( SUBSTRING(MD5( RAND() ) FROM 1 FOR 6 ), '@gmail.com' ), 2, MD5( RAND() ) ),
 	( null, 'Marina', 'Chávez', 'F', 8, '1947-05-24', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), CONCAT( SUBSTRING(MD5( RAND() ) FROM 1 FOR 6 ), '@gmail.com' ), 3, MD5( RAND() ) )
 ;
+
 --##########
 --##########
 DROP TABLE IF EXISTS obrasSociales;
@@ -114,7 +116,14 @@ CREATE TABLE obrasSociales(
 INSERT INTO obrasSociales VALUES
 	( null, 'LIBRE', 'LIBRE' ),
 	( null, 'IOMA', 'IOMA' ),
-	( null, 'PAMI', 'PAMI' )
+	( null, 'PAMI', 'PAMI' ),
+	( null, 'OSDE', 'OSDE Binario' ),
+	( null, 'CIMESA', 'CIMESA' ),
+	( null, 'MEDITAR', 'MEDITAR' ),
+	( null, 'FUSAL', 'FUSAL' ),
+	( null, 'SERVESALUD', 'SERVESALUD' ),
+	( null, 'FERMALINK', 'FERMALINK' ),
+	( null, 'ASET', 'ASET' )
 ;
 --##########
 --##########

@@ -26,6 +26,9 @@
 			td:nth-child( 2 ) span {
 				width: 100px;
 			}
+			td:nth-child( 4 ) span {
+				width: 80px;
+			}
 			td:nth-child( 7 ) span {
 				width: 100px;
 				font-size: 12px;
@@ -118,7 +121,9 @@
 							<span title="<?php echo $patient['nombres']; ?>"><?php echo $patient['nombres']; ?></span>
 						</td>
 						<td><?php echo $patient['sexo']; ?></td>
-						<td><?php echo $patient['dni']; ?></td>
+						<td>
+							<span title="<?php echo $patient['dni']; ?>"><?php echo $patient['dni']; ?></span>
+						</td>
 						<td><?php echo __dateISOToLocale( $patient['fechaNacimiento'] ); ?></td>
 						<td><?php echo $patient['telefono']; ?></td>
 						<td>
