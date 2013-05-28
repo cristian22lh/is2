@@ -82,7 +82,7 @@
 					<div class="controls">
 						<select type="text" class="input-xlarge is2-insurances-list" name="insuranceID">
 						<?php foreach( $insurances as $insurance ): ?>
-							<option value="<?php echo $insurance['id']; ?>"><?php echo $insurance['nombreCorto'] . ' (' . $insurance['nombreCompleto'] . ')'; ?></option>
+							<option value="<?php echo $insurance['id']; ?>" <?php echo $insurance['id'] == 1 ? 'selected' : ''; ?>><?php echo $insurance['nombreCorto'] . ' (' . $insurance['nombreCompleto'] . ')'; ?></option>
 						<?php endforeach; ?>
 						</select>
 					</div>
@@ -115,10 +115,12 @@
 // *** POPULATE THE FIELDS *** //
 	var prevState = JSON.parse( localStorage.getItem( 'is2-patient-state' ) );
 	if( prevState ) {
-		for( var fieldName in prevState ) {
-			$( 'input[name=' + fieldName + ']' ).val( prevState[fieldName] );
-			localStorage.removeItem(  'is2-patient-state' );
+		if( window.location.search.indexOf( 'error' ) >= 0 ) {
+			for( var fieldName in prevState ) {
+				$( 'input[name=' + fieldName + ']' ).val( prevState[fieldName] );
+			}
 		}
+		localStorage.removeItem(  'is2-patient-state' );
 	}
 
 // *** NORMAL THINGS *** //

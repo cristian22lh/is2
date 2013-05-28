@@ -158,3 +158,24 @@ ALTER TABLE horarios
 		REFERENCES medicos( id )
 		ON DELETE CASCADE
 ;
+
+ALTER TABLE pacientes
+	ADD CONSTRAINT pacientes_idObraSocial
+	FOREIGN KEY( idObraSocial )
+		REFERENCES obrasSociales( id )
+		ON DELETE SET NULL
+;
+--## Cuando se borrar una obra social los pacientes que estaban vinculados
+--## a esa obra social deben pasarse todos a la obra social LIBRE (la de ID = 1 )
+CREATE TRIGGER obrasSociales_reestablecerObraSocial
+	AFTER DELETE ON obrasSociales
+	FOR EACH ROW
+		UPDATE 
+			pacientes 
+		SET 
+			idObraSocial = 1,
+			nroAfiliado = '---'
+		WHERE 
+			idObraSocial IS NULL;
+;
+

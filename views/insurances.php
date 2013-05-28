@@ -26,7 +26,7 @@
 			<?php elseif( $createError ): ?>
 			<div class="alert alert-error">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
-				<strong>¡No se ha podido crear la nueva obra social!</strong> Capaz ya exista una con el mismo nombre corto en el sistema.
+				<strong>¡No se ha podido crear la nueva obra social!</strong> Verifique no exista una con el mismo nombre corto ya cargada en el sistema.
 			</div>
 			<?php elseif( $editSuccess ): ?>
 			<div class="alert alert-success">
@@ -99,8 +99,10 @@
 						<td class="is2-insurance-shortName"><?php echo $insurance['nombreCorto']; ?></td>
 						<td class="is2-insurance-fullName"><?php echo $insurance['nombreCompleto']; ?></td>
 						<td>
+						<?php if( $insurance['id'] != 1 ): ?>
 							<a class="btn is2-trigger-edit" href="#is2-modal-edit" data-toggle="modal" data-insurance-id="<?php echo $insurance['id']; ?>">Editar</a>
 							<a class="btn btn-danger is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-insurance-id="<?php echo $insurance['id']; ?>">Borrar</a>
+						<?php endif; ?>
 						</td>
 					</tr>
 				<?php endforeach; ?>
@@ -140,6 +142,7 @@
 			<div class="modal-body">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<span><strong>¿Estás seguro que desea borrar esta obra social del sistema?</strong></span>
+				<p>Sepa que aquellos pacientes que tenga esta obra social asociada serán asociados a la obra social LIBRE automaticamente.</p>
 			</div>
 			<div class="modal-footer">
 				<button class="btn" data-dismiss="modal">Cancelar</button>
