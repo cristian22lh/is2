@@ -3,35 +3,26 @@
 			label {
 				cursor: default;
 			}
-			table {
-				position: relative;
-			}
-			tr:not( :first-child ) {
-				border-top: 10px solid #eee;
-			}
 			th {
 				text-align: center !important;
 			}
-			td {
-				height: 35px;
-				vertical-align: top !important;
-				text-align: center !important;
-			}
 			td span {
-				overflow: hidden;
-				text-overflow: ellipsis;
-				display: inline-block;
+				display: block;
+				word-wrap: break-word;
+				font-size: 12px;
 			}
 			td:nth-child( 1 ) span,
 			td:nth-child( 2 ) span {
-				width: 100px;
+				width: 80px;
 			}
 			td:nth-child( 4 ) span {
-				width: 80px;
+				width: 65px;
+			}
+			td:nth-child( 6 ) span {
+				width: 65px;
 			}
 			td:nth-child( 7 ) span {
 				width: 100px;
-				font-size: 12px;
 				text-transform: none;
 			}
 			td:nth-child( 8 ) span {
@@ -39,20 +30,14 @@
 				text-transform: uppercase;
 			}
 			td:nth-child( 9 ) span {
-				width: 150px;
-				font-size: 12px;
+				width: 130px;
 			}
-			.is2-grid-actions {
-				position: absolute;
-				width: 99.8%;
-				left: 0;
-				background: #eee;
-				border-top: 1px solid #ccc;
-				border-bottom: 1px solid #ccc;
-				padding: 2px 0 2px 2px;
-				text-align: left;
+			td:nth-child( 10 ) span {
+				text-align: center;
 			}
-			
+			td:nth-child( 10 ) span a:first-child {
+				margin: 0 0 3px 0;
+			}
 			.pagination {
 				margin: 20px 0 0 0;
 			}
@@ -106,6 +91,7 @@
 						<th>Correo electrónico</th>
 						<th>Obra social</th>
 						<th>Número de afiliado</th>
+						<th>Acción</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -113,10 +99,6 @@
 					<tr data-patient-id="<?php echo $patient['id']; ?>">
 						<td>
 							<span title="<?php echo $patient['apellidos']; ?>"><?php echo $patient['apellidos']; ?></span>
-							<div class="is2-grid-actions">
-								<a class="btn btn-mini" href="/pacientes/<?php echo $patient['id']; ?>/editar">Editar</a>
-								<a class="btn btn-mini btn-danger is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-patient-id="<?php echo $patient['id']; ?>">Borrar</a>
-							</div>
 						</td>
 						<td>
 							<span title="<?php echo $patient['nombres']; ?>"><?php echo $patient['nombres']; ?></span>
@@ -126,7 +108,9 @@
 							<span title="<?php echo $patient['dni']; ?>"><?php echo $patient['dni']; ?></span>
 						</td>
 						<td><?php echo __dateISOToLocale( $patient['fechaNacimiento'] ); ?></td>
-						<td><?php echo $patient['telefono']; ?></td>
+						<td>
+							<span title="<?php echo $patient['telefono']; ?>"><?php echo $patient['telefono']; ?></span>
+						</td>
 						<td>
 							<span title="<?php echo $patient['email']; ?>"><?php echo $patient['email']; ?></span>
 						</td>
@@ -134,6 +118,12 @@
 							<span title="<?php echo $patient['obraSocialNombre']; ?>"><?php echo $patient['obraSocialNombre']; ?></span>
 						<td>
 							<span title="<?php echo $patient['nroAfiliado']; ?>"><?php echo $patient['nroAfiliado']; ?></span>
+						</td>
+						<td>
+							<span>
+								<a class="btn btn-mini" href="/pacientes/<?php echo $patient['id']; ?>/editar" title="Editar"><i class="icon-edit"></i></a>
+								<a class="btn btn-mini btn-danger is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-patient-id="<?php echo $patient['id']; ?>"><i class="icon-remove-sign" title="Borrar"></i></a>
+							</span>
 						</td>
 					</tr>
 				<?php endforeach; ?>
@@ -175,7 +165,7 @@
 <script>
 (function() {
 	$( '.is2-grid' ).delegate( 'span', 'mouseover', function( e ) {
-		$( this ).tooltip( 'show' );
+		//$( this ).tooltip( 'show' );
 	} );
 	$( '.is2-grid' ).delegate( '.is2-trigger-remove', 'click', function( e ) {
 		$( '#is2-modal-remove' ).find( 'input[name="id"]' ).val( $( this ).attr( 'data-patient-id' ) );

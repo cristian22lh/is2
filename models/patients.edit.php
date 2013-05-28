@@ -19,7 +19,7 @@
 		$insuranceNumber = __sanitizeValue( $_POST['insuranceNumber'] );
 		
 		if( !$lastName || !$firstName || !$gender || !$dni || !$birthDate || !$phone || !$email || !$insuranceID || !$insuranceNumber ) {
-			__redirect( '/pacientes/editar/' . $patientID .'?error=editar-paciente' );
+			__redirect( '/pacientes/' . $patientID . '/editar?error=editar-paciente' );
 		}
 		
 		$rowsAffected = $g_db->update( 
@@ -44,10 +44,10 @@
 
 		// puede pasar que submitee el form tal cual esta, no pasa nada, y por el < 0
 		if( $rowsAffected < 0 ) {
-			__redirect( '/pacientes/editar/' . $patientID . '?error=editar-paciente' );
+			__redirect( '/pacientes/' . $patientID . '/editar?error=editar-paciente' );
 		}
 		
-		__redirect( '/pacientes/editar/' . $patientID . '?exito=editar-paciente' );
+		__redirect( '/pacientes/' . $patientID . '/editar?exito=editar-paciente' );
 	}
 
 // DEBO PEDIR EL PACIENTE QUE ESTA EN LA URL
