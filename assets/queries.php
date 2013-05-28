@@ -46,8 +46,13 @@
 		);
 	}
 	
-	function q_getPatients( $whereCluase, $replacements ) {
+	function q_getPatients( $whereCluase, $replacements, $offset = 0 ) {
 		global $g_db;
+		
+		if( $offset ) {
+			$offset = $offset * 20;
+		}
+		$replacements[] = $offset;
 		return $g_db->select(
 			'
 				SELECT
@@ -62,6 +67,8 @@
 				'
 				ORDER BY
 					p.apellidos
+				LIMIT
+					?, 21
 			',
 			$replacements
 		);

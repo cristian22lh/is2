@@ -2,6 +2,7 @@
 
 	$whereCluase = array();
 	$replacements = array();
+	$letter = false;
 
 // ESTE ES CUANDO VENGO DE CREAR UN TURNO
 	if( ( $newPatient = __GETField( 'id' ) ) && __validateID( $newPatient ) ) {
@@ -9,13 +10,29 @@
 		$replacements[] = $newPatient;
 		
 	} else {
-		$whereCluase[] = ' 1 = 1 ';
+// ESTO ES CUANDO ESTOY ASI: pacientes/listar-por-letra/B SI FUERA EL CASO,
+// CASO CONTRARIO LISTO LOS APELLIDO QUE EMPIECEN CON 'A'
+		$letter = $g_router->seg( 3 ) ?: 'A';
+		$whereCluase[] = ' p.apellidos LIKE ?';
+		$replacements[] = $letter . '%';
 	}
 
 // ESTAS VARIABLES SON LAS QUE SE USAN EL VIEW
 	$username = __getUsername();
-	
-	$patients = q_getPatients( $whereCluase, $replacements );
+	// veo si tengo que paginar
+	$offset = __validateID( __GETField( 'pagina' ) );
+	if( !$offset ) {
+		$offset = 0;
+	}
+	// pido los pacientes en base a un $offset
+	$patients = q_getPatients( $whereCluase, $replacements, $offset );
+	// veo si tengo que SEGUIR paginar
+	if( count( $patients ) == 21 ) {
+		array_pop( $patients );
+		$stillMorePages = true;
+	} else {
+		$stillMorePages = false;
+	}
 	
 	$removeSuccess = false;
 	$removeError = false;
@@ -37,7 +54,10 @@
 			'patients' => $patients,
 			'removeSuccess' => $removeSuccess,
 			'removeError' => $removeError,
-			'editError' => $editError
+			'editError' => $editError,
+			'letter' => $letter,
+			'stillMorePages' => $stillMorePages,
+			'offset' => $offset
 		)
 	);
 

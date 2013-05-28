@@ -31,6 +31,10 @@
 						if( $seg <= 0 ) {
 							return false;
 						}
+					} else if( $cmp == ':char' ) {
+						if( !in_array( strtoupper( $seg ), range( 'A', 'Z' ) ) ) {
+							return false;
+						}
 					// si $cmp no es algo como :id entonces es
 					// $seg y $cmp deben ser iguales para poder continuar
 					} else if( $seg != $cmp ) {

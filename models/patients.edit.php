@@ -1,7 +1,7 @@
 <?php
 
-	// get last seg from /pacientes/editar/122
-	$patientID = $g_router->seg( 3 );
+	// get last seg from /pacientes/122/editar
+	$patientID = $g_router->seg( 2 );
 
 	if( __issetPOST( array( 'lastName', 'firstName', 'gender', 'dni', 'birthDate', 'phone', 'email', 'insuranceID', 'insuranceNumber' ) ) ) {
 		$lastName = __sanitizeValue( $_POST['lastName'] );

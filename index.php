@@ -64,7 +64,8 @@
 		'/pacientes/buscar/dni' => 'patients.search.dni',
 		'/pacientes/borrar' => 'patients.remove',
 		'/pacientes/crear' => 'patients.new',
-		'/pacientes/editar/:id' => 'patients.edit',
+		'/pacientes/:id/editar' => 'patients.edit',
+		'/pacientes/listar-por-letra/:char' => 'patients',
 
 // *** ESPECIALIDADES *** //
 		'/especialidades' => 'specialities',

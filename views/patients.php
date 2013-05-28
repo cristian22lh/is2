@@ -32,6 +32,7 @@
 			td:nth-child( 7 ) span {
 				width: 100px;
 				font-size: 12px;
+				text-transform: none;
 			}
 			td:nth-child( 8 ) span {
 				width: 100px;
@@ -85,7 +86,7 @@
 			<div class="pagination pagination-centered">
 				<ul>
 			<?php foreach( range( 'A', 'Z' ) as $char ): ?>
-					<li>
+					<li class="<?php echo $char == $letter ? 'active' : ''; ?>">
 						<a href="/pacientes/listar-por-letra/<?php echo $char; ?>"><?php echo $char; ?></a>
 					</li>
 			<?php endforeach; ?>
@@ -113,7 +114,7 @@
 						<td>
 							<span title="<?php echo $patient['apellidos']; ?>"><?php echo $patient['apellidos']; ?></span>
 							<div class="is2-grid-actions">
-								<a class="btn btn-mini" href="/pacientes/editar/<?php echo $patient['id']; ?>">Editar</a>
+								<a class="btn btn-mini" href="/pacientes/<?php echo $patient['id']; ?>/editar">Editar</a>
 								<a class="btn btn-mini btn-danger is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-patient-id="<?php echo $patient['id']; ?>">Borrar</a>
 							</div>
 						</td>
@@ -138,6 +139,16 @@
 				<?php endforeach; ?>
 				</tbody>
 			</table>
+			
+			<ul class="pager">
+				<li class="previous <?php echo $offset ? 'active': 'disabled'; ?>">
+					<a href="<?php echo $offset == 0 ? '#' : '?pagina=' . ($offset-1); ?>">&larr; Anterior</a>
+				</li>
+				<li class="next <?php echo $stillMorePages ? 'active': 'disabled'; ?>">
+					<a href="<?php echo $stillMorePages ? '?pagina=' . ($offset+1) : '#'; ?>">Siguiente &rarr;</a>
+				</li>
+			</ul>
+			
 			<?php else: ?>
 			<div class="alert alert-error">
 				No se han encontrado pacientes según el criterio de búsqueda específicado
