@@ -1100,3 +1100,11 @@ VALUES
 ( null, "Ventola", "Gabriel", "M", "31941127", "1957-07-15", "4352626", "ventola_gabriel@gmail.com", "2", "1931552af2" ) , 
 ( null, "Villafañe", "Cesar", "M", "11868509", "1983-03-15", "4644442", "villafañe_cesar@gmail.com", "6", "90fe231ac7" ) 
 ;
+
+UPDATE
+	pacientes
+SET
+	nroAfiliado = '---'
+WHERE
+	idObraSocial = 1
+;

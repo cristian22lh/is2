@@ -3,9 +3,11 @@
 	$whereCluase = array();
 	$replacements = array();
 	$letter = false;
+	$isSingle = false;
 
 // ESTE ES CUANDO VENGO DE CREAR UN TURNO
 	if( ( $newPatient = __GETField( 'id' ) ) && __validateID( $newPatient ) ) {
+		$isSingle = true;
 		$whereCluase[] = ' p.id = ? ';
 		$replacements[] = $newPatient;
 		
@@ -57,7 +59,8 @@
 			'editError' => $editError,
 			'letter' => $letter,
 			'stillMorePages' => $stillMorePages,
-			'offset' => $offset
+			'offset' => $offset,
+			'isSingle' => $isSingle
 		)
 	);
 

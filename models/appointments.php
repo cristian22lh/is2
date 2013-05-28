@@ -56,7 +56,7 @@
 	$isSearch = false;
 	
 	// ESTO ES CUANDO EL USUARIO HA HECHO CLICK EN EL BOTON BUSCAR
-	if( ( $search = __GETField( 'search' ) ) ) {
+	if( ( $search = __GETField( 'busqueda' ) ) ) {
 		$isSearch = true;
 	
 		$searchParts = explode( '|', base64_decode( $search ) );
@@ -226,7 +226,8 @@
 			'resetError' => $resetError,
 			'searchError' => $searchError,
 			'appointments' => $appointments,
-			'doctors' => $doctors
+			'doctors' => $doctors,
+			'persistValues' => $persistValues
 		)
 	);
 

@@ -121,8 +121,8 @@
 						</td>
 						<td>
 							<span>
-								<a class="btn btn-mini" href="/pacientes/<?php echo $patient['id']; ?>/editar" title="Editar"><i class="icon-edit"></i></a>
-								<a class="btn btn-mini btn-danger is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-patient-id="<?php echo $patient['id']; ?>"><i class="icon-remove-sign" title="Borrar"></i></a>
+								<a class="btn btn-mini" href="/pacientes/<?php echo $patient['id']; ?>/editar" title="Editar" data-placement="left"><i class="icon-edit"></i></a>
+								<a class="btn btn-mini btn-danger is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-patient-id="<?php echo $patient['id']; ?>" data-placement="right"><i class="icon-remove-sign" title="Borrar"></i></a>
 							</span>
 						</td>
 					</tr>
@@ -130,6 +130,7 @@
 				</tbody>
 			</table>
 			
+			<?php if( !$isSingle ): ?>
 			<ul class="pager">
 				<li class="previous <?php echo $offset ? 'active': 'disabled'; ?>">
 					<a href="<?php echo $offset == 0 ? '#' : '?pagina=' . ($offset-1); ?>">&larr; Anterior</a>
@@ -138,6 +139,7 @@
 					<a href="<?php echo $stillMorePages ? '?pagina=' . ($offset+1) : '#'; ?>">Siguiente &rarr;</a>
 				</li>
 			</ul>
+			<?php endif; ?>
 			
 			<?php else: ?>
 			<div class="alert alert-error">
@@ -164,9 +166,6 @@
 
 <script>
 (function() {
-	$( '.is2-grid' ).delegate( 'span', 'mouseover', function( e ) {
-		//$( this ).tooltip( 'show' );
-	} );
 	$( '.is2-grid' ).delegate( '.is2-trigger-remove', 'click', function( e ) {
 		$( '#is2-modal-remove' ).find( 'input[name="id"]' ).val( $( this ).attr( 'data-patient-id' ) );
 	} );
