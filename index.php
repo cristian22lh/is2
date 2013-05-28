@@ -39,9 +39,11 @@
 	// la pagina que quiere ver el usuario es protegida
 	// vemos si el usuario esta logueado
 	if( $i == $l && !__isUserLogged() ) {
-		__redirect( '/iniciar-sesion' );
+		// redirect then, after success login to the page that user
+		// wants in at first instance
+		__redirect( '/iniciar-sesion?destino=' . $page );
 	}
-	
+
 	$routes = array(
 		'/' => 'login',
 		'/iniciar-sesion' => 'login',

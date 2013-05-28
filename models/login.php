@@ -31,8 +31,8 @@
 		if( count( $res ) == 1 ) {
 			__setUserLogin();
 			__setUsername( $username );
-			// tiro un redirect a la aplicacion
-			__redirect( '/turnos' );
+			// check if the user comes from: /iniciar-sesion?destino=/turnos for example
+			__redirect( __GETField( 'destino' ) ?: '/turnos' );
 		}
 		
 		$isErrorLogin = true;

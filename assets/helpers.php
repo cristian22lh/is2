@@ -1,9 +1,15 @@
 <?php
 
 	function __redirect( $url ) {
-		if( $url{0} != '/' ) {
+		$url = trim( $url );
+	
+		if( preg_match( '/:\/\//', $url ) ) {
+			$url = '/404';
+			
+		} else if( $url{0} != '/' ) {
 			$url = '/' . $url;
 		}
+		
 		header( 'location: ' . $url, true );
 		die;
 	}

@@ -1,6 +1,6 @@
 <?php
 
 	__endSession();
-	__redirect( '/login' );
+	__redirect( '/iniciar-sesion' );
 
 ?>
