@@ -19,9 +19,9 @@ CREATE TABLE turnos(
 	fecha DATE,
 	hora TIME,
 	idMedico INTEGER NULL,
-	idPaciente INTEGER NULL,
+	idPaciente INTEGER NULL ,
 	estado ENUM( 'confirmado', 'cancelado', 'esperando' ),
-	UNIQUE( fecha,  hora, idMedico )
+	UNIQUE INDEX( fecha,  hora, idMedico )
 ) ENGINE=InnoDB;
 
 INSERT INTO turnos VALUES

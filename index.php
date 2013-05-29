@@ -55,7 +55,8 @@
 		'/turnos/cancelar' => 'appointments.cancel',
 		'/turnos/borrar' => 'appointments.remove',
 		'/turnos/reiniciar' => 'appointments.reset',
-		'/turnos/buscar' => 'appointments.search',
+		'/turnos/busqueda-rapida' => 'appointments',
+		'/turnos/busqueda-avanzada' => 'appointments.search.advanced',
 		'/turnos/crear' => 'appointments.new',
 
 // *** MEDICOS *** //

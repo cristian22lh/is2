@@ -41,7 +41,9 @@
 	
 // ACA CONSTRUYO EL WHERE DE MI QUERY
 	$replacements = array();
-	$whereClause = array( ' 1=1 ' );
+	$whereClause = array();
+	$whereJoinOperator = ' AND ';
+	$isLimitClause = false;
 	// aca voy a guardar los parametros de busqueda (fecha, hora, etc)
 	// para luego utilizarlo para rellenar el formulario de busqueda
 	$persistValues = array(
@@ -54,6 +56,7 @@
 		'status' => ''
 	);
 	$isSearch = false;
+	$isQuickSearch = false;
 	
 	// ESTO ES CUANDO EL USUARIO HA HECHO CLICK EN EL BOTON BUSCAR
 	if( ( $search = __GETField( 'busqueda' ) ) ) {
@@ -122,6 +125,43 @@
 	
 		$whereClause[] = ' t.id = ? ';
 		$replacements[] = $newAppointment;
+		
+// ACA CUANDO HACE UNA BUSQUEDA RAPIDA
+	} else if( __issetPOST( array( 'keyword' ) ) ) {
+		$keyword = __sanitizeValue( $_POST['keyword'] );
+		if( !$keyword ) {
+			__redirect( '/turnos?error=buscar-turno-rapido' );
+		}
+		$isQuickSearch = true;
+		
+		// es una fecha??
+		if( ( $value = __toISODate( $keyword ) ) ) {
+			$whereClause[] = ' t.fecha = ? ';
+			$replacements[] = $value;
+		// es una hora
+		} else if( ( $value = __toISOTime( $keyword ) ) ) {
+			$whereClause[] = ' t.hora = ? ';
+			$replacements[] = $value;
+		// es un estado
+		} else if( ( $keyword == 'confirmado' || $keyword == 'cancelado' ) ) {
+		} else if( ( $value = __getAppointmentStatus( $keyword ) ) ) {
+			$whereClause[] = ' t.estado = ? ';
+			$replacements[] = $value;
+		
+		} else {
+			$whereClause[] = ' m.nombres LIKE ? ';
+			$replacements[] = '%' . $keyword . '%';
+			$whereClause[] = ' m.apellidos LIKE ? ';
+			$replacements[] = '%' . $keyword . '%';
+			$whereClause[] = ' p.apellidos LIKE ? ';
+			$replacements[] = '%' . $keyword . '%';
+			$whereClause[] = ' p.nombres LIKE ? ';
+			$replacements[] = '%' . $keyword . '%';
+		}
+		
+		$whereJoinOperator = ' OR ';
+		// this last two token are for the limit clause
+		$isLimitClause = true;
 	
 	// ESTE ES EL WHERE NORMAL, OSEA CUANDO SE ESTA ACCEDIENDO DIRECTAMENTE A /turnos
 	} else {
@@ -133,15 +173,12 @@
 	}
 	
 	// SE PUEDEN FILTAR LOS TURNOS MEDIANTE LA COLUMNA "ACCIONES" O MEDINATE UNA BUSQUEDA
-	if( $statusValue == 'confirmados' ) {
+	if( $statusValue && ( $statusValue = __getAppointmentStatus( $statusValue ) ) ) {
 		$whereClause[] = ' t.estado = ? ';
-		$replacements[] = 'confirmado';
-	} else if( $statusValue == 'cancelados' ) {
-		$whereClause[] = ' t.estado = ? ';
-		$replacements[] = 'cancelado';
+		$replacements[] = $statusValue;
 	}
-
-	$appointments = $g_db->select( 
+	
+	$appointments = $g_db->select(
 		'
 			SELECT 
 				t.id, t.fecha, t.hora, t.estado,
@@ -153,13 +190,23 @@
 				INNER JOIN pacientes AS p 
 					ON p.id = t.idPaciente 
 			WHERE ' .
-				implode( ' AND ', $whereClause ) .
+				implode( $whereJoinOperator, $whereClause ) .
 				
 			'ORDER BY ' .
-				implode( ' , ', $orderByClause )
+				implode( ' , ', $orderByClause ) .
+				
+			( $isLimitClause ? ' LIMIT 0, 21 ' : '' )
 		,
 		$replacements
 	);
+	
+	// too much records
+	if( $isQuickSearch && count( $appointments ) == 21 ) {
+		array_pop( $appointments );
+		$tooMuchRecords = true;
+	} else {
+		$tooMuchRecords = false;
+	}
 
 // PIDO LOS MEDICOS, ESTOS ES DEBIDO A QUE LA BUSQUEDA DESPLIEGA UNA
 // LISTA QUE CONTIENE TODOS LOS MEDICOS EN EL SISTEMA
@@ -177,6 +224,7 @@
 	$resetSuccess = false;
 	$resetError = false;
 	$searchError = false;
+	$searchQuickError = false;
 	// aca veo si vengo de un confirmar-turno, el cual fue ok
 	// con esto mostrare los respectivos mensajes de exito...
 	if( __issetGETField( 'exito', 'confirmar-turno' ) ) {
@@ -203,6 +251,8 @@
 	} else if( __issetGETField( 'error', 'buscar-turno' ) ) {
 		$searchError = true;
 		$isSearch = true;
+	} else if( __issetGETField( 'error', 'buscar-turno-rapido' ) ) {
+		$searchQuickError = true;
 	}
 	
 	// esto es usado para mostrar un mensaje cuando se accede a /turnos
@@ -225,6 +275,8 @@
 			'resetSuccess' => $resetSuccess,
 			'resetError' => $resetError,
 			'searchError' => $searchError,
+			'searchQuickError' => $searchQuickError,
+			'tooMuchRecords' => $tooMuchRecords,
 			'appointments' => $appointments,
 			'doctors' => $doctors,
 			'persistValues' => $persistValues

@@ -130,20 +130,25 @@
 	}
 	
 	function __toISOTime( $value ) {
-		if( !preg_match( '/^(\d{2}):(\d{2}) (PM|AM)$/i', trim( $value ), $m ) ) {
+		if( !preg_match( '/^(\d{2}):(\d{2})(?: (PM|AM)|(:\d{2})?)$/i', trim( $value ), $m ) ) {
+			return false;
+		}
+		if( count( $m ) < 3 ) {
 			return false;
 		}
 		$hours = $m[1];
 		$minutes = $m[2];
-		$meridian = $m[3];
-		if( $hours > 12 || $minutes > 59 ) {
-			return false;
-		}
-		if( $meridian == 'PM' ) {
-			$hours += 12;
+		$meridian = isset( $m[3] ) ? $m[3] : false;
+		if( $meridian ) {
+			if( $hours > 12 || $minutes > 59 ) {
+				return false;
+			}
+			if( $meridian == 'PM' ) {
+				$hours += 12;
+			}
 		}
 		
-		return $hours . ':' . $minutes . ':00';
+		return $hours . ':' . $minutes . ( isset( $m[4] ) ? $m[4] : ':00' );
 	}
 	
 	function __timeISOToLocale( $value ) {
@@ -184,6 +189,15 @@
 	
 	function __validateEmail( $value ) {
 		return preg_match( '/^[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z]+$/i', trim( $value ) ) ? $value : false;
+	}
+	
+	function __getAppointmentStatus( $value ) {
+		if( $value == 'confirmados' ) {
+			return 'confirmado';
+		} else if( $value == 'cancelados' ) {
+			return 'cancelado';
+		}
+		return false;
 	}
 	
 // ************** /

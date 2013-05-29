@@ -19,6 +19,7 @@
 			float: right;
 			margin: 0 0 10px 0;
 		}
+		
 		.is2-doctors-listbox {
 			min-height: 150px;
 		}
@@ -71,7 +72,7 @@
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
 				¡No se ha podido reiniciar el turno! Vuelva a intentarlo.
 			</div>
-			<?php elseif( $searchError ): ?>
+			<?php elseif( $searchError || $searchQuickError ): ?>
 			<div class="alert alert-error">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
 				¡No se ha podido realizar la búsqueda! Vuelva a intentarlo.
@@ -81,17 +82,23 @@
 			<div class="is2-pagetitle clearfix">
 				<h3>Turnos</h3>
 				<a class="btn pull-right" href="/turnos/crear"><i class="icon-plus"></i> Crear un nuevo turno</a>
+				<form class="form-search pull-right" method="post" action="/turnos/busqueda-rapida">
+					<div class="input-append control-group <?php echo $searchQuickError ? 'error': ''; ?>">
+						<input type="text" class="input-large search-query" placeholder="Búsqueda rápida" name="keyword">
+						<button type="submit" class="btn"><i class="icon-search"></i></button>
+					</div>
+				</form>
 			</div>
 			
 			<div id="is2-search-appointments-wrapper" class="accordion">
 				<div class="accordion-group">
 					<div class="accordion-heading">
 						<a class="accordion-toggle" data-toggle="collapse" href="#is2-search-appointments" data-parent="#is2-search-appointments-wrapper">
-							Buscar turnos...
+							Búsqueda avanzada...
 						</a>
 					</div>
 					<div id="is2-search-appointments" class="accordion-body collapse<?php echo $searchError ? ' in ' : ' out'; ?>">
-						<form class="accordion-inner" method="post" action="/turnos/buscar">
+						<form class="accordion-inner" method="post" action="/turnos/busqueda-avanzada">
 							<fieldset class="form-inline">
 								<legend>Rango de fechas</legend>
 								<div class="alert alert-info">
@@ -176,7 +183,13 @@
 				</div>
 			</div>
 			
-			<?php if( $currentDate ): ?>
+			
+			<?php if( $tooMuchRecords ): ?>
+			<div class="alert">
+				<a class="close" data-dismiss="alert" href="#">&times;</a>
+				La búsqueda realizada a devuelto demasiados turnos, solo se muestran los primeros <strong>20</strong> turnos econtrados, trate de ser más específico en su criterio de búsqueda
+			</div>
+			<?php elseif( $currentDate ): ?>
 			<div class="alert">
 				Se muestran los turnos desde día presente (<strong><?php echo $currentDate; ?></strong>) hasta los próximos 7 días.
 			</div>

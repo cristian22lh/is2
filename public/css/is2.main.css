@@ -66,8 +66,12 @@ legend {
 	float: left;
 	margin: 0;
 }
-.is2-pagetitle .btn {
+.is2-pagetitle .btn,
+.is2-pagetitle input {
 	margin: 7px 0 0 0;
+}
+.is2-pagetitle .form-search {
+	margin: 0 5px 0 0;
 }
 
 .is2-preloader {
