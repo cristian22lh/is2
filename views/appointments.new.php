@@ -287,7 +287,6 @@
 		if( !$patientID.val().trim() ) {
 			e.preventDefault();
 			$dniGroupControl.addClass( 'error' );
-			$dni.tooltip( { title: 'Debe tener un paciente seleccionado para crear el turno' } );
 			return;
 		}
 		$dniGroupControl.removeClass( 'error' );
@@ -300,7 +299,6 @@
 		if( date.length !== 3 ) {
 			e.preventDefault();
 			$dateGroupControl.addClass( 'error' );
-			$date.tooltip( { title: 'Debe seleccionar una fecha para poder crear el turno' } );
 			return;
 		}
 		target = new Date();
@@ -312,7 +310,6 @@
 		if( base > target || target - base > 604800000 ) {
 			e.preventDefault();
 			$dateGroupControl.addClass( 'error' );
-			$date.tooltip( { title: 'La fecha elegida no esta dentro del rango permitdo' } );
 			return;
 		}
 		$dateGroupControl.removeClass( 'error' );

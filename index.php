@@ -56,7 +56,7 @@
 		'/turnos/cancelar' => 'appointments.cancel',
 		'/turnos/borrar' => 'appointments.remove',
 		'/turnos/reiniciar' => 'appointments.reset',
-		'/turnos/busqueda-rapida' => 'appointments',
+		'/turnos/busqueda-rapida' => 'appointments.search.quick',
 		'/turnos/busqueda-avanzada' => 'appointments.search.advanced',
 		'/turnos/crear' => 'appointments.new',
 

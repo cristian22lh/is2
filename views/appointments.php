@@ -82,9 +82,9 @@
 			<div class="is2-pagetitle clearfix">
 				<h3>Turnos</h3>
 				<a class="btn pull-right" href="/turnos/crear"><i class="icon-plus"></i> Crear un nuevo turno</a>
-				<form class="form-search pull-right" method="post" action="/turnos/busqueda-rapida">
-					<div class="input-append control-group <?php echo $searchQuickError ? 'error': ''; ?>">
-						<input type="text" class="input-large search-query" placeholder="Búsqueda rápida" name="keyword">
+				<form class="form-search pull-right is2-search-quick-form" method="post" action="/turnos/busqueda-rapida">
+					<div class="is2-search-quick-control input-append control-group <?php echo $searchQuickError ? 'error': ''; ?>">
+						<input type="text" class="input-large search-query is2-search-quick-input" placeholder="Búsqueda rápida" name="keyword" value="<?php echo $quickSearchValue; ?>">
 						<button type="submit" class="btn"><i class="icon-search"></i></button>
 					</div>
 				</form>
@@ -376,6 +376,19 @@
 	} );
 	$( '.is2-patients-search' ).on( 'click', function( e ) {
 		$( '.is2-patients-custom' ).click();
+	} );
+	
+// *** BUSQUEDA RAPIDA *** //
+	var $searchQuery = $( '.is2-search-quick-input' );
+	var $searchControlGroup = $( '.is2-search-quick-control' );
+	$( '.is2-search-quick-form' ).on( 'submit', function( e ) {
+		var keyword = $searchQuery.val().trim();
+		if( !keyword ) {
+			e.preventDefault();
+			$searchControlGroup.addClass( 'error' );
+			return;
+		}
+		$searchControlGroup.removeClass( 'error' );
 	} );
 	
 })();

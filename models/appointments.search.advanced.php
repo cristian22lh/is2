@@ -59,6 +59,6 @@
 	// aca armo la query url, estas sera procesado en appointments.php
 	$search = $fromDate . '@' . $toDate . '|' . $fromTime . '@' . $toTime . '|' . ( count( $doctorsList ) > 0 ? implode( '-', $doctorsList ) : '' ) . '|' . ( count( $cleanDNIs ) > 0 ? implode( '-', $cleanDNIs ) : '' ) . '|' . $status;
 	
-	__redirect( '/turnos?busqueda=' . base64_encode( $search ) );
+	__redirect( '/turnos?busqueda-avanzada=' . base64_encode( $search ) );
 	
 ?>

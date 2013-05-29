@@ -42,7 +42,6 @@
 // ACA CONSTRUYO EL WHERE DE MI QUERY
 	$replacements = array();
 	$whereClause = array();
-	$whereJoinOperator = ' AND ';
 	$isLimitClause = false;
 	// aca voy a guardar los parametros de busqueda (fecha, hora, etc)
 	// para luego utilizarlo para rellenar el formulario de busqueda
@@ -57,9 +56,10 @@
 	);
 	$isSearch = false;
 	$isQuickSearch = false;
-	
+	$quickSearchValue = false;
+
 // ESTO ES CUANDO EL USUARIO HA HECHO CLICK EN EL BOTON BUSCAR
-	if( ( $search = __GETField( 'busqueda' ) ) ) {
+	if( ( $search = __GETField( 'busqueda-avanzada' ) ) ) {
 		$isSearch = true;
 	
 		$searchParts = explode( '|', base64_decode( $search ) );
@@ -118,6 +118,10 @@
 		if( $searchParts[4] ) {
 			$statusValue = $persistValues['status'] = $searchParts[4];
 		};
+		
+		if( !count( $whereClause ) ) {
+			$whereClause[] = ' 1 = 1 ';
+		}
 	
 // ESTE ES CUANDO VENGO DE CREAR UN TURNO
 	} else if( ( $newAppointment = __GETField( 'id' ) ) && __validateID( $newAppointment ) ) {
@@ -127,38 +131,43 @@
 		$replacements[] = $newAppointment;
 		
 // ACA CUANDO HACE UNA BUSQUEDA RAPIDA
-	} else if( __issetPOST( array( 'keyword' ) ) ) {
-		$keyword = __sanitizeValue( $_POST['keyword'] );
+	} else if( ( $keyword = __GETField( 'busqueda' ) ) ) {
+		$keyword = __sanitizeValue( base64_decode( $keyword ) );
 		if( !$keyword ) {
 			__redirect( '/turnos?error=buscar-turno-rapido' );
 		}
-		$isQuickSearch = true;
-		
-		// es una fecha?
-		if( ( $value = __toISODate( $keyword ) ) ) {
-			$whereClause[] = ' t.fecha = ? ';
-			$replacements[] = $value;
-		// es una hora?
-		} else if( ( $value = __toISOTime( $keyword ) ) ) {
-			$whereClause[] = ' t.hora = ? ';
-			$replacements[] = $value;
-		// es un estado?
-		} else if( ( $value = __getAppointmentStatus( $keyword ) ) ) {
-			$whereClause[] = ' t.estado = ? ';
-			$replacements[] = $value;
-		
-		} else {
-			$whereClause[] = ' m.nombres LIKE ? ';
-			$replacements[] = '%' . $keyword . '%';
-			$whereClause[] = ' m.apellidos LIKE ? ';
-			$replacements[] = '%' . $keyword . '%';
-			$whereClause[] = ' p.apellidos LIKE ? ';
-			$replacements[] = '%' . $keyword . '%';
-			$whereClause[] = ' p.nombres LIKE ? ';
-			$replacements[] = '%' . $keyword . '%';
+		$keyword = explode( '=', $keyword );
+		if( count( $keyword ) != 2 ) {
+			__redirect( '/turnos?error=buscar-turno-rapido' );
 		}
 		
-		$whereJoinOperator = ' OR ';
+		$field =  $keyword[0];
+		$value = $keyword[1];
+		if( $field == 'fecha' ) {
+			$whereClause[] = ' t.fecha = ? ';
+			$replacements[] = $value;
+			
+		} else if( $field == 'hora' ) {
+			$whereClause[] = ' t.hora = ? ';
+			$replacements[] = $value;
+			
+		} else if( $field == 'estado' ) {
+			$whereClause[] = ' t.estado = ? ';
+			$replacements[] = $value;
+			
+		} else if( $field == 'comodin' ) {
+			$whereClause[] = ' ( m.nombres LIKE ? OR m.apellidos LIKE ? OR p.apellidos LIKE ? OR p.nombres LIKE ? ) ';
+			$replacements[] = '%' . $value . '%';
+			$replacements[] = '%' . $value . '%';
+			$replacements[] = '%' . $value . '%';
+			$replacements[] = '%' . $value . '%';
+		
+		} else {
+			__redirect( '/turnos?error=buscar-turno-rapido' );
+		}
+		
+		$quickSearchValue = $value;
+		$isQuickSearch = true;
 		// this last two token are for the limit clause
 		$isLimitClause = true;
 	
@@ -189,7 +198,7 @@
 				INNER JOIN pacientes AS p 
 					ON p.id = t.idPaciente 
 			WHERE ' .
-				implode( $whereJoinOperator, $whereClause ) .
+				implode( ' AND ', $whereClause ) .
 				
 			'ORDER BY ' .
 				implode( ' , ', $orderByClause ) .
@@ -275,6 +284,7 @@
 			'resetError' => $resetError,
 			'searchError' => $searchError,
 			'searchQuickError' => $searchQuickError,
+			'quickSearchValue' => $quickSearchValue,
 			'tooMuchRecords' => $tooMuchRecords,
 			'appointments' => $appointments,
 			'doctors' => $doctors,
