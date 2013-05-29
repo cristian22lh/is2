@@ -20,6 +20,10 @@
 		die;
 	}
 	
+	function __throw404Error() {
+		header( 'HTTP/1.0 404 Not Found' );
+	}
+	
 // ************** /
 // FIREPHP funcionality
 // ************* /

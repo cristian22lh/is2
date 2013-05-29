@@ -58,7 +58,7 @@
 	$isSearch = false;
 	$isQuickSearch = false;
 	
-	// ESTO ES CUANDO EL USUARIO HA HECHO CLICK EN EL BOTON BUSCAR
+// ESTO ES CUANDO EL USUARIO HA HECHO CLICK EN EL BOTON BUSCAR
 	if( ( $search = __GETField( 'busqueda' ) ) ) {
 		$isSearch = true;
 	
@@ -119,7 +119,7 @@
 			$statusValue = $persistValues['status'] = $searchParts[4];
 		};
 	
-	// ESTE ES CUANDO VENGO DE CREAR UN TURNO
+// ESTE ES CUANDO VENGO DE CREAR UN TURNO
 	} else if( ( $newAppointment = __GETField( 'id' ) ) && __validateID( $newAppointment ) ) {
 		$isSearch = true;
 	
@@ -134,16 +134,15 @@
 		}
 		$isQuickSearch = true;
 		
-		// es una fecha??
+		// es una fecha?
 		if( ( $value = __toISODate( $keyword ) ) ) {
 			$whereClause[] = ' t.fecha = ? ';
 			$replacements[] = $value;
-		// es una hora
+		// es una hora?
 		} else if( ( $value = __toISOTime( $keyword ) ) ) {
 			$whereClause[] = ' t.hora = ? ';
 			$replacements[] = $value;
-		// es un estado
-		} else if( ( $keyword == 'confirmado' || $keyword == 'cancelado' ) ) {
+		// es un estado?
 		} else if( ( $value = __getAppointmentStatus( $keyword ) ) ) {
 			$whereClause[] = ' t.estado = ? ';
 			$replacements[] = $value;
@@ -163,7 +162,7 @@
 		// this last two token are for the limit clause
 		$isLimitClause = true;
 	
-	// ESTE ES EL WHERE NORMAL, OSEA CUANDO SE ESTA ACCEDIENDO DIRECTAMENTE A /turnos
+// ESTE ES EL WHERE NORMAL, OSEA CUANDO SE ESTA ACCEDIENDO DIRECTAMENTE A /turnos
 	} else {
 		$whereClause[] = ' t.fecha >= ? ';
 		$replacements[] = date( 'Y-m-d' );
@@ -258,7 +257,7 @@
 	// esto es usado para mostrar un mensaje cuando se accede a /turnos
 	// sobre de que los turnos que estan siendo mostrados son los desde la
 	// la fecha actual hasta los siguiente 7 dias
-	$currentDate = !$isSearch ? date( 'd/m/Y' ) : false;
+	$currentDate = !$isSearch && !$isQuickSearch ? date( 'd/m/Y' ) : false;
 	
 // LOAD THE VIEW
 	__render( 

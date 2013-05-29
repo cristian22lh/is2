@@ -3,10 +3,6 @@
 	<head>
 		<meta charset="utf-8">
 		<link href="/css/bootstrap.css" rel="stylesheet">
-		<script src="/js/jquery-2.0.0.min.js"></script>
-		<script src="/js/bootstrap.min.js"></script>
-		<script src="/js/bootstrap-datepicker.js"></script>
-		<script src="/js/bootstrap-datepicker.es.js"></script>
 		<link href="/css/is2.main.css" rel="stylesheet">
     <style>
 		.container {
