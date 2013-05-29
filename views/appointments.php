@@ -318,6 +318,7 @@
 	} ).delegate( '.is2-trigger-restore', 'click', function( e ) {
 		$( '#is2-modal-restore input' ).val( $( this ).attr( 'data-appointment-id' ) );
 	} );
+	
 // *** ACA PARA CUANDO SORTEO LA GRID *** //
 	$( '.is2-trigger-orderby' ).on( 'click', function( e ) {
 		e.preventDefault();
@@ -368,9 +369,6 @@
 	});
 	$( '.is2-doctors-listbox' ).on( 'click', function( e ) {
 		$( '.is2-doctors-custom' ).click();
-	} );
-	$( '.is2-doctors-all' ).on( 'click', function( e ) {
-		$( '.is2-doctors-listbox' )[0].selectedIndex = -1;
 	} );
 	$( '.is2-patients-search' ).on( 'click', function( e ) {
 		$( '.is2-patients-custom' ).click();

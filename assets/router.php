@@ -8,6 +8,28 @@
 		function __construct() {
 		}
 		
+		function start( $routes, $page, $fallbackRoute ) {			
+			$count = 0;
+			foreach( $routes as $route => $model ) {
+				if( $this->test( $route, $page ) ) {
+					$path = './models/' . $model . '.php';
+					if( !file_exists( $path ) ) {
+						die( 'Specified model "' . $model . '" does not exists at "' . $path . '"' );
+					}
+					return $path;
+				} else {
+					$count++;
+				}
+			}
+			// la pagina que se quiere acceder no existe
+			if( $count == count( $routes ) ) {
+				if( $fallbackRoute{0} != '/' ) {
+					$fallbackRoute = '/' . $fallbackRoute;
+				}
+				__redirect( $fallbackRoute . '?destino=' . $page );
+			}
+		}
+		
 		function test( $pat, $page ) {
 			$this->m = array();
 		

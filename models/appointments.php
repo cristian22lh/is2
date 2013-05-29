@@ -186,51 +186,54 @@
 		$replacements[] = $statusValue;
 	}
 	
-	$appointments = $g_db->select(
-		'
-			SELECT 
-				t.id, t.fecha, t.hora, t.estado,
-				m.nombres AS medicoNombres, m.apellidos AS medicoApellidos,
-				p.nombres AS pacienteNombres, p.apellidos AS pacienteApellidos
-			FROM turnos AS t 
-				INNER JOIN medicos AS m 
-					ON m.id = t.idMedico 
-				INNER JOIN pacientes AS p 
-					ON p.id = t.idPaciente 
-			WHERE ' .
-				implode( ' AND ', $whereClause ) .
-				
-			'ORDER BY ' .
-				implode( ' , ', $orderByClause ) .
-				
-			( $isLimitClause ? ' LIMIT 0, 21 ' : '' )
-		,
-		$replacements
-	);
-	
-	// too much records
-	if( $isQuickSearch && count( $appointments ) == 21 ) {
-		array_pop( $appointments );
-		$tooMuchRecords = true;
-	} else {
-		$tooMuchRecords = false;
-	}
-
-// PIDO LOS MEDICOS, ESTOS ES DEBIDO A QUE LA BUSQUEDA DESPLIEGA UNA
-// LISTA QUE CONTIENE TODOS LOS MEDICOS EN EL SISTEMA
-	$doctors = q_getAllDoctors();
-	
-// TODAS ESTAS SON VARIABLES QUE DEBEN USARSE EN LA VIEW //
-	$username = __getUsername();
-	
 	$searchError = false;
 	$searchQuickError = false;
+	$tooMuchRecords = false;
 	if( __issetGETField( 'error', 'buscar-turno' ) ) {
 		$searchError = true;
 		$isSearch = true;
 	} else if( __issetGETField( 'error', 'buscar-turno-rapido' ) ) {
 		$searchQuickError = true;
 	}
+	
+	// dont waste a sql query is error is setted up
+	if( !$searchError && !$searchQuickError ) {
+		$appointments = $g_db->select(
+			'
+				SELECT 
+					t.id, t.fecha, t.hora, t.estado,
+					m.nombres AS medicoNombres, m.apellidos AS medicoApellidos,
+					p.nombres AS pacienteNombres, p.apellidos AS pacienteApellidos
+				FROM turnos AS t 
+					INNER JOIN medicos AS m 
+						ON m.id = t.idMedico 
+					INNER JOIN pacientes AS p 
+						ON p.id = t.idPaciente 
+				WHERE ' .
+					implode( ' AND ', $whereClause ) .
+					
+				'ORDER BY ' .
+					implode( ' , ', $orderByClause ) .
+					
+				( $isLimitClause ? ' LIMIT 0, 21 ' : '' )
+			,
+			$replacements
+		);
+		// too much records
+		if( $isQuickSearch && count( $appointments ) == 21 ) {
+			array_pop( $appointments );
+			$tooMuchRecords = true;
+		}
+		
+	} else {
+		$appointments = array();
+	}
+
+// PIDO LOS MEDICOS, ESTOS ES DEBIDO A QUE LA BUSQUEDA DESPLIEGA UNA
+// LISTA QUE CONTIENE TODOS LOS MEDICOS EN EL SISTEMA
+	$doctors = q_getAllDoctors();
+	
+	$username = __getUsername();
 	
 	// esto es usado para mostrar un mensaje cuando se accede a /turnos
 	// sobre de que los turnos que estan siendo mostrados son los desde la
