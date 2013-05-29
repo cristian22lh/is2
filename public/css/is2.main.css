@@ -85,3 +85,7 @@ legend {
 .is2-preloader-bg {
 	background-image: url( /img/preloader-bg-gray.gif );
 }
+
+:not( .popover-content ) > .is2-popover-template {
+	display: none;
+}
