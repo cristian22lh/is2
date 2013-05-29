@@ -223,40 +223,9 @@
 // TODAS ESTAS SON VARIABLES QUE DEBEN USARSE EN LA VIEW //
 	$username = __getUsername();
 	
-	$confirmSuccess = false;
-	$confirmError = false;
-	$cancelSuccess = false;
-	$cancelError = false;
-	$removeSuccess = false;
-	$removeError = false;
-	$resetSuccess = false;
-	$resetError = false;
 	$searchError = false;
 	$searchQuickError = false;
-	// aca veo si vengo de un confirmar-turno, el cual fue ok
-	// con esto mostrare los respectivos mensajes de exito...
-	if( __issetGETField( 'exito', 'confirmar-turno' ) ) {
-		$confirmSuccess = true;
-	// ... o de error
-	} else if( __issetGETField( 'error', 'confirmar-turno' ) ) {
-		$confirmError = true;
-	
-	} else if( __issetGETField( 'exito', 'cancelar-turno' ) ) {
-		$cancelSuccess = true;
-	} else if( __issetGETField( 'error', 'cancelar-turno' ) ) {
-		$cancelError = true;
-	
-	} else if( __issetGETField( 'exito', 'borrar-turno' ) ) {
-		$removeSuccess = true;
-	} else if( __issetGETField( 'error', 'borrar-turno' ) ) {
-		$removeError = true;
-	
-	} else if( __issetGETField( 'exito', 'reiniciar-turno' ) ) {
-		$resetSuccess = true;
-	} else if( __issetGETField( 'error', 'reiniciar-turno' ) ) {
-		$resetError = true;
-	
-	} else if( __issetGETField( 'error', 'buscar-turno' ) ) {
+	if( __issetGETField( 'error', 'buscar-turno' ) ) {
 		$searchError = true;
 		$isSearch = true;
 	} else if( __issetGETField( 'error', 'buscar-turno-rapido' ) ) {
@@ -274,14 +243,6 @@
 		array(
 			'username' => $username,
 			'currentDate' => $currentDate,
-			'confirmSuccess' => $confirmSuccess,
-			'confirmError' => $confirmError,
-			'cancelSuccess' => $cancelSuccess,
-			'cancelError' => $cancelError,
-			'removeSuccess' =>$removeSuccess,
-			'removeError' => $removeError,
-			'resetSuccess' => $resetSuccess,
-			'resetError' => $resetError,
 			'searchError' => $searchError,
 			'searchQuickError' => $searchQuickError,
 			'quickSearchValue' => $quickSearchValue,

@@ -26,53 +26,49 @@
 		.bootstrap-timepicker {
 			display: inline-block;
 		}
+		
+		tr.is2-appointment-removed * {
+			text-decoration: line-through;
+		}
 	</style>
 		
 <?php t_endHead(); ?>
 <?php t_startBody( $username, 'appointments'  ); ?>
 
 		<?php t_startWrapper(); ?>
-			<?php if( $confirmSuccess ): ?>
-			<div class="alert alert-success">
+			<div class="alert alert-success is2-confirm-success is2-ajax-msg" style="display:none">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
 				¡El turno ha sido confirmado satisfactoriamente!
 			</div>
-			<?php elseif( $confirmError ): ?>
-			<div class="alert alert-error">
+			<div class="alert alert-error is2-confirm-error is2-ajax-msg" style="display:none">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
 				¡No se ha podido confirmar el turno! Vuelva a intentarlo.
 			</div>
-			<?php elseif( $cancelSuccess ): ?>
-			<div class="alert alert-success">
+			<div class="alert alert-success is2-cancel-success is2-ajax-msg" style="display:none">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
 				¡El turno ha sido cancelado satisfactoriamente!
 			</div>
-			<?php elseif( $cancelError ): ?>
-			<div class="alert alert-error">
+			<div class="alert alert-error is2-cancel-error is2-ajax-msg" style="display:none">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
 				¡No se ha podido cancelar el turno! Vuelva a intentarlo.
 			</div>
-			<?php elseif( $removeSuccess ): ?>
-			<div class="alert alert-success">
+			<div class="alert alert-success is2-remove-success is2-ajax-msg" style="display:none">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
 				¡El turno ha sido borrado satisfactoriamente!
 			</div>
-			<?php elseif( $removeError ): ?>
-			<div class="alert alert-error">
+			<div class="alert alert-error is2-remove-error is2-ajax-msg" style="display:none">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
 				¡No se ha podido borar el turno! Vuelva a intentarlo.
 			</div>
-			<?php elseif( $resetSuccess ): ?>
-			<div class="alert alert-success">
+			<div class="alert alert-success is2-restore-success is2-ajax-msg" style="display:none">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
 				¡El turno ha sido reiniciado satisfactoriamente!
 			</div>
-			<?php elseif( $resetError ): ?>
-			<div class="alert alert-error">
+			<div class="alert alert-error is2-restore-error is2-ajax-msg" style="display:none">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
 				¡No se ha podido reiniciar el turno! Vuelva a intentarlo.
 			</div>
-			<?php elseif( $searchError || $searchQuickError ): ?>
+			<?php if( $searchError || $searchQuickError ): ?>
 			<div class="alert alert-error">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
 				¡No se ha podido realizar la búsqueda! Vuelva a intentarlo.
@@ -228,19 +224,17 @@
 						<td><?php echo substr( $appointment['hora'], 0, 5 ); ?></td>
 						<td><?php echo $appointment['medicoApellidos'] . ', ' .  $appointment['medicoNombres']; ?></td>
 						<td><?php echo $appointment['pacienteApellidos'] . ', ' .  $appointment['pacienteNombres']; ?></td>
-						<td>
-						<?php if( $appointment['estado'] == 'confirmado' ): ?>
-							<button class="btn btn-success disabled"><i class="icon-ok"></i> Confirmado</button>
-							<a class="btn btn-mini btn-link is2-trigger-restore" href="#is2-modal-restore" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Deshacer acción</a>
-						<?php elseif( $appointment['estado'] == 'cancelado' ): ?>
-							<button class="btn btn-warning disabled"><i class="icon-exclamation-sign"></i> Cancelado</button>
-							<a class="btn btn-mini btn-link is2-trigger-restore" href="#is2-modal-restore" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Deshacer acción</a>
-						<?php else: ?>
-							<a class="btn is2-trigger-confirm" href="#is2-modal-confirm" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Confirmar</a>
-							<a class="btn is2-trigger-cancel" href="#is2-modal-cancel" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Cancelar</a>
-							<a class="btn btn-danger is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Borrar</a>
+						<td data-appointment-id="<?php echo $appointment['id']; ?>">
+							<button class="btn btn-success disabled" style="display:<?php echo $appointment['estado'] == 'confirmado' ? 'inline-block' : 'none'; ?>" data-appointment-id="<?php echo $appointment['id']; ?>"><i class="icon-ok"></i> Confirmado</button>
+							<button class="btn btn-warning disabled" style="display:<?php echo $appointment['estado'] == 'cancelado' ? 'inline-block' : 'none'; ?>" data-appointment-id="<?php echo $appointment['id']; ?>"><i class="icon-exclamation-sign"></i> Cancelado</button>
+							<?php $isWaiting = $appointment['estado'] == 'esperando'; ?>
+							<a class="btn btn-mini btn-link is2-trigger-restore" href="#is2-modal-restore" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>" style="display:<?php echo !$isWaiting ? 'inline-block' : 'none'; ?>">Deshacer acción</a>
+							<div style="display:<?php echo $isWaiting ? 'block' : 'none'; ?>" data-appointment-id="<?php echo $appointment['id']; ?>">
+								<a class="btn is2-trigger-confirm" href="#is2-modal-confirm" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Confirmar</a>
+								<a class="btn is2-trigger-cancel" href="#is2-modal-cancel" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Cancelar</a>
+								<a class="btn btn-danger is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Borrar</a>
+							</div>
 						</td>
-						<?php endif; ?>
 					</tr>
 				<?php endforeach; ?>
 				</tbody>
@@ -254,52 +248,56 @@
 		<?php t_endWrapper(); ?>
 		
 		<!-- modals -->
-		<form method="post" action="/turnos/confirmar" id="is2-modal-confirm" class="modal hide fade">
+		<form id="is2-modal-confirm" class="modal hide fade">
 			<div class="modal-body">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<span><strong>¿Estás seguro que confirmar el turno?</strong></span>
 			</div>
 			<div class="modal-footer">
-				<button class="btn" data-dismiss="modal">No</button>
+				<span class="is2-preloader is2-preloader-bg pull-left is2-preloader-confirm"></span>
+				<button class="btn is2-modal-confirm-close" data-dismiss="modal">No</button>
 				<button class="btn btn-primary" type="submit">Sí</button>
 			</div>
-			<input type="hidden" name="id">
+			<input type="hidden" name="id" class="is2-modal-confirm-id">
 		</form>
 		
-		<form method="post" action="/turnos/cancelar" id="is2-modal-cancel" class="modal hide fade">
+		<form id="is2-modal-cancel" class="modal hide fade">
 			<div class="modal-body">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<span><strong>¿Estás seguro que desea cancelar el turno?</strong></span>
 			</div>
 			<div class="modal-footer">
-				<button class="btn" data-dismiss="modal">No</button>
+				<span class="is2-preloader is2-preloader-bg pull-left is2-preloader-cancel"></span>
+				<button class="btn is2-modal-cancel-close" data-dismiss="modal">No</button>
 				<button class="btn btn-primary" type="submit">Sí</button>
 			</div>
-			<input type="hidden" name="id">
+			<input type="hidden" name="id" class="is2-modal-cancel-id">
 		</form>
 		
-		<form method="post" action="/turnos/borrar" id="is2-modal-remove" class="modal hide fade">
+		<form id="is2-modal-remove" class="modal hide fade">
 			<div class="modal-body">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<span><strong>¿Estás seguro que desea borrar el turno?</strong></span>
 			</div>
 			<div class="modal-footer">
-				<button class="btn" data-dismiss="modal">No</button>
+				<span class="is2-preloader is2-preloader-bg pull-left is2-preloader-remove"></span>
+				<button class="btn is2-modal-remove-close" data-dismiss="modal">No</button>
 				<button class="btn btn-primary" type="submit">Sí</button>
 			</div>
-			<input type="hidden" name="id">
+			<input type="hidden" name="id" class="is2-modal-remove-id">
 		</form>
 		
-		<form method="post" action="/turnos/reiniciar" id="is2-modal-restore" class="modal hide fade">
+		<form id="is2-modal-restore" class="modal hide fade">
 			<div class="modal-body">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<span><strong>Sepa que si confirma, el turno volverá a su estado original, ¿desea continuar?</strong></span>
+				<span><strong>¿Estás seguro que desea que el turno vuelva a su estado original?</strong></span>
 			</div>
 			<div class="modal-footer">
-				<button class="btn" data-dismiss="modal">No</button>
+				<span class="is2-preloader is2-preloader-bg pull-left is2-preloader-restore"></span>
+				<button class="btn is2-modal-restore-close" data-dismiss="modal">No</button>
 				<button class="btn btn-primary" type="submit">Sí</button>
 			</div>
-			<input type="hidden" name="id">
+			<input type="hidden" name="id" class="is2-modal-restore-id">
 		</form>
 		
 <?php t_endBody(); ?>
@@ -391,5 +389,86 @@
 		$searchControlGroup.removeClass( 'error' );
 	} );
 	
+// *** APPOINTMENTS AJAX FUNCIONALITY *** //
+	var showAppointmentAction = function( id, type ) {
+	
+		$( 'td:last-child[data-appointment-id=' + id + '] > *' ).hide();
+	
+		if( type === 'restore' ) {
+			$( 'div[data-appointment-id=' + id + ']' ).show();
+			
+		} else if( type === 'confirm' ) {
+			$( 'button.btn-success[data-appointment-id=' + id + ']' ).show();
+			$( '.is2-trigger-restore[data-appointment-id=' + id + ']' ).show();
+			
+		} else if( type === 'cancel' ) {
+			$( 'button.btn-warning[data-appointment-id=' + id + ']' ).show();
+			$( '.is2-trigger-restore[data-appointment-id=' + id + ']' ).show();
+		
+		} else if( type === 'remove' ) {
+			$( 'tr[data-appointment-id=' + id + ']' ).addClass( 'is2-appointment-removed' );
+		}
+	};
+	
+	var AppointmentActionAjax = function( type, url ) {
+		this.type = type;
+		this.$preloader = $( '.is2-preloader-' + type );
+		this.url = url;
+		this.$id = $( '.is2-modal-' + type + '-id' );
+		this.$closeModal = $( '.is2-modal-' + type + '-close' );
+		this.$successMsg = $( '.is2-' + type + '-success' );
+		this.$errorMsg = $( '.is2-' + type + '-error' );
+		$( '#is2-modal-' + type ).on( 'submit', $.proxy( this.send, this ) );
+	};
+	AppointmentActionAjax.isWaiting = false;
+	AppointmentActionAjax.$allMsgs = $( '.is2-ajax-msg' );
+	AppointmentActionAjax.prototype = {
+	
+		send: function( e ) {
+			e.preventDefault();
+			
+			if( AppointmentActionAjax.isWaiting ) {
+				return false;
+			}
+			AppointmentActionAjax.isWaiting = true;
+			this.$preloader.css( 'visibility', 'visible' );
+			
+			$.ajax( {
+				url: this.url,
+				data: {
+					id: this.$id.val()
+				},
+				type: 'POST',
+				dataType: 'json',
+				success: this.response,
+				error: this.response,
+				context: this
+			} );
+		},
+		
+		response: function( dataResponse ) {
+			AppointmentActionAjax.isWaiting = false;
+			this.$preloader.css( 'visibility', 'hidden' );
+			this.$closeModal.click();
+			
+			AppointmentActionAjax.$allMsgs.hide();
+			
+			if( !dataResponse.success ) {
+				this.$successMsg.hide();
+				this.$errorMsg.show();
+				return;
+			}
+			this.$successMsg.show();
+			this.$errorMsg.hide();
+			
+			showAppointmentAction( dataResponse.data.id, this.type );
+		}
+	};
+	
+	new AppointmentActionAjax( 'confirm', '/turnos/confirmar' );
+	new AppointmentActionAjax( 'cancel', '/turnos/cancelar' );
+	new AppointmentActionAjax( 'remove', '/turnos/borrar' );
+	new AppointmentActionAjax( 'restore', '/turnos/reiniciar' );
+
 })();
 </script>

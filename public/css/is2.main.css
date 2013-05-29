@@ -82,3 +82,6 @@ legend {
 	vertical-align: middle;
 	visibility: hidden;
 }
+.is2-preloader-bg {
+	background-image: url( /img/preloader-bg-gray.gif );
+}
