@@ -1,4 +1,7 @@
+SET NAMES 'utf8';
+
 USE is2;
+
 INSERT INTO pacientes 
 VALUES
 ( null, "Alvarez", "Emiliano", "M", "36957747", "1933-05-16", "4848001", "alvarez_emiliano@gmail.com", "6", "260c1b5720" ) , 
