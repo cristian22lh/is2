@@ -12,15 +12,27 @@
 		__echoJSON( array( 'success' => false ) );
 	}
 	
+	// pido los horarios del medico
+	// eso siempre va estar en la respuesta
+	$doctorAvailibilities = $g_db->select(
+		'
+			SELECT
+				*
+			FROM
+				horarios
+			WHERE
+				idMedico = ?
+		',
+		array( $doctorID )
+	);
+	
 	// debo saber cual es dia en donde case $date
 	$day = date( 'N', strtotime( $date ) );
 	$res = q_checkDoctorAvailability( array( $doctorID, $time, $time, $day ) );
-	// el doctor no antiende tal dia
-	if( !count( $res ) ) {
-		__echoJSON( array( 'success' => false, 'type' => 'range' ) );
-	}
+	// el doctor antiende dia querido??
+	$isDoctorAvailable = (bool) count( $res );
 	
-	// ahora debp fijarme que no tenga ya un turno para ese ida
+	// ahora debo fijarme que no tenga ya un turno para ese ida
 	$res = $g_db->select(
 		'
 			SELECT
@@ -32,12 +44,15 @@
 		',
 		array( $date, $time, $doctorID )
 	);
+	$hasAppointmentAlready = (bool) count( $res );
 	
-	// ya hay un turno registrado para esa fecha
-	if( count( $res ) ) {
-		__echoJSON( array( 'success' => false, 'type' => 'exists' ) );
-	}
-	
-	__echoJSON( array( 'success' => true ) );
+	__echoJSON( array( 
+		'success' => true,
+		'data' => array( 
+			'availabilities' => $doctorAvailibilities,
+			'isAvailable' =>$isDoctorAvailable,
+			'hasAppointmentAlready' => $hasAppointmentAlready
+		)
+	) );
 	
 ?>

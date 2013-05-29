@@ -51,15 +51,23 @@
 							<option value="<?php echo $doctor['id']; ?>"><?php echo $doctor['apellidos'] . ', ' . $doctor['nombres']; ?></option>
 						<?php endforeach; ?>
 						</select>
-						<button type="button" class="btn btn-info is2-availability-trigger">Comprobar disponibilidad</button>
+						<button type="button" class="btn btn-info is2-availability-trigger" data-trigger="hover" data-placement="right" data-title="Disponibilidad del médico" data-content="Haga click en este botón para informarse acerca de la disponibilidad de este médico" data-html="true">Comprobar disponibilidad</button>
 						<span class="is2-preloader is2-availability-preloader"></span>
 					</div>
 				</div>
-				<div class="alert alert-error is2-availability-error" style="display:none">
-					<strong>El medico no esta disponible para la fecha y hora especifícado</strong>
-				</div>
-				<div class="alert alert-success is2-availability-success" style="display:none">
-					<strong>El medico esta disponible para la fecha y hora especifícado</strong>
+				<div class="is2-availability-template" style="display:none">
+					<strong>Este médico atiende los dias:</strong>
+					<ul></ul>
+					<hr>
+					<div class="alert alert-error is2-availability-already" style="display:none">
+						<strong>El médico ya tiene un turno registrado para la fecha y hora requerido</strong>
+					</div>
+					<div class="alert alert-error is2-availability-unavailable" style="display:none">
+						<strong>El médico no está disponible para la fecha y hora requerido</strong>
+					</div>
+					<div class="alert alert-success is2-availability-success" style="display:none">
+						<strong>¡El médico esta disponible para la fecha y hora especifícado!</strong>
+					</div>
 				</div>
 				<div class="control-group is2-dni">
 					<div class="alert alert-info">
@@ -67,7 +75,7 @@
 					</div>
 					<label class="control-label">Paciente</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge is2-patients-search-value" placeholder="Buscar paciente por DNI...">
+						<input type="text" class="input-xlarge is2-patients-search-value" placeholder="Buscar paciente por DNI..." name="dni">
 						<input type="hidden" class="is2-patients-search-result" name="idPaciente">
 						<button type="button" class="btn btn-info is2-patients-search-trigger">Buscar paciente</button>
 						<span class="is2-preloader is2-patients-search-preloader"></span>
@@ -142,6 +150,16 @@
 		showInputs: false,
 		disableFocus: true,
 	});
+	
+	var prevState = JSON.parse( localStorage.getItem( 'is2-appointment-state' ) );
+	if( prevState ) {
+		if( window.location.search.indexOf( 'error' ) >= 0 ) {
+			for( var fieldName in prevState ) {
+				$( '[name=' + fieldName + ']' ).val( prevState[fieldName] );
+			}
+		}
+		localStorage.removeItem( 'is2-appointment-state' );
+	}
 	
 // *** LA BUSQUEDA DE PACIENTE SE HACE MEDIATE AJAX *** //
 	var isWaiting = false;
@@ -218,24 +236,47 @@
 	var $timeGroupControl = $( '.is2-date' );
 	var $doctor = $( '.is2-availability-doctor' );
 	var $preloaderAvailability = $( '.is2-availability-preloader' );
-	var $availabilityErrorMsg = $( '.is2-availability-error' );
-	var $availabilitySuccessMsg = $( '.is2-availability-success' );
+	var $availabilityTrigger = $( '.is2-availability-trigger' );
+	$availabilityTrigger.popover();
+	var defaultMsg = $availabilityTrigger.attr( 'data-content' );
+	var $availabilityTemplate = $( '.is2-availability-template' );
+	var DAYNAME = [ 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo' ];
 	
+	var padTime = function( value ) {
+		return value.substring( 0, 5 );
+	};
+
 	var checkedAvailability = function( dataResponse ) {
 		isWaiting = false;
 		$preloaderAvailability.css( 'visibility', 'hidden' );
 		
 		if( !dataResponse.success ) {
-			$availabilitySuccessMsg.hide();
-			$availabilityErrorMsg.show();
-			
-		} else {
-			$availabilitySuccessMsg.show();
-			$availabilityErrorMsg.hide();
+			return;
 		}
+		var data = dataResponse.data;
+		
+		var $availabilitiesWrapper = $availabilityTemplate.find( 'ul' );
+		$availabilitiesWrapper.empty();
+		var availabilities = data.availabilities;
+		var availability;
+		while( availabilities.length ) {
+			availability = availabilities.shift();
+			$( '<li></li>' ).html( DAYNAME[availability.dia-1] + ' de ' + padTime( availability.horaIngreso ) + ' hasta ' + padTime( availability.horaEgreso ) ).appendTo( $availabilitiesWrapper );
+		}
+		
+		$availabilityTemplate.find( '.alert' ).hide();
+		if( data.isAvailable ) {
+			$availabilityTemplate.find( '.is2-availability-success' ).show();
+		} else if( data.hasAppointmentAlready ) {
+			$availabilityTemplate.find( '.is2-availability-already' ).show();
+		} else {
+			$availabilityTemplate.find( '.is2-availability-unavailable' ).show();
+		}
+		
+		$availabilityTrigger.popover( { content:  $availabilityTemplate.html() } ).popover( 'show' );
 	};
 	
-	$( '.is2-availability-trigger' ).on( 'click', function( e ) {
+	$availabilityTrigger.on( 'click', function( e ) {
 		if( isWaiting ) {
 			return;
 		}
@@ -256,6 +297,7 @@
 		$timeGroupControl.removeClass( 'error' );
 		
 		$preloaderAvailability.css( 'visibility', 'visible' );
+		$availabilityTrigger.popover( 'destroy' );
 		isWaiting = true;
 		
 		$.ajax( {
@@ -272,6 +314,12 @@
 		} );
 	} );
 	
+	// reset popover
+	$doctor.on( 'change', function( e ) {
+		$availabilityTrigger.popover( 'destroy' );
+		$availabilityTrigger.popover( { content: defaultMsg } );
+	} );
+	
 // *** OTRAS YERBAS *** //
 	// esto es por si apreta <ENTER> estando en DNI, evito que submitte el form
 	$dni.on( 'keydown', function( e ) {
@@ -283,7 +331,8 @@
 	} );
 	
 	// si no ha paciente elegido, no contunio
-	$( '.is2-appointment-form' ).on( 'submit', function( e ) {
+	var $theForm = $( '.is2-appointment-form' );
+	$theForm.on( 'submit', function( e ) {
 		if( !$patientID.val().trim() ) {
 			e.preventDefault();
 			$dniGroupControl.addClass( 'error' );
@@ -313,6 +362,17 @@
 			return;
 		}
 		$dateGroupControl.removeClass( 'error' );
+		
+		// remember prev state
+		var prevState = {};
+		$theForm.find( 'input, select' ).each( function( e ) {
+			var $el = $( this ),
+				fieldName = $el.attr( 'name' );
+			if( fieldName ) {
+				prevState[fieldName] = $el.val().replace( /&/g, '&amp;' ).replace( /</g, '&lt;' ).replace( />/g, '&gt;' );
+			}
+		} );
+		window.localStorage.setItem( 'is2-appointment-state', JSON.stringify( prevState ) );
 	} );
 	
 })();
