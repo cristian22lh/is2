@@ -203,7 +203,7 @@
 // ************** /
 // RENDER VIEWS
 // ************* /
-	function __render( $__filename__, $vars ) {
+	function __render( $__filename__, $vars = array() ) {
 		
 		$__fullPath__ =  './views/' . $__filename__ . '.php';
 		if( !file_exists( $__fullPath__ ) ) {

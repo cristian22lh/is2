@@ -48,6 +48,7 @@
 		'/' => 'login',
 		'/iniciar-sesion' => 'login',
 		'/cerrar-sesion' => 'logout',
+		'/404' => '404',
 		
 // *** TURNOS *** //
 		'/turnos' => 'appointments',
@@ -83,6 +84,7 @@
 		'/obras-sociales/borrar' => 'insurances.remove'
 	);
 	
+	$count = 0;
 	foreach( $routes as $route => $model ) {
 		if( $g_router->test( $route, $page ) ) {
 			$path = './models/' . $model . '.php';
@@ -90,7 +92,13 @@
 				die( 'Specified model "' . $model . '" does not exists at "' . $path . '"' );
 			}
 			require $path;
+		} else {
+			$count++;
 		}
+	}
+	// la pagian que se quiere acceder no existe
+	if( $count == count( $routes ) ) {
+		__redirect( '/404?destino=' . $page );
 	}
 
 ?>
