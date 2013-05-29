@@ -21,7 +21,7 @@
 		}
 		
 		.is2-doctors-listbox {
-			min-height: 150px;
+			margin: 0 0 0 10px;
 		}
 		.bootstrap-timepicker {
 			display: inline-block;
@@ -137,13 +137,13 @@
 									<input type="radio" name="doctorsSearch" value="custom" class="is2-doctors-custom" <?php echo count( $persistValues['doctorsList'] ) ? 'checked' : ''; ?>>
 									Solos los turnos que tenga asociados estos médicos...
 								</label>
-								<select multiple="multiple" class="input-xxlarge is2-doctors-listbox" name="doctorsList[]">
+								<div class="is2-doctors-listbox alert alert-info">
 								<?php foreach( $doctors as $doctor ): ?>
-									<option value="<?php echo $doctor['id']; ?>" <?php echo isset( $persistValues['doctorsList'][$doctor['id']] ) ? 'selected' : ''; ?>><?php echo $doctor['apellidos'] . ', ' . $doctor['nombres']; ?></option>
+									<label class="checkbox">
+										<input type="checkbox" name="doctorsList[]" value="<?php echo $doctor['id']; ?>" <?php echo isset( $persistValues['doctorsList'][$doctor['id']] ) ? 'checked' : ''; ?>>
+										<?php echo $doctor['apellidos'] . ', ' . $doctor['nombres']; ?>
+									</label>
 								<?php endforeach; ?>
-								</select>
-								<div class="alert alert-info">
-									Mantenga apretada la tecla <strong>Ctrl (Control)</strong> para seleccionar multíples médicos a la vez cada vez que hace click sobre el nombre de algun médico
 								</div>
 							</fieldset>
 							<fieldset>
