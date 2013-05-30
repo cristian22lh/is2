@@ -18,6 +18,9 @@
 	$g_router = new Router();
 	__initSession();
 	__initDebugging();
+
+	// enforce utf8 output
+	__forceUTF8Enconding();
 	
 	// veo adonde quiere ir el usuario
 	$reqURI = parse_url( $_SERVER['REQUEST_URI'] );

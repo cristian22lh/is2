@@ -32,6 +32,13 @@
 					<label class="control-label">Fecha</label>
 					<div class="controls">
 						<input type="text" class="input-small datepicker is2-availability-date" placeholder="Fecha" name="fecha">
+						<span class="is2-availability-date-popover" style="visibility:hidden" data-placement="right" data-html="true" data-trigger="hover">&nbsp;</span>
+					</div>
+					<div class="alert alert-error is2-popover-date-template is2-template-empty is2-popover-template">
+						Debe suministar una fecha
+					</div>
+					<div class="alert alert-error is2-popover-date-template is2-template-error is2-popover-template">
+						La fecha no puede ser anterior al dia presenete
 					</div>
 				</div>
 				<div class="control-group is2-time">
@@ -51,7 +58,7 @@
 							<option value="<?php echo $doctor['id']; ?>"><?php echo $doctor['apellidos'] . ', ' . $doctor['nombres']; ?></option>
 						<?php endforeach; ?>
 						</select>
-						<button type="button" class="btn btn-info is2-availability-trigger" data-trigger="hover" data-placement="right" data-title="Disponibilidad del médico" data-content="Haga click en este botón para informarse acerca de la disponibilidad de este médico" data-html="true">Comprobar disponibilidad</button>
+						<button type="button" class="btn btn-info is2-availability-trigger" data-trigger="hover" data-placement="right" data-title="Disponibilidad del médico" data-content="Haga click en este botón para informarse acerca de la disponibilidad de este médico" data-html="true" data-trigger="hover">Comprobar disponibilidad</button>
 						<span class="is2-preloader is2-availability-preloader"></span>
 					</div>
 				</div>
@@ -59,13 +66,13 @@
 					<strong>Este médico atiende los dias:</strong>
 					<ul></ul>
 					<hr>
-					<div class="alert alert-error is2-availability-already" style="display:none">
+					<div class="alert alert-error is2-availability-already is2-popover-template">
 						<strong>El médico ya tiene un turno registrado para la fecha y hora requerido</strong>
 					</div>
-					<div class="alert alert-error is2-availability-unavailable" style="display:none">
+					<div class="alert alert-error is2-availability-unavailable is2-popover-template">
 						<strong>El médico no está disponible para la fecha y hora requerido</strong>
 					</div>
-					<div class="alert alert-success is2-availability-success" style="display:none">
+					<div class="alert alert-success is2-availability-success is2-popover-template">
 						<strong>¡El médico esta disponible para la fecha y hora especifícado!</strong>
 					</div>
 				</div>
@@ -79,6 +86,10 @@
 						<input type="hidden" class="is2-patients-search-result" name="idPaciente">
 						<button type="button" class="btn btn-info is2-patients-search-trigger">Buscar paciente</button>
 						<span class="is2-preloader is2-patients-search-preloader"></span>
+						<span class="is2-patients-search-popover" data-paclement="right" data-html="true" data-trigger="hover">&nbsp;</span>
+					</div>
+					<div class="alert alert-error is2-patient-search-popover-template is2-popover-template">
+						Debe buscar al paciente a asociar con este turno para poder continuar
 					</div>
 				</div>
 				<div class="alert is2-patient-search-info">
@@ -164,6 +175,8 @@
 // *** LA BUSQUEDA DE PACIENTE SE HACE MEDIATE AJAX *** //
 	var isWaiting = false;
 	var $dni = $( '.is2-patients-search-value' );
+	var $dniPopover = $( '.is2-patients-search-popover' );
+	$dniPopover.popover( { content: $( '.is2-patient-search-popover-template' ).prop( 'outerHTML' ) } );
 	var $dniGroupControl = $( '.control-group.is2-dni' );
 	var $preloaderSearch = $( '.is2-patients-search-preloader' );
 	var $search = $( '.is2-patients-search-trigger' );
@@ -205,10 +218,14 @@
 		if( isWaiting ) {
 			return;
 		}
+
+		// clean previous state
+		$dniPopover.popover( 'hide' );
 		
 		var dni = $dni.val().trim();
 		if( !dni ) {
 			$dniGroupControl.addClass( 'error' );
+			$dniPopover.popover( 'show' );
 			return;
 		}
 		
@@ -231,6 +248,7 @@
 	
 // *** EL CHECKEO DE DISPONIBLIDAD SE HACE MEDIANTE AJAX *** //
 	var $date = $( '.is2-availability-date' );
+	var $datePopover = $( '.is2-availability-date-popover');
 	var $dateGroupControl = $( '.is2-date' );
 	var $time = $( '.is2-availability-time' );
 	var $timeGroupControl = $( '.is2-date' );
@@ -265,10 +283,10 @@
 		}
 		
 		$availabilityTemplate.find( '.alert' ).hide();
-		if( data.isAvailable ) {
-			$availabilityTemplate.find( '.is2-availability-success' ).show();
-		} else if( data.hasAppointmentAlready ) {
+		if( data.hasAppointmentAlready ) {
 			$availabilityTemplate.find( '.is2-availability-already' ).show();
+		} else if( data.isAvailable ) {
+			$availabilityTemplate.find( '.is2-availability-success' ).show();
 		} else {
 			$availabilityTemplate.find( '.is2-availability-unavailable' ).show();
 		}
@@ -333,9 +351,15 @@
 	// si no ha paciente elegido, no contunio
 	var $theForm = $( '.is2-appointment-form' );
 	$theForm.on( 'submit', function( e ) {
-		if( !$patientID.val().trim() ) {
+
+		// clean previous
+		$datePopover.popover( 'destroy' );
+		$dniPopover.popover( 'hide' );
+
+		if( !$patientID.val().trim() || !$dni.val().trim() ) {
 			e.preventDefault();
 			$dniGroupControl.addClass( 'error' );
+			$dniPopover.popover( 'show' );
 			return;
 		}
 		$dniGroupControl.removeClass( 'error' );
@@ -348,6 +372,7 @@
 		if( date.length !== 3 ) {
 			e.preventDefault();
 			$dateGroupControl.addClass( 'error' );
+			$datePopover.popover( { content: $( '.is2-template-empty.is2-popover-date-template' ).prop( 'outerHTML' ) } ).popover( 'show' );
 			return;
 		}
 		target = new Date();
@@ -359,6 +384,7 @@
 		if( base > target || target - base > 604800000 ) {
 			e.preventDefault();
 			$dateGroupControl.addClass( 'error' );
+			$datePopover.popover( { content: $( '.is2-template-error.is2-popover-date-template' ).prop( 'outerHTML' ), html: true } ).popover( 'show' );
 			return;
 		}
 		$dateGroupControl.removeClass( 'error' );
@@ -368,7 +394,7 @@
 		$theForm.find( 'input, select' ).each( function( e ) {
 			var $el = $( this ),
 				fieldName = $el.attr( 'name' );
-			if( fieldName ) {
+			if( fieldName && fieldName !== 'idPaciente' ) {
 				prevState[fieldName] = $el.val().replace( /&/g, '&amp;' ).replace( /</g, '&lt;' ).replace( />/g, '&gt;' );
 			}
 		} );

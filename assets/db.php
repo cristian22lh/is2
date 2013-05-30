@@ -26,6 +26,7 @@
 			    die( 'Failed to connect to MySQL: ' . $this->db->connect_error );
 			}
 
+			$this->db->set_charset( 'utf8' );
 		}
 		
 		function select( $query, $replacements = array() ) {

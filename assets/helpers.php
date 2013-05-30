@@ -15,13 +15,17 @@
 	}
 	
 	function __echoJSON( $data ) {
-		header( 'content-type: application/json' );
+		header( 'content-type: application/json', true );
 		echo json_encode( $data );
 		die;
 	}
 	
 	function __throw404Error() {
 		header( 'HTTP/1.0 404 Not Found' );
+	}
+
+	function __forceUTF8Enconding() {
+		header( 'content-type: text/html; charset=utf-8' );
 	}
 	
 // ************** /
