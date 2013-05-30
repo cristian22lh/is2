@@ -4,13 +4,10 @@
 			</a>
 			<ul class="dropdown-menu">
 				<li>
-					<a tabindex="-1" href="#" class="is2-trigger-status" data-field-name="estado" data-field-value="confirmados">Mostrar solo turnos confirmados</a>
+					<a tabindex="-1" href="#" class="is2-trigger-status" data-field-value="confirmado">Ordernar por turnos confirmados</a>
 				</li>
 				<li>
-					<a tabindex="-1" href="#" class="is2-trigger-status" data-field-name="estado" data-field-value="cancelados">Mostrar solo turnos cancelados</a>
-				</li>
-				<li>
-					<a tabindex="-1" href="#" class="is2-trigger-status" data-field-name="estado" data-field-value="todos">Mostrar todos los turnos</a>
+					<a tabindex="-1" href="#" class="is2-trigger-status" data-field-value="cancelado">Ordernar por turnos cancelados</a>
 				</li>
 			</ul>
 		</div>

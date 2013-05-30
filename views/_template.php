@@ -27,12 +27,20 @@
 		require './views/_wrapper.end.php';
 	}
 	
-	function t_ascDescMenu( $catName, $fieldName ) {
-		require './views/_appointments.asc.desc.menu.php';
+	function t_dateMenu() {
+		require './views/_appointments.date.menu.php';
+	}
+	
+	function t_timeMenu() {
+		require './views/_appointments.time.menu.php';
 	}
 	
 	function t_statusMenu() {
 		require './views/_appointments.status.menu.php';
+	}
+	
+	function t_appointmentNewRow() {
+		require './views/_appointments.row.new.php';
 	}
 
 ?>

@@ -10,6 +10,8 @@ body {
 	clear: both;
 	box-shadow: 0 1px 10px rgba(0, 0, 0, 0.05);
 	border: 1px solid #ccc;
+	position: relative;
+	overflow: hidden;
 }
 
 header {
@@ -38,6 +40,9 @@ header .is2-welcome {
 .table td:not( :last-child ) {
 	vertical-align: middle;
 	text-transform: capitalize;
+}
+.table td * {
+	text-transform: none;
 }
 
 .modal-backdrop, .modal-backdrop.fade.in {
@@ -89,4 +94,11 @@ legend {
 
 :not( .popover-content ) > .is2-popover-template {
 	display: none;
+}
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus,
+.dropdown-submenu:hover > a,
+.dropdown-submenu:focus > a {
+	text-shadow: none;
 }

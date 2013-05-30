@@ -5,6 +5,7 @@
 		<title>Aplicacion - <?php echo $page; ?></title>
 		<link href="/css/bootstrap.css" rel="stylesheet">
 		<script src="/js/jquery-2.0.0.min.js"></script>
+		<script src="/js/jquery-ui-1.10.3.custom.min.js"></script>
 		<script src="/js/bootstrap.min.js"></script>
 		<script src="/js/bootstrap-datepicker.js"></script>
 		<script src="/js/bootstrap-datepicker.es.js"></script>

@@ -3,6 +3,18 @@
 		label {
 			cursor: default;
 		}
+		.is2-availability-doctor {
+			width: 250px;
+		}
+		.is2-patients-search-value {
+			width: 235px;
+		}
+		.is2-availability-trigger {
+			width: 190px;
+		}
+		.is2-patients-search-trigger {
+			width: 190px;
+		}
 	</style>
 <?php t_endHead(); ?>
 <?php t_startBody( $username, 'appointments'  ); ?>
@@ -13,7 +25,7 @@
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
 				<p><strong>¡Ha fallado la creación del nuevo turno!</strong></p>
 				<ul>
-					<li>Verifique que la fecha del turno este dentro del rango de 7 días hacia adelante a partir de hoy</li>
+					<li>Verifique que la fecha del turno este dentro del rango de 7 días en adelante a partir de hoy</li>
 					<li>No puede crear un turno con un mismo médico a la misma hora y fecha que ya exista en el sistema</li>
 					<li>Verifique que la hora esté dentro del rango de horarios que posee el médico</li>
 				</ul>
@@ -358,17 +370,15 @@
 	var $theForm = $( '.is2-appointment-form' );
 	$theForm.on( 'submit', function( e ) {
 
-		// clean previous
 		$datePopover.popover( 'destroy' );
-		$dniPopover.popover( 'hide' );
-		$timePopover.popover( 'hide' );
-
+		
 		if( !$patientID.val().trim() || !$dni.val().trim() ) {
 			e.preventDefault();
 			$dniGroupControl.addClass( 'error' );
 			$dniPopover.popover( 'show' );
 			return;
 		}
+		$dniPopover.popover( 'hide' );
 		$dniGroupControl.removeClass( 'error' );
 		
 		var date = $date.val(),
@@ -403,6 +413,7 @@
 			$timePopover.popover( 'show' );
 			return;
 		}
+		$timePopover.popover( 'hide' );
 		$timeGroupControl.removeClass( 'error' );
 		
 		// remember prev state

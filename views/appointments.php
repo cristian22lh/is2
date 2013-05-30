@@ -4,6 +4,9 @@
 		.table {
 			margin: 0;
 		}
+		.table th {
+			text-align: center;
+		}
 		.table th:first-child {
 			width: 100px;
 		}
@@ -15,10 +18,8 @@
 			border-top: 0;
 		}
 		.is2-grid-header {
-			border: 1px solid #ccc;
 			border-radius: 5px 5px 0 0;
-			border-bottom: 1px solid #aaa;
-			background: #f1f1f1;
+			color: #fff;
 		}
 		.is2-ascdescmenu, .is2-statusmenu {
 			float: right;
@@ -50,10 +51,42 @@
 			text-decoration: line-through;
 		}
 		tr.is2-appointments-dayrow td {
-			background: #fbfbfb !important;
+			background: #f1f1f1 !important;
 			font-weight: 600;
 			color: #555;
 			text-shadow: 0 -1px 0 #fff;
+		}
+		tr.is2-appointments-newrow:first-of-type {	
+			display: none;
+		}
+		tr.is2-appointments-newrow td {	
+			padding: 2px;
+			background: #fbfbfb;
+		}
+		a.is2-appointments-newtrigger {
+			text-align: right;
+			display: block;
+		}
+		tr.is2-appointments-row td:nth-child( 3 ),
+		tr.is2-appointments-row td:nth-child( 4 ) {
+			width: 215px;
+		}
+		tr.is2-appointments-row td:last-child {
+			width: 215px;
+		}
+		
+		.alert.is2-ajax-msg {
+			box-shadow: 0 1px 3px #eee;
+			color: #468847;
+			left: 30%;
+			position: absolute;
+			top: -3px;
+			z-index: 100;
+			opacity: .9;
+		}
+		
+		.btn.disabled {
+			width: 110px;
 		}
 	</style>
 		
@@ -216,25 +249,17 @@
 			<?php endif; ?>
 			
 			<?php if( count( $appointments ) ): ?>
-			<table class="table is2-grid-header">
+			<table class="table is2-grid-header btn-inverse">
 				<thead>
 					<tr>
 						<th>
 							Fecha
-							<?php t_ascDescMenu( 'is2-date', 'fecha' ); ?>
+							<?php t_dateMenu(); ?>
 						</th>
-						<th>
-							Hora
-						</th>
-						<th>
-							Médico
-						</th>
-						<th>
-							Paciente
-						</th>
-						<th>
-							Acciones
-						</th>
+						<th>Hora</th>
+						<th>Médico</th>
+						<th>Paciente</th>
+						<th>Acciones</th>
 					</tr>
 				</thead>
 				<tbody></tbody>
@@ -247,32 +272,35 @@
 						<?php if( $appointment['fecha'] != $currentDate ): ?>
 							<?php $currentDate = $appointment['fecha']; ?>
 							<?php $d = strtotime( $currentDate ); ?>
-						<tr class="is2-appointments-dayrow">
+							<?php $dateLocale = date( 'd/m/Y', $d ); ?>
+						<?php t_appointmentNewRow(); ?>
+						<tr class="is2-appointments-dayrow" data-appointment-date="<?php echo $dateLocale; ?>">
 							<td><?php echo $DAYNAME[date( 'D', $d )] . ', ' . date( 'j', $d ); ?></td>
-							<td><?php t_ascDescMenu( 'is2-time', 'hora' ); ?></td>
+							<td><?php t_timeMenu(); ?></td>
 							<td></td>
 							<td></td>
 							<td><?php t_statusMenu(); ?></td>
 						</tr>
 						<?php endif; ?>
-						<tr data-appointment-id="<?php echo $appointment['id']; ?>">
+						<tr class="is2-appointments-row" data-appointment-id="<?php echo $appointment['id']; ?>" data-appointment-date="<?php echo $dateLocale; ?>" data-appontment-status="<?php echo $appointment['estado']; ?>">
 							<td>&nbsp;</td>
-							<td><?php echo substr( $appointment['hora'], 0, 5 ); ?></td>
+							<td class="is2-appointment-time"><?php echo substr( $appointment['hora'], 0, 5 ); ?></td>
 							<td><?php echo $appointment['medicoApellidos'] . ', ' .  $appointment['medicoNombres']; ?></td>
 							<td><?php echo $appointment['pacienteApellidos'] . ', ' .  $appointment['pacienteNombres']; ?></td>
-							<td data-appointment-id="<?php echo $appointment['id']; ?>">
-								<button class="btn btn-success disabled" style="display:<?php echo $appointment['estado'] == 'confirmado' ? 'inline-block' : 'none'; ?>" data-appointment-id="<?php echo $appointment['id']; ?>"><i class="icon-ok"></i> Confirmado</button>
-								<button class="btn btn-warning disabled" style="display:<?php echo $appointment['estado'] == 'cancelado' ? 'inline-block' : 'none'; ?>" data-appointment-id="<?php echo $appointment['id']; ?>"><i class="icon-exclamation-sign"></i> Cancelado</button>
+							<td data-appointment-id="<?php echo $appointment['id']; ?>" class="is2-appointment-status">
+								<button class="btn btn-small btn-success disabled" style="display:<?php echo $appointment['estado'] == 'confirmado' ? 'inline-block' : 'none'; ?>" data-appointment-id="<?php echo $appointment['id']; ?>"><i class="icon-ok"></i> Confirmado</button>
+								<button class="btn btn-small btn-warning disabled" style="display:<?php echo $appointment['estado'] == 'cancelado' ? 'inline-block' : 'none'; ?>" data-appointment-id="<?php echo $appointment['id']; ?>"><i class="icon-exclamation-sign"></i> Cancelado</button>
 								<?php $isWaiting = $appointment['estado'] == 'esperando'; ?>
 								<a class="btn btn-mini btn-link is2-trigger-restore" href="#is2-modal-restore" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>" style="display:<?php echo !$isWaiting ? 'inline-block' : 'none'; ?>">Deshacer acción</a>
 								<div style="display:<?php echo $isWaiting ? 'block' : 'none'; ?>" data-appointment-id="<?php echo $appointment['id']; ?>">
-									<a class="btn is2-trigger-confirm" href="#is2-modal-confirm" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Confirmar</a>
-									<a class="btn is2-trigger-cancel" href="#is2-modal-cancel" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Cancelar</a>
-									<a class="btn btn-danger is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Borrar</a>
+									<a class="btn btn-small is2-trigger-confirm" href="#is2-modal-confirm" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Confirmar</a>
+									<a class="btn btn-small is2-trigger-cancel" href="#is2-modal-cancel" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Cancelar</a>
+									<a class="btn btn-small btn-danger is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Borrar</a>
 								</div>
 							</td>
 						</tr>
 					<?php endforeach; ?>
+						<?php t_appointmentNewRow(); ?>
 					</tbody>
 				</table>
 			</div>
@@ -357,24 +385,128 @@
 	} );
 	
 // *** ACA PARA CUANDO SORTEO LA GRID *** //
+	// POR FECHA
 	$( '.is2-date .is2-trigger-orderby' ).on( 'click', function( e ) {
+		// dont append the #
 		e.preventDefault();
 		var $el = $( this ),
-			fieldName = $el.attr( 'data-field-name' ),
 			orderBy = $el.attr( 'data-orderby' ),
 			res = getQueryString();
 			
-		window.location = '/turnos?' + ( res.length ? res.join( '&' ) + '&' : '' ) + fieldName + '=' + orderBy;
+		window.location = '/turnos?' + ( res.length ? res.join( '&' ) + '&' : '' ) + 'fecha=' + orderBy;
 	} );
+
+	// LO NECESIT PARA ORDERNAR POR HORA
+	var BinaryTree = function() {
+	};
+	BinaryTree.prototype = {
+		add: function( data ) {
+			if( !this.key ) {
+				this.key = data.key;
+				// es un array por el tema de los repetidos
+				this.data = [ data.data ];
+				this.left = null;
+				this.right = null;
+				
+			} else if( this.key > data.key ) {
+				if( !this.left ) { 
+					this.left = new BinaryTree();
+				}
+				this.left.add( data );
+				
+			} else if( this.key < data.key ) {
+				if( !this.right ) {
+					this.right = new BinaryTree();
+				}
+				this.right.add( data );
+				
+			} else {
+				// repetidos cuentan
+				this.data.push( data.data );
+			}
+		},
+		walkAsc: function( callback ) {
+			if( this.key ) {
+				this.walkAsc.call( this.right, callback );
+				while( this.data.length ) {
+					callback( this.data.shift() );
+				}
+				this.walkAsc.call( this.left, callback );
+			}
+		},
+		walkDesc: function( callback ) {
+			if( this.key ) {
+				this.walkDesc.call( this.left, callback );
+				while( this.data.length ) {
+					callback( this.data.shift() );
+				}
+				this.walkDesc.call( this.right, callback );
+			}
+		}
+	};
 	
-	$( '.is2-trigger-status' ).on( 'click', function( e ) {
+	// POR HORA
+	$( '.is2-grid' ).delegate( '.is2-time .is2-trigger-orderby', 'click', function( e ) {
 		e.preventDefault();
 		var $el = $( this ),
-			fieldName = $el.attr( 'data-field-name' ),
-			fieldValue = $el.attr( 'data-field-value' ),
-			res = getQueryString();
+			orderBy = $el.attr( 'data-orderby' ),
+			$row = $el,
+			$cells;
 			
-		window.location = '/turnos?' + ( res.length ? res.join( '&' ) + '&' : '' ) + fieldName + '=' + fieldValue;
+		var reorderRows = function( $el ) {
+			$row = $row.after( $el );
+		};
+
+		while( ( $row = $row.parent() ).length && !$row.hasClass( 'is2-appointments-dayrow' ) );
+		
+		var $cells = $( 'tr[data-appointment-date="' + $row.attr( 'data-appointment-date' ) + '"]:not( :first ) td.is2-appointment-time' ),
+			i = 0, l = $cells.length,
+			times = [], time,
+			tree = new BinaryTree();
+			
+		if( l > 1 ) {
+			for( ; i < l; i++ ) {
+				$cell = $cells.eq( i );
+				time = $cell.html().replace( ':', '' ) - 0;
+				tree.add( { key: time, data: $cell.parent() } );
+			}
+
+			if( orderBy === 'asc' ) {
+				tree.walkAsc( reorderRows );
+			} else {
+				tree.walkDesc( reorderRows );
+			}
+		}
+	
+	} );
+	
+	// POR ESTADO
+	$( '.is2-grid' ).delegate( '.is2-trigger-status', 'click', function( e ) {
+		e.preventDefault();
+		var $el = $( this ),
+			fieldValue = $el.attr( 'data-field-value' ),
+			$target = $el,
+			$cells;
+			
+		while( ( $target = $target.parent() ).length && !$target.hasClass( 'is2-appointments-dayrow' ) );
+
+		var $rows =$( 'tr[data-appointment-date="' + $target.attr( 'data-appointment-date' ) + '"]:not( :first )' ), $row,
+			i = 0, l = $rows.length,
+			rows = [];
+	
+		if( l > 1 ) {
+			for( ; i < l; i++ ) {
+				$row = $rows.eq( i );
+				if( $row.attr( 'data-appointment-status' ) === fieldValue ) {
+					rows.splice( 0, 0, $row );
+				} else {
+					rows.push( $row );
+				}
+			}
+			while( rows.length ) {
+				$target = $target.after( rows.shift() );
+			}
+		}
 	} );
 	
 	var getQueryString = function() {
@@ -393,6 +525,12 @@
 		
 		return res;
 	};
+	
+// *** ACA CREO EL URL DE CREAR TURNO INLINE *** //
+	$( '.is2-appointments-newtrigger:not( :first )' ).each( function() {
+		var $el = $( this );
+		$el.attr( 'href', $el.attr( 'href' ) + $el.parent().parent().prev().attr( 'data-appointment-date' ) );
+	} );
 	
 // *** ACA PARA LA BUSQUEDA DE TURNOS *** //
 	$( '.datepicker' ).datepicker( {
@@ -427,22 +565,32 @@
 // *** APPOINTMENTS AJAX FUNCIONALITY *** //
 	var showAppointmentAction = function( id, type ) {
 	
+		var $row = $( 'tr[data-appointment-id=' + id + ']' ),
+			status
+	
 		$( 'td:last-child[data-appointment-id=' + id + '] > *' ).hide();
 	
 		if( type === 'restore' ) {
 			$( 'div[data-appointment-id=' + id + ']' ).show();
+			status = 'esperando';
 			
 		} else if( type === 'confirm' ) {
 			$( 'button.btn-success[data-appointment-id=' + id + ']' ).show();
 			$( '.is2-trigger-restore[data-appointment-id=' + id + ']' ).show();
+			status = 'confirmado';
 			
 		} else if( type === 'cancel' ) {
 			$( 'button.btn-warning[data-appointment-id=' + id + ']' ).show();
 			$( '.is2-trigger-restore[data-appointment-id=' + id + ']' ).show();
+			status = 'cancelado';
 		
 		} else if( type === 'remove' ) {
-			$( 'tr[data-appointment-id=' + id + ']' ).addClass( 'is2-appointment-removed' );
+			$row.addClass( 'is2-appointment-removed' );
+			status = 'borrado';
 		}
+		
+		$row.effect( 'highlight', null, 1500 );
+		$row.attr( 'data-appointment-status', status );
 	};
 	
 	var AppointmentActionAjax = function( type, url ) {
@@ -457,6 +605,7 @@
 	};
 	AppointmentActionAjax.isWaiting = false;
 	AppointmentActionAjax.$allMsgs = $( '.is2-ajax-msg' );
+	AppointmentActionAjax.$sound = $( '.is2-appointment-sound' );
 	AppointmentActionAjax.prototype = {
 	
 		send: function( e ) {
@@ -488,13 +637,15 @@
 			
 			AppointmentActionAjax.$allMsgs.hide();
 			
+			var $msg;
 			if( !dataResponse.success ) {
-				this.$successMsg.hide();
-				this.$errorMsg.show();
+				$msg = this.$errorMsg;
 				return;
 			}
-			this.$successMsg.show();
-			this.$errorMsg.hide();
+			$msg = this.$successMsg;
+			$msg.css( 'top', -40 ).show().animate( { top: '+=36' }, { complete: function() {
+				$msg.delay( 2000 ).animate( { top: '-=44' } );
+			} } );
 			
 			showAppointmentAction( dataResponse.data.id, this.type );
 		}
