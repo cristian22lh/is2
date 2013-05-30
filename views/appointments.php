@@ -10,6 +10,15 @@
 		.is2-grid-wrapper {
 			height: 500px;
 			overflow-y: scroll;
+			border: 1px solid #ccc;
+			border-right: 0;
+			border-top: 0;
+		}
+		.is2-grid-header {
+			border: 1px solid #ccc;
+			border-radius: 5px 5px 0 0;
+			border-bottom: 1px solid #aaa;
+			background: #f1f1f1;
 		}
 		.is2-ascdescmenu, .is2-statusmenu {
 			float: right;
@@ -41,7 +50,7 @@
 			text-decoration: line-through;
 		}
 		tr.is2-appointments-dayrow td {
-			background: #f4f7fa !important;
+			background: #fbfbfb !important;
 			font-weight: 600;
 			color: #555;
 			text-shadow: 0 -1px 0 #fff;
@@ -207,7 +216,7 @@
 			<?php endif; ?>
 			
 			<?php if( count( $appointments ) ): ?>
-			<table class="table">
+			<table class="table is2-grid-header">
 				<thead>
 					<tr>
 						<th>
@@ -231,7 +240,7 @@
 				<tbody></tbody>
 			</table>
 			<div class="is2-grid-wrapper">
-				<table class="table table-striped is2-grid">
+				<table class="table is2-grid">
 					<tbody>
 					<?php $currentDate = null; ?>
 					<?php foreach( $appointments as $appointment ): ?>

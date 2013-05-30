@@ -8,6 +8,29 @@
 		function __construct() {
 		}
 		
+		function auth( $page, $guestPages, $loginPage ) {
+			// debo saber si la pagina aonde ira el usuario
+			// solo puede ser accedida por usuarios loguedaos
+			for( $i = 0, $l = count( $guestPages ); $i < $l; $i++ ) {
+				$guest = $guestPages[$i];
+				// la pagina que quiere ver el usuario no necesita
+				// de que el usuario este logueado para verla, terminado
+				if( $guest == $page ) {
+					break;
+				}
+			}
+			// la pagina que quiere ver el usuario es protegida
+			// vemos si el usuario esta logueado
+			if( $i == $l && !__isUserLogged() ) {
+				// redirect then, after success login to the page that user
+				// wants in at first instance
+				if( $loginPage{0} != '/' ) {
+					$loginPage = '/' . $loginPage;
+				}
+				__redirect( $loginPage . '?destino=' . $page );
+			}
+		}
+		
 		function start( $routes, $page, $fallbackRoute ) {			
 			$count = 0;
 			foreach( $routes as $route => $model ) {
