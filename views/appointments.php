@@ -401,8 +401,8 @@
 	} );
 	$( '.timepicker' ).timepicker( {
 		showInputs: false,
-		disableFocus: true,
-		defaultTime: false
+		defaultTime: false,
+		showMeridian: false
 	});
 	$( '.is2-doctors-listbox' ).on( 'click', function( e ) {
 		$( '.is2-doctors-custom' ).click();

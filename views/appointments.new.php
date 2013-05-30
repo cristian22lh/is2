@@ -45,6 +45,10 @@
 					<label class="control-label">Hora</label>
 					<div class="controls bootstrap-timepicker">
 						<input type="text" class="input-small timepicker is2-availability-time" placeholder="Hora" name="hora">
+						<span class="is2-time-popover" style="visibility:hidden" data-placement="right" data-html="true" data-trigger="hover">&nbsp;</span>
+					</div>
+					<div class="alert alert-error is2-time-popover-template is2-popover-template">
+						Debe suministar de una hora para el turno
 					</div>
 				</div>
 				<div class="control-group">
@@ -159,7 +163,7 @@
 	} ).datepicker( 'setValue', new Date() );
 	$( '.timepicker' ).timepicker( {
 		showInputs: false,
-		disableFocus: true,
+		showMeridian: false
 	});
 	
 	var prevState = JSON.parse( localStorage.getItem( 'is2-appointment-state' ) );
@@ -251,7 +255,9 @@
 	var $datePopover = $( '.is2-availability-date-popover');
 	var $dateGroupControl = $( '.is2-date' );
 	var $time = $( '.is2-availability-time' );
-	var $timeGroupControl = $( '.is2-date' );
+	var $timePopover = $( '.is2-time-popover');
+	$timePopover.popover( { content: $( '.is2-time-popover-template' ).prop( 'outerHTML' ) } );
+	var $timeGroupControl = $( '.is2-time' );
 	var $doctor = $( '.is2-availability-doctor' );
 	var $preloaderAvailability = $( '.is2-availability-preloader' );
 	var $availabilityTrigger = $( '.is2-availability-trigger' );
@@ -355,6 +361,7 @@
 		// clean previous
 		$datePopover.popover( 'destroy' );
 		$dniPopover.popover( 'hide' );
+		$timePopover.popover( 'hide' );
 
 		if( !$patientID.val().trim() || !$dni.val().trim() ) {
 			e.preventDefault();
@@ -384,10 +391,19 @@
 		if( base > target || target - base > 604800000 ) {
 			e.preventDefault();
 			$dateGroupControl.addClass( 'error' );
-			$datePopover.popover( { content: $( '.is2-template-error.is2-popover-date-template' ).prop( 'outerHTML' ), html: true } ).popover( 'show' );
+			$datePopover.popover( { content: $( '.is2-template-error.is2-popover-date-template' ).prop( 'outerHTML' ) } ).popover( 'show' );
 			return;
 		}
 		$dateGroupControl.removeClass( 'error' );
+		
+		var time = $time.val().trim();
+		if( !time ) {
+			e.preventDefault();
+			$timeGroupControl.addClass( 'error' );
+			$timePopover.popover( 'show' );
+			return;
+		}
+		$timeGroupControl.removeClass( 'error' );
 		
 		// remember prev state
 		var prevState = {};
