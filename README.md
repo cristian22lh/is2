@@ -41,6 +41,10 @@ Para crear la base de datos que usara la aplicacion con sus respectivas tablas t
 
 `mysql -u %usuario% -p%clave% < _init_db.sql`
 
+**ES PROBABLE QUE EL COMANDO mysql NO SEA RECONOCIDO**
+Para este caso y si estan con WampServer, mysql esta (en mi caso) aca
+	`C:\wamp\bin\mysql\mysql5.5.8\bin\mysql` 
+
 * Tiene que reemplazar el `%usuario%` y `%clave%` por los datos de usuario y contraseña que se usan para acceder a la base de datos, por ejemplo **root** como usuario y si **no hay password** omitan el `-p`
 * Sepan que deben estar ubicado desde la consola en la carpeta donde esta el archivo `_init_db.sql`
 

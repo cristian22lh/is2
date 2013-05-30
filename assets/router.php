@@ -8,7 +8,7 @@
 		function __construct() {
 		}
 		
-		function auth( $page, $guestPages, $loginPage ) {
+		function auth( $page = '', $guestPages = array(), $loginPage = '' ) {
 			// debo saber si la pagina aonde ira el usuario
 			// solo puede ser accedida por usuarios loguedaos
 			for( $i = 0, $l = count( $guestPages ); $i < $l; $i++ ) {
@@ -53,7 +53,7 @@
 			}
 		}
 		
-		function test( $pat, $page ) {
+		function test( $pat = '', $page = '' ) {
 			$this->m = array();
 		
 			// just a /clients/list == /clients/list
@@ -93,7 +93,7 @@
 			return false;
 		}
 		
-		function seg( $i ) {
+		function seg( $i = 0 ) {
 			return isset( $this->m[$i] ) ? $this->m[$i] : null;
 		}
 		

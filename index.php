@@ -23,7 +23,8 @@
 	__forceUTF8Enconding();
 	
 	// veo adonde quiere ir el usuario
-	$page = preg_replace( '/\/?index\.php\/?/', '/', parse_url( $_SERVER['REQUEST_URI'] )['path'] );
+	$url = parse_url( $_SERVER['REQUEST_URI'] );
+	$page = preg_replace( '/\/?index\.php\/?/', '/', $url['path'] );
 	// hago a que no pueda acceder a una pagina que necesite
 	// de que el usuario este logueado para verla
 	$g_router->auth( $page, array( '/', '/iniciar-sesion' ), '/iniciar-sesion' );
