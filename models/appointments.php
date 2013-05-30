@@ -6,11 +6,11 @@
 	$statusValue = false;
 	// me fijo si la grid esta siendo ordenado por algun tipo de orden
 	if( __issetGETField( 'fecha', 'desc' ) ) {
-		$orderByClause[] = 't.fecha DESC';
+		$orderByClause[] = 'fecha DESC';
 	} else {
-		$orderByClause[] = 't.fecha ASC';
+		$orderByClause[] = 'fecha ASC';
 	}
-	$orderByClause[] = 't.hora ASC';
+	$orderByClause[] = 'hora ASC';
 
 // ACA CONSTRUYO EL WHERE DE MI QUERY
 	$replacements = array();
@@ -43,21 +43,21 @@
 		$dateRange = explode( '@', $searchParts[0] );
 		// no pasa nada si se mete mano en estos datos
 		if( isset( $dateRange[0] ) && $dateRange[0] ) {
-			$whereClause[] = ' t.fecha >= ? ';
+			$whereClause[] = ' fecha >= ? ';
 			$replacements[] = $persistValues['fromDate'] = $dateRange[0];
 		}
 		if( isset( $dateRange[1] ) && $dateRange[1] ) {
-			$whereClause[] = ' t.fecha <= ? ';
+			$whereClause[] = ' fecha <= ? ';
 			$replacements[] = $persistValues['toDate'] = $dateRange[1];
 		}
 		// la segunda parte el time range
 		$timeRange = explode( '@', $searchParts[1] );
 		if( isset( $timeRange[0] ) && $timeRange[0] ) {
-			$whereClause[] = ' t.hora >= ? ';
+			$whereClause[] = ' hora >= ? ';
 			$replacements[] = $persistValues['fromTime'] = $timeRange[0];
 		}
 		if( isset( $timeRange[1] ) && $timeRange[1] ) {
-			$whereClause[] = ' t.hora <= ? ';
+			$whereClause[] = ' hora <= ? ';
 			$replacements[] = $persistValues['toTime'] = $timeRange[1];
 		}
 		// la tercera parte es una lista de doctores
@@ -117,15 +117,15 @@
 		$field =  $keyword[0];
 		$value = $keyword[1];
 		if( $field == 'fecha' ) {
-			$whereClause[] = ' t.fecha = ? ';
+			$whereClause[] = ' fecha = ? ';
 			$replacements[] = $value;
 			
 		} else if( $field == 'hora' ) {
-			$whereClause[] = ' t.hora = ? ';
+			$whereClause[] = ' hora = ? ';
 			$replacements[] = $value;
 			
 		} else if( $field == 'estado' ) {
-			$whereClause[] = ' t.estado = ? ';
+			$whereClause[] = ' estado = ? ';
 			$replacements[] = $value;
 			
 		} else if( $field == 'comodin' ) {
@@ -141,21 +141,22 @@
 		
 		$quickSearchValue = $value;
 		$isQuickSearch = true;
+		$isSearch = true;
 		// this last two token are for the limit clause
 		$isLimitClause = true;
 	
 // ESTE ES EL WHERE NORMAL, OSEA CUANDO SE ESTA ACCEDIENDO DIRECTAMENTE A /turnos
 	} else {
-		$whereClause[] = ' t.fecha >= ? ';
-		$replacements[] = date( 'Y-m-d' );
-		$whereClause[] = ' t.fecha <= ? ';
+		$whereClause[] = ' fecha >= ? ';
+		$replacements[] = $startDate = date( 'Y-m-d' );
+		$whereClause[] = ' fecha <= ? ';
 		// en modo normal se muestran los turnos desde la fecha actual hasta + 7 dias
-		$replacements[] = date( 'Y-m-d', strtotime( '+7 days' ) );
+		$replacements[] = $endDate = date( 'Y-m-d', strtotime( '+7 days' ) );
 	}
 	
 	// SE PUEDEN FILTAR LOS TURNOS MEDIANTE LA COLUMNA "ACCIONES" O MEDINATE UNA BUSQUEDA
 	if( $statusValue && ( $statusValue = __getAppointmentStatus( $statusValue ) ) ) {
-		$whereClause[] = ' t.estado = ? ';
+		$whereClause[] = ' estado = ? ';
 		$replacements[] = $statusValue;
 	}
 	
@@ -171,10 +172,40 @@
 	
 	// dont waste a sql query is error is setted up
 	if( !$searchError && !$searchQuickError ) {
+	
+		$dummyQueries = array();
+		$dummyReplacements = array();
+		if( !$isSearch ) {
+			// generate the dummy selects, with this will now include
+			// in the results set days that dont have appointments
+			$days = 7;
+			$baseDate = strtotime( $startDate );
+			while( $days-- ) {
+				$dummyQueries[] = 
+				'
+					SELECT
+						null AS id, ? AS fecha, null AS hora, null AS estado,
+						null AS medicoNombres, null AS medicoApellidos,
+						null AS pacienteNombres, null AS pacienteApellidos
+				';
+				$baseDate = strtotime( 'next day', $baseDate );
+				$dummyReplacements[] = date( 'Y-m-d', $baseDate );
+			}
+		}
+		
 		$appointments = $g_db->select(
 			'
+			SELECT
+				*
+			FROM (
+			' .
+		
+			( count( $dummyQueries ) ? implode( ' UNION ALL ', $dummyQueries ) . ' UNION ALL ' : '' ) .
+		
+		
+			'
 				SELECT 
-					t.id, t.fecha, t.hora, t.estado,
+					t.id, fecha, hora, estado,
 					m.nombres AS medicoNombres, m.apellidos AS medicoApellidos,
 					p.nombres AS pacienteNombres, p.apellidos AS pacienteApellidos
 				FROM turnos AS t 
@@ -185,12 +216,16 @@
 				WHERE ' .
 					implode( ' AND ', $whereClause ) .
 					
-				'ORDER BY ' .
-					implode( ' , ', $orderByClause ) .
-					
-				( $isLimitClause ? ' LIMIT 0, 21 ' : '' )
+				( $isLimitClause ? ' LIMIT 0, 21 ' : '' ) .
+				
+			'
+			) AS 
+				appointments
+			ORDER BY
+			' .
+				implode( ' , ', $orderByClause )
 			,
-			$replacements
+			array_merge( $dummyReplacements, $replacements )
 		);
 		// too much records
 		if( $isQuickSearch && count( $appointments ) == 21 ) {

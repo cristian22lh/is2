@@ -1,4 +1,4 @@
-		<div class="is2-ascdescmenu btn btn-mini btn-group is2-time'">
+		<div class="is2-ascdescmenu btn btn-mini btn-group is2-time">
 			<a class="dropdown-toggle" data-toggle="dropdown" href="#">
 				<span class="caret"></span>
 			</a>

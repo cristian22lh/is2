@@ -273,7 +273,7 @@
 							<?php $currentDate = $appointment['fecha']; ?>
 							<?php $d = strtotime( $currentDate ); ?>
 							<?php $dateLocale = date( 'd/m/Y', $d ); ?>
-						<?php t_appointmentNewRow(); ?>
+						<?php t_appointmentNewRow( date( 'd/m/Y', strtotime( $currentDate . ' previous day' ) ) ); ?>
 						<tr class="is2-appointments-dayrow" data-appointment-date="<?php echo $dateLocale; ?>">
 							<td><?php echo $DAYNAME[date( 'D', $d )] . ', ' . date( 'j', $d ); ?></td>
 							<td><?php t_timeMenu(); ?></td>
@@ -282,6 +282,7 @@
 							<td><?php t_statusMenu(); ?></td>
 						</tr>
 						<?php endif; ?>
+						<?php if( $appointment['hora'] ): ?>
 						<tr class="is2-appointments-row" data-appointment-id="<?php echo $appointment['id']; ?>" data-appointment-date="<?php echo $dateLocale; ?>" data-appontment-status="<?php echo $appointment['estado']; ?>">
 							<td>&nbsp;</td>
 							<td class="is2-appointment-time"><?php echo substr( $appointment['hora'], 0, 5 ); ?></td>
@@ -299,8 +300,9 @@
 								</div>
 							</td>
 						</tr>
+						<?php endif; ?>
 					<?php endforeach; ?>
-						<?php t_appointmentNewRow(); ?>
+						<?php t_appointmentNewRow( $dateLocale ); ?>
 					</tbody>
 				</table>
 			</div>
@@ -525,12 +527,6 @@
 		
 		return res;
 	};
-	
-// *** ACA CREO EL URL DE CREAR TURNO INLINE *** //
-	$( '.is2-appointments-newtrigger:not( :first )' ).each( function() {
-		var $el = $( this );
-		$el.attr( 'href', $el.attr( 'href' ) + $el.parent().parent().prev().attr( 'data-appointment-date' ) );
-	} );
 	
 // *** ACA PARA LA BUSQUEDA DE TURNOS *** //
 	$( '.datepicker' ).datepicker( {
