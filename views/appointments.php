@@ -1,6 +1,16 @@
 <?php t_startHead( 'Turnos' ); ?>
 
 	<style>
+		.table {
+			margin: 0;
+		}
+		.table th:first-child {
+			width: 100px;
+		}
+		.is2-grid-wrapper {
+			height: 500px;
+			overflow-y: scroll;
+		}
 		.is2-ascdescmenu, .is2-statusmenu {
 			float: right;
 			padding: 0;
@@ -29,6 +39,12 @@
 		
 		tr.is2-appointment-removed * {
 			text-decoration: line-through;
+		}
+		tr.is2-appointments-dayrow td {
+			background: #f4f7fa !important;
+			font-weight: 600;
+			color: #555;
+			text-shadow: 0 -1px 0 #fff;
 		}
 	</style>
 		
@@ -179,7 +195,6 @@
 				</div>
 			</div>
 			
-			
 			<?php if( $tooMuchRecords ): ?>
 			<div class="alert">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
@@ -192,53 +207,66 @@
 			<?php endif; ?>
 			
 			<?php if( count( $appointments ) ): ?>
-			<table class="table table-striped is2-grid">
+			<table class="table">
 				<thead>
 					<tr>
 						<th>
 							Fecha
-							<?php t_ascDescMenu( 'fecha' ); ?>
+							<?php t_ascDescMenu( 'is2-date', 'fecha' ); ?>
 						</th>
 						<th>
 							Hora
-							<?php t_ascDescMenu( 'hora' ); ?>
 						</th>
 						<th>
 							Médico
-							<?php t_ascDescMenu( 'medico' ); ?>
 						</th>
 						<th>
 							Paciente
-							<?php t_ascDescMenu( 'paciente' ); ?>
 						</th>
 						<th>
 							Acciones
-							<?php t_statusMenu(); ?>
 						</th>
 					</tr>
 				</thead>
-				<tbody>
-				<?php foreach( $appointments as $appointment ): ?>
-					<tr data-appointment-id="<?php echo $appointment['id']; ?>">
-						<td><?php echo date( 'd/m/Y', strtotime( $appointment['fecha'] ) ); ?></td>
-						<td><?php echo substr( $appointment['hora'], 0, 5 ); ?></td>
-						<td><?php echo $appointment['medicoApellidos'] . ', ' .  $appointment['medicoNombres']; ?></td>
-						<td><?php echo $appointment['pacienteApellidos'] . ', ' .  $appointment['pacienteNombres']; ?></td>
-						<td data-appointment-id="<?php echo $appointment['id']; ?>">
-							<button class="btn btn-success disabled" style="display:<?php echo $appointment['estado'] == 'confirmado' ? 'inline-block' : 'none'; ?>" data-appointment-id="<?php echo $appointment['id']; ?>"><i class="icon-ok"></i> Confirmado</button>
-							<button class="btn btn-warning disabled" style="display:<?php echo $appointment['estado'] == 'cancelado' ? 'inline-block' : 'none'; ?>" data-appointment-id="<?php echo $appointment['id']; ?>"><i class="icon-exclamation-sign"></i> Cancelado</button>
-							<?php $isWaiting = $appointment['estado'] == 'esperando'; ?>
-							<a class="btn btn-mini btn-link is2-trigger-restore" href="#is2-modal-restore" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>" style="display:<?php echo !$isWaiting ? 'inline-block' : 'none'; ?>">Deshacer acción</a>
-							<div style="display:<?php echo $isWaiting ? 'block' : 'none'; ?>" data-appointment-id="<?php echo $appointment['id']; ?>">
-								<a class="btn is2-trigger-confirm" href="#is2-modal-confirm" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Confirmar</a>
-								<a class="btn is2-trigger-cancel" href="#is2-modal-cancel" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Cancelar</a>
-								<a class="btn btn-danger is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Borrar</a>
-							</div>
-						</td>
-					</tr>
-				<?php endforeach; ?>
-				</tbody>
+				<tbody></tbody>
 			</table>
+			<div class="is2-grid-wrapper">
+				<table class="table table-striped is2-grid">
+					<tbody>
+					<?php $currentDate = null; ?>
+					<?php foreach( $appointments as $appointment ): ?>
+						<?php if( $appointment['fecha'] != $currentDate ): ?>
+							<?php $currentDate = $appointment['fecha']; ?>
+							<?php $d = strtotime( $currentDate ); ?>
+						<tr class="is2-appointments-dayrow">
+							<td><?php echo $DAYNAME[date( 'D', $d )] . ', ' . date( 'j', $d ); ?></td>
+							<td><?php t_ascDescMenu( 'is2-time', 'hora' ); ?></td>
+							<td></td>
+							<td></td>
+							<td><?php t_statusMenu(); ?></td>
+						</tr>
+						<?php endif; ?>
+						<tr data-appointment-id="<?php echo $appointment['id']; ?>">
+							<td>&nbsp;</td>
+							<td><?php echo substr( $appointment['hora'], 0, 5 ); ?></td>
+							<td><?php echo $appointment['medicoApellidos'] . ', ' .  $appointment['medicoNombres']; ?></td>
+							<td><?php echo $appointment['pacienteApellidos'] . ', ' .  $appointment['pacienteNombres']; ?></td>
+							<td data-appointment-id="<?php echo $appointment['id']; ?>">
+								<button class="btn btn-success disabled" style="display:<?php echo $appointment['estado'] == 'confirmado' ? 'inline-block' : 'none'; ?>" data-appointment-id="<?php echo $appointment['id']; ?>"><i class="icon-ok"></i> Confirmado</button>
+								<button class="btn btn-warning disabled" style="display:<?php echo $appointment['estado'] == 'cancelado' ? 'inline-block' : 'none'; ?>" data-appointment-id="<?php echo $appointment['id']; ?>"><i class="icon-exclamation-sign"></i> Cancelado</button>
+								<?php $isWaiting = $appointment['estado'] == 'esperando'; ?>
+								<a class="btn btn-mini btn-link is2-trigger-restore" href="#is2-modal-restore" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>" style="display:<?php echo !$isWaiting ? 'inline-block' : 'none'; ?>">Deshacer acción</a>
+								<div style="display:<?php echo $isWaiting ? 'block' : 'none'; ?>" data-appointment-id="<?php echo $appointment['id']; ?>">
+									<a class="btn is2-trigger-confirm" href="#is2-modal-confirm" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Confirmar</a>
+									<a class="btn is2-trigger-cancel" href="#is2-modal-cancel" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Cancelar</a>
+									<a class="btn btn-danger is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Borrar</a>
+								</div>
+							</td>
+						</tr>
+					<?php endforeach; ?>
+					</tbody>
+				</table>
+			</div>
 			<?php else: ?>
 			<div class="alert alert-error">
 				No se han encontrado turnos según el criterio de búsqueda específicado
@@ -320,13 +348,13 @@
 	} );
 	
 // *** ACA PARA CUANDO SORTEO LA GRID *** //
-	$( '.is2-trigger-orderby' ).on( 'click', function( e ) {
+	$( '.is2-date .is2-trigger-orderby' ).on( 'click', function( e ) {
 		e.preventDefault();
 		var $el = $( this ),
 			fieldName = $el.attr( 'data-field-name' ),
 			orderBy = $el.attr( 'data-orderby' ),
 			res = getQueryString();
-
+			
 		window.location = '/turnos?' + ( res.length ? res.join( '&' ) + '&' : '' ) + fieldName + '=' + orderBy;
 	} );
 	
@@ -344,7 +372,7 @@
 		// tiro un redirect
 		var queryString = window.location.search.replace( /^\?/, '' ),
 			segs = queryString ? queryString.split( '&' ) : [], seg,
-			pat = /(?:(?:fecha|hora|medico|paciente)=(?:asc|desc)|estado=(?:confirmados|cancelados)|(?:exito|error)=[^$]+)/,
+			pat = /(?:fecha=(?:asc|desc)|(?:exito|error)=[^$]+)/,
 			res = [];
 		
 		while( segs.length ) {

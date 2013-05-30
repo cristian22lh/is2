@@ -2,43 +2,16 @@
 
 // ESTA PARTE ES CUANDO SE ESTA FILTRANDO LOS TURNOS MEDIANTE LAS COLUMNAS DE LA GRID
 	$orderByClause = array();
-	$isOrderByTime = false;
-	$isOrderByDate = false;
 	// usada para mostrar turnos segun su estado
 	$statusValue = false;
 	// me fijo si la grid esta siendo ordenado por algun tipo de orden
 	if( __issetGETField( 'fecha', 'desc' ) ) {
 		$orderByClause[] = 't.fecha DESC';
-		$isOrderByDate = true;
+	} else {
+		$orderByClause[] = 't.fecha ASC';
+	}
+	$orderByClause[] = 't.hora ASC';
 
-	} else if( __issetGETField( 'hora', 'desc' ) ) {
-		$orderByClause[]  = 't.hora DESC';
-		$isOrderByTime = true;
-
-	} else if( __issetGETField( 'medico', 'asc' ) ) {
-		$orderByClause[] = 'm.apellidos ASC';
-	} else if( __issetGETField( 'medico', 'desc' ) ) {
-		$orderByClause[] = 'm.apellidos DESC';
-		
-	} else if( __issetGETField( 'paciente', 'asc' ) ) {
-		$orderByClause[] = 'm.apellidos ASC';
-	} else if( __issetGETField( 'paciente', 'desc' ) ) {
-		$orderByClause[] = 'p.apellidos DESC';
-	
-	} else if( __issetGETField( 'estado', 'confirmados' ) ) {
-		$statusValue = 'confirmados';
-	} else if( __issetGETField( 'estado', 'cancelados' ) ) {
-		$statusValue = 'cancelados';
-	}
-	// siempre se debe ordernar por fecha SOLO SI NO SE ESTA ORDENANDO POR ALGO
-	if( !$isOrderByDate && !count( $orderByClause ) ) {
-		$orderByClause[] = ' t.fecha ASC ';
-	}
-	// siempre se debe ordernar por ahora SI O SI
-	if( !$isOrderByTime ) {
-		$orderByClause[] = ' t.hora ASC ';
-	}
-	
 // ACA CONSTRUYO EL WHERE DE MI QUERY
 	$replacements = array();
 	$whereClause = array();
@@ -239,7 +212,18 @@
 	// sobre de que los turnos que estan siendo mostrados son los desde la
 	// la fecha actual hasta los siguiente 7 dias
 	$currentDate = !$isSearch && !$isQuickSearch ? date( 'd/m/Y' ) : false;
-	
+
+	// to translate date( 'j' ) to its spanish correpsndece
+	$DAYNAME = array(
+		'Mon' => 'Lunes',
+		'Tue' => 'Martes',
+		'Wed' => 'Miércoles',
+		'Thu' => 'Jueves',
+		'Fri' => 'Viernes',
+		'Sat' => 'Sábado',
+		'Sun' => 'Domingo'
+	);
+		
 // LOAD THE VIEW
 	__render( 
 		'appointments', 
@@ -252,7 +236,8 @@
 			'tooMuchRecords' => $tooMuchRecords,
 			'appointments' => $appointments,
 			'doctors' => $doctors,
-			'persistValues' => $persistValues
+			'persistValues' => $persistValues,
+			'DAYNAME' => $DAYNAME
 		)
 	);
 

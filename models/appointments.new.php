@@ -22,7 +22,7 @@
 		
 		// 2) no puedo crear un turno mayor a 7 dias desde el dia actual
 		$diff = date_diff( date_create(), date_create( $date ) )->format( '%d' );
-		if( $diff <= 0 || $diff > 7 ) {
+		if( $diff < 0 || $diff > 7 ) {
 			__redirect( '/turnos/crear?error=crear-turno' );
 		}
 		

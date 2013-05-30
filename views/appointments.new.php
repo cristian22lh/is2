@@ -283,10 +283,10 @@
 		}
 		
 		$availabilityTemplate.find( '.alert' ).hide();
-		if( data.isAvailable ) {
-			$availabilityTemplate.find( '.is2-availability-success' ).show();
-		} else if( data.hasAppointmentAlready ) {
+		if( data.hasAppointmentAlready ) {
 			$availabilityTemplate.find( '.is2-availability-already' ).show();
+		} else if( data.isAvailable ) {
+			$availabilityTemplate.find( '.is2-availability-success' ).show();
 		} else {
 			$availabilityTemplate.find( '.is2-availability-unavailable' ).show();
 		}

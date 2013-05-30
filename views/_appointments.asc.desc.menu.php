@@ -1,4 +1,4 @@
-		<div class="is2-ascdescmenu btn btn-mini btn-group">
+		<div class="is2-ascdescmenu btn btn-mini btn-group <?php echo $catName; ?>">
 			<a class="dropdown-toggle" data-toggle="dropdown" href="#">
 				<span class="caret"></span>
 			</a>

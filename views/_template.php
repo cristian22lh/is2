@@ -27,7 +27,7 @@
 		require './views/_wrapper.end.php';
 	}
 	
-	function t_ascDescMenu( $fieldName ) {
+	function t_ascDescMenu( $catName, $fieldName ) {
 		require './views/_appointments.asc.desc.menu.php';
 	}
 	

@@ -44,6 +44,7 @@
 		',
 		array( $date, $time, $doctorID )
 	);
+	__log($res);
 	$hasAppointmentAlready = (bool) count( $res );
 	
 	__echoJSON( array( 
