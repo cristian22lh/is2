@@ -562,7 +562,7 @@
 	var showAppointmentAction = function( id, type ) {
 	
 		var $row = $( 'tr[data-appointment-id=' + id + ']' ),
-			status
+			status;
 	
 		$( 'td:last-child[data-appointment-id=' + id + '] > *' ).hide();
 	
@@ -601,7 +601,6 @@
 	};
 	AppointmentActionAjax.isWaiting = false;
 	AppointmentActionAjax.$allMsgs = $( '.is2-ajax-msg' );
-	AppointmentActionAjax.$sound = $( '.is2-appointment-sound' );
 	AppointmentActionAjax.prototype = {
 	
 		send: function( e ) {

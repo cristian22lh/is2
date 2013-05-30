@@ -38,21 +38,25 @@
 		}
 	}
 	
-	function __log( $msg ) {
+	function __log() {
 		global $DEBUG;
 		if( $DEBUG ) {
 			require_once './debug/FirePHP.class.php';
 			$firephp = FirePHP::getInstance( true );
-			$firephp->log( $msg );
+			foreach( func_get_args() as $arg ) {
+				$firephp->log( is_bool( $arg ) ? ( $arg ? 'true' : 'false' ) : $arg );
+			}
 		}
 	}
 	
-	function __err( $msg ) {
+	function __err() {
 		global $DEBUG;
 		if( $DEBUG ) {
 			require_once './debug/FirePHP.class.php';
 			$firephp = FirePHP::getInstance( true );
-			$firephp->error( $msg );
+			foreach( func_get_args() as $arg ) {
+				$firephp->log( is_bool( $arg ) ? ( $arg ? 'true' : 'false' ) : $arg );
+			}
 		}
 	}
 	
@@ -108,25 +112,26 @@
 			return false;
 		}
 		$year = $value[2];
-		if( $year < 0 ) {
+		if( $year <= 0 || strlen( (int) $year ) != 4 ) {
 			return false;
 		}
 		$month = $value[1];
-		if( $month < 0 ) {
+		if( $month <= 0 || $month > 12 ) {
 			return false;
 		}
 		if( $month < 10 ) {
 			$month = '0' . (int) $month;
 		}
 		$date = $value[0];
-		if( $date < 0 ) {
+		$yearMonth = $year . '-' . $month;
+		if( $date <= 0 || $date > date( 't', strtotime( $yearMonth ) ) ) {
 			return false;
 		}
 		if( $date < 10 ) {
 			$date = '0' . (int) $date;
 		}
 		
-		return $year . '-' . $month . '-' . $date;
+		return $yearMonth . '-' . $date;
 	}
 	
 	function __dateISOToLocale( $value ) {

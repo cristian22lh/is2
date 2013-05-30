@@ -43,7 +43,7 @@
 				<div class="control-group is2-date">
 					<label class="control-label">Fecha</label>
 					<div class="controls">
-						<input type="text" class="input-small datepicker is2-availability-date" placeholder="Fecha" name="fecha">
+						<input type="text" class="input-small datepicker is2-availability-date" placeholder="Fecha" name="fecha" value="<?php echo $wantedDate; ?>">
 						<span class="is2-availability-date-popover" style="visibility:hidden" data-placement="right" data-html="true" data-trigger="hover">&nbsp;</span>
 					</div>
 					<div class="alert alert-error is2-popover-date-template is2-template-empty is2-popover-template">

@@ -56,6 +56,8 @@
 		$createError = false;
 	}
 	
+	$wantedDate = ( $wantedDate = __GETField( 'fecha' ) ) && __toISODate( $wantedDate ) ? $wantedDate : false;
+	
 // LOAD THE VIEW
 	__render( 
 		'appointments.new', 
@@ -63,6 +65,7 @@
 			'username' => $username,
 			'createError' => $createError,
 			'doctors' => $doctors,
+			'wantedDate' => $wantedDate
 		)
 	);
 	
