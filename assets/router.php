@@ -8,7 +8,8 @@
 		function __construct() {
 		}
 		
-		function auth( $page = '', $guestPages = array(), $loginPage = '' ) {
+		function auth( $guestPages = array(), $loginPage = '' ) {
+			$page = $this->_getPage();
 			// debo saber si la pagina aonde ira el usuario
 			// solo puede ser accedida por usuarios loguedaos
 			for( $i = 0, $l = count( $guestPages ); $i < $l; $i++ ) {
@@ -27,11 +28,12 @@
 				if( $loginPage{0} != '/' ) {
 					$loginPage = '/' . $loginPage;
 				}
-				__redirect( $loginPage . '?destino=' . $page );
+				__redirect( $loginPage . '?destino=' . $page . $this->_getQuery() );
 			}
 		}
 		
-		function start( $routes, $page, $fallbackRoute ) {			
+		function start( $routes = array(), $fallbackRoute = '' ) {
+			$page = $this->_getPage();
 			$count = 0;
 			foreach( $routes as $route => $model ) {
 				if( $this->test( $route, $page ) ) {
@@ -49,7 +51,7 @@
 				if( $fallbackRoute{0} != '/' ) {
 					$fallbackRoute = '/' . $fallbackRoute;
 				}
-				__redirect( $fallbackRoute . '?destino=' . $page );
+				__redirect( $fallbackRoute . '?destino=' . $page . $this->_getQuery() );
 			}
 		}
 		
@@ -95,6 +97,17 @@
 		
 		function seg( $i = 0 ) {
 			return isset( $this->m[$i] ) ? $this->m[$i] : null;
+		}
+		
+		private function _getPage() {
+			// veo adonde quiere ir el usuario
+			$url = parse_url( $_SERVER['REQUEST_URI'] );
+			return preg_replace( '/\/?index\.php\/?/', '/', $url['path'] );
+		}
+		
+		private function _getQuery() {
+			$query = $_SERVER['QUERY_STRING'];
+			return $query ? '?' . $query : '';
 		}
 		
 	}

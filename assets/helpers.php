@@ -73,7 +73,7 @@
 	}
 
 	function __GETField( $name ) {
-		return count( $_GET ) > 0 && isset( $_GET[$name] ) ? $_GET[$name] : false;
+		return count( $_GET ) > 0 && isset( $_GET[$name] ) ? __sanitizeValue( $_GET[$name] ) : false;
 	}
 	
 // ************** /
