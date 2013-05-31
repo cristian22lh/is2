@@ -28,6 +28,7 @@
 					<li>Verifique que la fecha del turno este dentro del rango de 7 días en adelante a partir de hoy</li>
 					<li>No puede crear un turno con un mismo médico a la misma hora y fecha que ya exista en el sistema</li>
 					<li>Verifique que la hora esté dentro del rango de horarios que posee el médico</li>
+					<li>Verifique que el médico soporte la misma obra social que la del paciente</li>
 				</ul>
 			</div>
 			<?php endif; ?>
@@ -156,6 +157,10 @@
 							<span data-field-name="nroAfiliado"></span>
 						</li>
 					</ul>
+					<div class="alert alert-error is2-patient-search-insurance-error">
+						<p><strong>¡Este médico no soporta la obra social de este paciente!</strong></p>
+						No puede utilizar a este paciente para crear este turno
+					</div>
 				</div>
 				<div class="control-group">
 					<div class="controls">
@@ -198,6 +203,7 @@
 	var $search = $( '.is2-patients-search-trigger' );
 	var $errorMsg = $( '.is2-patient-search-error' );
 	var $successMsg = $( '.is2-patient-search-success' );
+	var $errorInsuranceMsg = $( '.is2-patient-search-insurance-error' );
 	var $patientID = $( '.is2-patients-search-result' );
 	
 	var searchedPatient = function( dataResponse ) {
@@ -207,10 +213,12 @@
 		if( !dataResponse.success ) {
 			return;
 		}
-		
-		var patientData = dataResponse.data;
 		$( '.is2-patient-search-info' ).hide();
-		if( !patientData ) {
+		
+		var data = dataResponse.data,
+			patientData, supportInsurance;
+			
+		if( !data ) {
 			// no hubo match
 			$successMsg.hide();
 			$errorMsg.show();
@@ -218,15 +226,24 @@
 			$patientID.val( '' );
 			
 		} else {
+			patientData = data.patient,
+			supportInsurance = data.supportInsurance;
+		
 			$errorMsg.hide();
 			$successMsg.find(  'span' ).each( function() {
 				var $el = $( this );
 				$el.html( patientData[$el.attr( 'data-field-name' )] );
 			} );
-			$successMsg.show();
 			
-			// dejo la marca
-			$patientID.val( patientData['id'] );
+			if( supportInsurance ) {
+				// dejo la marca
+				$patientID.val( patientData['id'] );
+				$errorInsuranceMsg.hide();
+			} else {
+				$errorInsuranceMsg.show();
+			}
+			
+			$successMsg.show();
 		}
 	};
 	
@@ -252,7 +269,8 @@
 		$.ajax( {
 			url: '/pacientes/buscar/dni',
 			data: {
-				dni: dni
+				dni: dni,
+				doctorID: $doctor.val()
 			},
 			dataType: 'json',
 			type: 'POST',

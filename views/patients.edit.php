@@ -20,7 +20,6 @@
 				<ul>
 					<li>Sepa que el número de DNI debe ser único</li>
 					<li>Verifique que la fecha de nacimiento sea válida y con el formato: dd/mm/yyyy</li>
-					<li>Verifique que el correo electrónico sea uno válido</li>
 				</ul>
 			</div>
 			<?php endif; ?>
@@ -67,12 +66,6 @@
 					<label class="control-label">Teléfono</label>
 					<div class="controls">
 						<input type="text" class="input-xlarge" placeholder="Teléfono" name="phone" value="<?php echo $patient['telefono']; ?>">
-					</div>
-				</div>
-				<div class="control-group">
-					<label class="control-label">Correo electrónico</label>
-					<div class="controls">
-						<input type="text" class="input-xlarge" placeholder="Correo electrónico" name="email" value="<?php echo $patient['email']; ?>">
 					</div>
 				</div>
 				<div class="alert">

@@ -1,6 +1,6 @@
 <?php
 
-	if( __issetPOST( array( 'lastName', 'firstName', 'gender', 'dni', 'birthDate', 'phone', 'email', 'insuranceID', 'insuranceNumber' ) ) ) {
+	if( __issetPOST( array( 'lastName', 'firstName', 'gender', 'dni', 'birthDate', 'phone', 'insuranceID', 'insuranceNumber' ) ) ) {
 		$lastName = __sanitizeValue( $_POST['lastName'] );
 		$firstName = __sanitizeValue( $_POST['firstName'] );
 		$gender = __validateGender( $_POST['gender'] );
@@ -11,11 +11,10 @@
 			$birthDate = false;
 		}
 		$phone = __sanitizeValue( $_POST['phone'] );
-		$email = __validateEmail( $_POST['email'] );
 		$insuranceID = __sanitizeValue( $_POST['insuranceID'] );
 		$insuranceNumber = __sanitizeValue( $_POST['insuranceNumber'] );
 		
-		if( !$lastName || !$firstName || !$gender || !$dni || !$birthDate || !$phone || !$email || !$insuranceID || !$insuranceNumber ) {
+		if( !$lastName || !$firstName || !$gender || !$dni || !$birthDate || !$phone || !$insuranceID || !$insuranceNumber ) {
 			__redirect( '/pacientes/crear?error=crear-paciente' );
 		}
 		
@@ -24,11 +23,11 @@
 				INSERT INTO
 					pacientes
 				VALUES
-					( null, ?, ?, ?, ?, ?, ?, ?, ?, ? )
+					( null, ?, ?, ?, ?, ?, ?, ?, ? )
 			',
-			array( $lastName, $firstName, $gender, $dni, $birthDate, $phone, $email, $insuranceID, $insuranceNumber )
+			array( $lastName, $firstName, $gender, $dni, $birthDate, $phone, $insuranceID, $insuranceNumber )
 		);
-		
+		die;
 		if( !$insertId ) {
 			__redirect( '/pacientes/crear?error=crear-paciente' );
 		}

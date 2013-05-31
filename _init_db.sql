@@ -80,6 +80,33 @@ INSERT INTO horarios VALUES
 ;
 --##########
 --##########
+DROP TABLE IF EXISTS medicosObrasSociales;
+CREATE TABLE medicosObrasSociales(
+	id INTEGER PRIMARY KEY AUTO_INCREMENT,
+	idMedico INTEGER NULL,
+	idObraSocial INTEGER NULL
+) ENGINE=InnoDB;
+
+INSERT INTO medicosObrasSociales VALUES
+	( null, 1, 1 ),
+	( null, 2, 1 ),
+	( null, 3, 1 ),
+	( null, 4, 1 ),
+	( null, 5, 1 ),
+	( null, 6, 1 ),
+	( null, 7, 1 ),
+	( null, 8, 1 ),
+	( null, 1, 2 ),
+	( null, 2, 2 ),
+	( null, 3, 2 ),
+	( null, 4, 2 ),
+	( null, 5, 2 ),
+	( null, 6, 2 ),
+	( null, 7, 2 ),
+	( null, 8, 2 )
+;
+--##########
+--##########
 DROP TABLE IF EXISTS pacientes;
 CREATE TABLE pacientes(
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -89,21 +116,20 @@ CREATE TABLE pacientes(
 	dni VARCHAR( 20 ) UNIQUE,
 	fechaNacimiento DATE,
 	telefono VARCHAR( 100 ),
-	email VARCHAR( 255 ),
 	idObraSocial INTEGER NULL,
 	nroAfiliado VARCHAR( 255 ) NULL
 ) ENGINE=InnoDB;
 
 --## REFERS TO TO FILE patients.sql TO POPULATE THIS TABLE WITH 1000 PATIENTS
 INSERT INTO pacientes VALUES
-	( null, 'Ivan', 'Gómez', 'M', 1, '1947-10-10', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), CONCAT( SUBSTRING(MD5( RAND() ) FROM 1 FOR 6 ), '@gmail.com' ), 1, MD5( RAND() ) ),
-	( null, 'Damián', 'Antúnez', 'M', 2, '1949-03-30', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), CONCAT( SUBSTRING(MD5( RAND() ) FROM 1 FOR 6 ), '@gmail.com' ), 2, MD5( RAND() ) ),
-	( null, 'Federico', 'López', 'M', 3, '1951-11-01', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), CONCAT( SUBSTRING(MD5( RAND() ) FROM 1 FOR 6 ), '@gmail.com' ), 2, MD5( RAND() ) ),
-	( null, 'Fabián', 'Meléndez', 'M', 4, '1951-01-12', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), CONCAT( SUBSTRING(MD5( RAND() ) FROM 1 FOR 6 ), '@gmail.com' ), 1, MD5( RAND() ) ),
-	( null, 'José', 'Fagúndez', 'M', 5, '1945-06-24', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), CONCAT( SUBSTRING(MD5( RAND() ) FROM 1 FOR 6 ), '@gmail.com' ), 1, MD5( RAND() ) ),
-	( null, 'María Clara', 'Cortéz', 'F', 6, '1951-04-05', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), CONCAT( SUBSTRING(MD5( RAND() ) FROM 1 FOR 6 ), '@gmail.com' ), 2, MD5( RAND() ) ),
-	( null, 'Maria Laura', 'Valdéz', 'F', 7, '1950-12-12', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), CONCAT( SUBSTRING(MD5( RAND() ) FROM 1 FOR 6 ), '@gmail.com' ), 2, MD5( RAND() ) ),
-	( null, 'Marina', 'Chávez', 'F', 8, '1947-05-24', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), CONCAT( SUBSTRING(MD5( RAND() ) FROM 1 FOR 6 ), '@gmail.com' ), 3, MD5( RAND() ) )
+	( null, 'Ivan', 'Gómez', 'M', 1, '1947-10-10', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), 1, MD5( RAND() ) ),
+	( null, 'Damián', 'Antúnez', 'M', 2, '1949-03-30', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), 2, MD5( RAND() ) ),
+	( null, 'Federico', 'López', 'M', 3, '1951-11-01', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), 2, MD5( RAND() ) ),
+	( null, 'Fabián', 'Meléndez', 'M', 4, '1951-01-12', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), 1, MD5( RAND() ) ),
+	( null, 'José', 'Fagúndez', 'M', 5, '1945-06-24', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), 1, MD5( RAND() ) ),
+	( null, 'María Clara', 'Cortéz', 'F', 6, '1951-04-05', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), 2, MD5( RAND() ) ),
+	( null, 'Maria Laura', 'Valdéz', 'F', 7, '1950-12-12', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), 2, MD5( RAND() ) ),
+	( null, 'Marina', 'Chávez', 'F', 8, '1947-05-24', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), 3, MD5( RAND() ) )
 ;
 
 --##########
@@ -164,6 +190,64 @@ ALTER TABLE turnos
 		ON DELETE CASCADE
 ;
 
+DELIMITER $$
+CREATE TRIGGER turnos_insertarTurno
+	BEFORE INSERT ON turnos
+	FOR EACH ROW
+	BEGIN
+		--## MIS VARIABLES
+		DECLARE dayNameIndex INTEGER;
+		DECLARE daysCount INTEGER;
+	
+		--## ESTE TRIGER SE FIJA SI TAL DIA A TAL HORARIO TAL MEDICO ES UNA FECHA
+		--## NO CONFUNDIR CON ESTAR DISPONIBLE, EN ESTE CASO, LA CONSTRAINT 
+		--## UNIQUE( idMedico, fecha, hora ) DE turnos SE ENCARGARA DE ESTO
+		SELECT DAYOFWEEK( NEW.fecha ) INTO dayNameIndex;
+		IF ( 
+			SELECT
+					id
+				FROM
+					horarios
+				WHERE
+					idMedico = NEW.idMedico AND 
+					NEW.hora >= horaIngreso AND NEW.hora <= horaEgreso AND 
+					dia = ( SELECT CASE
+						WHEN dayNameIndex = 1 THEN 7
+						ELSE dayNameIndex - 1 END )
+		) IS NULL THEN
+			CALL medico_no_antiende_fecha_hora_requerido;
+		END IF;
+		
+		--## UN TURNO NO PUEDE SER MAYOR AL DIA PRESENTE EN 7 DIAS HACIA DELANTE
+		SELECT DATEDIFF( NEW.fecha, CURRENT_DATE() ) INTO daysCount;
+		IF daysCount > 7 THEN
+			CALL turno_fecha_mayor_siete_dias;
+		ELSEIF daysCount < 0 THEN
+			CALL turno_fecha_negativo;
+		END IF;
+		
+		--## HAY QUE CHECKEAR QUE EL MEDICO SOPORTE LA OBRA SOCIAL DEL PACIENTE
+		IF (
+			SELECT
+				p.id
+			FROM 
+				medicosObrasSociales AS mos
+				INNER JOIN pacientes AS p
+			WHERE
+				mos.idMedico = NEW.idMedico AND 
+				mos.idObraSocial = p.idObraSocial AND
+				p.id = NEW.idPaciente
+				
+		) IS NULL THEN
+			CALL medico_no_soporta_obra_social_paciente;
+		END IF;
+		
+		--## SI YA EXISTE UN TURNO CON EL MISMO MEDICO, FECHA Y HORA
+		--## LA CONSTRAINT UNIQUE( idMedico, fecha, hora ) WILL TAKE CARE OF THIS
+	END;
+$$
+DELIMITER ;
+
 ALTER TABLE horarios
 	ADD CONSTRAINT horarios_idMedico
 	FOREIGN KEY( idMedico )
@@ -175,37 +259,12 @@ ALTER TABLE pacientes
 	ADD CONSTRAINT pacientes_idObraSocial
 	FOREIGN KEY( idObraSocial )
 		REFERENCES obrasSociales( id )
-		ON DELETE SET NULL
-;
---## Cuando se borrar una obra social los pacientes que estaban vinculados
---## a esa obra social deben pasarse todos a la obra social LIBRE (la de ID = 1 )
-CREATE TRIGGER pacientes_reestablecerObraSocial
-	AFTER DELETE ON obrasSociales
-	FOR EACH ROW
-		UPDATE 
-			pacientes 
-		SET 
-			idObraSocial = 1,
-			nroAfiliado = NULL
-		WHERE 
-			idObraSocial IS NULL;
+		ON DELETE RESTRICT
 ;
 
 ALTER TABLE medicos
 	ADD CONSTRAINT medicos_idEspecialidad
 	FOREIGN KEY( idEspecialidad )
 		REFERENCES especialidades( id )
-		ON DELETE SET NULL
-;
---## Cuando borro una especialidad la cual este asociado a un medico
---## este debe pasar a la especialiad por defecto ( la de ID = 1 )
-CREATE TRIGGER medicos_reestablecerEspecialidad
-	AFTER DELETE ON especialidades
-	FOR EACH ROW
-		UPDATE 
-			medicos 
-		SET 
-			idEspecialidad = 1
-		WHERE 
-			idEspecialidad IS NULL;
+		ON DELETE RESTRICT
 ;

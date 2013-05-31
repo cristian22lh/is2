@@ -3,7 +3,7 @@
 	// get last seg from /pacientes/122/editar
 	$patientID = $g_router->seg( 2 );
 
-	if( __issetPOST( array( 'lastName', 'firstName', 'gender', 'dni', 'birthDate', 'phone', 'email', 'insuranceID', 'insuranceNumber' ) ) ) {
+	if( __issetPOST( array( 'lastName', 'firstName', 'gender', 'dni', 'birthDate', 'phone', 'insuranceID', 'insuranceNumber' ) ) ) {
 		$lastName = __sanitizeValue( $_POST['lastName'] );
 		$firstName = __sanitizeValue( $_POST['firstName'] );
 		$gender = __validateGender( $_POST['gender'] );
@@ -14,11 +14,10 @@
 			$birthDate = false;
 		}
 		$phone = __sanitizeValue( $_POST['phone'] );
-		$email = __validateEmail( $_POST['email'] );
 		$insuranceID = __sanitizeValue( $_POST['insuranceID'] );
 		$insuranceNumber = __sanitizeValue( $_POST['insuranceNumber'] );
 		
-		if( !$lastName || !$firstName || !$gender || !$dni || !$birthDate || !$phone || !$email || !$insuranceID || !$insuranceNumber ) {
+		if( !$lastName || !$firstName || !$gender || !$dni || !$birthDate || !$phone || !$insuranceID || !$insuranceNumber ) {
 			__redirect( '/pacientes/' . $patientID . '/editar?error=editar-paciente' );
 		}
 		
@@ -33,13 +32,12 @@
 					dni = ?,
 					fechaNacimiento = ?,
 					telefono = ?,
-					email = ?,
 					idObraSocial = ?,
 					nroAfiliado = ?
 				WHERE
 					id = ?
 			',
-			array( $lastName, $firstName, $gender, $dni, $birthDate, $phone, $email, $insuranceID, $insuranceNumber, $patientID )
+			array( $lastName, $firstName, $gender, $dni, $birthDate, $phone, $insuranceID, $insuranceNumber, $patientID )
 		);
 
 		// puede pasar que submitee el form tal cual esta, no pasa nada, y por el < 0

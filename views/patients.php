@@ -13,7 +13,7 @@
 			}
 			td:nth-child( 1 ) span,
 			td:nth-child( 2 ) span {
-				width: 80px;
+				width: 130px;
 			}
 			td:nth-child( 4 ) span {
 				width: 65px;
@@ -23,19 +23,15 @@
 			}
 			td:nth-child( 7 ) span {
 				width: 100px;
-				text-transform: none;
-			}
-			td:nth-child( 8 ) span {
-				width: 100px;
 				text-transform: uppercase;
 			}
-			td:nth-child( 9 ) span {
+			td:nth-child( 8) span {
 				width: 130px;
 			}
-			td:nth-child( 10 ) span {
+			td:nth-child( 9 ) span {
 				text-align: center;
 			}
-			td:nth-child( 10 ) span a:first-child {
+			td:nth-child( 9 ) span a:first-child {
 				margin: 0 0 3px 0;
 			}
 			.pagination {
@@ -88,7 +84,6 @@
 						<th>DNI</th>
 						<th>Fecha de nacimiento</th>
 						<th>Teléfono</th>
-						<th>Correo electrónico</th>
 						<th>Obra social</th>
 						<th>Número de afiliado</th>
 						<th>Acción</th>
@@ -110,9 +105,6 @@
 						<td><?php echo __dateISOToLocale( $patient['fechaNacimiento'] ); ?></td>
 						<td>
 							<span title="<?php echo $patient['telefono']; ?>"><?php echo $patient['telefono']; ?></span>
-						</td>
-						<td>
-							<span title="<?php echo $patient['email']; ?>"><?php echo $patient['email']; ?></span>
 						</td>
 						<td>
 							<span title="<?php echo $patient['obraSocialNombre']; ?>"><?php echo $patient['obraSocialNombre']; ?></span>

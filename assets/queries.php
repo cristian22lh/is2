@@ -17,21 +17,6 @@
 		);
 	}
 	
-	function q_checkDoctorAvailability( $replacements ) {
-		global $g_db;
-		return $g_db->select( 
-			'
-				SELECT
-					id
-				FROM
-					horarios
-				WHERE
-					idMedico = ? AND ? >= horaIngreso AND ? <= horaEgreso AND dia = ?
-			',
-			$replacements
-		);
-	}
-	
 	function q_getAllInsurances() {
 		global $g_db;
 		return $g_db->select(
@@ -56,7 +41,7 @@
 		return $g_db->select(
 			'
 				SELECT
-					p.id, p.apellidos, p.nombres, p.sexo, p.dni, p.idObraSocial, p.fechaNacimiento, p.email, p.telefono, p.nroAfiliado,
+					p.id, p.apellidos, p.nombres, p.sexo, p.dni, p.idObraSocial, p.fechaNacimiento, p.telefono, p.nroAfiliado,
 					os.nombreCorto AS obraSocialNombre
 				FROM
 					pacientes AS p

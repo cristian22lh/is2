@@ -2,19 +2,20 @@
 
 // TENER EN CUENTA QUE ESTO SOLO DEVUELVE UN SOLO PACIENTE, NO VARIOS!!!
 
-	if( !__issetPOST( array( 'dni' ) ) ) {
+	if( !__issetPOST( array( 'dni', 'doctorID' ) ) ) {
 		__echoJSON( array( 'success' => false ) );
 	}
 
 	$dni = __cleanDNI( $_POST['dni'] );
-	if( !$dni ) {
+	$doctorID = __validateID( $_POST['doctorID'] );
+	if( !$dni || !$doctorID ) {
 		__echoJSON( array( 'success' => false ) );
 	}
 	
 	$patients = $g_db->select(
 		'
 			SELECT
-				p.id, p.apellidos, p.nombres, p.sexo, p.dni, p.idObraSocial, p.fechaNacimiento, p.email, p.telefono, p.nroAfiliado,
+				p.id, p.apellidos, p.nombres, p.sexo, p.dni, p.idObraSocial, p.fechaNacimiento, p.telefono, p.nroAfiliado,
 				os.nombreCorto AS obraSocialNombre
 			FROM
 				pacientes AS p
@@ -25,16 +26,35 @@
 		',
 		array( $dni )
 	);
-	
-	if( count( $patients ) ) {
-		$patient = $patients[0];
-		$patient['nombreCompleto'] = $patient['apellidos'] . ', ' . $patient['nombres'];
-		$patient['edad'] = date_diff( date_create( $patient['fechaNacimiento'] ), date_create() )->format( '%Y' );
-	
-	} else {
-		$patient = null;
+	if( !count( $patients ) ) {
+		__echoJSON( array( 'success' => true, 'data' => null ) );
 	}
 	
-	__echoJSON( array( 'success' => true, 'data' => $patient ) );
+	$patient = $patients[0];
+	$patient['nombreCompleto'] = $patient['apellidos'] . ', ' . $patient['nombres'];
+	$patient['edad'] = date_diff( date_create( $patient['fechaNacimiento'] ), date_create() )->format( '%Y' );
+	
+	// me fijo que si el paciente soporta la obra social del medico
+	$res = $g_db->select(
+		'
+			SELECT
+				id
+			FROM 
+				medicosObrasSociales
+			WHERE
+				idMedico = ? AND 
+				idObraSocial = ?
+		',
+		array( $doctorID, $patient['idObraSocial'] )
+	);
+	$supportInsurance = (bool) count( $res );
+	
+	__echoJSON( array( 
+		'success' => true,
+		'data' => array( 
+			'patient' => $patient,
+			'supportInsurance' => $supportInsurance 
+		) 
+	) );
 	
 ?>

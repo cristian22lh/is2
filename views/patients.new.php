@@ -15,7 +15,6 @@
 				<ul>
 					<li>Sepa que no puede crear un paciente con un DNI el cual ya exista otro paciente con ese mismo DNI en el sistema</li>
 					<li>Verifique que la fecha de nacimiento sea válida y con el formato: dd/mm/yyyy</li>
-					<li>Verifique que el correo electrónico sea uno válido</li>
 				</ul>
 			</div>
 			<?php endif; ?>
@@ -62,12 +61,6 @@
 					<label class="control-label">Teléfono</label>
 					<div class="controls">
 						<input type="text" class="input-xlarge" placeholder="Teléfono" name="phone">
-					</div>
-				</div>
-				<div class="control-group">
-					<label class="control-label">Correo electrónico</label>
-					<div class="controls">
-						<input type="text" class="input-xlarge" placeholder="Correo electrónico" name="email">
 					</div>
 				</div>
 				<div class="alert">

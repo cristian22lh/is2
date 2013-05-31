@@ -10,22 +10,13 @@
 			__redirect( '/turnos/crear?error=crear-turno' );
 		}
 		
-		// debo hacer un par de comprobaciones
-		// 1) no puedo crear un turno donde el medico
-		// no este disponible para ese dia y hora
-		$day = date( 'N', strtotime( $date ) );
-		$res = q_checkDoctorAvailability( array( $doctorID, $time, $time, $day ) );
-		// el medico no tiene tal horario
-		if( !count( $res ) ) {
-			__redirect( '/turnos/crear?error=crear-turno' );
-		}
-		
-		// 2) no puedo crear un turno mayor a 7 dias desde el dia actual
-		$diff = date_diff( date_create(), date_create( $date ) )->format( '%d' );
-		if( $diff < 0 || $diff > 7 ) {
-			__redirect( '/turnos/crear?error=crear-turno' );
-		}
-		
+		// internamente la base de datos hara las siguientes comprobaciones
+		// 1) si el doctor atiende en el dia, hora y fecha especificados
+		// 2) el turno no puede ser mayor a 7 dias delante del dia actual y 
+		//	tampoco una fecha anterior a la actual
+		// 3) que el medico soporte la obra social del paciente
+		// 4) que no exista una un turno YA registrado con la misma fecha, hora y idMedico
+		// 5) TODO: checkear medicos licencia
 		$insertId = $g_db->insert(
 			'
 				INSERT INTO 
