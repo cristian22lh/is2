@@ -258,6 +258,21 @@
 		'Sat' => 'Sábado',
 		'Sun' => 'Domingo'
 	);
+	// to translate date( 'M' ) to spanish
+	$MONTHNAME = array(
+		'Jan' => 'Enero',
+		'Feb' => 'Febrero',
+		'Mar' => 'Marzo',
+		'Apr' => 'Abril',
+		'May' => 'Mayo',
+		'Jun' => 'Junio',
+		'Jul' => 'Julio',
+		'Aug' => 'Agosto',
+		'Sep' => 'Septiembre',
+		'Oct' => 'Octubre',
+		'Nov' => 'Noviembre',
+		'Dec' => 'Diciembre'
+	);
 		
 // LOAD THE VIEW
 	__render( 
@@ -272,7 +287,8 @@
 			'appointments' => $appointments,
 			'doctors' => $doctors,
 			'persistValues' => $persistValues,
-			'DAYNAME' => $DAYNAME
+			'DAYNAME' => $DAYNAME,
+			'MONTHNAME' => $MONTHNAME
 		)
 	);
 

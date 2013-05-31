@@ -74,6 +74,23 @@
 		tr.is2-appointments-row td:last-child {
 			width: 215px;
 		}
+		tr.is2-appointments-monthbreak td {
+			background: #84d2db;
+			border-bottom: 1px solid #defcff;
+			border-top: 1px solid #fff;
+			font-weight: 600;
+			text-shadow: 0 -1px 0 #008494;
+			color: #fff;
+		}
+		tr.is2-appointments-monthbreak:not( :first-child ) td {
+			border-top: 0;
+		}
+		tr.is2-appointments-monthbreak td:nth-child( 3 ) {
+			text-align: right;
+		}
+		tr.is2-appointments-monthbreak td:nth-child( 4 ) {
+			text-align: left;
+		}
 		
 		.alert.is2-ajax-msg {
 			box-shadow: 0 1px 3px #eee;
@@ -268,20 +285,35 @@
 				<table class="table is2-grid">
 					<tbody>
 					<?php $currentDate = null; ?>
+					<?php $currentMonth = null ?>
+					
 					<?php foreach( $appointments as $appointment ): ?>
+					
 						<?php if( $appointment['fecha'] != $currentDate ): ?>
 							<?php $currentDate = $appointment['fecha']; ?>
-							<?php $d = strtotime( $currentDate ); ?>
-							<?php $dateLocale = date( 'd/m/Y', $d ); ?>
+							<?php $currentAppointmentDate = strtotime( $currentDate ); ?>
+							<?php $dateLocale = date( 'd/m/Y', $currentAppointmentDate ); ?>
 						<?php t_appointmentNewRow( date( 'd/m/Y', strtotime( $currentDate . ' previous day' ) ) ); ?>
+						<?php if( !$currentMonth || $currentMonth != date( 'm', $currentAppointmentDate ) ): ?>
+							<?php $currentMonth = date( 'm', $currentAppointmentDate ); ?>
+						<tr class="is2-appointments-monthbreak">
+							<td></td>
+							<td></td>
+							<td><?php echo $MONTHNAME[date( 'M', $currentAppointmentDate )]; ?></td>
+							<td><?php echo date( 'Y', $currentAppointmentDate );  ?></td>
+							<td></td>
+						</tr>
+						<?php endif; ?>
+						
 						<tr class="is2-appointments-dayrow" data-appointment-date="<?php echo $dateLocale; ?>">
-							<td><?php echo $DAYNAME[date( 'D', $d )] . ', ' . date( 'j', $d ); ?></td>
+							<td><?php echo $DAYNAME[date( 'D', $currentAppointmentDate )] . ', ' . date( 'j', $currentAppointmentDate ); ?></td>
 							<td><?php t_timeMenu(); ?></td>
 							<td></td>
 							<td></td>
 							<td><?php t_statusMenu(); ?></td>
 						</tr>
 						<?php endif; ?>
+						
 						<?php if( $appointment['hora'] ): ?>
 						<tr class="is2-appointments-row" data-appointment-id="<?php echo $appointment['id']; ?>" data-appointment-date="<?php echo $dateLocale; ?>" data-appontment-status="<?php echo $appointment['estado']; ?>">
 							<td>&nbsp;</td>
@@ -301,6 +333,7 @@
 							</td>
 						</tr>
 						<?php endif; ?>
+						
 					<?php endforeach; ?>
 						<?php t_appointmentNewRow( $dateLocale ); ?>
 					</tbody>
