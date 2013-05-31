@@ -469,7 +469,7 @@
 	};
 	
 	// POR FECHA
-	$( '.is2-date .is2-trigger-orderby' ).on( 'click', function( e ) {
+	$( '.is2-trigger-date' ).on( 'click', function( e ) {
 		// dont append the #
 		e.preventDefault();
 		var $el = $( this ),
@@ -500,10 +500,10 @@
 			orderedGridRows.push( $dayRow );
 			
 			var appointmentDate = $dayRow.attr( 'data-appointment-date' );
-			// pido los turnos respectivos
-			orderedGridRows.push( $( 'tr.is2-appointments-row[data-appointment-date="' + appointmentDate + '"]' ) );
-			// pido su newrow
-			orderedGridRows.push( $( 'tr.is2-appointments-newrow[data-appointment-date="' + appointmentDate + '"]' ) );
+			// pido los turnos respectivos y la newrow
+			orderedGridRows.push( 
+				$( 'tr.is2-appointments-row[data-appointment-date="' + appointmentDate + '"], tr.is2-appointments-newrow[data-appointment-date="' + appointmentDate + '"]' )
+			);
 		};
 		
 		// ordeno los meses
@@ -522,9 +522,9 @@
 		
 		$( '.is2-appointments-newrow:first' ).after( orderedGridRows );
 	} );
-	
+
 	// POR HORA
-	$( '.is2-grid' ).delegate( '.is2-time .is2-trigger-orderby', 'click', function( e ) {
+	$( '.is2-grid' ).delegate( '.is2-trigger-time', 'click', function( e ) {
 		// dont append the #
 		e.preventDefault();
 		var $el = $( this ),
@@ -540,27 +540,23 @@
 		
 		var $cells = $( 'tr[data-appointment-date="' + $row.attr( 'data-appointment-date' ) + '"]:not( :first ) td.is2-appointment-time' ),
 			i = 0, l = $cells.length,
-			times = [], time,
-			tree = new BinaryTree();
+			timeTree = new BinaryTree();
 			
 		if( l > 1 ) {
 			for( ; i < l; i++ ) {
 				$cell = $cells.eq( i );
-				time = $cell.html().replace( ':', '' ) - 0;
-				tree.add( time, $cell.parent() );
+				timeTree.add( $cell.html().replace( ':', '' ) - 0, $cell.parent() );
 			}
 
 			if( orderBy === 'asc' ) {
-				tree.walkAsc( reorderRows );
+				timeTree.walkAsc( reorderRows );
 			} else {
-				tree.walkDesc( reorderRows );
+				timeTree.walkDesc( reorderRows );
 			}
 		}
 	
-	} );
-	
 	// POR ESTADO
-	$( '.is2-grid' ).delegate( '.is2-trigger-status', 'click', function( e ) {
+	} ).delegate( '.is2-trigger-status', 'click', function( e ) {
 		// dont append the #
 		e.preventDefault();
 		var $el = $( this ),
@@ -570,7 +566,7 @@
 			
 		while( ( $target = $target.parent() ).length && !$target.hasClass( 'is2-appointments-dayrow' ) );
 
-		var $rows =$( 'tr[data-appointment-date="' + $target.attr( 'data-appointment-date' ) + '"]:not( :first )' ), $row,
+		var $rows =$( 'tr.is2-appointments-row[data-appointment-date="' + $target.attr( 'data-appointment-date' ) + '"]' ), $row,
 			i = 0, l = $rows.length,
 			rows = [];
 	
