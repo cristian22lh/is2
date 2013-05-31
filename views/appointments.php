@@ -293,10 +293,10 @@
 							<?php $currentDate = $appointment['fecha']; ?>
 							<?php $currentAppointmentDate = strtotime( $currentDate ); ?>
 							<?php $dateLocale = date( 'd/m/Y', $currentAppointmentDate ); ?>
-						<?php t_appointmentNewRow( date( 'd/m/Y', strtotime( $currentDate . ' previous day' ) ) ); ?>
+						<?php t_appointmentNewRow( date( 'd/m/Y',  strtotime( $currentDate . ' previous day' ) ) ); ?>
 						<?php if( !$currentMonth || $currentMonth != date( 'm', $currentAppointmentDate ) ): ?>
 							<?php $currentMonth = date( 'm', $currentAppointmentDate ); ?>
-						<tr class="is2-appointments-monthbreak">
+						<tr class="is2-appointments-monthbreak" data-appointment-group="<?php echo $currentMonth; ?>">
 							<td></td>
 							<td></td>
 							<td><?php echo $MONTHNAME[date( 'M', $currentAppointmentDate )]; ?></td>
@@ -305,7 +305,7 @@
 						</tr>
 						<?php endif; ?>
 						
-						<tr class="is2-appointments-dayrow" data-appointment-date="<?php echo $dateLocale; ?>">
+						<tr class="is2-appointments-dayrow" data-appointment-date="<?php echo $dateLocale; ?>" data-appointment-group="<?php echo $currentMonth; ?>" data-appointment-timestamp="<?php echo $currentAppointmentDate; ?>">
 							<td><?php echo $DAYNAME[date( 'D', $currentAppointmentDate )] . ', ' . date( 'j', $currentAppointmentDate ); ?></td>
 							<td><?php t_timeMenu(); ?></td>
 							<td></td>
@@ -420,76 +420,120 @@
 	} );
 	
 // *** ACA PARA CUANDO SORTEO LA GRID *** //
+	// LO NECESITO PARA ORDERNAR POR HORA Y POR FECHA
+	var BinaryTree = function() {};
+	BinaryTree.prototype = {
+		add: function( key, data ) {
+			if( !this.key ) {
+				this.key = key;
+				// es un array por el tema de los repetidos
+				this.data = [ data ];
+				this.left = null;
+				this.right = null;
+				
+			} else if( this.key > key ) {
+				if( !this.left ) { 
+					this.left = new BinaryTree();
+				}
+				this.left.add( key, data );
+				
+			} else if( this.key < key ) {
+				if( !this.right ) {
+					this.right = new BinaryTree();
+				}
+				this.right.add( key, data );
+				
+			} else {
+				// repetidos cuentan
+				this.data.push( data );
+			}
+		},
+		walkAsc: function( callback ) {
+			if( this.key ) {
+				this.walkAsc.call( this.left, callback );
+				while( this.data.length ) {
+					callback( this.key, this.data.shift() );
+				}
+				this.walkAsc.call( this.right, callback );
+			}
+		},
+		walkDesc: function( callback ) {
+			if( this.key ) {
+				this.walkDesc.call( this.right, callback );
+				while( this.data.length ) {
+					callback( this.key, this.data.shift() );
+				}
+				this.walkDesc.call( this.left, callback );
+			}
+		}
+	};
+	
 	// POR FECHA
 	$( '.is2-date .is2-trigger-orderby' ).on( 'click', function( e ) {
 		// dont append the #
 		e.preventDefault();
 		var $el = $( this ),
 			orderBy = $el.attr( 'data-orderby' ),
-			res = getQueryString();
-			
-		window.location = '/turnos?' + ( res.length ? res.join( '&' ) + '&' : '' ) + 'fecha=' + orderBy;
-	} );
+			monthsTree = new BinaryTree(),
+			daysTree = new BinaryTree(),
+			orderedGridRows = [];
 
-	// LO NECESIT PARA ORDERNAR POR HORA
-	var BinaryTree = function() {
-	};
-	BinaryTree.prototype = {
-		add: function( data ) {
-			if( !this.key ) {
-				this.key = data.key;
-				// es un array por el tema de los repetidos
-				this.data = [ data.data ];
-				this.left = null;
-				this.right = null;
-				
-			} else if( this.key > data.key ) {
-				if( !this.left ) { 
-					this.left = new BinaryTree();
-				}
-				this.left.add( data );
-				
-			} else if( this.key < data.key ) {
-				if( !this.right ) {
-					this.right = new BinaryTree();
-				}
-				this.right.add( data );
-				
+		var makeDaysTree = function( key, $monthRow ) {
+			var $daysRow = $( 'tr.is2-appointments-dayrow[data-appointment-group=' + $monthRow.attr( 'data-appointment-group' ) + ']' ), $dayRow,
+				i = 0, l = $daysRow.length;
+			
+			orderedGridRows.push( $monthRow );
+			// orderno los dias
+			for( ; i < l; i++ ) {
+				$dayRow = $daysRow.eq( i );
+				daysTree.add( $dayRow.attr( 'data-appointment-timestamp' ), $dayRow );
+			}
+			
+			if( orderBy === 'asc' ) {
+				daysTree.walkAsc( orderDays );
 			} else {
-				// repetidos cuentan
-				this.data.push( data.data );
+				daysTree.walkDesc( orderDays );
 			}
-		},
-		walkAsc: function( callback ) {
-			if( this.key ) {
-				this.walkAsc.call( this.right, callback );
-				while( this.data.length ) {
-					callback( this.data.shift() );
-				}
-				this.walkAsc.call( this.left, callback );
-			}
-		},
-		walkDesc: function( callback ) {
-			if( this.key ) {
-				this.walkDesc.call( this.left, callback );
-				while( this.data.length ) {
-					callback( this.data.shift() );
-				}
-				this.walkDesc.call( this.right, callback );
-			}
+		};
+		
+		var orderDays = function( key, $dayRow  ) {
+			orderedGridRows.push( $dayRow );
+			
+			var appointmentDate = $dayRow.attr( 'data-appointment-date' );
+			// pido los turnos respectivos
+			orderedGridRows.push( $( 'tr.is2-appointments-row[data-appointment-date="' + appointmentDate + '"]' ) );
+			// pido su newrow
+			orderedGridRows.push( $( 'tr.is2-appointments-newrow[data-appointment-date="' + appointmentDate + '"]' ) );
+		};
+		
+		// ordeno los meses
+		$( 'tr.is2-appointments-monthbreak' ).each( function() {
+			var $row = $( this );
+			monthsTree.add( $row.attr( 'data-appointment-group' ), $row );
+		} );
+		
+		// pido los dias de los meses
+		if( orderBy === 'asc' ) {
+			// pido sus dias respectivos
+			monthsTree.walkAsc( makeDaysTree );
+		} else {
+			monthsTree.walkDesc( makeDaysTree );
 		}
-	};
+		
+		$( '.is2-appointments-newrow:first' ).after( orderedGridRows );
+	} );
 	
 	// POR HORA
 	$( '.is2-grid' ).delegate( '.is2-time .is2-trigger-orderby', 'click', function( e ) {
+		// dont append the #
 		e.preventDefault();
 		var $el = $( this ),
 			orderBy = $el.attr( 'data-orderby' ),
 			$row = $el,
 			$cells;
 			
-		var reorderRows = function( $el ) {
-			$row = $row.after( $el );
+		var reorderRows = function( key, $el ) {
+			$row = $row.after( $el ).next();
 		};
 
 		while( ( $row = $row.parent() ).length && !$row.hasClass( 'is2-appointments-dayrow' ) );
@@ -503,7 +547,7 @@
 			for( ; i < l; i++ ) {
 				$cell = $cells.eq( i );
 				time = $cell.html().replace( ':', '' ) - 0;
-				tree.add( { key: time, data: $cell.parent() } );
+				tree.add( time, $cell.parent() );
 			}
 
 			if( orderBy === 'asc' ) {
@@ -517,6 +561,7 @@
 	
 	// POR ESTADO
 	$( '.is2-grid' ).delegate( '.is2-trigger-status', 'click', function( e ) {
+		// dont append the #
 		e.preventDefault();
 		var $el = $( this ),
 			fieldValue = $el.attr( 'data-field-value' ),
@@ -543,24 +588,7 @@
 			}
 		}
 	} );
-	
-	var getQueryString = function() {
-		// tiro un redirect
-		var queryString = window.location.search.replace( /^\?/, '' ),
-			segs = queryString ? queryString.split( '&' ) : [], seg,
-			pat = /(?:fecha=(?:asc|desc)|(?:exito|error)=[^$]+)/,
-			res = [];
-		
-		while( segs.length ) {
-			seg = segs.shift();
-			if( !pat.test( seg ) ) {
-				res.push( seg );
-			}
-		}
-		
-		return res;
-	};
-	
+
 // *** ACA PARA LA BUSQUEDA DE TURNOS *** //
 	$( '.datepicker' ).datepicker( {
 		format: 'dd/mm/yyyy',

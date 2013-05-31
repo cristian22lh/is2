@@ -1,21 +1,12 @@
 <?php
 
-// ESTA PARTE ES CUANDO SE ESTA FILTRANDO LOS TURNOS MEDIANTE LAS COLUMNAS DE LA GRID
-	$orderByClause = array();
-	// usada para mostrar turnos segun su estado
-	$statusValue = false;
-	// me fijo si la grid esta siendo ordenado por algun tipo de orden
-	if( __issetGETField( 'fecha', 'desc' ) ) {
-		$orderByClause[] = 'fecha DESC';
-	} else {
-		$orderByClause[] = 'fecha ASC';
-	}
-	$orderByClause[] = 'hora ASC';
-
 // ACA CONSTRUYO EL WHERE DE MI QUERY
 	$replacements = array();
 	$whereClause = array();
 	$isLimitClause = false;
+	// usada para mostrar turnos segun su estado, por defecto se muestran
+	// todos , pero esto puede cambiar cuando se hace una busqueda avanazada
+	$statusValue = false;
 	// aca voy a guardar los parametros de busqueda (fecha, hora, etc)
 	// para luego utilizarlo para rellenar el formulario de busqueda
 	$persistValues = array(
@@ -222,8 +213,8 @@
 			) AS 
 				appointments
 			ORDER BY
-			' .
-				implode( ' , ', $orderByClause )
+				fecha ASC, hora ASC
+			'
 			,
 			array_merge( $dummyReplacements, $replacements )
 		);

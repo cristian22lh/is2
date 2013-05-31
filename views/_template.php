@@ -39,7 +39,7 @@
 		require './views/_appointments.status.menu.php';
 	}
 	
-	function t_appointmentNewRow( $dateLocale ) {
+	function t_appointmentNewRow( $appointmentDateLocale ) {
 		require './views/_appointments.row.new.php';
 	}
 
