@@ -27,7 +27,7 @@
 			',
 			array( $lastName, $firstName, $gender, $dni, $birthDate, $phone, $insuranceID, $insuranceNumber )
 		);
-		die;
+
 		if( !$insertId ) {
 			__redirect( '/pacientes/crear?error=crear-paciente' );
 		}
