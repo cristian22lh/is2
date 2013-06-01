@@ -24,7 +24,7 @@ CREATE TABLE turnos(
 	fecha DATE,
 	hora TIME,
 	idMedico INTEGER NULL,
-	idPaciente INTEGER NULL ,
+	idPaciente INTEGER NULL,
 	estado ENUM( 'confirmado', 'cancelado', 'esperando' ) DEFAULT 'esperando',
 	UNIQUE INDEX( fecha,  hora, idMedico )
 ) ENGINE=InnoDB;
@@ -163,7 +163,7 @@ CREATE TABLE especialidades(
 ) ENGINE=InnoDB;
 
 INSERT INTO especialidades VALUES
-	( null, '---' ),
+	( null, 'Sin asignar' ),
 	( null, 'Otorrinolaringología' ),
 	( null, 'Odontología' ),
 	( null, 'Nefrología' ),
@@ -209,9 +209,10 @@ CREATE TRIGGER turnos_insertarTurno
 		DECLARE daysCount INTEGER;
 	
 		/**
-		* ESTE TRIGER SE FIJA SI TAL DIA A TAL HORARIO TAL MEDICO ES UNA FECHA
-		* NO CONFUNDIR CON ESTAR DISPONIBLE, EN ESTE CASO, LA CONSTRAINT 
-		* UNIQUE( idMedico, fecha, hora ) DE turnos SE ENCARGARA DE ESTO
+		* ESTE TRIGER SE FIJA SI TAL DIA A TAL HORARIO TAL MEDICO ATIENDE
+		* NO CONFUNDIR CON ESTAR DISPONIBLE (QUE NO TENGA OTRO TURNO), 
+		* EN ESTE CASO, LA CONSTRAINT UNIQUE( idMedico, fecha, hora ) 
+		* DE turnos SE ENCARGARA DE ESTO
 		*/
 		SELECT DAYOFWEEK( NEW.fecha ) INTO dayNameIndex;
 		IF ( 
