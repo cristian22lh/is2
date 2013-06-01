@@ -51,7 +51,7 @@
 			text-decoration: line-through;
 		}
 		tr.is2-appointments-dayrow td {
-			background: #f1f1f1 !important;
+			background: #f1f1f1;
 			font-weight: 600;
 			color: #555;
 			text-shadow: 0 -1px 0 #fff;
@@ -300,7 +300,7 @@
 							<td></td>
 							<td></td>
 							<td><?php echo $MONTHNAME[date( 'M', $currentAppointmentDate )]; ?></td>
-							<td><?php echo date( 'Y', $currentAppointmentDate );  ?></td>
+							<td><?php echo date( 'Y', $currentAppointmentDate ); ?></td>
 							<td></td>
 						</tr>
 						<?php endif; ?>
@@ -538,7 +538,8 @@
 
 		while( ( $row = $row.parent() ).length && !$row.hasClass( 'is2-appointments-dayrow' ) );
 		
-		var $cells = $( 'tr[data-appointment-date="' + $row.attr( 'data-appointment-date' ) + '"]:not( :first ) td.is2-appointment-time' ),
+		// hay que buscar los times especificos de la $row
+		var $cells = $( 'tr.is2-appointments-row[data-appointment-date="' + $row.attr( 'data-appointment-date' ) + '"] td.is2-appointment-time' ),
 			i = 0, l = $cells.length,
 			timeTree = new BinaryTree();
 			
@@ -621,20 +622,20 @@
 		var $row = $( 'tr[data-appointment-id=' + id + ']' ),
 			status;
 	
-		$( 'td:last-child[data-appointment-id=' + id + '] > *' ).hide();
+		$row.find( 'td:last-child > *' ).hide();
 	
 		if( type === 'restore' ) {
-			$( 'div[data-appointment-id=' + id + ']' ).show();
+			$row.find( 'div' ).show();
 			status = 'esperando';
 			
 		} else if( type === 'confirm' ) {
-			$( 'button.btn-success[data-appointment-id=' + id + ']' ).show();
-			$( '.is2-trigger-restore[data-appointment-id=' + id + ']' ).show();
+			$row.find( 'button.btn-success' ).show();
+			$row.find( '.is2-trigger-restore' ).show();
 			status = 'confirmado';
 			
 		} else if( type === 'cancel' ) {
-			$( 'button.btn-warning[data-appointment-id=' + id + ']' ).show();
-			$( '.is2-trigger-restore[data-appointment-id=' + id + ']' ).show();
+			$row.find( 'button.btn-warning' ).show();
+			$row.find( '.is2-trigger-restore' ).show();
 			status = 'cancelado';
 		
 		} else if( type === 'remove' ) {
