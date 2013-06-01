@@ -3,18 +3,21 @@ SET NAMES 'utf8';
 DROP DATABASE IF EXISTS is2;
 CREATE DATABASE is2 CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 USE is2;
---##########
---##########
+/**
+*
+*/
 DROP TABLE IF EXISTS usuarios;
 CREATE TABLE usuarios(
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
-	usuario VARCHAR( 255 ) UNIQUE,
-	clave CHAR( 40 )
+	usuario VARCHAR( 255 ),
+	clave CHAR( 40 ),
+	UNIQUE INDEX( usuario )
 );
 
 INSERT INTO usuarios VALUES( null, 'admin', SHA( 123456 ) ), ( null, 'root', SHA( 123456 ) );
---##########
---##########
+/**
+*
+*/
 DROP TABLE IF EXISTS turnos;
 CREATE TABLE turnos(
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -22,22 +25,23 @@ CREATE TABLE turnos(
 	hora TIME,
 	idMedico INTEGER NULL,
 	idPaciente INTEGER NULL ,
-	estado ENUM( 'confirmado', 'cancelado', 'esperando' ),
+	estado ENUM( 'confirmado', 'cancelado', 'esperando' ) DEFAULT 'esperando',
 	UNIQUE INDEX( fecha,  hora, idMedico )
 ) ENGINE=InnoDB;
 
 INSERT INTO turnos VALUES
-	( null, CURRENT_DATE(), '15:30:00', 1, 1, 'esperando' ),
-	( null, DATE_ADD( CURRENT_DATE(), INTERVAL 1 DAY ), '15:30:00', 2, 2, 'cancelado' ),
-	( null, DATE_ADD( CURRENT_DATE(), INTERVAL 2 DAY ), '18:00:00', 3, 3, 'esperando' ),
-	( null, DATE_ADD( CURRENT_DATE(), INTERVAL 3 DAY ), '13:15:00', 4, 4, 'confirmado' ),
-	( null, DATE_ADD( CURRENT_DATE(), INTERVAL 4 DAY ), '09:40:00', 5, 5, 'esperando' ),
-	( null, DATE_ADD( CURRENT_DATE(), INTERVAL 5 DAY ), '18:15:00', 6, 6, 'cancelado' ),
-	( null, DATE_ADD( CURRENT_DATE(), INTERVAL 6 DAY ), '19:00:00', 7, 7, 'cancelado' ),
-	( null, DATE_ADD( CURRENT_DATE(), INTERVAL 7 DAY ), '11:45:00', 8, 8, 'confirmado' )
+( null, CURRENT_DATE(), '15:30:00', 1, 1, 'esperando' ),
+( null, DATE_ADD( CURRENT_DATE(), INTERVAL 1 DAY ), '15:30:00', 2, 2, 'cancelado' ),
+( null, DATE_ADD( CURRENT_DATE(), INTERVAL 2 DAY ), '18:00:00', 3, 3, 'esperando' ),
+( null, DATE_ADD( CURRENT_DATE(), INTERVAL 3 DAY ), '13:15:00', 4, 4, 'confirmado' ),
+( null, DATE_ADD( CURRENT_DATE(), INTERVAL 4 DAY ), '09:40:00', 5, 5, 'esperando' ),
+( null, DATE_ADD( CURRENT_DATE(), INTERVAL 5 DAY ), '18:15:00', 6, 6, 'cancelado' ),
+( null, DATE_ADD( CURRENT_DATE(), INTERVAL 6 DAY ), '19:00:00', 7, 7, 'cancelado' ),
+( null, DATE_ADD( CURRENT_DATE(), INTERVAL 7 DAY ), '11:45:00', 8, 8, 'confirmado' )
 ;
---##########
---##########
+/**
+*
+*/
 DROP TABLE IF EXISTS medicos;
 CREATE TABLE medicos(
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -57,8 +61,9 @@ INSERT INTO medicos VALUES
 	( null, 7, 'Patricia', 'Velásquez', '122434/21' ),
 	( null, 8, 'María Marta', 'Suárez', '122434/21' )
 ;
---##########
---##########
+/**
+*
+*/
 DROP TABLE IF EXISTS horarios;
 CREATE TABLE horarios(
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -74,12 +79,13 @@ INSERT INTO horarios VALUES
 	( null, 3, '08:00:00', '20:00:00', 3 ),
 	( null, 4, '15:00:00', '20:00:00', 5 ),
 	( null, 5, '15:00:00', '19:00:00', 6 ),
-	( null, 6, '16:00:00', '18:00:00', 4 ),
+	( null, 6, '16:00:00', '19:00:00', 4 ),
 	( null, 7, '08:00:00', '13:00:00', 1 ),
-	( null, 8, '09:00:00', '14:00:00', 2 )
+	( null, 8, '09:00:00', '14:00:00', 7 )
 ;
---##########
---##########
+/**
+*
+*/
 DROP TABLE IF EXISTS medicosObrasSociales;
 CREATE TABLE medicosObrasSociales(
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -105,40 +111,33 @@ INSERT INTO medicosObrasSociales VALUES
 	( null, 7, 2 ),
 	( null, 8, 2 )
 ;
---##########
---##########
+/**
+*
+*/
 DROP TABLE IF EXISTS pacientes;
 CREATE TABLE pacientes(
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
 	apellidos VARCHAR( 100 ),
 	nombres VARCHAR( 100 ),
 	sexo ENUM( 'F', 'M' ),
-	dni VARCHAR( 20 ) UNIQUE,
+	dni VARCHAR( 20 ),
 	fechaNacimiento DATE,
 	telefono VARCHAR( 100 ),
 	idObraSocial INTEGER NULL,
-	nroAfiliado VARCHAR( 255 ) NULL
+	nroAfiliado VARCHAR( 255 ) NULL,
+	UNIQUE INDEX( dni )
 ) ENGINE=InnoDB;
 
---## REFERS TO TO FILE patients.sql TO POPULATE THIS TABLE WITH 1000 PATIENTS
-INSERT INTO pacientes VALUES
-	( null, 'Ivan', 'Gómez', 'M', 1, '1947-10-10', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), 1, MD5( RAND() ) ),
-	( null, 'Damián', 'Antúnez', 'M', 2, '1949-03-30', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), 2, MD5( RAND() ) ),
-	( null, 'Federico', 'López', 'M', 3, '1951-11-01', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), 2, MD5( RAND() ) ),
-	( null, 'Fabián', 'Meléndez', 'M', 4, '1951-01-12', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), 1, MD5( RAND() ) ),
-	( null, 'José', 'Fagúndez', 'M', 5, '1945-06-24', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), 1, MD5( RAND() ) ),
-	( null, 'María Clara', 'Cortéz', 'F', 6, '1951-04-05', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), 2, MD5( RAND() ) ),
-	( null, 'Maria Laura', 'Valdéz', 'F', 7, '1950-12-12', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), 2, MD5( RAND() ) ),
-	( null, 'Marina', 'Chávez', 'F', 8, '1947-05-24', CONCAT( 4, FLOOR( RAND() * 1000000 ) ), 3, MD5( RAND() ) )
-;
-
---##########
---##########
+LOAD DATA LOCAL INFILE "./_1000_patients.sql" INTO TABLE pacientes;
+/**
+*
+*/
 DROP TABLE IF EXISTS obrasSociales;
 CREATE TABLE obrasSociales(
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
-	nombreCorto VARCHAR( 255 ) UNIQUE,
-	nombreCompleto TEXT
+	nombreCorto VARCHAR( 255 ),
+	nombreCompleto TEXT,
+	UNIQUE INDEX( nombreCorto )
 ) ENGINE=InnoDB;
 	
 INSERT INTO obrasSociales VALUES
@@ -153,12 +152,14 @@ INSERT INTO obrasSociales VALUES
 	( null, 'FERMALINK', 'FERMALINK' ),
 	( null, 'ASET', 'ASET' )
 ;
---##########
---##########
+/**
+*
+*/
 DROP TABLE IF EXISTS especialidades;
 CREATE TABLE especialidades(
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
-	nombre VARCHAR( 255 ) UNIQUE
+	nombre VARCHAR( 255 ),
+	UNIQUE INDEX( nombre )
 ) ENGINE=InnoDB;
 
 INSERT INTO especialidades VALUES
@@ -172,10 +173,18 @@ INSERT INTO especialidades VALUES
 	( null, 'Pediatría' ),
 	( null, 'Psiquiatría' )
 ;
---##########
---##########
---## AHORA LAS REFERENCES
---##########
+
+/**
+*
+*/
+SOURCE ./_100_appointments.sql;
+/**
+*
+*/
+
+/**
+* AHORA LAS REFERENCES
+*/
 ALTER TABLE turnos
 	ADD CONSTRAINT turnos_idMedico
 	FOREIGN KEY( idMedico )
@@ -195,13 +204,15 @@ CREATE TRIGGER turnos_insertarTurno
 	BEFORE INSERT ON turnos
 	FOR EACH ROW
 	BEGIN
-		--## MIS VARIABLES
+		/** MIS VARIABLES */
 		DECLARE dayNameIndex INTEGER;
 		DECLARE daysCount INTEGER;
 	
-		--## ESTE TRIGER SE FIJA SI TAL DIA A TAL HORARIO TAL MEDICO ES UNA FECHA
-		--## NO CONFUNDIR CON ESTAR DISPONIBLE, EN ESTE CASO, LA CONSTRAINT 
-		--## UNIQUE( idMedico, fecha, hora ) DE turnos SE ENCARGARA DE ESTO
+		/**
+		* ESTE TRIGER SE FIJA SI TAL DIA A TAL HORARIO TAL MEDICO ES UNA FECHA
+		* NO CONFUNDIR CON ESTAR DISPONIBLE, EN ESTE CASO, LA CONSTRAINT 
+		* UNIQUE( idMedico, fecha, hora ) DE turnos SE ENCARGARA DE ESTO
+		*/
 		SELECT DAYOFWEEK( NEW.fecha ) INTO dayNameIndex;
 		IF ( 
 			SELECT
@@ -218,7 +229,7 @@ CREATE TRIGGER turnos_insertarTurno
 			CALL medico_no_antiende_fecha_hora_requerido;
 		END IF;
 		
-		--## UN TURNO NO PUEDE SER MAYOR AL DIA PRESENTE EN 7 DIAS HACIA DELANTE
+		/** UN TURNO NO PUEDE SER MAYOR AL DIA PRESENTE EN 7 DIAS HACIA DELANTE */
 		SELECT DATEDIFF( NEW.fecha, CURRENT_DATE() ) INTO daysCount;
 		IF daysCount > 7 THEN
 			CALL turno_fecha_mayor_siete_dias;
@@ -226,7 +237,7 @@ CREATE TRIGGER turnos_insertarTurno
 			CALL turno_fecha_negativo;
 		END IF;
 		
-		--## HAY QUE CHECKEAR QUE EL MEDICO SOPORTE LA OBRA SOCIAL DEL PACIENTE
+		/** HAY QUE CHECKEAR QUE EL MEDICO SOPORTE LA OBRA SOCIAL DEL PACIENTE */
 		IF (
 			SELECT
 				p.id
@@ -242,8 +253,10 @@ CREATE TRIGGER turnos_insertarTurno
 			CALL medico_no_soporta_obra_social_paciente;
 		END IF;
 		
-		--## SI YA EXISTE UN TURNO CON EL MISMO MEDICO, FECHA Y HORA
-		--## LA CONSTRAINT UNIQUE( idMedico, fecha, hora ) WILL TAKE CARE OF THIS
+		/**
+		* SI YA EXISTE UN TURNO CON EL MISMO MEDICO, FECHA Y HORA
+		* LA CONSTRAINT UNIQUE( idMedico, fecha, hora ) WILL TAKE CARE OF THIS
+		*/
 	END;
 $$
 DELIMITER ;
@@ -252,7 +265,7 @@ ALTER TABLE horarios
 	ADD CONSTRAINT horarios_idMedico
 	FOREIGN KEY( idMedico )
 		REFERENCES medicos( id )
-		ON DELETE CASCADE
+		ON DELETE RESTRICT
 ;
 
 ALTER TABLE pacientes

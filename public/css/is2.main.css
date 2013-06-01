@@ -1,5 +1,9 @@
 body {
 	background-color: #eee;
+	font-family: Scada,"Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+input, button, select, textarea {
+	font-family: Scada,"Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 .container {
 	width: 940px;

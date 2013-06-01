@@ -34,6 +34,10 @@
 			right: 0;
 			left: inherit;
 		}
+		.btn-inverse .dropdown-toggle .caret {
+			border-bottom-color: #000;
+			border-top-color: #000;
+		}
 
 		.is2-search-trigger {
 			float: right;
@@ -285,7 +289,7 @@
 				<table class="table is2-grid">
 					<tbody>
 					<?php $currentDate = null; ?>
-					<?php $currentMonth = null ?>
+					<?php $currentMonth = null; ?>
 					
 					<?php foreach( $appointments as $appointment ): ?>
 					
@@ -351,7 +355,7 @@
 		<form id="is2-modal-confirm" class="modal hide fade">
 			<div class="modal-body">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<span><strong>¿Estás seguro que confirmar el turno?</strong></span>
+				<strong>¿Estás seguro que desea confirmar el turno?</strong>
 			</div>
 			<div class="modal-footer">
 				<span class="is2-preloader is2-preloader-bg pull-left is2-preloader-confirm"></span>
@@ -364,7 +368,7 @@
 		<form id="is2-modal-cancel" class="modal hide fade">
 			<div class="modal-body">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<span><strong>¿Estás seguro que desea cancelar el turno?</strong></span>
+				<strong>¿Estás seguro que desea cancelar el turno?</strong>
 			</div>
 			<div class="modal-footer">
 				<span class="is2-preloader is2-preloader-bg pull-left is2-preloader-cancel"></span>
@@ -377,7 +381,7 @@
 		<form id="is2-modal-remove" class="modal hide fade">
 			<div class="modal-body">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<span><strong>¿Estás seguro que desea borrar el turno?</strong></span>
+				<strong>¿Estás seguro que desea borrar el turno?</strong>
 			</div>
 			<div class="modal-footer">
 				<span class="is2-preloader is2-preloader-bg pull-left is2-preloader-remove"></span>
@@ -390,7 +394,7 @@
 		<form id="is2-modal-restore" class="modal hide fade">
 			<div class="modal-body">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<span><strong>¿Estás seguro que desea que el turno vuelva a su estado original?</strong></span>
+				<strong>¿Estás seguro que desea que el turno vuelva a su estado original?</strong>
 			</div>
 			<div class="modal-footer">
 				<span class="is2-preloader is2-preloader-bg pull-left is2-preloader-restore"></span>

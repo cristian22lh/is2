@@ -1,58 +1,128 @@
+/**
+*
+* PARA QUE ESTE SCRIPT FUNCIONES LOS MEDICOS DEBE ATENDER TODOS LOS DIAS
+* DEBE HABER 7 PACIENTES QUE SOPORTEN LA OBRA SOCIAL ID = 1 (LIBRE)
+*
+*/
 SET NAMES 'utf8';
---## ESTO LO HAGO PARA TESTAR LA FUNCIONALIDAD BUSQUEDA RAPIDA DE TURNOS
 USE is2;
-
-INSERT INTO
-	turnos
-VALUES
-( null, '2013-10-10', '15:30:10', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:11', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:12', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:13', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:14', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:15', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:16', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:17', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:18', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:19', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:20', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:21', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:22', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:23', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:24', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:25', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:26', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:27', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:28', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:29', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:30', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:31', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:32', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:33', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:34', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:35', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:36', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:37', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:38', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:39', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:40', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:41', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:42', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:43', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:44', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:45', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:46', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:47', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:48', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:49', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:50', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:51', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:52', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:53', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:54', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:55', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:56', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:57', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:58', 1, 1, 'esperando' ),
-( null, '2013-10-10', '15:30:59', 1, 1, 'esperando' )
-;
+/**
+*
+*/
+TRUNCATE TABLE turnos;
+/**
+*
+*/
+DROP FUNCTION IF EXISTS getDayNameIndex;
+DELIMITER $$
+CREATE FUNCTION getDayNameIndex( offset INTEGER )
+RETURNS INTEGER
+BEGIN
+	DECLARE today INTEGER;
+	SELECT DAYOFWEEK( ADDDATE( CURRENT_DATE(), INTERVAL offset DAY ) ) INTO today;
+	SELECT IF( today = 1, 7, today - 1 ) INTO today;
+	RETURN today;
+END$$
+DELIMITER ;
+/**
+*/
+DROP FUNCTION IF EXISTS getPatientWithNonInsurance;
+DELIMITER $$
+CREATE FUNCTION getPatientWithNonInsurance( avoidThisPatientID INTEGER )
+RETURNS INTEGER
+BEGIN
+	DECLARE idPatient INTEGER;
+	SELECT id FROM pacientes WHERE idObraSocial = 1 AND id > avoidThisPatientID LIMIT 1 INTO idPatient;
+	RETURN idPatient;
+END $$
+DELIMITER ;
+/**
+*/
+DROP FUNCTION IF EXISTS getDoctorIDBasedOnADayNameIndex;
+DELIMITER $$
+CREATE FUNCTION getDoctorIDBasedOnADayNameIndex( dayNameIndex INTEGER )
+RETURNS INTEGER
+BEGIN
+	DECLARE doctorID INTEGER;
+	SELECT m.id FROM medicos AS m INNER JOIN horarios AS h ON h.idMedico = m.id WHERE h.dia = dayNameIndex LIMIT 1 INTO doctorID;
+	RETURN doctorID;
+END $$
+DELIMITER ;
+/**
+*/
+DROP FUNCTION IF EXISTS getDoctorEntryTimeWithID;
+DELIMITER $$
+CREATE FUNCTION getDoctorEntryTimeWithID( doctorID INTEGER )
+RETURNS TIME
+BEGIN
+	DECLARE entryTime TIME;
+	SELECT h.horaIngreso FROM medicos AS m INNER JOIN horarios AS h ON h.idMedico = m.id WHERE m.id = doctorID LIMIT 1 INTO entryTime;
+	RETURN entryTime;
+END $$
+DELIMITER ;
+/**
+*/
+DROP FUNCTION IF EXISTS getAppointmentDate;
+DELIMITER $$
+CREATE FUNCTION getAppointmentDate( offset INTEGER )
+RETURNS DATE
+BEGIN
+	DECLARE appointmentDate DATE;
+	SELECT ADDDATE( CURRENT_DATE(), INTERVAL offset DAY ) INTO appointmentDate;
+	RETURN appointmentDate;
+END $$
+DELIMITER ;
+/**************************************************************/
+/**************************************************************/
+/**************************************************************/
+DROP PROCEDURE IF EXISTS insertAppointmentsForTheCurrentWeek;
+DELIMITER $$
+CREATE PROCEDURE insertAppointmentsForTheCurrentWeek()
+BEGIN
+	DECLARE patientID INTEGER DEFAULT 0;
+	DECLARE doctorID INTEGER;
+	DECLARE entryTime TIME;
+	DECLARE appointmentDate DATE;
+	
+	DECLARE currentDayIndex INTEGER DEFAULT 0;
+	DECLARE currentDateNumber INTEGER DEFAULT 0;
+	DECLARE daysCount INTEGER DEFAULT 7;
+	
+	theLoop: LOOP
+		SELECT getPatientWithNonInsurance( (SELECT patientID) ) INTO patientID;
+		
+		SELECT getDoctorIDBasedOnADayNameIndex( getDayNameIndex( (SELECT currentDayIndex) ) ) INTO doctorID;
+		SELECT currentDayIndex + 1 INTO currentDayIndex;
+		
+		SELECT getDoctorEntryTimeWithID( (SELECT doctorID) ) INTO entryTime;
+		
+		SELECT getAppointmentDate( (SELECT currentDateNumber) ) INTO appointmentDate;
+		SELECT currentDateNumber + 1 INTO currentDateNumber;
+		
+		INSERT INTO
+			turnos
+		VALUES
+		( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '00:00:00' ), (SELECT doctorID), (SELECT patientID), 'esperando' ),
+		( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '00:15:00' ), (SELECT doctorID), (SELECT patientID), 'esperando' ),
+		( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '00:30:00' ), (SELECT doctorID), (SELECT patientID), 'esperando' ),
+		( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '00:45:00' ), (SELECT doctorID), (SELECT patientID), 'esperando' ),
+		( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '01:00:00' ), (SELECT doctorID), (SELECT patientID), 'esperando' ),
+		( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '01:15:00' ), (SELECT doctorID), (SELECT patientID), 'esperando' ),
+		( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '01:30:00' ), (SELECT doctorID), (SELECT patientID), 'esperando' ),
+		( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '01:45:00' ), (SELECT doctorID), (SELECT patientID), 'esperando' ),
+		( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '02:00:00' ), (SELECT doctorID), (SELECT patientID), 'esperando' ),
+		( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '02:15:00' ), (SELECT doctorID), (SELECT patientID), 'esperando' )
+		;
+		
+		SELECT daysCount - 1 INTO daysCount;
+		IF daysCount <= 0 THEN
+			LEAVE theLoop;
+		END IF;
+		
+	END LOOP theLoop;
+END$$
+DELIMITER ;
+/**************************************************************/
+/**************************************************************/
+/**************************************************************/
+CALL insertAppointmentsForTheCurrentWeek();
