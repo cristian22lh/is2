@@ -319,7 +319,7 @@
 						<?php endif; ?>
 						
 						<?php if( $appointment['hora'] ): ?>
-						<tr class="is2-appointments-row" data-appointment-id="<?php echo $appointment['id']; ?>" data-appointment-date="<?php echo $dateLocale; ?>" data-appontment-status="<?php echo $appointment['estado']; ?>">
+						<tr class="is2-appointments-row" data-appointment-id="<?php echo $appointment['id']; ?>" data-appointment-date="<?php echo $dateLocale; ?>" data-appointment-status="<?php echo $appointment['estado']; ?>">
 							<td>&nbsp;</td>
 							<td class="is2-appointment-time"><?php echo substr( $appointment['hora'], 0, 5 ); ?></td>
 							<td><?php echo $appointment['medicoApellidos'] . ', ' .  $appointment['medicoNombres']; ?></td>
@@ -574,7 +574,7 @@
 		var $rows =$( 'tr.is2-appointments-row[data-appointment-date="' + $target.attr( 'data-appointment-date' ) + '"]' ), $row,
 			i = 0, l = $rows.length,
 			rows = [];
-	
+		;
 		if( l > 1 ) {
 			for( ; i < l; i++ ) {
 				$row = $rows.eq( i );
@@ -584,9 +584,7 @@
 					rows.push( $row );
 				}
 			}
-			while( rows.length ) {
-				$target = $target.after( rows.shift() );
-			}
+			$target.after( rows );
 		}
 	} );
 
