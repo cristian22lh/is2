@@ -8,7 +8,7 @@
 			text-align: center;
 		}
 		.table th:first-child {
-			width: 100px;
+			width: 90px;
 		}
 		.is2-grid-wrapper {
 			height: 500px;
@@ -73,10 +73,10 @@
 		}
 		tr.is2-appointments-row td:nth-child( 3 ),
 		tr.is2-appointments-row td:nth-child( 4 ) {
-			width: 215px;
+			width: 220px;
 		}
 		tr.is2-appointments-row td:last-child {
-			width: 215px;
+			width: 206px;
 		}
 		tr.is2-appointments-monthbreak td {
 			background: #84d2db;
@@ -109,6 +109,22 @@
 		.btn.disabled {
 			width: 110px;
 		}
+
+		.is2-appointments-row-newly {
+			background: #FCF8E3;
+			color: #C09853;
+		}
+		.is2-appointment-newly-template {
+			text-align: center;
+			display: none;
+		}
+		.popover .is2-appointment-newly-template {
+			display: block;
+		}
+		.is2-appointment-newly-template-close {
+			margin: 5px 0 -7px 0;
+		}
+
 	</style>
 		
 <?php t_endHead(); ?>
@@ -349,12 +365,23 @@
 			</div>
 			<?php endif; ?>
 
+			<div class="is2-appointment-newly-template">
+				<div class="alert" style="clear:both">
+					<strong>¡Nuevo turno ha sido creado satisfactoriamente!</strong>
+				</div>
+				<a class="btn btn-block" href="/turnos">
+						<i class="icon-arrow-left"></i>
+						Listar turnos
+				</a>
+				<button class="btn btn-link btn-mini is2-appointment-newly-template-close">¡Entendido!</button>
+			</div>
+
 		<?php t_endWrapper(); ?>
 		
 		<!-- modals -->
 		<form id="is2-modal-confirm" class="modal hide fade">
 			<div class="modal-body">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<button type="button" class="close clearfix">&times;</button>
 				<strong>¿Estás seguro que desea confirmar el turno?</strong>
 			</div>
 			<div class="modal-footer">
@@ -574,7 +601,7 @@
 		var $rows =$( 'tr.is2-appointments-row[data-appointment-date="' + $target.attr( 'data-appointment-date' ) + '"]' ), $row,
 			i = 0, l = $rows.length,
 			rows = [];
-		;
+
 		if( l > 1 ) {
 			for( ; i < l; i++ ) {
 				$row = $rows.eq( i );
@@ -710,6 +737,37 @@
 	new AppointmentActionAjax( 'cancel', '/turnos/cancelar' );
 	new AppointmentActionAjax( 'remove', '/turnos/borrar' );
 	new AppointmentActionAjax( 'restore', '/turnos/reiniciar' );
+
+// *** ACA MUESTRO UN POPOVER CUANDO SE ACABA DE CREAR UN TURNO NUEVO *** //
+	var $newlyAppointment, 
+		$newlyAppointmentClose, 
+		$document = $( document ), 
+		appointmentID =  window.location.search.match( /id=(\d+)/ );
+
+	if( appointmentID && ( $newlyAppointment = $( '.is2-appointments-row[data-appointment-id=' + appointmentID[1] + ']' ) ).length ) {
+		$newlyAppointment.addClass( 'is2-appointments-row-newly').popover( {
+			trigger: 'manual',
+			placement: 'bottom',
+			html: true,
+			content: $( '.is2-appointment-newly-template' ).prop( 'outerHTML' )
+		} ).popover( 'show');
+
+		$newlyAppointmentClose = $( '.is2-appointment-newly-template-close' );
+		$newlyAppointmentClose.on( 'click', function( e ) {
+			e.stopPropagation();
+			$newlyAppointment.popover( 'hide' ).removeClass( 'is2-appointments-row-newly' ).off( 'click', arguments.callee );
+		} );
+		$document.on( 'click', function( e ) {
+			var $el = $( e.target );
+			while( $el.length && !$el.hasClass( 'popover' ) ) { 
+				$el = $el.parent();
+			}
+			if( !$el.length ) {
+				$newlyAppointmentClose.click();
+				$document.off( 'click', arguments.callee )
+			}
+		} );
+	}
 
 })();
 </script>
