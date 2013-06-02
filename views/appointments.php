@@ -741,7 +741,8 @@
 // *** ACA MUESTRO UN POPOVER CUANDO SE ACABA DE CREAR UN TURNO NUEVO *** //
 	var $newlyAppointment, 
 		$newlyAppointmentClose, 
-		$document = $( document ), 
+		$document = $( document ),
+		$popover,
 		appointmentID = window.location.search.match( /id=(\d+)/ );
 
 	if( appointmentID && ( $newlyAppointment = $( '.is2-appointments-row[data-appointment-id=' + appointmentID[1] + ']' ) ).length ) {
@@ -750,7 +751,12 @@
 			placement: 'bottom',
 			html: true,
 			content: $( '.is2-appointment-newly-template' ).prop( 'outerHTML' )
-		} ).popover( 'show');
+		} )
+
+		$popover = $newlyAppointment.data( 'popover').tip();
+		$popover.css( 'visibility', 'hidden' );
+		$newlyAppointment.popover( 'show' );
+		$popover.css( 'top', '+=10' ).hide().css( 'visibility', 'visible' ).fadeIn( 'fast' ).animate( { top: '-=15' } );
 
 		$newlyAppointmentClose = $( '.is2-appointment-newly-template-close' );
 		$newlyAppointmentClose.on( 'click', function( e ) {
