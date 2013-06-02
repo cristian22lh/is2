@@ -381,7 +381,7 @@
 		<!-- modals -->
 		<form id="is2-modal-confirm" class="modal hide fade">
 			<div class="modal-body">
-				<button type="button" class="close clearfix">&times;</button>
+				<button type="button" class="close" data-dismiss="modal">&times;</button> 
 				<strong>¿Estás seguro que desea confirmar el turno?</strong>
 			</div>
 			<div class="modal-footer">
@@ -742,7 +742,7 @@
 	var $newlyAppointment, 
 		$newlyAppointmentClose, 
 		$document = $( document ), 
-		appointmentID =  window.location.search.match( /id=(\d+)/ );
+		appointmentID = window.location.search.match( /id=(\d+)/ );
 
 	if( appointmentID && ( $newlyAppointment = $( '.is2-appointments-row[data-appointment-id=' + appointmentID[1] + ']' ) ).length ) {
 		$newlyAppointment.addClass( 'is2-appointments-row-newly').popover( {
