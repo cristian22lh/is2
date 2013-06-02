@@ -5,9 +5,23 @@
 		$time = __toISOTime( $_POST['hora'] );
 		$doctorID = __validateID( $_POST['idMedico'] );
 		$patientID = __validateID( $_POST['idPaciente'] );
+		// store heres all the errros
+		$errors = array();
 		
-		if( !$date || !$time || !$doctorID || !$patientID ) {
-			__redirect( '/turnos/crear?error=crear-turno' );
+		if( !$date ) {
+			$error[] = 'date';
+		}
+		if( !$time ) {
+			$error[] = 'time';
+		}
+		if( !$doctorID ) {
+			$error[] = 'doctorID';
+		}
+		if( !$patientID ) {
+			$error[] = 'patientID';
+		}
+		if( count( $errors ) ) {
+			__redirect( '/turnos/crear?error=crear-turno&campos=' . base64_encode( implode( '|', $errors ) ) );
 		}
 		
 		// internamente la base de datos hara las siguientes comprobaciones
@@ -26,9 +40,9 @@
 			',
 			array( $date, $time, $doctorID, $patientID, 'esperando' )
 		);
-		
 		if( !$insertId ) {
-			__redirect( '/turnos/crear?error=crear-turno' );
+			//die;
+			__redirect( '/turnos/crear?error=crear-turno&campos=' . base64_encode( implode( '|', $g_db->getErrorList() ) ) );
 		}
 		
 		__redirect( '/turnos?id=' . $insertId );

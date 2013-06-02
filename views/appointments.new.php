@@ -15,6 +15,18 @@
 		.is2-patients-search-trigger {
 			width: 190px;
 		}
+		
+		.is2-error-datetime-popover {
+			height: 0;
+			overflow: hidden;
+			width: 300px;
+		}
+		.is2-error-msg {
+			display: none;
+		}
+		.popover .is2-error-msg {
+			display: block;
+		}
 	</style>
 <?php t_endHead(); ?>
 <?php t_startBody( $username, 'appointments'  ); ?>
@@ -50,9 +62,19 @@
 					<div class="alert alert-error is2-popover-date-template is2-template-empty is2-popover-template">
 						Debe suministar una fecha
 					</div>
-					<div class="alert alert-error is2-popover-date-template is2-template-error is2-popover-template">
+					<div class="alert alert-error is2-popover-date-template is2-template-underflow is2-popover-template">
 						La fecha no puede ser anterior al dia presenete
 					</div>
+					<div class="alert alert-error is2-popover-date-template is2-template-overflow is2-popover-template">
+						La fecha no puede exceder los 7 días desde el día de hoy
+					</div>
+				</div>
+				<div class="is2-error-datetime-popover is2-popover-creationerror"></div>
+				<div class="alert alert-error is2-error-datetimedoctorunavailable is2-error-msg">
+					El médico no atiende en la fecha y hora que han sido requeridos
+				</div>
+				<div class="alert alert-error is2-error-datetimedoctorduplicated is2-error-msg">
+					El médico ya posee un turno registrado para la fecha y hora que han sido requeridos
 				</div>
 				<div class="control-group is2-time">
 					<label class="control-label">Hora</label>
@@ -106,7 +128,7 @@
 						<span class="is2-patients-search-popover" data-paclement="right" data-html="true" data-trigger="hover">&nbsp;</span>
 					</div>
 					<div class="alert alert-error is2-patient-search-popover-template is2-popover-template">
-						Debe buscar al paciente a asociar con este turno para poder continuar
+						Debe buscar un paciente cuya obra social sea soportada por el médico en cuestón para poder crear el turno
 					</div>
 				</div>
 				<div class="alert is2-patient-search-info">
@@ -145,10 +167,6 @@
 							<span data-field-name="telefono"></span>
 						</li>
 						<li>
-							<strong>Correo electrónico:</strong>
-							<span data-field-name="email"></span>
-						</li>
-						<li>
 							<strong>Obra social:</strong>
 							<span data-field-name="obraSocialNombre"></span>
 						</li>
@@ -159,7 +177,7 @@
 					</ul>
 					<div class="alert alert-error is2-patient-search-insurance-error">
 						<p><strong>¡Este médico no soporta la obra social de este paciente!</strong></p>
-						No puede utilizar a este paciente para crear este turno
+						No puede utilizar a este paciente para crear el turno
 					</div>
 				</div>
 				<div class="control-group">
@@ -174,24 +192,15 @@
 
 <script>
 (function() {
-	$( '.datepicker' ).datepicker( {
-		format: 'dd/mm/yyyy',
-		language: 'es'
-	} ).datepicker( 'setValue', new Date() );
-	$( '.timepicker' ).timepicker( {
-		showInputs: false,
-		showMeridian: false
-	});
-	
-	var prevState = JSON.parse( localStorage.getItem( 'is2-appointment-state' ) );
-	if( prevState ) {
-		if( window.location.search.indexOf( 'error' ) >= 0 ) {
-			for( var fieldName in prevState ) {
-				$( '[name=' + fieldName + ']' ).val( prevState[fieldName] );
-			}
+
+	IS2.initDatepickers( true );
+	IS2.initTimepickers();
+	IS2.loadPrevState( 'is2-appointment-state', function( prevState ) {
+		// debo realizar la busqyeda del paciente
+		if( prevState['dni'] ) {
+			$( '.is2-patients-search-value' ).attr( 'data-automatic-search', 'true' );
 		}
-		localStorage.removeItem( 'is2-appointment-state' );
-	}
+	} );
 	
 // *** LA BUSQUEDA DE PACIENTE SE HACE MEDIATE AJAX *** //
 	var isWaiting = false;
@@ -214,16 +223,16 @@
 			return;
 		}
 		$( '.is2-patient-search-info' ).hide();
+		// si esto se setta es que hay paciente
+		$patientID.val( '' );
 		
 		var data = dataResponse.data,
 			patientData, supportInsurance;
-			
+
 		if( !data ) {
 			// no hubo match
 			$successMsg.hide();
 			$errorMsg.show();
-			// con esto se que no hay paciente elegido
-			$patientID.val( '' );
 			
 		} else {
 			patientData = data.patient,
@@ -243,8 +252,10 @@
 				$errorInsuranceMsg.show();
 			}
 			
-			$successMsg.show();
+			$successMsg.slideDown();
 		}
+		
+		console.log( $patientID.val() );
 	};
 	
 	$search.bind( 'click', function( e ) {
@@ -277,9 +288,8 @@
 			success: searchedPatient,
 			error: searchedPatient
 		} );
-		
 	} );
-	
+
 // *** EL CHECKEO DE DISPONIBLIDAD SE HACE MEDIANTE AJAX *** //
 	var $date = $( '.is2-availability-date' );
 	var $datePopover = $( '.is2-availability-date-popover');
@@ -389,6 +399,8 @@
 	$theForm.on( 'submit', function( e ) {
 
 		$datePopover.popover( 'destroy' );
+		// hide any popover from error post
+		$( '.is2-popover-creationerror' ).popover( 'hide' );
 		
 		if( !$patientID.val().trim() || !$dni.val().trim() ) {
 			e.preventDefault();
@@ -416,10 +428,16 @@
 		target.setMonth( date[1]-1 );
 		target.setDate( date[0] );
 
-		if( base > target || target - base > 604800000 ) {
+		if( base > target ) {
 			e.preventDefault();
 			$dateGroupControl.addClass( 'error' );
-			$datePopover.popover( { content: $( '.is2-template-error.is2-popover-date-template' ).prop( 'outerHTML' ) } ).popover( 'show' );
+			$datePopover.popover( { content: $( '.is2-template-underflow.is2-popover-date-template' ).prop( 'outerHTML' ) } ).popover( 'show' );
+			return;
+		}
+		if( target - base > 604800000 ) {
+			e.preventDefault();
+			$dateGroupControl.addClass( 'error' );
+			$datePopover.popover( { content: $( '.is2-template-overflow.is2-popover-date-template' ).prop( 'outerHTML' ) } ).popover( 'show' );
 			return;
 		}
 		$dateGroupControl.removeClass( 'error' );
@@ -433,18 +451,39 @@
 		}
 		$timePopover.popover( 'hide' );
 		$timeGroupControl.removeClass( 'error' );
-		
-		// remember prev state
-		var prevState = {};
-		$theForm.find( 'input, select' ).each( function( e ) {
-			var $el = $( this ),
-				fieldName = $el.attr( 'name' );
-			if( fieldName && fieldName !== 'idPaciente' ) {
-				prevState[fieldName] = $el.val().replace( /&/g, '&amp;' ).replace( /</g, '&lt;' ).replace( />/g, '&gt;' );
-			}
-		} );
-		window.localStorage.setItem( 'is2-appointment-state', JSON.stringify( prevState ) );
+
+		IS2.savePrevState( 'is2-appointment-state', 'patientID' );
 	} );
+	
+// *** CUANDO VENGO DE UN ERROR DEBO INFORMAR EXACTAMENTE DONDE FALLO *** //
+	// debo rebuscar al paciente?
+	if( $dni.attr( 'data-automatic-search' ) ) {
+		$search.click();
+	}
+	var errors = window.location.search.match( /campos=([^&$]+)/ );
+	if( errors ) {
+		try {
+			errors = atob( errors[1] );
+		} catch( e ) {
+		}
+	}
+	
+	var $dateTimePopover = $( '.is2-error-datetime-popover' );
+	var $dateTimeUnavailableDoctorMsg = $( '.is2-error-datetimedoctorunavailable' );
+	var $dateTimeDuplicatedDoctorMsg = $( '.is2-error-datetimedoctorduplicated' );
+	if( errors === 'fecha|hora' || errors === 'duplicado' ) {
+		$dateGroupControl.addClass( 'error' );
+		$timeGroupControl.addClass( 'error' );
+		$dateTimePopover.popover( {
+			trigger: 'manual',
+			html: true,
+			content: ( errors === 'fecha|hora' ? $dateTimeUnavailableDoctorMsg : $dateTimeDuplicatedDoctorMsg ).prop( 'outerHTML' )
+		} ).popover( 'show' );
+		setTimeout( function() {
+			$dateTimePopover.popover( 'hide' );
+		}, 10000 );
+	}
+	
 	
 })();
 </script>

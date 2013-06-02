@@ -172,7 +172,7 @@
 		
 			<div class="is2-pagetitle clearfix">
 				<h3>Turnos</h3>
-				<a class="btn pull-right" href="/turnos/crear"><i class="icon-plus"></i> Crear un nuevo turno</a>
+				<a class="btn pull-right btn-warning" href="/turnos/crear"><i class="icon-plus"></i> Crear un nuevo turno</a>
 				<form class="form-search pull-right is2-search-quick-form" method="post" action="/turnos/busqueda-rapida">
 					<div class="is2-search-quick-control input-append control-group <?php echo $searchQuickError ? 'error': ''; ?>">
 						<input type="text" class="input-large search-query is2-search-quick-input" placeholder="Búsqueda rápida" name="keyword" value="<?php echo $quickSearchValue; ?>">
@@ -435,6 +435,8 @@
 
 <script>
 (function() {
+	IS2.cleanPrevState();
+
 // *** ACA PARA CUANDO MUESTRO LOS MODALS *** //
 	$( '.is2-grid' ).delegate( '.is2-trigger-confirm', 'click', function( e ) {
 		// hay que poner el turno id en input hidden
@@ -616,15 +618,8 @@
 	} );
 
 // *** ACA PARA LA BUSQUEDA DE TURNOS *** //
-	$( '.datepicker' ).datepicker( {
-		format: 'dd/mm/yyyy',
-		language: 'es'
-	} );
-	$( '.timepicker' ).timepicker( {
-		showInputs: false,
-		defaultTime: false,
-		showMeridian: false
-	});
+	IS2.initDatepickers();
+	IS2.initTimepickers( { defaultTime: false } );
 	$( '.is2-doctors-listbox' ).on( 'click', function( e ) {
 		$( '.is2-doctors-custom' ).click();
 	} );
@@ -742,7 +737,7 @@
 	var $newlyAppointment, 
 		$newlyAppointmentClose, 
 		$document = $( document ),
-		$popover,
+		$popover, closePopupTimeout,
 		appointmentID = window.location.search.match( /id=(\d+)/ );
 
 	if( appointmentID && ( $newlyAppointment = $( '.is2-appointments-row[data-appointment-id=' + appointmentID[1] + ']' ) ).length ) {
@@ -762,6 +757,7 @@
 		$newlyAppointmentClose.on( 'click', function( e ) {
 			e.stopPropagation();
 			$newlyAppointment.popover( 'hide' ).removeClass( 'is2-appointments-row-newly' ).off( 'click', arguments.callee );
+			window.clearTimeout( closePopupTimeout );
 		} );
 		$document.on( 'click', function( e ) {
 			var $el = $( e.target );
@@ -773,6 +769,9 @@
 				$document.off( 'click', arguments.callee )
 			}
 		} );
+		closePopupTimeout = window.setTimeout( function() {
+			$newlyAppointmentClose.click();
+		}, 5000 );
 	}
 
 })();

@@ -14,3 +14,4 @@
 		<script src="/js/bootstrap-timepicker.js"></script>
 		<link href="/css/bootstrap-timepicker.css" rel="stylesheet">
 		<link href="/css/is2.main.css" rel="stylesheet">
+		<script src="/js/is2.js"></script>

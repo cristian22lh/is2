@@ -9,6 +9,14 @@
 			'double' => 'd'
 		);
 		
+		private $errorsDict = array(
+			'PROCEDURE is2.medico_no_antiende_fecha_hora_requerido does not exist' => 'fecha|hora'
+		);
+		private $errorsCode = array(
+			'1062' => 'duplicado'
+		);
+		private $errorsList = array();
+		
 	// *** PUBLIC METHODS *** //
 		function __construct() {
 		
@@ -120,6 +128,10 @@
 			return $insertId;
 		}
 		
+		function getErrorList() {
+			return $this->errorsList;
+		}
+		
 	// *** PRIVATE METHODS *** //
 		private function _executeQuery( $stmt, $replacements ) {
 			// capaz que no hay tokens a reemplezar
@@ -178,6 +190,13 @@
 		
 		private function _err( $msg ) {
 			__err( $msg );
+			
+			$errorString = $this->db->error;
+			if( isset( $this->errorsDict[$errorString] ) ) {
+				$this->errorsList[] = $this->errorsDict[$errorString];
+			} else {
+				$this->errorsList[] = $this->errorsCode[$this->db->errno];
+			}
 		}
 	}
 	
