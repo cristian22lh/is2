@@ -751,7 +751,7 @@
 			placement: 'bottom',
 			html: true,
 			content: $( '.is2-appointment-newly-template' ).prop( 'outerHTML' )
-		} )
+		} );
 
 		$popover = $newlyAppointment.data( 'popover').tip();
 		$popover.css( 'visibility', 'hidden' );
