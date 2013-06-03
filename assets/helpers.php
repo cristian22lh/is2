@@ -76,6 +76,19 @@
 		return count( $_GET ) > 0 && isset( $_GET[$name] ) ? __sanitizeValue( $_GET[$name] ) : false;
 	}
 	
+	function __getGETComplete( $skip = '' ) {
+		$q = array();
+		if( count( $_GET ) ) {
+			foreach( $_GET as $name => $value ) {
+				if( $name != $skip ) {
+					$q[] = $name . '=' . $value;
+				}
+			}
+			return '?' . __sanitizeValue( implode( '&', $q ) );
+		}
+		return '?';
+	}
+	
 // ************** /
 // TODO ESTO HACE USO $_SESSION
 // ************* /

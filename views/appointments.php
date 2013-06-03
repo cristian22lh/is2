@@ -1,34 +1,8 @@
 <?php t_startHead( 'Turnos' ); ?>
 
 	<style>
-		.table {
-			margin: 0;
-		}
-		.table th {
-			text-align: center;
-		}
 		.table th:first-child {
 			width: 90px;
-		}
-		.is2-grid-wrapper {
-			height: 500px;
-			overflow-y: scroll;
-			border: 1px solid #ccc;
-			border-right: 0;
-			border-top: 0;
-		}
-		.is2-grid-header {
-			border-radius: 5px 5px 0 0;
-			color: #fff;
-		}
-		.is2-ascdescmenu, .is2-statusmenu {
-			float: right;
-			padding: 0;
-		}
-		.is2-ascdescmenu a.dropdown-toggle,
-		.is2-statusmenu a.dropdown-toggle {
-			padding: 0 6px;
-			display: inline-block;
 		}
 		.is2-statusmenu .dropdown-menu {
 			right: 0;

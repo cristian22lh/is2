@@ -4,6 +4,36 @@
 	$replacements = array();
 	$letter = false;
 	$isSingle = false;
+	
+// ESTE ES CUANDO VIENE DE SORTEAR LA GRID
+	$orderByType = false;
+	$orderByCustom = array();
+	// se puede ordenar por apellidos y nombres a la vez...
+	if( ( $orderByType = __GETField( 'apellido' ) ) ) {
+		$orderByCustom['apellidos'] = $orderByType;
+	}
+	if( ( $orderByType = __GETField( 'nombre' ) ) ) {
+		$orderByCustom['nombres'] = $orderByType;
+	}
+	// ..pero no se puede cobinar con fecha-de-nacimiento
+	if( !count( $orderByCustom ) && ( $orderByType = __GETField( 'fecha-de-nacimiento' ) ) ) {
+		$orderByCustom['fechaNacimiento'] = $orderByType;
+	}
+	// validate
+	$orderByClause = [];
+	if( count( $orderByCustom ) ) {
+		foreach( $orderByCustom as $orderByCol => $orderByType ) {
+			// si me metio mano, poner ASC
+			if( !in_array( strtoupper( $orderByType ), array( 'ASC', 'DESC' ) ) ) {
+				$orderByClause[] = ' p.' . $orderByCol . ' ASC ';
+			} else {
+				$orderByClause[] = ' p.' . $orderByCol . ' ' . $orderByType . ' ';
+			}
+		}
+	// default
+	} else {
+		$orderByClause = array( ' p.apellidos ASC ' , ' p.nombres ASC ' );
+	}
 
 // ESTE ES CUANDO VENGO DE CREAR UN TURNO
 	if( ( $newPatient = __GETField( 'id' ) ) && __validateID( $newPatient ) ) {
@@ -27,9 +57,9 @@
 		$offset = 0;
 	}
 	// pido los pacientes en base a un $offset
-	$patients = q_getPatients( $whereCluase, $replacements, $offset );
+	$patients = q_getPatients( $whereCluase, $replacements, $orderByClause, $offset );
 	// veo si tengo que SEGUIR paginar
-	if( count( $patients ) == 21 ) {
+	if( count( $patients ) == 31 ) {
 		array_pop( $patients );
 		$stillMorePages = true;
 	} else {
@@ -47,7 +77,11 @@
 	} else if( __issetGETField( 'error', 'editar-paciente' ) ) {
 		$editError = true;
 	}
-
+	
+	$queryString = __getGETComplete( 'pagina' );
+	
+	$insurances = q_getAllInsurances();
+	
 // LOAD THE VIEW
 	__render( 
 		'patients', 
@@ -60,7 +94,9 @@
 			'letter' => $letter,
 			'stillMorePages' => $stillMorePages,
 			'offset' => $offset,
-			'isSingle' => $isSingle
+			'isSingle' => $isSingle,
+			'queryString' => $queryString,
+			'insurances' => $insurances
 		)
 	);
 

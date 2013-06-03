@@ -13,7 +13,8 @@
 			'PROCEDURE is2.medico_no_antiende_fecha_hora_requerido does not exist' => 'fecha|hora'
 		);
 		private $errorsCode = array(
-			'1062' => 'duplicado'
+			'1062' => 'duplicado',
+			'1054' => 'columna desconocida'
 		);
 		private $errorsList = array();
 		

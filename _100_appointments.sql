@@ -37,7 +37,7 @@ BEGIN
 	INSERT INTO t_patientsWithNonInsurance SELECT id FROM pacientes WHERE idObraSocial = 1 AND id > avoidThisPatientID LIMIT 10;
 	SELECT id FROM t_patientsWithNonInsurance ORDER BY id DESC LIMIT 1 INTO lastID;
 	RETURN lastID;
-END $$
+END$$
 DELIMITER ;
 /**
 */

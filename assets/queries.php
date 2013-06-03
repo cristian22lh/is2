@@ -31,11 +31,11 @@
 		);
 	}
 	
-	function q_getPatients( $whereCluase, $replacements, $offset = 0 ) {
+	function q_getPatients( $whereCluase, $replacements, $orderByClause, $offset = 0 ) {
 		global $g_db;
 		
 		if( $offset ) {
-			$offset = $offset * 20;
+			$offset = $offset * 30;
 		}
 		$replacements[] = $offset;
 		return $g_db->select(
@@ -51,9 +51,11 @@
 					implode( ' AND ', $whereCluase ) .
 				'
 				ORDER BY
-					p.apellidos
+				' .
+					implode( ', ', $orderByClause ) .
+				'
 				LIMIT
-					?, 21
+					?, 31
 			',
 			$replacements
 		);

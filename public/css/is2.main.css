@@ -48,6 +48,23 @@ header .is2-welcome {
 .table td * {
 	text-transform: none;
 }
+.table {
+	margin: 0;
+}
+.table th {
+	text-align: center;
+}
+.is2-grid-header {
+	border-radius: 5px 5px 0 0;
+	color: #fff;
+}
+.is2-grid-wrapper {
+	height: 500px;
+	overflow-y: scroll;
+	border: 1px solid #ccc;
+	border-right: 0;
+	border-top: 0;
+}
 
 .modal-backdrop, .modal-backdrop.fade.in {
 	background-color: #f1f1f1;
@@ -105,4 +122,17 @@ legend {
 .dropdown-submenu:hover > a,
 .dropdown-submenu:focus > a {
 	text-shadow: none;
+}
+
+.btn-inverse .dropdown-toggle .caret {
+	border-bottom-color: #000;
+	border-top-color: #000;
+}
+.dropdown-toggle {
+	padding: 0 6px;
+	display: inline-block;
+}
+.is2-dropdownmenu {
+    float: right;
+    padding: 0;
 }

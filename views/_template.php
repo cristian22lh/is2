@@ -42,5 +42,17 @@
 	function t_appointmentNewRow( $appointmentDateLocale ) {
 		require './views/_appointments.row.new.php';
 	}
+	
+	function t_lastNameMenu() {
+		require './views/_patients.lastname.menu.php';
+	}
+	
+	function t_firstNameMenu() {
+		require './views/_patients.firstname.menu.php';
+	}
+
+	function t_birthDateMenu() {
+		require './views/_patients.birthname.menu.php';
+	}
 
 ?>
