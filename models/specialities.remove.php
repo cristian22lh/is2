@@ -9,7 +9,7 @@
 		__redirect( '/especialidades?error=borrar-especialidad' );
 	}
 	
-	$rowsAffected = $g_db->update(
+	$rowsAffected = DB::update(
 		'
 			DELETE FROM
 				especialidades

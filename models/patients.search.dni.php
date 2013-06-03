@@ -12,7 +12,7 @@
 		__echoJSON( array( 'success' => false ) );
 	}
 	
-	$patients = $g_db->select(
+	$patients = DB::select(
 		'
 			SELECT
 				p.id, p.apellidos, p.nombres, p.sexo, p.dni, p.idObraSocial, p.fechaNacimiento, p.telefono, p.nroAfiliado,
@@ -36,7 +36,7 @@
 	$patient['fechaNacimiento'] = __dateISOToLocale( $patient['fechaNacimiento'] );
 	
 	// me fijo que si el paciente soporta la obra social del medico
-	$res = $g_db->select(
+	$res = DB::select(
 		'
 			SELECT
 				id

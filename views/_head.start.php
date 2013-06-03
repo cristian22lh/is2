@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Aplicacion - <?php echo $page; ?></title>
-		<link href="http://fonts.googleapis.com/css?family=Scada" rel="stylesheet">
+		<?php t_setCustomTypeface(); ?>
 		<link href="/css/bootstrap.css" rel="stylesheet">
 		<script src="/js/jquery-2.0.0.min.js"></script>
 		<script src="/js/jquery-ui-1.10.3.custom.min.js"></script>

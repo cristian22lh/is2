@@ -2,24 +2,26 @@
 
 	class DB {
 	
-		private $db;
-		private $typesDict = array(
+		private static $db;
+		private static $replacements = array();
+		
+		private static $typesDict = array(
 			'integer' => 'i',
 			'string' => 's',
 			'double' => 'd'
 		);
 		
-		private $errorsDict = array(
+		private static $errorsDict = array(
 			'PROCEDURE is2.medico_no_antiende_fecha_hora_requerido does not exist' => 'fecha|hora'
 		);
-		private $errorsCode = array(
+		private static $errorsCode = array(
 			'1062' => 'duplicado',
 			'1054' => 'columna desconocida'
 		);
-		private $errorsList = array();
+		private static $errorsList = array();
 		
 	// *** PUBLIC METHODS *** //
-		function __construct() {
+		static function init() {
 		
 			if( file_exists( './mysql.ini' ) ) {
 				$credenciales = parse_ini_file( './mysql.ini' );
@@ -30,23 +32,23 @@
 				);
 			}
 
-			$this->db = new mysqli( 'localhost', $credenciales['usuario'], $credenciales['clave'], 'is2' );
-			if( $this->db->connect_errno ) {
-			    die( 'Failed to connect to MySQL: ' . $this->db->connect_error );
+			self::$db = new mysqli( 'localhost', $credenciales['usuario'], $credenciales['clave'], 'is2' );
+			if( self::$db->connect_errno ) {
+			    die( 'Failed to connect to MySQL: ' . self::$db->connect_error );
 			}
 
-			$this->db->set_charset( 'utf8' );
+			self::$db->set_charset( 'utf8' );
 		}
 		
-		function select( $query, $replacements = array() ) {
+		static function select( $query, $replacements = array() ) {
 		
-			$this->_log( $query, $replacements );
+			self::_log( $query, $replacements );
 	
 			$res = array();
 			
-			if( $stmt = $this->db->prepare( $query ) ) {
+			if( $stmt = self::$db->prepare( $query ) ) {
 			
-				if( $this->_executeQuery( $stmt, $replacements ) ) {
+				if( self::_executeQuery( $stmt, $replacements ) ) {
 					// debo conseguir el nombre de las columnas
 					$metadata = $stmt->result_metadata();
 					$columns = array();
@@ -60,7 +62,7 @@
 					}
 					
 					// internamente hace un $stmt->bind_result
-					$this->_bindResult( $stmt, $values );
+					self::_bindResult( $stmt, $values );
 				       
 					// lito, solo queda iterar cada fila y guardarla en $res
 					$res = array();
@@ -77,126 +79,126 @@
 				$stmt->close();
 				
 			} else {
-				$this->_err( $this->db->error );
+				self::_err( self::$db->error );
 			}
 			
 			return $res;
 		}
 		
-		function update( $query, $replacements ) {
+		static function update( $query, $replacements ) {
 
-			$this->_log( $query, $replacements );
+			self::_log( $query, $replacements );
 
 			$rowsAffected = -1;
 			
-			if( $stmt = $this->db->prepare( $query ) ) {
+			if( $stmt = self::$db->prepare( $query ) ) {
 				
-				if( $this->_executeQuery( $stmt, $replacements ) ) {
+				if( self::_executeQuery( $stmt, $replacements ) ) {
 					$rowsAffected = $stmt->affected_rows;
 				}
 				
 				$stmt->close();
 				
 			} else {
-				$this->_err( $this->db->error );
+				self::_err( self::$db->error );
 			}
 			
 			return $rowsAffected;
 		}
 		
-		function delete( $query, $replacements ) {
-			return $this->update( $query, $replacements );
+		static function delete( $query, $replacements ) {
+			return self::update( $query, $replacements );
 		}
 		
-		function insert( $query, $replacements ) {
+		static function insert( $query, $replacements ) {
 		
-			$this->_log( $query, $replacements );
+			self::_log( $query, $replacements );
 		
 			$insertId = null;
 			
-			if( $stmt = $this->db->prepare( $query ) ) {
+			if( $stmt = self::$db->prepare( $query ) ) {
 				
-				if( $this->_executeQuery( $stmt, $replacements ) ) {
+				if( self::_executeQuery( $stmt, $replacements ) ) {
 					$insertId = $stmt->insert_id;
 				}
 				
 				$stmt->close();
 				
 			} else {
-				$this->_err( $this->db->error );
+				self::_err( self::$db->error );
 			}
 			
 			return $insertId;
 		}
 		
-		function getErrorList() {
-			return $this->errorsList;
+		static function getErrorList() {
+			return self::$errorsList;
 		}
 		
 	// *** PRIVATE METHODS *** //
-		private function _executeQuery( $stmt, $replacements ) {
+		private static function _executeQuery( $stmt, $replacements ) {
 			// capaz que no hay tokens a reemplezar
 			if( count( $replacements ) ) {
 				// internamente aca se hace un $stmt->bind_param()
-				$this->_bindParams( $stmt, $this->_addParams( $replacements ) );
+				self::_bindParams( $stmt, self::_addParams( $replacements ) );
 			}
 			
 			// ejecutamos la consultado
 			if( !$stmt->execute() ) {
-				$this->_err( $stmt->error );
+				self::_err( $stmt->error );
 				return false;
 			}
 			
 			return true;
 		}
 	
-		private function _addParams( $replacements ) {
+		private static function _addParams( $replacements ) {
 			$types = '';
-			$this->values = array();
+			self::$replacements = array();
 			
 			for( $i = 0, $l = count( $replacements ); $i < $l; $i++ ) {
-				$types .= $this->_gettype( $replacements[$i] );
-				$this->values[] = &$replacements[$i];
+				$types .= self::_gettype( $replacements[$i] );
+				self::$replacements[] = &$replacements[$i];
 			}
 
 			// esto sera el argumento para $stmt->bind_param();
-			$args = array_merge( array( $types ), $this->values );
+			$args = array_merge( array( $types ), self::$replacements );
 			return $args;
 		}
 		
-		private function _gettype( $value ) {
+		private static function _gettype( $value ) {
 			$type = gettype( $value );
 
-			if( isset( $this->typesDict[$type] ) ) {
-				return $this->typesDict[$type];
+			if( isset( self::$typesDict[$type] ) ) {
+				return self::$typesDict[$type];
 			}
 			
-			$this->_err( 'Invalid data type: ' . $type );
+			self::_err( 'Invalid data type: ' . $type );
 		}
 		
-		private function _bindParams( $stmt, $args ) {
+		private static function _bindParams( $stmt, $args ) {
 			call_user_func_array( array( $stmt, 'bind_param' ), $args );
 		}
 		
-		private function _bindResult( $stmt, $args ) {
+		private static function _bindResult( $stmt, $args ) {
 			call_user_func_array( array( $stmt, 'bind_result' ) , $args );
 		}
 		
-		private function _log( $query, $replacements ) {
+		private static function _log( $query, $replacements ) {
 			__log( 'executing the query: ' );
 			__log( $query );
 			__log( 'with the params: ' );
 			__log( $replacements );
 		}
 		
-		private function _err( $msg ) {
+		private static function _err( $msg ) {
 			__err( $msg );
 			
-			$errorString = $this->db->error;
-			if( isset( $this->errorsDict[$errorString] ) ) {
-				$this->errorsList[] = $this->errorsDict[$errorString];
+			$errorString = self::$db->error;
+			if( isset( self::$errorsDict[$errorString] ) ) {
+				self::$errorsList[] = self::$errorsDict[$errorString];
 			} else {
-				$this->errorsList[] = $this->errorsCode[$this->db->errno];
+				self::$errorsList[] = self::$errorsCode[self::$db->errno];
 			}
 		}
 	}

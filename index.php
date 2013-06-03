@@ -18,9 +18,9 @@
 	require './views/_template.php';
 	// las queries tienen como prefijo q_
 	require './assets/queries.php';
-	// mis globales
-	$g_db = new DB();
-	$g_router = new Router();
+	// init some things
+	DB::init();
+	Router::init();
 	// init some things
 	__initSession();
 	__initDebugging();
@@ -29,7 +29,7 @@
 	
 	// hago a que no pueda acceder a una pagina que necesite
 	// de que el usuario este logueado para verla
-	$g_router->auth( array( '/', '/iniciar-sesion' ), '/iniciar-sesion' );
+	Router::auth( array( '/', '/iniciar-sesion' ), '/iniciar-sesion' );
 
 	$routes = array(
 		'/' => 'login',
@@ -71,6 +71,6 @@
 		'/obras-sociales/borrar' => 'insurances.remove'
 	);
 	
-	require $g_router->start( $routes, '/404' );
+	require Router::start( $routes, '/404' );
 
 ?>

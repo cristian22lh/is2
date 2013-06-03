@@ -1,7 +1,7 @@
 <?php
 
 	// get last seg from /pacientes/122/editar
-	$patientID = $g_router->seg( 2 );
+	$patientID = Router::seg( 2 );
 
 	if( __issetPOST( array( 'lastName', 'firstName', 'gender', 'dni', 'birthDate', 'phone', 'insuranceID', 'insuranceNumber' ) ) ) {
 		$lastName = __sanitizeValue( $_POST['lastName'] );
@@ -21,7 +21,7 @@
 			__redirect( '/pacientes/' . $patientID . '/editar?error=editar-paciente' );
 		}
 		
-		$rowsAffected = $g_db->update( 
+		$rowsAffected = DB::update( 
 			'
 				UPDATE
 					pacientes

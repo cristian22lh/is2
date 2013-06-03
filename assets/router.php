@@ -3,13 +3,13 @@
 	class Router {
 	
 		// aca se guarda el matcheo de la url
-		private $m;
+		private static $m;
 		
-		function __construct() {
+		static function init() {
 		}
 		
-		function auth( $guestPages = array(), $loginPage = '' ) {
-			$page = $this->_getPage();
+		static function auth( $guestPages = array(), $loginPage = '' ) {
+			$page = Router::_getPage();
 			// debo saber si la pagina aonde ira el usuario
 			// solo puede ser accedida por usuarios loguedaos
 			for( $i = 0, $l = count( $guestPages ); $i < $l; $i++ ) {
@@ -28,15 +28,15 @@
 				if( $loginPage{0} != '/' ) {
 					$loginPage = '/' . $loginPage;
 				}
-				__redirect( $loginPage . '?destino=' . $page . $this->_getQuery() );
+				__redirect( $loginPage . '?destino=' . $page . Router::$_getQuery() );
 			}
 		}
 		
-		function start( $routes = array(), $fallbackRoute = '' ) {
-			$page = $this->_getPage();
+		static function start( $routes = array(), $fallbackRoute = '' ) {
+			$page = Router::_getPage();
 			$count = 0;
 			foreach( $routes as $route => $model ) {
-				if( $this->test( $route, $page ) ) {
+				if( Router::test( $route, $page ) ) {
 					$path = './models/' . $model . '.php';
 					if( !file_exists( $path ) ) {
 						die( 'Specified model "' . $model . '" does not exists at "' . $path . '"' );
@@ -51,12 +51,12 @@
 				if( $fallbackRoute{0} != '/' ) {
 					$fallbackRoute = '/' . $fallbackRoute;
 				}
-				__redirect( $fallbackRoute . '?destino=' . $page . $this->_getQuery() );
+				__redirect( $fallbackRoute . '?destino=' . $page . Router::$_getQuery() );
 			}
 		}
 		
-		function test( $pat = '', $page = '' ) {
-			$this->m = array();
+		static function test( $pat = '', $page = '' ) {
+			Router::$m = array();
 		
 			// just a /clients/list == /clients/list
 			if( $pat == $page ) {
@@ -88,24 +88,24 @@
 						return false;
 					}
 					// keep saving the matches
-					$this->m[] = $seg;
+					Router::$m[] = $seg;
 				}
 				return true;
 			}
 			return false;
 		}
 		
-		function seg( $i = 0 ) {
-			return isset( $this->m[$i] ) ? $this->m[$i] : null;
+		static function seg( $i = 0 ) {
+			return isset( Router::$m[$i] ) ? Router::$m[$i] : null;
 		}
 		
-		private function _getPage() {
+		private static function _getPage() {
 			// veo adonde quiere ir el usuario
 			$url = parse_url( $_SERVER['REQUEST_URI'] );
 			return preg_replace( '/\/?index\.php\/?/', '/', $url['path'] );
 		}
 		
-		private function _getQuery() {
+		private static function _getQuery() {
 			$query = $_SERVER['QUERY_STRING'];
 			return $query ? '?' . $query : '';
 		}

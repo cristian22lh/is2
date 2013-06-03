@@ -14,7 +14,7 @@
 	
 	// pido los horarios del medico
 	// eso siempre va estar en la respuesta
-	$doctorAvailibilities = $g_db->select(
+	$doctorAvailibilities = DB::select(
 		'
 			SELECT
 				*
@@ -28,7 +28,7 @@
 	
 	// debo saber cual es dia en donde case $date
 	$day = date( 'N', strtotime( $date ) );
-	$res = $g_db->select( 
+	$res = DB::select( 
 		'
 			SELECT
 				id
@@ -43,7 +43,7 @@
 	$isDoctorAvailable = (bool) count( $res );
 	
 	// ahora debo fijarme que no tenga ya un turno para ese ida
-	$res = $g_db->select(
+	$res = DB::select(
 		'
 			SELECT
 				id

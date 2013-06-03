@@ -54,5 +54,9 @@
 	function t_birthDateMenu() {
 		require './views/_patients.birthname.menu.php';
 	}
+	
+	function t_setCustomTypeface() {
+		require './views/_custom.fontface.php';
+	}
 
 ?>

@@ -44,7 +44,7 @@
 	} else {
 // ESTO ES CUANDO ESTOY ASI: pacientes/listar-por-letra/B SI FUERA EL CASO,
 // CASO CONTRARIO LISTO LOS APELLIDO QUE EMPIECEN CON 'A'
-		$letter = $g_router->seg( 3 ) ?: 'A';
+		$letter = Router::seg( 3 ) ?: 'A';
 		$whereCluase[] = ' p.apellidos LIKE ?';
 		$replacements[] = $letter . '%';
 	}

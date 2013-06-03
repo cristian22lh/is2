@@ -9,7 +9,7 @@
 		__redirect( '/especialidades?error=crear-especialidad' );
 	}
 	
-	$insertId = $g_db->insert(
+	$insertId = DB::insert(
 		'
 			INSERT INTO
 				especialidades

@@ -4,8 +4,7 @@
 // VEZ POR LOS DIFERENTES MODELOS
 
 	function q_getAllDoctors() {
-		global $g_db;
-		return $g_db->select(
+		return DB::select(
 			'
 				SELECT
 					*
@@ -18,8 +17,7 @@
 	}
 	
 	function q_getAllInsurances() {
-		global $g_db;
-		return $g_db->select(
+		return DB::select(
 			'
 				SELECT
 					*
@@ -32,13 +30,11 @@
 	}
 	
 	function q_getPatients( $whereCluase, $replacements, $orderByClause, $offset = 0 ) {
-		global $g_db;
-		
 		if( $offset ) {
 			$offset = $offset * 30;
 		}
 		$replacements[] = $offset;
-		return $g_db->select(
+		return DB::select(
 			'
 				SELECT
 					p.id, p.apellidos, p.nombres, p.sexo, p.dni, p.idObraSocial, p.fechaNacimiento, p.telefono, p.nroAfiliado,

@@ -9,7 +9,7 @@
 		__redirect( '/obras-sociales?error=borrar-obra-social' );
 	}
 	
-	$rowsAffected = $g_db->update(
+	$rowsAffected = DB::update(
 		'
 			DELETE FROM
 				obrasSociales

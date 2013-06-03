@@ -11,7 +11,7 @@
 		__redirect( '/obras-sociales?error=editar-obra-social' );
 	}
 	
-	$rowsAffected = $g_db->update(
+	$rowsAffected = DB::update(
 		'
 			UPDATE
 				obrasSociales

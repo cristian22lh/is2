@@ -15,7 +15,7 @@
 		$password = $_POST['password'];
 		
 		// vemos si el usuario existe en la db
-		$res = $g_db->select(
+		$res = DB::select(
 			'
 				SELECT 
 					id 

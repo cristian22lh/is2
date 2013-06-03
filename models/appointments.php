@@ -184,7 +184,7 @@
 			}
 		}
 		
-		$appointments = $g_db->select(
+		$appointments = DB::select(
 			'
 			SELECT
 				*

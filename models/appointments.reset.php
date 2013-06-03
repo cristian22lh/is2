@@ -11,8 +11,14 @@
 		__echoJSON( array( 'success' => false ) );
 	}
 	
-	$rowsAffected = $g_db->update(
-		'UPDATE turnos SET estado = ? WHERE id = ?',
+	$rowsAffected = DB::update(
+		'
+			UPDATE 
+				turnos 
+			SET 
+				estado = ? 
+			WHERE id = ?
+		',
 		array( 'esperando', $id )
 	);
 	

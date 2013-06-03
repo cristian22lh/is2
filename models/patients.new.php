@@ -18,7 +18,7 @@
 			__redirect( '/pacientes/crear?error=crear-paciente' );
 		}
 		
-		$insertId = $g_db->insert( 
+		$insertId = DB::insert( 
 			'
 				INSERT INTO
 					pacientes

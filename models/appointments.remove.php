@@ -11,8 +11,13 @@
 		__echoJSON( array( 'success' => false ) );
 	}
 	
-	$rowsAffected = $g_db->delete(
-		'DELETE FROM turnos WHERE id = ?',
+	$rowsAffected = DB::delete(
+		'
+			DELETE FROM
+				turnos
+			WHERE 
+				id = ?
+		',
 		array( $id )
 	);
 	

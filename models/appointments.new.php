@@ -31,7 +31,7 @@
 		// 3) que el medico soporte la obra social del paciente
 		// 4) que no exista una un turno YA registrado con la misma fecha, hora y idMedico
 		// 5) TODO: checkear medicos licencia
-		$insertId = $g_db->insert(
+		$insertId = DB::insert(
 			'
 				INSERT INTO 
 					turnos
@@ -42,7 +42,7 @@
 		);
 		if( !$insertId ) {
 			//die;
-			__redirect( '/turnos/crear?error=crear-turno&campos=' . base64_encode( implode( '|', $g_db->getErrorList() ) ) );
+			__redirect( '/turnos/crear?error=crear-turno&campos=' . base64_encode( implode( '|', DB::getErrorList() ) ) );
 		}
 		
 		__redirect( '/turnos?id=' . $insertId );
