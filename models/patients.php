@@ -137,8 +137,42 @@
 			$whereClause[]	= ' ( ' . implode( ' OR ', $affiliateNumbersOrClause ) . ' ) ';
 			$persistValues['affiliateInsuranceNumber'] = implode( ' ', $persistValues['affiliateInsuranceNumber'] );
 		}
+/* }}} */
+/* {{{ ACA CUANDO VIENE DE BUSQUEDA-RAPIDA */
+	} else if( ( $keyword = __GETField( 'busqueda' ) ) ) {
+		$keyword = __sanitizeValue( base64_decode( $keyword ) );
+		if( !$keyword ) {
+			__redirect( '/pacientes?error=buscar-paciente-rapido' );
+		}
+		$keyword = explode( '=', $keyword );
+		if( count( $keyword ) != 2 ) {
+			__redirect( '/pacientes?error=buscar-paciente-rapido' );
+		}
 		
-		__log( $whereClause, $replacements );
+		$field =  $keyword[0];
+		$value = $keyword[1];
+		if( $field == 'fechaNacimiento' ) {
+			$whereClause[] = ' p.fechaNacimiento = ? ';
+			$replacements[] = $value;
+			
+		} else if( $field == 'dni|telefono' ) {
+			$whereClause[] = ' p.dni = ? OR p.telefono = ? ';
+			$replacements[] = $value;
+			$replacements[] = $value;
+
+		} else if( $field == 'comodin' ) {
+			$whereClause[] = ' ( p.nombres LIKE ? OR p.apellidos LIKE ? OR os.nombreCorto LIKE ? ) ';
+			$replacements[] = '%' . $value . '%';
+			$replacements[] = '%' . $value . '%';
+			$replacements[] = '%' . $value . '%';
+		
+		} else {
+			__redirect( '/pacientes?error=buscar-paciente-rapido' );
+		}
+		
+		$quickSearchValue = $value;
+		$isQuickSearch = true;
+		$isSearch = true;
 		
 /* }}} */
 /* {{{ ESTE ES CUANDO VENGO DE CREAR UN TURNO */
@@ -176,6 +210,9 @@ CASO CONTRARIO LISTO LOS APELLIDO QUE EMPIECEN CON 'A' */
 	$removeSuccess = false;
 	$removeError = false;
 	$editError = false;
+	$searchError = false;
+	$searchQuickError = false;
+	$tooMuchRecords = false;
 	if( __issetGETField( 'exito', 'borrar-paciente' ) ) {
 		$removeSuccess = true;
 	// ... o de error
@@ -183,6 +220,12 @@ CASO CONTRARIO LISTO LOS APELLIDO QUE EMPIECEN CON 'A' */
 		$removeError = true;
 	} else if( __issetGETField( 'error', 'editar-paciente' ) ) {
 		$editError = true;
+	
+	} else if( __issetGETField( 'error', 'buscar-paciente' ) ) {
+		$searchError = true;
+		$isSearch = true;
+	} else if( __issetGETField( 'error', 'buscar-paciente-rapido' ) ) {
+		$searchQuickError = true;
 	}
 	
 	$queryString = __getGETComplete( 'pagina' );
@@ -203,7 +246,9 @@ CASO CONTRARIO LISTO LOS APELLIDO QUE EMPIECEN CON 'A' */
 			'isSingle' => $isSingle,
 			'queryString' => $queryString,
 			'insurances' => $insurances,
-			'persistValues' => $persistValues
+			'persistValues' => $persistValues,
+			'searchQuickError' => $searchQuickError,
+			'quickSearchValue' => $quickSearchValue
 		)
 	);
 /* }}} */

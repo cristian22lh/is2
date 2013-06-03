@@ -7,7 +7,7 @@
 					<a tabindex="-1" class="is2-dropdownmenu-trigger" href="#" data-field-name="nombre" data-orderby="asc">Ordernar por nombre vía ascendente</a>
 				</li>
 				<li>
-					<a tabindex="-1" class="is2-dropdownmenu-trigger" hhref="#" data-field-name="nombre" data-orderby="desc">Ordernar por nombre vía descendente</a>
+					<a tabindex="-1" class="is2-dropdownmenu-trigger" href="#" data-field-name="nombre" data-orderby="desc">Ordernar por nombre vía descendente</a>
 				</li>
 			</ul>
 		</div>

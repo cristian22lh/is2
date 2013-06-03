@@ -133,7 +133,6 @@
 		$quickSearchValue = $value;
 		$isQuickSearch = true;
 		$isSearch = true;
-		// this last two token are for the limit clause
 		$isLimitClause = true;
 	
 // ESTE ES EL WHERE NORMAL, OSEA CUANDO SE ESTA ACCEDIENDO DIRECTAMENTE A /turnos

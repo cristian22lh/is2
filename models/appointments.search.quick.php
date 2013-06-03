@@ -23,7 +23,7 @@
 	
 	} else {
 		$field = 'comodin';
-		$value = $keyword;
+		$value = trim( $keyword );
 	}
 	
 	__redirect( '/turnos?busqueda=' . base64_encode( $field . '=' . $value ) );

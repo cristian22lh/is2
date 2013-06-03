@@ -107,6 +107,12 @@
 			<div class="is2-pagetitle clearfix">
 				<h3>Pacientes</h3>
 				<a class="btn pull-right btn-warning" href="/pacientes/crear"><i class="icon-plus"></i> Crear un nuevo paciente</a>
+				<form class="form-search pull-right is2-search-quick-form" method="post" action="/pacientes/busqueda-rapida">
+					<div class="is2-search-quick-control input-append control-group <?php echo $searchQuickError ? 'error': ''; ?>">
+						<input type="text" class="input-large search-query is2-search-quick-input" placeholder="Búsqueda rápida" name="keyword" value="<?php echo $quickSearchValue; ?>">
+						<button type="submit" class="btn"><i class="icon-search"></i></button>
+					</div>
+				</form>
 			</div>
 
 			<div id="is2-search-patients-wrapper" class="accordion">
@@ -152,7 +158,6 @@
 									<input type="text" class="input-small datepicker" name="birthDateEnd" value="<?php echo __dateISOToLocale( $persistValues['birthDateEnd'] ); ?>">
 								</label>
 							</fieldset>
-							</fieldset>
 							<fieldset>
 								<legend>Buscar pacientes con obra social</legend>
 								<label class="radio">
@@ -173,7 +178,7 @@
 							<fieldset>
 								<legend>Buscar pacientes con número de afiliado</legend>
 								<label>Número de afiliado de la obra social:</label>
-								<input type="text" class="input-xxlarge" name="affiliateInsuranceNumber" value="" placeholder="Separe con espacios para buscar por varios números de afiliado" value="<?php echo $persistValues['affiliateInsuranceNumber']; ?>">
+								<input type="text" class="input-xxlarge" name="affiliateInsuranceNumber" placeholder="Separe con espacios para buscar por varios números de afiliado" value="<?php echo $persistValues['affiliateInsuranceNumber']; ?>">
 							</fieldset>
 							<button type="submit" class="btn btn-large btn-primary is2-search-trigger">Buscar</button>
 						</form>
@@ -235,7 +240,7 @@
 							<td>
 								<span title="<?php echo $patient['obraSocialNombre']; ?>"><?php echo $patient['obraSocialNombre']; ?></span>
 							<td>
-								<a class="btn btn-mini" href="/pacientes/<?php echo $patient['id']; ?>/ver-en-detalle" title="Ver en detalle"><i class="icon-eye-open"></i></a>
+								<a class="btn btn-mini" href="/pacientes/<?php echo $patient['id']; ?>" title="Ver en detalle"><i class="icon-eye-open"></i></a>
 								<a class="btn btn-mini" href="/pacientes/<?php echo $patient['id']; ?>/editar" title="Editar"><i class="icon-edit"></i></a>
 								<a class="btn btn-mini btn-danger is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-patient-id="<?php echo $patient['id']; ?>"><i class="icon-remove-sign" title="Borrar"></i></a>
 							</td>
@@ -298,7 +303,7 @@
 		// tiro un redirect
 		var queryString = window.location.search.replace( /^\?/, '' ),
 			segs = queryString ? queryString.split( '&' ) : [], seg,
-			pat = /(?:(apellido|nombre|fecha-de-nacimiento)=(asc|desc)|(exito|error|pagina|busqueda-avanzada)=([^$]+))/,
+			pat = /(?:(apellido|nombre|fecha-de-nacimiento)=(asc|desc)|(exito|error|pagina|busqueda-avanzada|busqueda)=([^$]+))/,
 			res = {}, m, q = [], prop;
 		
 		while( segs.length ) {

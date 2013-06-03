@@ -57,6 +57,7 @@
 		'/pacientes/:id/editar' => 'patients.edit',
 		'/pacientes/listar-por-letra/:char' => 'patients',
 		'/pacientes/busqueda-avanzada' => 'patients.search.advanced',
+		'/pacientes/busqueda-rapida' => 'patients.search.quick',
 
 // *** ESPECIALIDADES *** //
 		'/especialidades' => 'specialities',
