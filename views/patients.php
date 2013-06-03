@@ -90,12 +90,13 @@
 			<?php if( $removeSuccess ): ?>
 			<div class="alert alert-success">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
-				¡El paciente junto con sus turnos asociados han sido borrados satisfactoriamente!
+				¡El paciente han sido borrado satisfactoriamente!
 			</div>
 			<?php elseif( $removeError ): ?>
 			<div class="alert alert-error">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
-				¡No se ha podido borrar al paciente! Vuelva a intentarlo.
+				<p><strong>¡No se ha podido borrar al paciente!</strong></p>
+				Recuerde que no puede borrar a un paciente que tenga turnos asociados.
 			</div>
 			<?php elseif( $editError ): ?>
 			<div class="alert alert-error">
@@ -273,7 +274,8 @@
 		<form method="post" action="/pacientes/borrar" id="is2-modal-remove" class="modal hide fade">
 			<div class="modal-body">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<span><strong>¿Estás seguro que desea borrar este paciente del sistema?</strong> Sepa que también se eleminarán sus turnos asociados.</span>
+				<p><strong>¿Estás seguro que desea borrar este paciente?</strong></p>
+				Sepa que no se puede borrar un paciente que posea turnos registrados en el sistema. Primero debe borrar sus turnos asociados y luego si, podrá borrar a este paciete.
 			</div>
 			<div class="modal-footer">
 				<button class="btn" data-dismiss="modal">Cancelar</button>

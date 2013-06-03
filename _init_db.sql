@@ -270,6 +270,27 @@ ALTER TABLE pacientes
 		ON DELETE RESTRICT
 ;
 
+DELIMITER $$
+CREATE TRIGGER pacientes_borrarPaciente
+	BEFORE DELETE ON pacientes
+	FOR EACH ROW
+	BEGIN
+		/** NO SE PUEDE BORRAR UN PACIENTE QUE TENGA TURNOS ASOCIADOS */
+		IF ( 
+			SELECT
+				id
+			FROM
+				turnos
+			WHERE
+				idPaciente = OLD.id
+
+		) IS NOT NULL THEN
+				CALL paciente_posee_turnos_asociados;
+		END IF;
+	END;
+$$
+DELIMITER ;
+
 ALTER TABLE medicos
 	ADD CONSTRAINT medicos_idEspecialidad
 	FOREIGN KEY( idEspecialidad )

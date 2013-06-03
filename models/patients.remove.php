@@ -18,10 +18,10 @@
 		',
 		array( $id )
 	);
-
+	
 	// maybe a constraint error or id point to an inesisten record
 	if( $rowsAffected != 1 ) {
-		__redirect( '/pacientes?error=borrar-paciente' );
+		__redirect( '/pacientes?error=borrar-paciente&id=' . $id );
 	}
 	
 	__redirect( '/pacientes?exito=borrar-paciente' );

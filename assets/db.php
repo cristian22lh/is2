@@ -12,7 +12,8 @@
 		);
 		
 		private static $errorsDict = array(
-			'PROCEDURE is2.medico_no_antiende_fecha_hora_requerido does not exist' => 'fecha|hora'
+			'PROCEDURE is2.medico_no_antiende_fecha_hora_requerido does not exist' => 'fecha|hora',
+			'PROCEDURE is2.paciente_posee_turnos_asociados does not exist' => 'paciente-con-turnos'
 		);
 		private static $errorsCode = array(
 			'1062' => 'duplicado',
