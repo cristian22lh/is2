@@ -78,7 +78,9 @@
 				margin: 0 0 10px;
 			}
 			.is2-insurances-listbox {
+				height: 200px;
 				margin: 0 0 0 10px;
+				overflow-y: scroll;
 			}
 		</style>
 <?php t_endHead(); ?>
@@ -162,7 +164,7 @@
 								<?php foreach( $insurances as $insurance ): ?>
 									<label class="checkbox">
 										<input type="checkbox" name="doctorsList[]" value="<?php echo $insurance['id']; ?>">
-										<?php echo $insurance['nombreCorto'] . ' (' . $insurance['nombreCompleto'] . ')'; ?>
+										<?php echo $insurance['nombreCorto'] . ( $insurance['nombreCompleto'] ? ' (' . $insurance['nombreCompleto'] . ')' : '' ); ?>
 									</label>
 								<?php endforeach; ?>
 								</div>

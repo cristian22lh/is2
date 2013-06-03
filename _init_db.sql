@@ -143,15 +143,9 @@ CREATE TABLE obrasSociales(
 INSERT INTO obrasSociales VALUES
 	( null, 'LIBRE', 'LIBRE' ),
 	( null, 'IOMA', 'IOMA' ),
-	( null, 'PAMI', 'PAMI' ),
-	( null, 'OSDE', 'OSDE Binario' ),
-	( null, 'CIMESA', 'CIMESA' ),
-	( null, 'MEDITAR', 'MEDITAR' ),
-	( null, 'FUSAL', 'FUSAL' ),
-	( null, 'SERVESALUD', 'SERVESALUD' ),
-	( null, 'FERMALINK', 'FERMALINK' ),
-	( null, 'ASET', 'ASET' )
+	( null, 'PAMI', 'PAMI' )
 ;
+LOAD DATA LOCAL INFILE "./_200_insurances.sql" INTO TABLE obrasSociales;
 /**
 *
 */

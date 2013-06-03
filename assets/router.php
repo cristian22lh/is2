@@ -51,7 +51,7 @@
 				if( $fallbackRoute{0} != '/' ) {
 					$fallbackRoute = '/' . $fallbackRoute;
 				}
-				__redirect( $fallbackRoute . '?destino=' . $page . Router::$_getQuery() );
+				__redirect( $fallbackRoute . '?destino=' . $page . Router::_getQuery() );
 			}
 		}
 		
