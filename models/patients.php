@@ -1,11 +1,6 @@
 <?php
 
-	$whereCluase = array();
-	$replacements = array();
-	$letter = false;
-	$isSingle = false;
-	
-// ESTE ES CUANDO VIENE DE SORTEAR LA GRID
+/* {{{ ESTE ES CUANDO VIENE DE SORTEAR LA GRID */
 	$orderByType = false;
 	$orderByCustom = array();
 	// se puede ordenar por apellidos y nombres a la vez...
@@ -34,22 +29,134 @@
 	} else {
 		$orderByClause = array( ' p.apellidos ASC ' , ' p.nombres ASC ' );
 	}
+/* }}} */
 
-// ESTE ES CUANDO VENGO DE CREAR UN TURNO
-	if( ( $newPatient = __GETField( 'id' ) ) && __validateID( $newPatient ) ) {
-		$isSingle = true;
-		$whereCluase[] = ' p.id = ? ';
-		$replacements[] = $newPatient;
+	$whereClause = array();
+	$replacements = array();
+	$letter = false;
+	$isSingle = false;
+
+	$isSearch = false;
+	$isQuickSearch = false;
+	$quickSearchValue = false;
+	$persistValues = array(
+		'lastName' => '',
+		'firstName' => '',
+		'patientsList' => '',
+		'birthDateStart' => '',
+		'birthDateEnd' => '',
+		'insurancesList' => array(),
+		'affiliateInsuranceNumber' => ''
+	);
+/* {{{ ESTO ES CUANDO EL USUARIO HACE UNA BUSQUEDA AVANZADA */
+	if( ( $search = __GETField( 'busqueda-avanzada' ) ) ) {
+		$isSearch = true;
 		
+		$searchParts = explode( '|', __sanitizeValue( base64_decode( $search ) ) );
+		if( count( $searchParts ) != 6 ) {
+			__redirect( '/pacientes?error=buscar-turno' );
+		}
+		
+		// lo primero son los apellidos
+		$lastNames = explode( '-', $searchParts[0] );
+		$lastNamesOrClause = array();
+		foreach( $lastNames as $lastName ) {
+			if( $lastName ) {
+				$lastNamesOrClause[] = ' p.apellidos = ? ';
+				$replacements[] = $persistValues['lastName'][] = $lastName;
+			}
+		}
+		if( count( $lastNamesOrClause ) ) {
+			$whereClause[]	= ' ( ' . implode( ' OR ', $lastNamesOrClause ) . ' ) ';
+			$persistValues['lastName'] = implode( ' ', $persistValues['lastName'] );
+		}
+		
+		// lo segundo son los nombres
+		$firstNames = explode( '-', $searchParts[1] );
+		$firstNamesOrClause = array();
+		foreach( $firstNames as $firstName ) {
+			if( $firstName ) {
+				$lastNamesOrClause[] = ' p.nombres = ? ';
+				$replacements[] = $persistValues['firstName'][] = $firstName;
+			}
+		}
+		if( count( $firstNamesOrClause ) ) {
+			$whereClause[]	= ' ( ' . implode( ' OR ', $firstNamesOrClause ) . ' ) ';
+			$persistValues['firstName'] = implode( ' ', $persistValues['firstName'] );
+		}
+		
+		// lo tercero el rango de fecha de nacimiento
+		$birthDateRange = explode( '@', $searchParts[2] );
+		if( isset( $birthDateRange[0] ) && $birthDateRange[0] ) {
+			$whereClause[] = ' p.fechaNacimiento >= ? ';
+			$replacements[] = $persistValues['birthDateStart'] = $birthDateRange[0];
+		}
+		if( isset( $birthDateRange[1] ) && $birthDateRange[1] ) {
+			$whereClause[] = ' p.fechaNacimiento <= ? ';
+			$replacements[] = $persistValues['birthDateEnd'] = $birthDateRange[1];
+		}
+		
+		// lo cuarto es una lista de obra sociales
+		$insurancesList = explode( '-', $searchParts[3] );
+		// hago el OR clause
+		$insurancesOrClause = array();
+		foreach( $insurancesList as $insuranceID ) {
+			if( $insuranceID ) {
+				$insurancesOrClause[] = ' os.id = ? ';
+				$replacements[] = $persistValues['insurancesList'][$insuranceID] = $insuranceID;
+			}
+		}
+		if( count( $insurancesOrClause ) ) {
+			$whereClause[] = ' ( ' . implode( ' OR ', $insurancesOrClause ) . ' ) ';
+		}
+		
+		// lo quinto es una lista de dnis
+		$patientsDNI = explode( '-', $searchParts[4] );
+		$patientsOrClause = array();
+		foreach( $patientsDNI as $dni ) {
+			if( $dni ) {
+				$patientsOrClause[] = ' p.dni = ? ';
+				$replacements[] = $persistValues['patientsList'][] = $dni;
+			}
+		}
+		if( count( $patientsOrClause ) ) {
+			$whereClause[]	= ' ( ' . implode( ' OR ', $patientsOrClause ) . ' ) ';
+			$persistValues['patientsList'] = implode( ' ', $persistValues['patientsList'] );
+		}
+		
+		// la sexta parte es una lista de numero de afiliados
+		$affiliateNumbers = explode( '-', $searchParts[5] );
+		$affiliateNumbersOrClause = array();
+		foreach( $affiliateNumbers as $affiliateNumber ) {
+			if( $affiliateNumber ) {
+				$affiliateNumbersOrClause[] = ' p.nroAfiliado = ? ';
+				$replacements[] = $persistValues['affiliateInsuranceNumber'][] = $affiliateNumber;
+			}
+		}
+		if( count( $affiliateNumbersOrClause ) ) {
+			$whereClause[]	= ' ( ' . implode( ' OR ', $affiliateNumbersOrClause ) . ' ) ';
+			$persistValues['affiliateInsuranceNumber'] = implode( ' ', $persistValues['affiliateInsuranceNumber'] );
+		}
+		
+		__log( $whereClause, $replacements );
+		
+/* }}} */
+/* {{{ ESTE ES CUANDO VENGO DE CREAR UN TURNO */
+	} else if( ( $newPatient = __GETField( 'id' ) ) && __validateID( $newPatient ) ) {
+		$isSingle = true;
+		$whereClause[] = ' p.id = ? ';
+		$replacements[] = $newPatient;
+/* }}} */
+/* {{{ ESTO ES CUANDO ESTOY ASI: pacientes/listar-por-letra/B SI FUERA EL CASO,
+CASO CONTRARIO LISTO LOS APELLIDO QUE EMPIECEN CON 'A' */
 	} else {
-// ESTO ES CUANDO ESTOY ASI: pacientes/listar-por-letra/B SI FUERA EL CASO,
-// CASO CONTRARIO LISTO LOS APELLIDO QUE EMPIECEN CON 'A'
 		$letter = Router::seg( 3 ) ?: 'A';
-		$whereCluase[] = ' p.apellidos LIKE ?';
+		$whereClause[] = ' p.apellidos LIKE ?';
 		$replacements[] = $letter . '%';
 	}
+/* }}} */
 
-// ESTAS VARIABLES SON LAS QUE SE USAN EL VIEW
+/* {{{ VARIABLES QUE SERAN USADAS EN LA VIEW */
 	$username = __getUsername();
 	// veo si tengo que paginar
 	$offset = __validateID( __GETField( 'pagina' ) );
@@ -57,7 +164,7 @@
 		$offset = 0;
 	}
 	// pido los pacientes en base a un $offset
-	$patients = q_getPatients( $whereCluase, $replacements, $orderByClause, $offset );
+	$patients = q_getPatients( $whereClause, $replacements, $orderByClause, $offset );
 	// veo si tengo que SEGUIR paginar
 	if( count( $patients ) == 31 ) {
 		array_pop( $patients );
@@ -82,7 +189,6 @@
 	
 	$insurances = q_getAllInsurances();
 	
-// LOAD THE VIEW
 	__render( 
 		'patients', 
 		array(
@@ -96,8 +202,10 @@
 			'offset' => $offset,
 			'isSingle' => $isSingle,
 			'queryString' => $queryString,
-			'insurances' => $insurances
+			'insurances' => $insurances,
+			'persistValues' => $persistValues
 		)
 	);
+/* }}} */
 
 ?>

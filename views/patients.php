@@ -3,67 +3,67 @@
 			label {
 				cursor: default;
 			}
-			th {
+			.is2-grid-header th {
 				text-align: center !important;
 				vertical-align: middle !important;
 			}
-			th:nth-child( 1 ),
-			th:nth-child( 2 ) {
+			.is2-grid-header th:nth-child( 1 ),
+			.is2-grid-header th:nth-child( 2 ) {
 				width: 164px;
 			}
-			th:nth-child( 4 ) {
+			.is2-grid-header th:nth-child( 4 ) {
 				width: 105px;
 				text-align: left !important;
 			}
-			th:nth-child( 4 ) > span {
+			.is2-grid-header th:nth-child( 4 ) > span {
 				display: inline-block;
 				text-align: center;
 				width: 77px;
 			}
-			th:nth-child( 4 ) .is2-dropdownmenu {
+			.is2-grid-header th:nth-child( 4 ) .is2-dropdownmenu {
 				position: relative;
 				top: -10px;
 			}
-			th:nth-child( 5 ) {
+			.is2-grid-header th:nth-child( 5 ) {
 				width: 80px;
 			}
-			td {
+			.is2-grid td {
 				text-align: center !important;
 				font-size: 13px;
 			}
-			td span {
+			.is2-grid td span {
 				display: block;
 				word-wrap: break-word;
 			}
-			td:nth-child( 1 ) span,
-			td:nth-child( 2 ) span {
+			.is2-grid td:nth-child( 1 ) span,
+			.is2-grid td:nth-child( 2 ) span {
 				width: 155px;
 				text-align: left;
 			}
-			td:nth-child( 3 ) {
+			.is2-grid td:nth-child( 3 ) {
 				width: 65px;
 			}
-			td:nth-child( 4 ) {
+			.is2-grid td:nth-child( 4 ) {
 				width: 65px;
 			}
-			td:nth-child( 5 ) {
+			.is2-grid td:nth-child( 5 ) {
 				width: 100px;
 			}
-			td:nth-child( 6 ) span {
+			.is2-grid td:nth-child( 6 ) span {
 				width: 150px;
 				text-align: left;
 			}
-			td:nth-child( 7 ) span {
+			.is2-grid td:nth-child( 7 ) span {
 				width: 100px;
 				text-transform: uppercase;
 			}
-			td:nth-child( 8 ) span {
+			.is2-grid td:nth-child( 8 ) span {
 				width: 130px;
 			}
-			td:nth-child( 9 ) span {
+			.is2-grid td:nth-child( 9 ) span {
 				text-align: center;
 			}
-			td:last-child {
+			.is2-grid td:last-child {
 				width: 95px;
 			}
 			.pagination {
@@ -108,7 +108,7 @@
 				<h3>Pacientes</h3>
 				<a class="btn pull-right btn-warning" href="/pacientes/crear"><i class="icon-plus"></i> Crear un nuevo paciente</a>
 			</div>
-			
+
 			<div id="is2-search-patients-wrapper" class="accordion">
 				<div class="accordion-group">
 					<div class="accordion-heading">
@@ -116,7 +116,7 @@
 							Búsqueda avanzada...
 						</a>
 					</div>
-					<div id="is2-search-patients" class="accordion-body collapse in">
+					<div id="is2-search-patients" class="accordion-body collapse out">
 						<form class="accordion-inner" method="post" action="/pacientes/busqueda-avanzada">
 							<div class="alert">
 								Sepa que puede combinar los campos entre si para realizar búsquedas más precisas
@@ -128,42 +128,43 @@
 								<legend>Buscar pacientes con apellidos</legend>
 
 								<label>Apellidos:</label>
-								<input type="text" class="input-xxlarge" name="" value="" placeholder="Para buscar por varios apellidos simplemente separelos con una , (coma)">
+								<input type="text" class="input-xxlarge" name="lastName" value="<?php echo __sanitizeValue( $persistValues['lastName'] ); ?>" placeholder="Para buscar por varios apellidos simplemente separelos con un espacio">
 							</fieldset>
 							<fieldset>
 								<legend>Buscar pacientes con nombres</legend>
 								<label>Nombres:</label>
-								<input type="text" class="input-xxlarge" name="" value="" placeholder="Para buscar por varios nombres simplemente separelos con una , (coma)">
+								<input type="text" class="input-xxlarge" name="firstName" value="<?php echo __sanitizeValue( $persistValues['firstName'] ); ?>" placeholder="Para buscar por varios nombres simplemente separelos con un espacio">
 							</fieldset>
 							<fieldset>
 								<legend>Buscar pacientes con numero de DNI</legend>
 								<label>Número de DNI:</label>
-								<input type="text" class="input-xxlarge" name="" value="" placeholder="Para buscar por varios números de DNI simplemente separelos con un espacio">
+								<input type="text" class="input-xxlarge" name="patientsList" value="<?php echo __sanitizeValue( $persistValues['patientsList'] ); ?>" placeholder="Para buscar por varios números de DNI simplemente separelos con un espacio">
 							</fieldset>
 							<fieldset class="form-inline">
-								<legend>Buscar pacientes con fecha de nacimiento entre</legend>
+								<legend>Buscar pacientes con fecha de nacimiento</legend>
 								<div class="alert alert-info">
 									Puede optar por dejar un limite vacío para realizar una busqueda sin limite superior/inferior
 								</div>
 								<label>Desde:
-									<input type="text" class="input-small datepicker" name="" value="">
+									<input type="text" class="input-small datepicker" name="birthDateStart" value="<?php echo __dateISOToLocale( $persistValues['birthDateStart'] ); ?>">
 								</label>
 								<label>hasta:
-									<input type="text" class="input-small datepicker" name="" value="">
+									<input type="text" class="input-small datepicker" name="birthDateEnd" value="<?php echo __dateISOToLocale( $persistValues['birthDateEnd'] ); ?>">
 								</label>
+							</fieldset>
 							</fieldset>
 							<fieldset>
 								<legend>Buscar pacientes con obra social</legend>
 								<label class="radio">
-									<input type="radio" name="insuranceSearch">Incluir todas las obras sociales
+									<input type="radio" name="insuranceSearch" value="all" <?php echo !count( $persistValues['insurancesList'] ) ? 'checked' : ''; ?>>Incluir todas las obras sociales
 								</label>
 								<label class="radio">
-									<input type="radio" name="insuranceSearch">Solo los pacientes con las obras sociales...
+									<input type="radio" name="insuranceSearch" value="custom" class="is2-search-patients-insurance-custom" <?php echo count( $persistValues['insurancesList'] ) ? 'checked' : ''; ?>>Solo los pacientes con las obras sociales...
 								</label>
 								<div class="is2-insurances-listbox alert alert-info">
 								<?php foreach( $insurances as $insurance ): ?>
 									<label class="checkbox">
-										<input type="checkbox" name="doctorsList[]" value="<?php echo $insurance['id']; ?>">
+										<input type="checkbox" name="insurancesList[]" value="<?php echo $insurance['id']; ?>" <?php echo isset( $persistValues['insurancesList'][$insurance['id']] ) ? 'checked' : ''; ?>>
 										<?php echo $insurance['nombreCorto'] . ( $insurance['nombreCompleto'] ? ' (' . $insurance['nombreCompleto'] . ')' : '' ); ?>
 									</label>
 								<?php endforeach; ?>
@@ -171,7 +172,8 @@
 							</fieldset>
 							<fieldset>
 								<legend>Buscar pacientes con número de afiliado</legend>
-								<input type="text" class="input-xxlarge" name="" value="" placeholder="Separe con espacios para buscar por varios números de afiliado">
+								<label>Número de afiliado de la obra social:</label>
+								<input type="text" class="input-xxlarge" name="affiliateInsuranceNumber" value="" placeholder="Separe con espacios para buscar por varios números de afiliado" value="<?php echo $persistValues['affiliateInsuranceNumber']; ?>">
 							</fieldset>
 							<button type="submit" class="btn btn-large btn-primary is2-search-trigger">Buscar</button>
 						</form>
@@ -279,16 +281,24 @@
 
 <script>
 (function() {
+
+	IS2.initDatepickers();
+
 	$( '.is2-grid' ).delegate( '.is2-trigger-remove', 'click', function( e ) {
 		$( '#is2-modal-remove' ).find( 'input[name="id"]' ).val( $( this ).attr( 'data-patient-id' ) );
 	} );
 	
+// *** PARA LA BUSQUEDA AVANZADA *** //
+	$( '.is2-insurances-listbox label' ).on( 'click', function( e ) {
+		$( '.is2-search-patients-insurance-custom' ).click();
+	} );
+	
 // *** CUANDO SE SORTEA LA GRID *** //
-	var getQueryString = function() {
+	var getQueryString = function( fieldName, callback ) {
 		// tiro un redirect
 		var queryString = window.location.search.replace( /^\?/, '' ),
 			segs = queryString ? queryString.split( '&' ) : [], seg,
-			pat = /(?:(apellido|nombre|fecha-de-nacimiento)=(asc|desc)|(exito|error|pagina)=([^$]+))/,
+			pat = /(?:(apellido|nombre|fecha-de-nacimiento)=(asc|desc)|(exito|error|pagina|busqueda-avanzada)=([^$]+))/,
 			res = {}, m, q = [], prop;
 		
 		while( segs.length ) {
@@ -299,12 +309,25 @@
 			}
 		}
 		
-		q = [];
+		if( !callback ) {
+			callback = function() { return true; };
+		}
+
 		for( prop in res ) {
-			q.push( prop + '=' + res[prop] );
+			if( prop !== fieldName && callback( prop ) ) {
+				q.push( prop + '=' + res[prop] );
+			}
 		}
 		
 		return q.length ? q.join( '&' ) + '&' : '';
+	};
+	
+	// cuando se buscar por fecha de nacimiento, no puede estar seteado apellido y nombre
+	var skipNames = function( prop ) {
+		return prop !== 'apellido' && prop !== 'nombre';
+	};
+	var skipBirthDate = function( prop ) {
+		return prop !== 'fecha-de-nacimiento';
 	};
 	
 	$( '.is2-dropdownmenu-trigger' ).on( 'click', function( e ) {
@@ -313,7 +336,7 @@
 			fieldName = $el.attr( 'data-field-name' ),
 			orderBy = $el.attr( 'data-orderby' );
 			
-		window.location = window.location.pathname + '?' + getQueryString() + fieldName + '=' + orderBy;
+		window.location = window.location.pathname + '?' + getQueryString( fieldName, fieldName === 'fecha-de-nacimiento' ? skipNames : skipBirthDate ) + fieldName + '=' + orderBy;
 	} );
 })();
 </script>

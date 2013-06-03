@@ -21,7 +21,6 @@
 	// init some things
 	DB::init();
 	Router::init();
-	// init some things
 	__initSession();
 	__initDebugging();
 	// enforce utf8 output
@@ -57,6 +56,7 @@
 		'/pacientes/crear' => 'patients.new',
 		'/pacientes/:id/editar' => 'patients.edit',
 		'/pacientes/listar-por-letra/:char' => 'patients',
+		'/pacientes/busqueda-avanzada' => 'patients.search.advanced',
 
 // *** ESPECIALIDADES *** //
 		'/especialidades' => 'specialities',

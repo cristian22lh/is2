@@ -28,7 +28,7 @@
 				if( $loginPage{0} != '/' ) {
 					$loginPage = '/' . $loginPage;
 				}
-				__redirect( $loginPage . '?destino=' . $page . Router::$_getQuery() );
+				__redirect( $loginPage . '?destino=' . $page . Router::_getQuery() );
 			}
 		}
 		

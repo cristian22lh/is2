@@ -35,17 +35,15 @@
 	if( $doctorsSearch == 'custom' ) {
 		if( !isset( $_POST['doctorsList'] ) || !is_array( $_POST['doctorsList'] ) || !count( $_POST['doctorsList'] ) ) {
 			__redirect( '/turnos?error=buscar-turno' );
-		}
-		
+		}	
 		$doctorsList = $_POST['doctorsList'];
 	}	
 	
 	$patientsSearch = $_POST['patientsSearch'];
 	$cleanDNIs = array();
 	if( $patientsSearch == 'custom' && ( $patientsList = trim( $_POST['patientsList'] ) ) ) {
-		// sanitize los dnis
+		// make "1212 2321 3323" -> [ 1213, 2321 3323 ]
 		$patientsList = explode( ' ', $patientsList );
-		$cleanDNIs = array();
 		foreach( $patientsList as $dni ) {
 			$dni = __cleanDNI( $dni );
 			if( $dni ) {
@@ -57,7 +55,7 @@
 	$status = $_POST['status'];
 	
 	// aca armo la query url, estas sera procesado en appointments.php
-	$search = $fromDate . '@' . $toDate . '|' . $fromTime . '@' . $toTime . '|' . ( count( $doctorsList ) > 0 ? implode( '-', $doctorsList ) : '' ) . '|' . ( count( $cleanDNIs ) > 0 ? implode( '-', $cleanDNIs ) : '' ) . '|' . $status;
+	$search = $fromDate . '@' . $toDate . '|' . $fromTime . '@' . $toTime . '|' . ( count( $doctorsList ) ? implode( '-', $doctorsList ) : '' ) . '|' . ( count( $cleanDNIs ) ? implode( '-', $cleanDNIs ) : '' ) . '|' . $status;
 	
 	__redirect( '/turnos?busqueda-avanzada=' . base64_encode( $search ) );
 	

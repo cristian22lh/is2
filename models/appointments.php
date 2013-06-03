@@ -22,11 +22,11 @@
 	$isQuickSearch = false;
 	$quickSearchValue = false;
 
-// ESTO ES CUANDO EL USUARIO HA HECHO CLICK EN EL BOTON BUSCAR
+// ESTO ES CUANDO EL USUARIO HACE UNA BUSQUEDA AVANZADA
 	if( ( $search = __GETField( 'busqueda-avanzada' ) ) ) {
 		$isSearch = true;
 	
-		$searchParts = explode( '|', base64_decode( $search ) );
+		$searchParts = explode( '|', __sanitizeValue( base64_decode( $search ) ) );
 		if( count( $searchParts ) != 5 ) {
 			__redirect( '/turnos?error=buscar-turno' );
 		}
@@ -61,7 +61,7 @@
 				$replacements[] = $persistValues['doctorsList'][$doctorID] = $doctorID;
 			}
 		}
-		if( count( $doctorsOrClause ) > 0 ) {
+		if( count( $doctorsOrClause ) ) {
 			$whereClause[] = ' ( ' . implode( ' OR ', $doctorsOrClause ) . ' ) ';
 		}
 		// la cuarta parte es una lista de pacientes de DNIs
@@ -74,7 +74,7 @@
 				$replacements[] = $persistValues['patientsDNI'][] = $dni;
 			}
 		}
-		if( count( $patientsOrClause ) > 0 ) {
+		if( count( $patientsOrClause ) ) {
 			$whereClause[]	= ' ( ' . implode( ' OR ', $patientsOrClause ) . ' ) ';
 			$persistValues['patientsDNI'] = implode( ' ', $persistValues['patientsDNI'] );
 		}

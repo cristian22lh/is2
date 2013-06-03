@@ -170,10 +170,10 @@
 									Deje en blanco estos campos, si no desea buscar por rango de fechas
 								</div>
 								<label>Desde:
-									<input type="text" class="input-small datepicker" name="fromDate" value="<?php echo __dateISOToLocale( __sanitizeValue( $persistValues['fromDate'] ) ); ?>">
+									<input type="text" class="input-small datepicker" name="fromDate" value="<?php echo __dateISOToLocale( $persistValues['fromDate'] ); ?>">
 								</label>
 								<label>hasta:
-									<input type="text" class="input-small datepicker" name="toDate" value="<?php echo __dateISOToLocale( __sanitizeValue( $persistValues['toDate'] ) ); ?>">
+									<input type="text" class="input-small datepicker" name="toDate" value="<?php echo __dateISOToLocale(  $persistValues['toDate'] ); ?>">
 								</label>
 							</fieldset>
 							<fieldset class="form-inline">
@@ -594,7 +594,7 @@
 // *** ACA PARA LA BUSQUEDA DE TURNOS *** //
 	IS2.initDatepickers();
 	IS2.initTimepickers( { defaultTime: false } );
-	$( '.is2-doctors-listbox' ).on( 'click', function( e ) {
+	$( '.is2-doctors-listbox label' ).on( 'click', function( e ) {
 		$( '.is2-doctors-custom' ).click();
 	} );
 	$( '.is2-patients-search' ).on( 'click', function( e ) {
