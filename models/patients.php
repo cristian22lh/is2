@@ -15,7 +15,7 @@
 		$orderByCustom['fechaNacimiento'] = $orderByType;
 	}
 	// validate
-	$orderByClause = [];
+	$orderByClause = array();
 	if( count( $orderByCustom ) ) {
 		foreach( $orderByCustom as $orderByCol => $orderByType ) {
 			// si me metio mano, poner ASC

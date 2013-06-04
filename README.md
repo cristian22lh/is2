@@ -39,7 +39,7 @@ Creando la base de datos y sus tablas
 ------------------------------------------------
 Para crear la base de datos que usara la aplicacion con sus respectivas tablas tiene que correr el siguiente comando desde la consola
 
-`mysql -u %usuario% -p%clave% < _init_db.sql`
+`mysql --local-infile -u %usuario% -p%clave% < _init_db.sql`
 
 **ES PROBABLE QUE EL COMANDO mysql NO SEA RECONOCIDO**
 Para este caso y si estan con WampServer, mysql esta (en mi caso) aca
