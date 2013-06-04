@@ -136,7 +136,7 @@ DROP TABLE IF EXISTS obrasSociales;
 CREATE TABLE obrasSociales(
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
 	nombreCorto VARCHAR( 255 ),
-	nombreCompleto TEXT,
+	nombreCompleto TEXT NULL,
 	UNIQUE INDEX( nombreCorto )
 ) ENGINE=InnoDB;
 	

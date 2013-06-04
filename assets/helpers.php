@@ -195,6 +195,10 @@
 		
 		return $hours . ':' . $value[1] . ' ' . $meridian;
 	}
+	
+	function __trimTime( $value ) {
+		return substr( $value, 0, 5 );
+	}
 
 	function __cleanDNI( $value ) {
 		$value = str_replace( '.', '', trim( $value ) );

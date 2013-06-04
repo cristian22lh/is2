@@ -72,7 +72,7 @@
 	}
 
 	__render( 
-		'_patients.new.edit', 
+		'patients.new.edit', 
 		array(
 			'username' => $username,
 			'editSuccess' => $editSuccess,

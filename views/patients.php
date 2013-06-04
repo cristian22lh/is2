@@ -83,6 +83,125 @@
 				overflow-y: scroll;
 			}
 		</style>
+		<style>
+			/* popup de paciente detalles */
+			@import url(http://fonts.googleapis.com/css?family=Allura|Zeyada|Parisienne|Sue+Ellen+Francisco);
+			
+			#is2-modal-details {
+				background: #fff;
+				border-radius: 0;
+				padding: 0;
+				font-family: 'Allura', cursive;
+				font-family: 'Sue Ellen Francisco', cursive;
+				font-family: 'Parisienne', cursive;
+				font-family: 'Zeyada', cursive;
+				width: 850px;
+				max-height: 495px;
+				z-index: 100000;
+				box-shadow: 0 0 5px rgba(0, 0, 0, 0.2), inset 0 0 30px rgba(0, 0, 0, 0.1);
+			}
+			#is2-modal-details * {
+				margin: 0;
+			}
+			#is2-modal-details .modal-body {
+				line-height: 0;
+				padding: 0;
+				position: absolute;
+				right: 4px;
+				top: 5px;
+				overflow: hidden;
+			}
+			.is2-modal-details-header {
+				position: relative;
+				font-size: 30px;
+			}
+			.is2-modal-details-header h1 {
+				padding: 10px;
+			}
+			.is2-modal-details-header ul {
+				padding: 0 10px 10px 10px;
+			}
+			.is2-modal-details-header li {
+				list-style-type: none;
+				display: inline-block;
+				margin: 10px 0;
+			}
+			.is2-modal-details-header:after {
+				border-bottom: 1px solid #ffaa9f;
+				border-top: 1px solid #ffaa9f;
+				height: 2px;
+				width: 100%;
+				content: '';
+				position: absolute;
+			}
+			.is2-modal-details-body {
+				margin: 15px 0;
+			}
+			.is2-modal-details-body li {
+				display: block;
+				font-size: 25px;
+				border-bottom: 1px solid #ccc;
+				line-height: 2;
+				padding: 0 0 0 10px;
+			}
+			.is2-modal-details-body li:last-child {
+				border-bottom: 0;
+			}
+			.is2-modal-details-appointments {
+				height: 200px;
+				overflow-y: scroll;
+				margin: 5px 0 0 0;
+				border-top: 1px solid #ccc;
+				font-size: 25px;
+			}
+
+			.is2-modal-details-appointments tr:hover {
+				background-color: #eee;
+				-webkit-transition: 0.2s;
+				-moz-transition:    0.2s;
+				-ms-transition:     0.2s;
+				-o-transition:      0.2s;
+			}
+			.is2-modal-details-appointments td {
+				list-style: none;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				padding: 10px 5px 10px 50px;
+				border-top: 0;
+			}
+			.is2-modal-details-appointments tr {
+				border-bottom: 1px dotted #ccc;
+			}
+			.is2-modal-details-appointments tr:last-child {
+				border-bottom: 0;
+			}
+			.wrapper {
+				position: relative;
+			}
+			.is2-preloader-wrapper {
+				width: 128px;
+				height: 128px;
+				position: absolute;
+				background: #fff;
+				border: 1px solid #ccc;
+				border-radius: 10px;
+				padding: 10px;
+				top: 30%;
+				left: 40%;
+				box-shadow: 0 0 5px rgba(0, 0, 0, 0.2), inset 0 0 5px rgba(0, 0, 0, 0.1);
+			}
+			.is2-modal-details-appointments-empty {
+				text-align: center;
+				padding: 10px 0 0 0;
+				color: #ffaa9f;
+			}
+			.is2-patient-data-insurance {
+				font-size: 20px;
+				color: #777;
+			}
+		</style>
+
 <?php t_endHead(); ?>
 <?php t_startBody( $username, 'patients'  ); ?>
 	
@@ -241,7 +360,7 @@
 							<td>
 								<span title="<?php echo $patient['obraSocialNombre']; ?>"><?php echo $patient['obraSocialNombre']; ?></span>
 							<td>
-								<a class="btn btn-mini" href="/pacientes/<?php echo $patient['id']; ?>" title="Ver en detalle"><i class="icon-eye-open"></i></a>
+								<a class="btn btn-mini is2-patients-details-trigger" href="#is2-modal-details" data-toggle="modal" title="Ver en detalle" data-patient-id="<?php echo $patient['id']; ?>"><i class="icon-eye-open"></i></a>
 								<a class="btn btn-mini" href="/pacientes/<?php echo $patient['id']; ?>/editar" title="Editar"><i class="icon-edit"></i></a>
 								<a class="btn btn-mini btn-danger is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-patient-id="<?php echo $patient['id']; ?>"><i class="icon-remove-sign" title="Borrar"></i></a>
 							</td>
@@ -284,7 +403,7 @@
 		<!-- los modals -->
 		<form method="post" action="/pacientes/borrar" id="is2-modal-remove" class="modal hide fade">
 			<div class="modal-body">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<button class="close" data-dismiss="modal">&times;</button>
 				<p><strong>¿Estás seguro que desea borrar este paciente?</strong></p>
 				Sepa que no se puede borrar un paciente que posea turnos registrados en el sistema. Primero debe borrar sus turnos asociados y luego si, podrá borrar a este paciete.
 			</div>
@@ -293,6 +412,52 @@
 				<button class="btn btn-primary" type="submit">Borrar</button>
 			</div>
 			<input type="hidden" name="id">
+		</form>
+		
+		<form id="is2-modal-details" class="modal hide fade">
+			<div class="wrapper">
+				<div class="is2-preloader-wrapper">
+					<div class="is2-preloader-big is2-patients-details-preloader"></div>
+				</div>
+				<div class="is2-modal-details-header">
+					<div class="modal-body">
+						<button class="btn btn-link" data-dismiss="modal">
+							<i class="icon-remove-sign"></i>
+						</button>
+					</div>
+					<h1 class="is2-patient-data" data-field-name="nombreCompleto"></h1>
+					<ul>
+						<li class="is2-patient-data" data-field-name="dni"></li>
+						<li class="is2-patient-data" data-field-name="fechaNacimiento"></li>
+						<li class="is2-patient-data" data-field-name="edad"></li>
+					</ul>
+				</div>
+				<div class="is2-modal-details-body">
+					<ul>
+						<li>Teléfono: <strong class="is2-patient-data" data-field-name="telefono">4570670</strong></li>
+						<li>Obra social: <strong class="is2-patient-data" data-field-name="obraSocialAbbr">IOMA</strong> <strong class="is2-patient-data is2-patient-data-insurance" data-field-name="obraSocialNombre"></strong></li>
+						<li>Número de afiliado: <strong class="is2-patient-data" data-field-name="nroAfiliado">34354656565/12</strong></li>
+					</ul>
+					<div class="is2-modal-details-appointments" style="display:none">
+						<table class="table">
+							<tr class="is2-modal-details-appointments-record">
+								<td class="is2-appointment-data" data-field-name="fecha"></td>
+								<td class="is2-appointment-data" data-field-name="hora"></td>
+								<td><span class="is2-appointment-data" data-field-name="apellidos"></span>, <span class="is2-appointment-data" data-field-name="nombres"></span></td>
+								<td class="is2-appointment-data" data-field-name="estado"></td>
+								<td>
+									<a href="#" class="btn btn-mini btn-link is2-appointment-data-link" title="Ir al turno">
+										<i class="icon-share-alt"></i>
+									</a>
+								</td>
+							</tr>
+						</table>
+						<div class="is2-modal-details-appointments-empty" style="display:none">
+							<strong>Paciente sin turnos registrados hasta el momento</strong>
+						</div>
+					</div>
+				</div>
+			</div>
 		</form>
 		
 <?php t_endBody(); ?>
@@ -304,6 +469,85 @@
 
 	$( '.is2-grid' ).delegate( '.is2-trigger-remove', 'click', function( e ) {
 		$( '#is2-modal-remove' ).find( 'input[name="id"]' ).val( $( this ).attr( 'data-patient-id' ) );
+	} );
+	
+// *** PARA EL DETALLE DEL PACIENTE *** //
+	var $patientDetailsModal = $( '#is2-modal-details');
+	var $patientDetailsModalPreloader = $( '.is2-preloader-wrapper' );
+	var $patientDetailsModalPreloaderIcon = $( '.is2-patients-details-preloader' );
+	var isWaiting = false;
+	var $patientFields = $( '.is2-patient-data' );
+	var $appointmentRecord = $( '.is2-modal-details-appointments-record' ).clone();
+	$( '.is2-modal-details-appointments-record' ).remove();
+	var $appointmentsWrapper = $( '.is2-modal-details-appointments' );
+	var $appointmentsGrid = $( '.is2-modal-details-appointments table' );
+	var $emptyAppointments = $( '.is2-modal-details-appointments-empty' );
+	
+	$patientDetailsModal .css( 'left', $( window ).outerWidth() /2 - 850 / 2 ).css( 'margin-left', 0 ).on( 'hidden', function( e ) {
+		$( 'tr.is2-patients-row.is2-record-new' ).removeClass( 'is2-record-new' );
+	} );
+	
+	var showPatientDetails = function( dataResponse ) {
+		isWaiting = false;
+		$patientDetailsModalPreloader.fadeOut( 'fast' );
+		$patientDetailsModalPreloaderIcon.css( 'visibility', 'hidden' );
+		if( !dataResponse.success ){
+			return false;
+		}
+		
+		$appointmentsGrid.empty();
+		
+		var data = dataResponse.data,
+			patientData = data.patient,
+			appointments = data.appointments;
+			
+		$patientFields.each( function() {
+			var $el = $( this );
+			$el.html( patientData[$el.attr( 'data-field-name' )] );
+		} );
+		
+		var appointment,
+			$record, $fields, $field,
+			i, l, hasAppointments = appointments.length;
+			
+		while( appointments.length ) {
+			appointment = appointments.shift();
+			$record = $appointmentRecord.clone();
+			$fields = $record.find( '.is2-appointment-data' );
+			for( i = 0, l = $fields.length; i < l; i++ ) {
+				$field = $fields.eq( i );
+				$field.html( appointment[$field.attr( 'data-field-name' )] );
+			}
+			$record.find( '.is2-appointment-data-link' ).attr( 'href', '/turnos?id=' + appointment.id );
+			$appointmentsGrid.append( $record );
+		}
+	
+		if( !hasAppointments ) {
+			$emptyAppointments.show();
+		} else {
+			$emptyAppointments.hide();
+		}
+		$appointmentsWrapper.slideDown( 'fast' );
+	};
+	
+	$( '.is2-grid-wrapper' ).delegate( '.is2-patients-details-trigger', 'click', function( e ) {
+		if( isWaiting ) {
+			return;
+		}
+		isWaiting = true;
+		$patientDetailsModalPreloaderIcon.css( 'visibility', 'visible' );
+		$patientDetailsModalPreloader.fadeIn( 'fast' );
+		
+		var patientID = $( this ).attr( 'data-patient-id' );
+		$( 'tr.is2-patients-row[data-patient-id=' + patientID + ']' ).addClass( 'is2-record-new' );
+	
+		$.ajax( {
+			url: '/pacientes/' + patientID,
+			dataType: 'json',
+			type: 'GET',
+			success: showPatientDetails,
+			error: showPatientDetails
+		} );
 	} );
 	
 // *** PARA LA BUSQUEDA AVANZADA *** //

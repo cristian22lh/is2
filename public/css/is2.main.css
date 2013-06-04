@@ -112,6 +112,14 @@ legend {
 .is2-preloader-bg {
 	background-image: url( /img/preloader-bg-gray.gif );
 }
+.is2-preloader-big {
+	background: url( /img/preloader-big.gif ) no-repeat;
+	display: inline-block;
+	width: 128px;
+	height: 128px;
+	vertical-align: middle;
+	visibility: hidden;
+}
 
 :not( .popover-content ) > .is2-popover-template {
 	display: none;
@@ -141,6 +149,10 @@ legend {
 	background: #FCF8E3;
 	color: #C09853;
 	border-bottom: 1px solid #ddd;
+	-webkit-transition: 0.2s;
+	-moz-transition:    0.2s;
+	-ms-transition:     0.2s;
+	-o-transition:      0.2s;
 }
 .is2-record-new-popover {
 	text-align: center;

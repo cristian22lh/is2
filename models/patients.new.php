@@ -44,7 +44,7 @@
 	}
 
 	__render( 
-		'_patients.new.edit', 
+		'patients.new.edit', 
 		array(
 			'username' => $username,
 			'createError' => $createError,

@@ -76,7 +76,7 @@ IS2.showNewRecord = function( $el ) {
 
 	$popoverClose.on( 'click', function( e ) {
 		e.stopPropagation();
-		$el.popover( 'hide' ).removeClass( 'is2-appointments-row-newly' ).off( 'click', arguments.callee );
+		$el.popover( 'hide' ).removeClass( 'is2-record-new' ).off( 'click', arguments.callee );
 		window.clearTimeout( closePopupTimeout );
 	} );
 	$document.on( 'click', function( e ) {
