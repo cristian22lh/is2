@@ -434,9 +434,9 @@
 				</div>
 				<div class="is2-modal-details-body">
 					<ul>
-						<li>Teléfono: <strong class="is2-patient-data" data-field-name="telefono">4570670</strong></li>
-						<li>Obra social: <strong class="is2-patient-data" data-field-name="obraSocialAbbr">IOMA</strong> <strong class="is2-patient-data is2-patient-data-insurance" data-field-name="obraSocialNombre"></strong></li>
-						<li>Número de afiliado: <strong class="is2-patient-data" data-field-name="nroAfiliado">34354656565/12</strong></li>
+						<li>Teléfono: <strong class="is2-patient-data" data-field-name="telefono"></strong></li>
+						<li>Obra social: <strong class="is2-patient-data" data-field-name="obraSocialAbbr"></strong> <strong class="is2-patient-data is2-patient-data-insurance" data-field-name="obraSocialNombre"></strong></li>
+						<li>Número de afiliado: <strong class="is2-patient-data" data-field-name="nroAfiliado"></strong></li>
 					</ul>
 					<div class="is2-modal-details-appointments" style="display:none">
 						<table class="table">
@@ -602,7 +602,7 @@
 	} );
 	
 // *** cuando vengo de crear un nuevo paciente *** //
-	if( window.location.search.indexOf( 'id' ) >= 0 ) {
+	if( window.location.search.indexOf( 'id=' ) >= 0 ) {
 		IS2.showNewRecord( $( '.is2-patients-row' ) );
 	}
 	

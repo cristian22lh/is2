@@ -37,7 +37,7 @@ IS2.loadPrevState = function( name, callback ) {
 				$( '[name=' + fieldName + ']' ).val( prevState[fieldName] );
 			}
 		}
-		this.cleanPrevState( name );
+		this.cleanPrevState();
 		callback && callback( prevState );
 	}
 };
@@ -58,7 +58,7 @@ IS2.showNewRecord = function( $el ) {
 	
 	var $document = $( document ),
 		$popoverTemplate = $( '.is2-record-new-popover' ),
-		$popoverClose = $( '.is2-record-new-popover-close' ),
+		$popoverClose,
 		$popover,
 		closePopupTimeout;
 	
@@ -74,12 +74,14 @@ IS2.showNewRecord = function( $el ) {
 	$el.popover( 'show' );
 	$popover.css( 'top', '+=10' ).hide().css( 'visibility', 'visible' ).fadeIn( 'fast' ).animate( { top: '-=15' } );
 
+	$popoverClose = $popover.find( '.is2-record-new-popover-close' );
 	$popoverClose.on( 'click', function( e ) {
 		e.stopPropagation();
 		$el.popover( 'hide' ).removeClass( 'is2-record-new' ).off( 'click', arguments.callee );
 		window.clearTimeout( closePopupTimeout );
 	} );
 	$document.on( 'click', function( e ) {
+		e.stopPropagation();
 		var $el = $( e.target );
 		while( $el.length && !$el.hasClass( 'popover' ) ) { 
 			$el = $el.parent();
@@ -91,6 +93,34 @@ IS2.showNewRecord = function( $el ) {
 	} );
 	closePopupTimeout = window.setTimeout( function() {
 		$popoverClose.click();
-	}, 5000 );	
+	}, 5000 );
+};
+
+IS2.emptyFieldMsg = '<div class="alert alert-error is2-popover-msg is2-patient-empty">Este campo no puede estar vacio</div>';
+IS2.lookForEmptyFields = function( $theForm ) {
 	
+	var $fields = $theForm.find( 'input:not( [type=hidden] )' ), $field,
+		$groupControl,
+		isError = false,
+		i = 0, l = $fields.length;
+	
+	for( ; i < l; i++ ) {
+		$field = $fields.eq( i );
+		// clean any prevous popover setup
+		$field.popover( 'destroy' );
+		
+		$groupControl = $field;
+		// search $groupControl
+		while( ( $groupControl = $groupControl.parent() ).length && !$groupControl.hasClass( 'control-group' ) );
+		
+		if( !$field.val().trim() ) {
+			$field.popover( { content: IS2.emptyFieldMsg, html: true, trigger: 'manual' } ).popover( 'show' );
+			$groupControl.addClass( 'error' );
+			isError = true;
+		} else {
+			$groupControl.removeClass( 'error' );
+		}
+	}
+	
+	return isError;
 };

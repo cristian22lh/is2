@@ -45,7 +45,7 @@
 			__redirect( '/turnos/crear?error=crear-turno&campos=' . base64_encode( implode( '|', DB::getErrorList() ) ) );
 		}
 		
-		__redirect( '/turnos?id=' . $insertId );
+		__redirect( '/turnos?exito=crear-turno&id=' . $insertId );
 	}
 
 // PIDO LA LISTA DE DOCTORES

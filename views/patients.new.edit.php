@@ -9,6 +9,9 @@
 		.popover .is2-popover-msg {
 			display: block;
 		}
+		.is2-insurances-list {
+			width: 284px;
+		}
 	</style>
 <?php t_endHead(); ?>
 <?php t_startBody( $username, 'patients'  ); ?>
@@ -122,16 +125,12 @@
 				</div>
 				<div class="control-group">
 					<div class="controls">
-						<button type="submit" class="btn">Editar paciente</button>
+						<button type="submit" class="btn btn-primary btn-large"><?php echo $buttonLabel; ?></button>
 					</div>
 				</div>
 				<?php if( $patient['id'] ): ?>
 				<input type="hidden" name="id" value="<?php echo $patient['id']; ?>">
 				<?php endif; ?>
-				
-				<div class="alert alert-error is2-popover-msg is2-patient-empty">
-					Este campo no puede estar vacio
-				</div>
 			</form>
 			
 		<?php t_endWrapper(); ?>
@@ -142,7 +141,11 @@
 (function() {
 
 	IS2.initDatepickers();
-	IS2.loadPrevState( 'is2-patient-state' );
+	if( window.location.search.indexOf( 'exito=editar-paciente' ) >= 0 ) {
+		IS2.cleanPrevState();
+	} else {
+		IS2.loadPrevState( 'is2-patient-state' );
+	}
 
 // *** NORMAL THINGS *** //
 	var $insurancesList = $( '.is2-insurances-list' );
@@ -164,30 +167,14 @@
 	$theForm.on( 'submit', function( e ) {
 		$birthDate.popover( 'destroy' );
 
-		var isError = false;
-		$theForm.find( 'input' ).each( function() {
-			var $el = $( this ),
-				$groupControl = $el;
-				
-			$el.popover( 'destroy' );			
-			while( ( $groupControl = $groupControl.parent() ).length && !$groupControl.hasClass( 'control-group' ) );
-			
-			if( !$el.val().trim() ) {
-				$el.popover( { content: $( '.is2-patient-empty' ).prop( 'outerHTML' ) } ).popover( 'show' );
-				$groupControl.addClass( 'error' );
-				isError = true;
-			} else {
-				$groupControl.removeClass( 'error' );
-			}
-		} );
-		if( isError ) {
+		if( IS2.lookForEmptyFields( $theForm ) ) {
 			e.preventDefault();
 			return;
 		}
-	
+		
 		// check birthDate validity
-		var date = $birthDate.val().split( '/' );
-		if( date.length != 3 ) {
+		var date = $birthDate.val().match( /^(\d{2})\/(\d{2})\/(\d{4})$/ );
+		if( !date ) {
 			e.preventDefault();
 			$birthDate.popover( { content: $( '.is2-patient-birthdate-popover-invalid' ).prop( 'outerHTML' ) } ).popover( 'show' );
 			$birthDateGroupError.addClass( 'error' );
@@ -195,9 +182,9 @@
 		}
 		var target = new Date();
 		target.setDate( 1 );
-		target.setFullYear( date[2] );
-		target.setMonth( date[1]-1 );
-		target.setDate( date[0] );
+		target.setFullYear( date[3] );
+		target.setMonth( date[2]-1 );
+		target.setDate( date[1] );
 		var base = new Date();
 		base.setDate( base.getDate() + 1 );
 		if( target > base ) {

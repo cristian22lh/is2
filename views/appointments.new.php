@@ -60,7 +60,7 @@
 						<span class="is2-availability-date-popover" style="visibility:hidden" data-placement="right" data-html="true" data-trigger="hover">&nbsp;</span>
 					</div>
 					<div class="alert alert-error is2-popover-date-template is2-template-empty is2-popover-template">
-						Debe suministar una fecha
+						La fecha no es válida, debe estar en el formato dd/mm/yyyy, por ejemplo algo como: 21/03/2012
 					</div>
 					<div class="alert alert-error is2-popover-date-template is2-template-underflow is2-popover-template">
 						La fecha no puede ser anterior al dia presenete
@@ -397,6 +397,11 @@
 	// si no ha paciente elegido, no contunio
 	var $theForm = $( '.is2-appointment-form' );
 	$theForm.on( 'submit', function( e ) {
+	
+		if( IS2.lookForEmptyFields( $theForm ) ) {
+			e.preventDefault();
+			return;
+		}
 
 		$datePopover.popover( 'destroy' );
 		// hide any popover from error post
@@ -415,8 +420,8 @@
 			target,
 			base = new Date();
 		
-		date = date.split( '/' );
-		if( date.length !== 3 ) {
+		date = date.match( /^(\d{2})\/(\d{2})\/(\d{4})$/ );
+		if( !date ) {
 			e.preventDefault();
 			$dateGroupControl.addClass( 'error' );
 			$datePopover.popover( { content: $( '.is2-template-empty.is2-popover-date-template' ).prop( 'outerHTML' ) } ).popover( 'show' );
@@ -424,9 +429,9 @@
 		}
 		target = new Date();
 		target.setDate( 1 );
-		target.setFullYear( date[2] );
-		target.setMonth( date[1]-1 );
-		target.setDate( date[0] );
+		target.setFullYear( date[3] );
+		target.setMonth( date[2]-1 );
+		target.setDate( date[1] );
 
 		if( base > target ) {
 			e.preventDefault();

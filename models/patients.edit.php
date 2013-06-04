@@ -56,6 +56,7 @@
 	$username = __getUsername();
 	
 	$page = 'Editar';
+	$buttonLabel = 'Editar paciente';
 	
 	if( __GETField( 'error' ) ) {
 		$editError = true;
@@ -80,6 +81,7 @@
 			'insurances' => $insurances,
 			'patient' => $patient,
 			'page' => $page,
+			'buttonLabel' => $buttonLabel,
 // estas son las varaibles que son edit, y que debo
 // conocer para no que '_patients.new.edit' no se rompa
 			'createError' => false

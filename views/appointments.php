@@ -699,7 +699,7 @@
 	var $newlyAppointment, 
 		appointmentID = window.location.search.match( /id=(\d+)/ );
 
-	if( appointmentID && ( $newlyAppointment = $( '.is2-appointments-row[data-appointment-id=' + appointmentID[1] + ']' ) ).length ) {
+	if( appointmentID && ( $newlyAppointment = $( '.is2-appointments-row[data-appointment-id=' + appointmentID[1] + ']' ) ).length && window.location.search.indexOf( 'exito=crear-turno' ) >= 0 ) {
 		IS2.showNewRecord( $newlyAppointment );
 	}
 
