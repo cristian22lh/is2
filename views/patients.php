@@ -217,7 +217,7 @@
 						</th>
 						<th>Teléfono</th>
 						<th>Obra social</th>
-						<th>Acción</th>
+						<th>Acciones</th>
 					</tr>
 				</thead>
 				<tbody></tbody>

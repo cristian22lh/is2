@@ -14,7 +14,7 @@
 		$field = 'fechaNacimiento';
 		
 	// es un dni ?
-	} else if( ( ( $value = __cleanDNI( $keyword ) ) || ( $value = __cleanTel( $keyword ) ) ) && preg_match( '/^\d+$/', $value ) ) {
+	} else if( ( $value = __cleanDNI( $keyword ) ) || ( $value = __cleanTel( $keyword ) ) ) {
 		$field = 'dni|telefono';
 	
 	// aca es tanto un nombre, apellido o nombre de la obra social

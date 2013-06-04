@@ -29,11 +29,13 @@
 		);
 	}
 	
-	function q_getPatients( $whereCluase, $replacements, $orderByClause, $offset = 0 ) {
+	function q_getPatients( $whereCluase, $replacements, $orderByClause = array(), $offset = 0 ) {
+	
 		if( $offset ) {
 			$offset = $offset * 30;
 		}
 		$replacements[] = $offset;
+		
 		return DB::select(
 			'
 				SELECT
@@ -45,15 +47,12 @@
 					ON os.id = p.idObraSocial
 				WHERE ' .
 					implode( ' AND ', $whereCluase ) .
-				'
-				ORDER BY
-				' .
-					implode( ', ', $orderByClause ) .
-				'
-				LIMIT
-					?, 31
-			',
-			$replacements
+			
+				( count( $orderByClause ) ? ' ORDER BY ' . implode( ', ', $orderByClause ) : ''  ) .
+				
+				' LIMIT ?, 31 '
+				
+			, $replacements
 		);
 	}
 

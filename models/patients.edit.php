@@ -13,12 +13,41 @@
 		if( strtotime( $birthDate ) > strtotime( 'today +1 day' ) ) {
 			$birthDate = false;
 		}
-		$phone = __sanitizeValue( $_POST['phone'] );
-		$insuranceID = __sanitizeValue( $_POST['insuranceID'] );
-		$insuranceNumber = __sanitizeValue( $_POST['insuranceNumber'] );
+		$phone = __cleanTel( $_POST['phone'] );
+		$insuranceID = $_POST['insuranceID'];
+		if( $insuranceID === 1 ) {
+			$insuranceNumber = '---';
+		} else {
+			$insuranceNumber = trim( $_POST['insuranceNumber'] );
+		}
 		
-		if( !$lastName || !$firstName || !$gender || !$dni || !$birthDate || !$phone || !$insuranceID || !$insuranceNumber ) {
-			__redirect( '/pacientes/' . $patientID . '/editar?error=editar-paciente' );
+		$errors = array();
+		if( !$lastName ) {
+			$errors[] = 'lastName';
+		}
+		if( !$firstName ) {
+			$errors[] = 'firstName';
+		}
+		if( !$dni ) {
+			$errors[] = 'dni';
+		}
+		if( !$gender ) {
+			$errors[] = 'gender';
+		}
+		if( !$birthDate ) {
+			$errors[] = 'birthDate';
+		}
+		if( !$phone ) {
+			$errors[] = 'birthDate';
+		}
+		if( !$insuranceID ) {
+			$errors[] = 'insuranceID';
+		}
+		if( !$insuranceNumber ) {
+			$errors[] = 'insuranceNumber';
+		}
+		if( count( $errors ) ) {
+			__redirect( '/pacientes/' . $patientID . '/editar?error=editar-paciente&campos=' . base64_encode( implode( '|', $errors ) ) );
 		}
 		
 		$rowsAffected = DB::update( 
@@ -39,21 +68,21 @@
 			',
 			array( $lastName, $firstName, $gender, $dni, $birthDate, $phone, $insuranceID, $insuranceNumber, $patientID )
 		);
-
 		// puede pasar que submitee el form tal cual esta, no pasa nada, y por el < 0
 		if( $rowsAffected < 0 ) {
-			__redirect( '/pacientes/' . $patientID . '/editar?error=editar-paciente' );
+			__redirect( '/pacientes/' . $patientID . '/editar?error=editar-paciente&campos=' . base64_encode( implode( '|', DB::getErrorList() ) ) );
 		}
 		
 		__redirect( '/pacientes/' . $patientID . '/editar?exito=editar-paciente' );
 	}
 
-// DEBO PEDIR EL PACIENTE QUE ESTA EN LA URL
+/* {{{ DEBO PEDIR EL PACIENTE QUE ESTA EN LA URL */
 	$patients = q_getPatients( array( ' p.id = ? ' ), array( $patientID ) );
 	if( !count( $patients ) ) {
 		__redirect( '/pacientes?error=editar-paciente' );
 	}
 	$patient = $patients[0];
+/* }}} */
 
 // PIDO LA LISTA DE OBRAS SOCIALES
 	$insurances = q_getAllInsurances();

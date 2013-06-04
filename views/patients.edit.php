@@ -3,6 +3,12 @@
 		label {
 			cursor: default;
 		}
+		.is2-popover-msg {
+			display: none;
+		}
+		.popover .is2-popover-msg {
+			display: block;
+		}
 	</style>
 <?php t_endHead(); ?>
 <?php t_startBody( $username, 'patients'  ); ?>
@@ -18,6 +24,7 @@
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
 				<p><strong>¡Ha fallado la edición del paciente en cuestión!</strong></p>
 				<ul>
+					<li>Sepa que todos los campos son obligatorios</li>
 					<li>Sepa que el número de DNI debe ser único</li>
 					<li>Verifique que la fecha de nacimiento sea válida y con el formato: dd/mm/yyyy</li>
 				</ul>
@@ -32,13 +39,13 @@
 				<div class="control-group">
 					<label class="control-label">Apellidos</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" placeholder="Apellidos" name="lastName" value="<?php echo $patient['apellidos']; ?>">
+						<input type="text" class="input-xlarge" placeholder="Apellidos" name="lastName" value="<?php echo $patient['apellidos']; ?>" data-html="true" data-trigger="manual">
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label">Nombres</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" placeholder="Nombres" name="firstName" value="<?php echo $patient['nombres']; ?>">
+						<input type="text" class="input-xlarge" placeholder="Nombres" name="firstName" value="<?php echo $patient['nombres']; ?>" data-html="true" data-trigger="manual">
 					</div>
 				</div>
 				<div class="control-group">
@@ -50,22 +57,37 @@
 						</select>
 					</div>
 				</div>
-				<div class="control-group">
+				<div class="control-group is2-patient-dni-wrapper">
 					<label class="control-label">DNI</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" placeholder="Número de DNI" name="dni" value="<?php echo $patient['dni']; ?>">
+						<input type="text" class="input-xlarge is2-patient-dni" placeholder="Número de DNI" name="dni" value="<?php echo $patient['dni']; ?>" data-html="true" data-trigger="manual">
+					</div>
+					<div class="alert alert-error is2-patient-dni-popover-duplicated is2-popover-msg">
+						Ya existe en el sistema un paciente registrado con el mismo número de documento
+					</div>
+					<div class="alert alert-error is2-patient-dni-popover-invalid is2-popover-msg">
+						El número de documento no es válido
 					</div>
 				</div>
 				<div class="control-group is2-patient-birthdate-wrapper">
 					<label class="control-label">Fecha de nacimiento</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge datepicker is2-patient-birthdate" placeholder="Fecha de nacimiento" name="birthDate" value="<?php echo __dateISOToLocale( $patient['fechaNacimiento'] ); ?>">
+						<input type="text" class="input-xlarge datepicker is2-patient-birthdate" placeholder="Fecha de nacimiento" name="birthDate" value="<?php echo __dateISOToLocale( $patient['fechaNacimiento'] ); ?>" data-html="true" data-trigger="manual">
+					</div>
+					<div class="alert alert-error is2-patient-birthdate-popover-overflow is2-popover-msg">
+						La fecha de nacimiento excede al día presente
+					</div>
+					<div class="alert alert-error is2-patient-birthdate-popover-invalid is2-popover-msg">
+						La fecha debe estar en el formato dd/mm/yyyy para ser reconocida como valida, por ejemplo algo como: 21/03/1940
 					</div>
 				</div>
-				<div class="control-group">
+				<div class="control-group is2-patient-phone-wrapper">
 					<label class="control-label">Teléfono</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" placeholder="Teléfono" name="phone" value="<?php echo $patient['telefono']; ?>">
+						<input type="text" class="input-xlarge is2-patient-phone" placeholder="Teléfono" name="phone" value="<?php echo $patient['telefono']; ?>" data-html="true" data-trigger="manual">
+					</div>
+					<div class="alert alert-error is2-patient-phone-popover is2-popover-msg">
+						El número de teléfono no es válido
 					</div>
 				</div>
 				<div class="alert">
@@ -76,7 +98,7 @@
 					<div class="controls">
 						<select type="text" class="input-xlarge is2-insurances-list" name="insuranceID">
 						<?php foreach( $insurances as $insurance ): ?>
-							<option value="<?php echo $insurance['id']; ?>" <?php echo $insurance['id'] == $patient['idObraSocial'] ? 'selected' : ''; ?>><?php echo $insurance['nombreCorto'] . ' (' . $insurance['nombreCompleto'] . ')'; ?></option>
+							<option value="<?php echo $insurance['id']; ?>" <?php echo $insurance['id'] == $patient['idObraSocial'] ? 'selected' : ''; ?>><?php echo $insurance['nombreCorto'] . ( $insurance['nombreCompleto'] ? ' (' . $insurance['nombreCompleto'] . ')' : '' ); ?></option>
 						<?php endforeach; ?>
 						</select>
 					</div>
@@ -85,7 +107,7 @@
 				<div class="control-group">
 					<label class="control-label">Número de afiliado</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge is2-insurance-number" placeholder="Número de afiliado" name="insuranceNumber" value="<?php echo $patient['nroAfiliado']; ?>">
+						<input type="text" class="input-xlarge is2-insurance-number" placeholder="Número de afiliado" name="insuranceNumber" value="<?php echo $patient['nroAfiliado']; ?>" data-html="true" data-trigger="manual">
 					</div>
 				</div>
 				<div class="control-group">
@@ -94,6 +116,10 @@
 					</div>
 				</div>
 				<input type="hidden" name="id" value="<?php echo $patient['id']; ?>">
+				
+				<div class="alert alert-error is2-popover-msg is2-patient-empty">
+					Este campo no puede estar vacio
+				</div>
 			</form>
 			
 		<?php t_endWrapper(); ?>
@@ -102,21 +128,9 @@
 
 <script>
 (function() {
-	$( '.datepicker' ).datepicker( {
-		format: 'dd/mm/yyyy',
-		language: 'es'
-	} );
 
-// *** POPULATE THE FIELDS *** //
-	var prevState = JSON.parse( localStorage.getItem( 'is2-patient-state' ) );
-	if( prevState ) {
-		if( window.location.search.indexOf( 'error' ) >= 0 ) {
-			for( var fieldName in prevState ) {
-				$( 'input[name=' + fieldName + ']' ).val( prevState[fieldName] );
-			}
-		}
-		localStorage.removeItem(  'is2-patient-state' );
-	}
+	IS2.initDatepickers();
+	IS2.loadPrevState( 'is2-patient-state' );
 
 // *** NORMAL THINGS *** //
 	var $insurancesList = $( '.is2-insurances-list' );
@@ -130,12 +144,40 @@
 	
 	var $birthDate = $( '.is2-patient-birthdate' );
 	var $birthDateGroupError = $( '.is2-patient-birthdate-wrapper' );
+	var $dni = $( '.is2-patient-dni' );
+	var $dniGroupControl = $( '.is2-patient-dni-wrapper' );
+	var $phone = $( '.is2-patient-phone' );
+	var $phoneGroupControl = $( '.is2-patient-phone-wrapper' );
 	var $theForm = $( '.is2-patient-form' );
 	$theForm.on( 'submit', function( e ) {
+		$birthDate.popover( 'destroy' );
+
+		var isError = false;
+		$theForm.find( 'input' ).each( function() {
+			var $el = $( this ),
+				$groupControl = $el;
+				
+			$el.popover( 'destroy' );			
+			while( ( $groupControl = $groupControl.parent() ).length && !$groupControl.hasClass( 'control-group' ) );
+			
+			if( !$el.val().trim() ) {
+				$el.popover( { content: $( '.is2-patient-empty' ).prop( 'outerHTML' ) } ).popover( 'show' );
+				$groupControl.addClass( 'error' );
+				isError = true;
+			} else {
+				$groupControl.removeClass( 'error' );
+			}
+		} );
+		if( isError ) {
+			e.preventDefault();
+			return;
+		}
+	
 		// check birthDate validity
 		var date = $birthDate.val().split( '/' );
 		if( date.length != 3 ) {
 			e.preventDefault();
+			$birthDate.popover( { content: $( '.is2-patient-birthdate-popover-invalid' ).prop( 'outerHTML' ) } ).popover( 'show' );
 			$birthDateGroupError.addClass( 'error' );
 			return;
 		}
@@ -146,20 +188,53 @@
 		target.setDate( date[0] );
 		var base = new Date();
 		base.setDate( base.getDate() + 1 );
-		if( target >= base ) {
+		if( target > base ) {
 			e.preventDefault();
 			$birthDateGroupError.addClass( 'error' );
+			$birthDate.popover( { content: $( '.is2-patient-birthdate-popover-overflow' ).prop( 'outerHTML' ) } ).popover( 'show' );
 			return;
 		}
 		$birthDateGroupError.removeClass( 'error' );
 		
+		var dni = $dni.val().replace( /\./g, '' );
+		if( !/^\d+$/.test( dni ) ) {
+			e.preventDefault();
+			$dniGroupControl.addClass( 'error' );
+			$dni.popover( { content: $( '.is2-patient-dni-popover-invalid' ).prop( 'outerHTML' ) } ).popover( 'show' );
+			return;
+		}
+		$dniGroupControl.removeClass( 'error' );
+		
+		var phone = $phone.val().trim();
+		if( !/^[#*\d-()]+$/.test( phone ) ) {
+			e.preventDefault();
+			$phoneGroupControl.addClass( 'error' );
+			$phone.popover( { content: $( '.is2-patient-phone-popover' ).prop( 'outerHTML' ) } ).popover( 'show' );
+			return;
+		}
+		$phoneGroupControl.removeClass( 'error' );
+		
 		// ahora debo guardar los valores de los inputs
-		var prevState = {};
-		$theForm.find( 'input' ).each( function( e ) {
-			var $el = $( this );
-			prevState[$el.attr( 'name' )] = $el.val().replace( /&/g, '&amp;' ).replace( /</g, '&lt;' ).replace( />/g, '&gt;' );
-		} );
-		window.localStorage.setItem( 'is2-patient-state', JSON.stringify( prevState ) );
+		IS2.savePrevState( 'is2-patient-state' );
 	} );
+	
+// *** CUANDO VENGO DE UN ERROR AL EDITAR EL PACIENTE *** //
+	if( window.location.search.indexOf( 'error=editar-paciente' ) >= 0 ) {
+		$dni.popover( { content: $( '.is2-patient-dni-popover-duplicated' ).prop( 'outerHTML' ) } );
+		var errors;
+		
+		errors = window.location.search.match( /campos=([^&$]+)/ );
+		if( errors ) {
+			try {
+				errors = atob( errors[1] );
+			} catch( e ) {}
+		}
+		
+		if( errors === 'duplicado' ) {
+			$dni.popover( 'show' );
+			$dniGroupControl.addClass( 'error' );
+		}
+	}
+	
 })();
 </script>

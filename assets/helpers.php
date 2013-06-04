@@ -197,7 +197,8 @@
 	}
 
 	function __cleanDNI( $value ) {
-		return str_replace( '.', '', $value );
+		$value = str_replace( '.', '', trim( $value ) );
+		return preg_match( '/^\d+$/', $value ) ? $value : false;
 	}
 	
 	function __sanitizeValue( $value ) {
@@ -206,6 +207,10 @@
 	
 	function __validateID( $value ) {
 		return $value > 0 ? (int) $value : false;
+	}
+	
+	function __cleanTel( $value ) {
+		return ( $m = preg_replace( '/^[^#*\d-()]+$/', '', trim( $value ) ) ) ? $m : false;
 	}
 	
 	function __validateGender( $value ) {
