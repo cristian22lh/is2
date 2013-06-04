@@ -1,55 +1,20 @@
 <?php
 
-	// get last seg from /pacientes/122/editar
+	// both edit and create patients funtionality share some common things
+	require './models/_patients.new.edit.php';
+
+	// get the id seg from /pacientes/122/editar
 	$patientID = Router::seg( 2 );
 
-	if( __issetPOST( array( 'lastName', 'firstName', 'gender', 'dni', 'birthDate', 'phone', 'insuranceID', 'insuranceNumber' ) ) ) {
-		$lastName = __sanitizeValue( $_POST['lastName'] );
-		$firstName = __sanitizeValue( $_POST['firstName'] );
-		$gender = __validateGender( $_POST['gender'] );
-		$dni = __cleanDNI( $_POST['dni'] );
-		$birthDate = __toISODate( $_POST['birthDate'] );
-		// la fecha de nacimiento no puede ser mayor al dia presente
-		if( strtotime( $birthDate ) > strtotime( 'today +1 day' ) ) {
-			$birthDate = false;
-		}
-		$phone = __cleanTel( $_POST['phone'] );
-		$insuranceID = $_POST['insuranceID'];
-		if( $insuranceID === 1 ) {
-			$insuranceNumber = '---';
-		} else {
-			$insuranceNumber = trim( $_POST['insuranceNumber'] );
-		}
-		
+/* {{{ */
+	if( m_issetPOST() ) {
+		$fields = array();
 		$errors = array();
-		if( !$lastName ) {
-			$errors[] = 'lastName';
-		}
-		if( !$firstName ) {
-			$errors[] = 'firstName';
-		}
-		if( !$dni ) {
-			$errors[] = 'dni';
-		}
-		if( !$gender ) {
-			$errors[] = 'gender';
-		}
-		if( !$birthDate ) {
-			$errors[] = 'birthDate';
-		}
-		if( !$phone ) {
-			$errors[] = 'birthDate';
-		}
-		if( !$insuranceID ) {
-			$errors[] = 'insuranceID';
-		}
-		if( !$insuranceNumber ) {
-			$errors[] = 'insuranceNumber';
-		}
-		if( count( $errors ) ) {
+		if( !m_processPOST( $fields, $errors ) ) {
 			__redirect( '/pacientes/' . $patientID . '/editar?error=editar-paciente&campos=' . base64_encode( implode( '|', $errors ) ) );
 		}
 		
+		$fields[] = $patientID;
 		$rowsAffected = DB::update( 
 			'
 				UPDATE
@@ -66,7 +31,7 @@
 				WHERE
 					id = ?
 			',
-			array( $lastName, $firstName, $gender, $dni, $birthDate, $phone, $insuranceID, $insuranceNumber, $patientID )
+			$fields
 		);
 		// puede pasar que submitee el form tal cual esta, no pasa nada, y por el < 0
 		if( $rowsAffected < 0 ) {
@@ -75,6 +40,7 @@
 		
 		__redirect( '/pacientes/' . $patientID . '/editar?exito=editar-paciente' );
 	}
+/* }}} */
 
 /* {{{ DEBO PEDIR EL PACIENTE QUE ESTA EN LA URL */
 	$patients = q_getPatients( array( ' p.id = ? ' ), array( $patientID ) );
@@ -84,11 +50,12 @@
 	$patient = $patients[0];
 /* }}} */
 
-// PIDO LA LISTA DE OBRAS SOCIALES
+/* {{{ */
 	$insurances = q_getAllInsurances();
 
-// TODAS ESTAS SON VARIABLES QUE DEBEN USARSE EN LA VIEW //
 	$username = __getUsername();
+	
+	$page = 'Editar';
 	
 	if( __GETField( 'error' ) ) {
 		$editError = true;
@@ -104,16 +71,20 @@
 		$editError = true;
 	}
 
-// LOAD THE VIEW
 	__render( 
-		'patients.edit', 
+		'_patients.new.edit', 
 		array(
 			'username' => $username,
 			'editSuccess' => $editSuccess,
 			'editError' => $editError,
 			'insurances' => $insurances,
-			'patient' => $patient
+			'patient' => $patient,
+			'page' => $page,
+// estas son las varaibles que son edit, y que debo
+// conocer para no que '_patients.new.edit' no se rompa
+			'createError' => false
 		)
 	);
+/* }}} */
 	
 ?>

@@ -136,3 +136,19 @@ legend {
     float: right;
     padding: 0;
 }
+
+.is2-record-new {
+	background: #FCF8E3;
+	color: #C09853;
+	border-bottom: 1px solid #ddd;
+}
+.is2-record-new-popover {
+	text-align: center;
+	display: none;
+}
+.popover .is2-record-new-popover {
+	display: block;
+}
+.is2-record-new-popover-close {
+	margin: 5px 0 -7px 0;
+}

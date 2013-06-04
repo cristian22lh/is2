@@ -25,7 +25,7 @@
 				$orderByClause[] = ' p.' . $orderByCol . ' ' . $orderByType . ' ';
 			}
 		}
-	// default
+	// default order by
 	} else {
 		$orderByClause = array( ' p.apellidos ASC ' , ' p.nombres ASC ' );
 	}

@@ -179,7 +179,7 @@
 							<fieldset>
 								<legend>Buscar pacientes con número de afiliado</legend>
 								<label>Número de afiliado de la obra social:</label>
-								<input type="text" class="input-xxlarge" name="affiliateInsuranceNumber" placeholder="Separe con espacios para buscar por varios números de afiliado" value="<?php echo $persistValues['affiliateInsuranceNumber']; ?>">
+								<input type="text" class="input-xxlarge" name="affiliateInsuranceNumber" placeholder="Separe con espacios para buscar por varios números de afiliado" value="<?php echo __sanitizeValue( $persistValues['affiliateInsuranceNumber'] ); ?>">
 							</fieldset>
 							<button type="submit" class="btn btn-large btn-primary is2-search-trigger">Buscar</button>
 						</form>
@@ -226,7 +226,7 @@
 				<table class="table is2-grid">
 					<tbody>
 					<?php foreach( $patients as $patient ): ?>
-						<tr data-patient-id="<?php echo $patient['id']; ?>">
+						<tr class="is2-patients-row" data-patient-id="<?php echo $patient['id']; ?>">
 							<td>
 								<span title="<?php echo $patient['apellidos']; ?>"><?php echo $patient['apellidos']; ?></span>
 							</td>
@@ -251,7 +251,18 @@
 				</table>
 			</div>
 			
-			<?php if( !$isSingle ): ?>
+			<?php if( $isSingle ): ?>
+			<div class="is2-record-new-popover">
+				<div class="alert">
+					<strong>¡Nuevo paciente ha sido creado satisfactoriamente!</strong>
+				</div>
+				<a class="btn btn-block" href="/pacientes">
+					<i class="icon-arrow-left"></i>
+					Listar pacientes
+				</a>
+				<button class="btn btn-link btn-mini is2-record-new-popover-close">¡Entendido!</button>
+			</div>
+			<?php else: ?>
 			<ul class="pager">
 				<li class="previous <?php echo $offset ? 'active': 'disabled'; ?>">
 					<a href="<?php echo $offset == 0 ? '#' : $queryString . '&pagina=' . ($offset-1); ?>">&larr; Anterior</a>
@@ -345,5 +356,11 @@
 			
 		window.location = window.location.pathname + '?' + getQueryString( fieldName, fieldName === 'fecha-de-nacimiento' ? skipNames : skipBirthDate ) + fieldName + '=' + orderBy;
 	} );
+	
+// *** cuando vengo de crear un nuevo paciente *** //
+	if( window.location.search.indexOf( 'id' ) >= 0 ) {
+		IS2.showNewRecord( $( '.is2-patients-row' ) );
+	}
+	
 })();
 </script>

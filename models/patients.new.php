@@ -1,23 +1,16 @@
 <?php
 
-	if( __issetPOST( array( 'lastName', 'firstName', 'gender', 'dni', 'birthDate', 'phone', 'insuranceID', 'insuranceNumber' ) ) ) {
-		$lastName = __sanitizeValue( $_POST['lastName'] );
-		$firstName = __sanitizeValue( $_POST['firstName'] );
-		$gender = __validateGender( $_POST['gender'] );
-		$dni = __cleanDNI( $_POST['dni'] );
-		$birthDate = __toISODate( $_POST['birthDate'] );
-		// la fecha de nacimiento no puede ser mayor al dia presente
-		if( strtotime( $birthDate ) > strtotime( 'today +1 day' ) ) {
-			$birthDate = false;
+	// both edit and create patients funtionality share some common things
+	require './models/_patients.new.edit.php';
+	
+/* {{{ */
+	if( m_issetPOST() ) {
+		$fields = array();
+		$errors = array();
+		if( !m_processPOST( $fields, $errors ) ) {
+			___redirect( '/pacientes/crear?error=crear-paciente&campos=' . base64_encode( implode( '|', $errors ) ) );
 		}
-		$phone = __sanitizeValue( $_POST['phone'] );
-		$insuranceID = __sanitizeValue( $_POST['insuranceID'] );
-		$insuranceNumber = __sanitizeValue( $_POST['insuranceNumber'] );
-		
-		if( !$lastName || !$firstName || !$gender || !$dni || !$birthDate || !$phone || !$insuranceID || !$insuranceNumber ) {
-			__redirect( '/pacientes/crear?error=crear-paciente' );
-		}
-		
+
 		$insertId = DB::insert( 
 			'
 				INSERT INTO
@@ -25,21 +18,23 @@
 				VALUES
 					( null, ?, ?, ?, ?, ?, ?, ?, ? )
 			',
-			array( $lastName, $firstName, $gender, $dni, $birthDate, $phone, $insuranceID, $insuranceNumber )
+			$fields
 		);
-
+		
 		if( !$insertId ) {
-			__redirect( '/pacientes/crear?error=crear-paciente' );
+			__redirect( '/pacientes/crear?error=crear-paciente&campos=' . base64_encode( implode( '|', DB::getErrorList() ) ) );
 		}
 		
 		__redirect( '/pacientes?id=' . $insertId );
 	}
+/* }}} */
 
-// PIDO LA LISTA DE OBRAS SOCIALES
+/* {{{ */
 	$insurances = q_getAllInsurances();
 
-// TODAS ESTAS SON VARIABLES QUE DEBEN USARSE EN LA VIEW //
 	$username = __getUsername();
+	
+	$page = 'Crear';
 	
 // VENGO DE UN $_POST PERO HUBO PROBLEMAS
 	if( __GETField( 'error' ) ) {
@@ -47,15 +42,31 @@
 	} else {
 		$createError = false;
 	}
-	
-// LOAD THE VIEW
+
 	__render( 
-		'patients.new', 
+		'_patients.new.edit', 
 		array(
 			'username' => $username,
 			'createError' => $createError,
-			'insurances' => $insurances
+			'insurances' => $insurances,
+			'page' => $page,
+// estas son las varaibles que son edit, y que debo
+// conocer para no que '_patients.new.edit' no se rompa
+			'editSuccess' => false,
+			'editError' => false,
+			'patient' => array(
+				'apellidos' => '',
+				'nombres' => '',
+				'sexo' => '',
+				'dni' => '',
+				'fechaNacimiento' => '',
+				'telefono' => '',
+				'idObraSocial' => '',
+				'nroAfiliado' => '',
+				'id' => false
+			)
 		)
 	);
+/* }}} */
 	
 ?>

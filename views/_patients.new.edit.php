@@ -1,4 +1,4 @@
-<?php t_startHead( 'Pacientes - Editar' ); ?>
+<?php t_startHead( 'Pacientes - ' . $page ); ?>
 	<style>
 		label {
 			cursor: default;
@@ -14,7 +14,17 @@
 <?php t_startBody( $username, 'patients'  ); ?>
 	
 		<?php t_startWrapper(); ?>
-			<?php if( $editSuccess ): ?>
+			<?php if( $createError ): ?>
+			<div class="alert alert-error">
+				<a class="close" data-dismiss="alert" href="#">&times;</a>
+				<p><strong>¡Ha fallado la creación del nuevo paciente!</strong></p>
+				<ul>
+					<li>Sepa que todos los campos son obligatorios</li>
+					<li>Sepa que no puede crear un paciente con un DNI el cual ya exista otro paciente con ese mismo DNI en el sistema</li>
+					<li>Verifique que la fecha de nacimiento sea válida y con el formato: dd/mm/yyyy</li>
+				</ul>
+			</div>
+			<?php elseif( $editSuccess ): ?>
 			<div class="alert alert-success">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
 				<strong>¡El paciente ha sido editado con satisfactoriamente!</strong>
@@ -31,7 +41,7 @@
 			</div>
 			<?php endif; ?>
 			<div class="is2-pagetitle clearfix">
-				<h3>Pacientes - Editar</h3>
+				<h3>Pacientes - <?php echo $page; ?></h3>
 				<a class="btn pull-right" href="/pacientes"><i class="icon-arrow-left"></i> Listar pacientes</a>
 			</div>
 			
@@ -115,7 +125,9 @@
 						<button type="submit" class="btn">Editar paciente</button>
 					</div>
 				</div>
+				<?php if( $patient['id'] ): ?>
 				<input type="hidden" name="id" value="<?php echo $patient['id']; ?>">
+				<?php endif; ?>
 				
 				<div class="alert alert-error is2-popover-msg is2-patient-empty">
 					Este campo no puede estar vacio
@@ -219,7 +231,7 @@
 	} );
 	
 // *** CUANDO VENGO DE UN ERROR AL EDITAR EL PACIENTE *** //
-	if( window.location.search.indexOf( 'error=editar-paciente' ) >= 0 ) {
+	if( window.location.search.indexOf( 'error' ) >= 0 ) {
 		$dni.popover( { content: $( '.is2-patient-dni-popover-duplicated' ).prop( 'outerHTML' ) } );
 		var errors;
 		

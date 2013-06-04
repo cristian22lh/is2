@@ -53,3 +53,44 @@ IS2.savePrevState = function( name, skip ) {
 	} );
 	window.localStorage.setItem( name, JSON.stringify( prevState ) );
 };
+
+IS2.showNewRecord = function( $el ) {
+	
+	var $document = $( document ),
+		$popoverTemplate = $( '.is2-record-new-popover' ),
+		$popoverClose = $( '.is2-record-new-popover-close' ),
+		$popover,
+		closePopupTimeout;
+	
+	$el.addClass( 'is2-record-new' ).popover( {
+		trigger: 'manual',
+		placement: 'bottom',
+		html: true,
+		content: $popoverTemplate.prop( 'outerHTML' )
+	} );
+
+	$popover = $el.data( 'popover').tip();
+	$popover.css( 'visibility', 'hidden' );
+	$el.popover( 'show' );
+	$popover.css( 'top', '+=10' ).hide().css( 'visibility', 'visible' ).fadeIn( 'fast' ).animate( { top: '-=15' } );
+
+	$popoverClose.on( 'click', function( e ) {
+		e.stopPropagation();
+		$el.popover( 'hide' ).removeClass( 'is2-appointments-row-newly' ).off( 'click', arguments.callee );
+		window.clearTimeout( closePopupTimeout );
+	} );
+	$document.on( 'click', function( e ) {
+		var $el = $( e.target );
+		while( $el.length && !$el.hasClass( 'popover' ) ) { 
+			$el = $el.parent();
+		}
+		if( !$el.length ) {
+			$popoverClose.click();
+			$document.off( 'click', arguments.callee )
+		}
+	} );
+	closePopupTimeout = window.setTimeout( function() {
+		$popoverClose.click();
+	}, 5000 );	
+	
+};

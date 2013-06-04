@@ -83,24 +83,12 @@
 		.btn.disabled {
 			width: 110px;
 		}
-
-		.is2-appointments-row-newly {
-			background: #FCF8E3;
-			color: #C09853;
+		/* overwrite new record style */
+		.is2-record-new {
+			border-bottom: 0;
 		}
-		.is2-appointment-newly-template {
-			text-align: center;
-			display: none;
-		}
-		.popover .is2-appointment-newly-template {
-			display: block;
-		}
-		.is2-appointment-newly-template-close {
-			margin: 5px 0 -7px 0;
-		}
-
 	</style>
-		
+
 <?php t_endHead(); ?>
 <?php t_startBody( $username, 'appointments'  ); ?>
 
@@ -339,15 +327,15 @@
 			</div>
 			<?php endif; ?>
 
-			<div class="is2-appointment-newly-template">
-				<div class="alert" style="clear:both">
+			<div class="is2-record-new-popover">
+				<div class="alert">
 					<strong>¡Nuevo turno ha sido creado satisfactoriamente!</strong>
 				</div>
 				<a class="btn btn-block" href="/turnos">
-						<i class="icon-arrow-left"></i>
-						Listar turnos
+					<i class="icon-arrow-left"></i>
+					Listar turnos
 				</a>
-				<button class="btn btn-link btn-mini is2-appointment-newly-template-close">¡Entendido!</button>
+				<button class="btn btn-link btn-mini is2-record-new-popover-close">¡Entendido!</button>
 			</div>
 
 		<?php t_endWrapper(); ?>
@@ -709,43 +697,10 @@
 
 // *** ACA MUESTRO UN POPOVER CUANDO SE ACABA DE CREAR UN TURNO NUEVO *** //
 	var $newlyAppointment, 
-		$newlyAppointmentClose, 
-		$document = $( document ),
-		$popover, closePopupTimeout,
 		appointmentID = window.location.search.match( /id=(\d+)/ );
 
 	if( appointmentID && ( $newlyAppointment = $( '.is2-appointments-row[data-appointment-id=' + appointmentID[1] + ']' ) ).length ) {
-		$newlyAppointment.addClass( 'is2-appointments-row-newly').popover( {
-			trigger: 'manual',
-			placement: 'bottom',
-			html: true,
-			content: $( '.is2-appointment-newly-template' ).prop( 'outerHTML' )
-		} );
-
-		$popover = $newlyAppointment.data( 'popover').tip();
-		$popover.css( 'visibility', 'hidden' );
-		$newlyAppointment.popover( 'show' );
-		$popover.css( 'top', '+=10' ).hide().css( 'visibility', 'visible' ).fadeIn( 'fast' ).animate( { top: '-=15' } );
-
-		$newlyAppointmentClose = $( '.is2-appointment-newly-template-close' );
-		$newlyAppointmentClose.on( 'click', function( e ) {
-			e.stopPropagation();
-			$newlyAppointment.popover( 'hide' ).removeClass( 'is2-appointments-row-newly' ).off( 'click', arguments.callee );
-			window.clearTimeout( closePopupTimeout );
-		} );
-		$document.on( 'click', function( e ) {
-			var $el = $( e.target );
-			while( $el.length && !$el.hasClass( 'popover' ) ) { 
-				$el = $el.parent();
-			}
-			if( !$el.length ) {
-				$newlyAppointmentClose.click();
-				$document.off( 'click', arguments.callee )
-			}
-		} );
-		closePopupTimeout = window.setTimeout( function() {
-			$newlyAppointmentClose.click();
-		}, 5000 );
+		IS2.showNewRecord( $newlyAppointment );
 	}
 
 })();
