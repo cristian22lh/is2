@@ -56,7 +56,13 @@
 		);
 	}
 
-	function q_getDoctorAvailabilities( $doctorID ) {
+	function q_getDoctorAvailabilities( $doctorID, $availabilityID = null ) {
+		$replacements = array();
+		$replacements[] = $doctorID;
+		if( $availabilityID ) {
+			$replacements[] = $availabilityID;
+		}
+	
 		return DB::select(
 			'
 				SELECT
@@ -65,8 +71,14 @@
 					horarios
 				WHERE
 					idMedico = ?
-			',
-			array( $doctorID )
+			' .
+				( $availabilityID ? ' AND id = ? ' : '' ) .
+			'
+				ORDER BY
+					dia, horaIngreso, horaEgreso
+			'
+			,
+			$replacements
 		);
 	}
 	
@@ -82,6 +94,8 @@
 						ON os.id = mos.idObraSocial
 				WHERE
 					mos.idMedico = ?
+				ORDER BY
+					os.nombreCorto
 			',
 			array( $doctorID )
 		);

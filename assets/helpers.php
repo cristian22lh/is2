@@ -240,6 +240,10 @@
 		return isset( $DAYNAME[$dayIndex-1] ) ? $DAYNAME[$dayIndex-1] : false;
 	}
 	
+	function __validateDayIndex( $dayIndex ) {
+		return in_array( $dayIndex, array( 1, 2, 3, 4, 5, 6, 7 ) ) ? $dayIndex : false;
+	}
+	
 // ************** /
 // RENDER VIEWS
 // ************* /

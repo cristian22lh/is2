@@ -50,6 +50,7 @@
 		'/medicos/comprobar-horarios-disponibilidad' => 'doctors.check.availability',
 		'/medicos' => 'doctors',
 		'/medicos/:id' => 'doctors.details',
+		'/medicos/:id/crear-horario' => 'doctors.availability.new',
 		
 // *** PACIENTES *** //
 		'/pacientes' => 'patients',

@@ -97,7 +97,7 @@ IS2.showNewRecord = function( $el ) {
 };
 
 IS2.emptyFieldMsg = '<div class="alert alert-error is2-popover-msg is2-patient-empty">Este campo no puede estar vacio</div>';
-IS2.lookForEmptyFields = function( $theForm ) {
+IS2.lookForEmptyFields = function( $theForm, notShowPopover ) {
 	
 	var $fields = $theForm.find( 'input:not( [type=hidden] )' ), $field,
 		$groupControl,
@@ -107,14 +107,18 @@ IS2.lookForEmptyFields = function( $theForm ) {
 	for( ; i < l; i++ ) {
 		$field = $fields.eq( i );
 		// clean any prevous popover setup
-		$field.popover( 'destroy' );
+		if( !notShowPopover ) {
+			$field.popover( 'destroy' );
+		}
 		
 		$groupControl = $field;
 		// search $groupControl
 		while( ( $groupControl = $groupControl.parent() ).length && !$groupControl.hasClass( 'control-group' ) );
 		
 		if( !$field.val().trim() ) {
-			$field.popover( { content: IS2.emptyFieldMsg, html: true, trigger: 'manual' } ).popover( 'show' );
+			if( !notShowPopover ) {
+				$field.popover( { content: IS2.emptyFieldMsg, html: true, trigger: 'manual' } ).popover( 'show' );
+			}
 			$groupControl.addClass( 'error' );
 			isError = true;
 		} else {

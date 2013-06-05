@@ -58,6 +58,11 @@ header .is2-welcome {
 	border-radius: 5px 5px 0 0;
 	color: #fff;
 }
+.is2-grid-header th {
+	border-top: 0;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
 .is2-grid-wrapper {
 	height: 500px;
 	overflow-y: scroll;
@@ -149,14 +154,14 @@ legend {
 	color: #C09853;
 	border-bottom: 1px solid #ddd;
 }
-.is2-record-new-popover {
+.is2-popover {
 	text-align: center;
 	display: none;
 }
-.popover .is2-record-new-popover {
+.popover .is2-popover {
 	display: block;
 }
-.is2-record-new-popover-close {
+.is2-popover-close {
 	margin: 5px 0 -7px 0;
 }
 

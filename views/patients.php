@@ -3,10 +3,6 @@
 		label {
 			cursor: default;
 		}
-		.is2-grid-header th {
-			text-align: center !important;
-			vertical-align: middle !important;
-		}
 		.is2-grid-header th:nth-child( 1 ),
 		.is2-grid-header th:nth-child( 2 ) {
 			width: 164px;
@@ -344,7 +340,7 @@
 							<td>
 								<a class="btn btn-mini is2-patients-details-trigger" href="#is2-modal-details" data-toggle="modal" title="Ver en detalle" data-patient-id="<?php echo $patient['id']; ?>"><i class="icon-eye-open"></i></a>
 								<a class="btn btn-mini" href="/pacientes/<?php echo $patient['id']; ?>/editar" title="Editar"><i class="icon-edit"></i></a>
-								<a class="btn btn-mini btn-danger is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-patient-id="<?php echo $patient['id']; ?>" title="Borrar"><i class="icon-remove-sign"></i></a>
+								<a class="btn btn-mini btn-danger is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-patient-id="<?php echo $patient['id']; ?>" title="Borrar"><i class="icon-remove-sign icon-white"></i></a>
 							</td>
 						</tr>
 					<?php endforeach; ?>

@@ -63,7 +63,8 @@ CREATE TABLE horarios(
 	idMedico INTEGER NULL,
 	horaIngreso TIME,
 	horaEgreso TIME,
-	dia ENUM( '1', '2', '3', '4', '5', '6', '7' )
+	dia ENUM( '1', '2', '3', '4', '5', '6', '7' ),
+	UNIQUE INDEX( idMedico, horaIngreso, horaEgreso, dia )
 ) ENGINE=InnoDB;
 
 INSERT INTO horarios VALUES
