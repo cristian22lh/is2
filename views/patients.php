@@ -177,16 +177,17 @@
 				position: relative;
 			}
 			.is2-preloader-wrapper {
-				width: 128px;
-				height: 128px;
-				position: absolute;
 				background: #fff;
-				border: 1px solid #ccc;
-				border-radius: 10px;
+				border: 1px solid #149BDF;
+				border-radius: 3px 3px 3px 3px;
+				box-shadow: 0 1px 0 #149BDF;
+				height: 8px;
+				left: 36%;
 				padding: 10px;
-				top: 30%;
-				left: 40%;
-				box-shadow: 0 0 5px rgba(0, 0, 0, 0.2), inset 0 0 5px rgba(0, 0, 0, 0.1);
+				position: absolute;
+				top: 34%;
+				width: 200px;
+				z-index: 100;
 			}
 			.is2-modal-details-appointments-empty {
 				text-align: center;
@@ -413,8 +414,8 @@
 		
 		<form id="is2-modal-details" class="modal hide fade">
 			<div class="wrapper">
-				<div class="is2-preloader-wrapper">
-					<div class="is2-preloader-big is2-patients-details-preloader"></div>
+				<div class="progress progress-striped active is2-preloader-wrapper">
+					<div class="bar"></div>
 				</div>
 				<div class="is2-modal-details-header">
 					<div class="modal-body">
@@ -471,7 +472,7 @@
 // *** PARA EL DETALLE DEL PACIENTE *** //
 	var $patientDetailsModal = $( '#is2-modal-details');
 	var $patientDetailsModalPreloader = $( '.is2-preloader-wrapper' );
-	var $patientDetailsModalPreloaderIcon = $( '.is2-patients-details-preloader' );
+	var $patientDetailsModalPreloaderBar = $patientDetailsModalPreloader.find( '.bar' );
 	var isWaiting = false;
 	var $patientFields = $( '.is2-patient-data' );
 	var $appointmentRecord = $( '.is2-modal-details-appointments-record' ).clone();
@@ -479,6 +480,7 @@
 	var $appointmentsWrapper = $( '.is2-modal-details-appointments' );
 	var $appointmentsGrid = $( '.is2-modal-details-appointments table' );
 	var $emptyAppointments = $( '.is2-modal-details-appointments-empty' );
+	var $patientDetailsContent = $( '.is2-modal-details-header, .is2-modal-details-body' );
 	
 	$patientDetailsModal .css( 'left', $( window ).outerWidth() /2 - 850 / 2 ).css( 'margin-left', 0 ).on( 'hidden', function( e ) {
 		$( 'tr.is2-patients-row.is2-record-new' ).removeClass( 'is2-record-new' );
@@ -486,8 +488,10 @@
 	
 	var showPatientDetails = function( dataResponse ) {
 		isWaiting = false;
-		$patientDetailsModalPreloader.fadeOut( 'fast' );
-		$patientDetailsModalPreloaderIcon.css( 'visibility', 'hidden' );
+		$patientDetailsModalPreloaderBar.css( 'width', '100%' );
+		window.setTimeout( function() {
+			$patientDetailsModalPreloader.fadeOut( 'fast' );
+		}, 500 );
 		if( !dataResponse.success ){
 			return false;
 		}
@@ -524,7 +528,9 @@
 		} else {
 			$emptyAppointments.hide();
 		}
-		$appointmentsWrapper.slideDown( 'fast' );
+		$appointmentsWrapper.slideDown( 'fast', function() {
+			$patientDetailsContent.css( 'visibility', 'visible' );
+		} );
 	};
 	
 	$( '.is2-grid-wrapper' ).delegate( '.is2-patients-details-trigger', 'click', function( e ) {
@@ -532,7 +538,8 @@
 			return;
 		}
 		isWaiting = true;
-		$patientDetailsModalPreloaderIcon.css( 'visibility', 'visible' );
+		$patientDetailsContent.css( 'visibility', 'hidden' );
+		$patientDetailsModalPreloaderBar.css( 'width', '1%' );
 		$patientDetailsModalPreloader.fadeIn( 'fast' );
 		
 		var patientID = $( this ).attr( 'data-patient-id' );
