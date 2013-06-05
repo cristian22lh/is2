@@ -144,7 +144,7 @@
 			color: #555;
 			text-shadow: 0 1px 0 #fff;
 		}
-		.is2-grid-header th:first-child
+		.is2-grid-header th:first-child,
 		.is2-doctor-availability-grid td:first-child {
 			width: 45px;
 		}
@@ -228,12 +228,12 @@
 									<td class="control-group is2-doctor-availability-day">
 										<input type="text" class="input-mini is2-doctor-availability-day" name="diaNombre" placeholder="Día">
 									</td>
-									<td class="control-group">
+									<td class="control-group is2-doctor-availability-in">
 										<div class="bootstrap-timepicker">
 											<input type="text" class="input-mini timepicker is2-doctor-availability-in" name="horaIngreso" placeholder="Hora de ingreso">
 										</div>
 									</td>
-									<td class="control-group">
+									<td class="control-group is2-doctor-availability-out">
 										<div class="bootstrap-timepicker">
 											<input type="text" class="input-mini timepicker is2-doctor-availability-out" name="horaEgreso" placeholder="Hora de egreso">
 										</div>
@@ -474,6 +474,17 @@
 			return;
 		}
 		timeEntryOut = timeEntryOut[0];
+
+		var d1 = timeEntryIn.split( ':' ),
+			d2 = timeEntryOut.split( ':' );
+			
+		if( d1[0] >= d2[0] && d1[1] >= d2[1] ) {
+			$timeEntryInGroupControl.addClass( 'error' );
+			$timeEntryOutGroupControl.addClass( 'error' );
+			return;
+		}
+		$timeEntryInGroupControl.removeClass( 'error' );
+		$timeEntryOutGroupControl.removeClass( 'error' );
 
 		isWaiting = true;
 		$doctorModalPreloaderBar.css( 'width', '1%' );
