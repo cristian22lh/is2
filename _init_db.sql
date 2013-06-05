@@ -25,20 +25,9 @@ CREATE TABLE turnos(
 	hora TIME,
 	idMedico INTEGER NULL,
 	idPaciente INTEGER NULL,
-	estado ENUM( 'confirmado', 'cancelado', 'esperando' ) DEFAULT 'esperando',
+	estado ENUM( 'confirmado', 'cancelado', 'esperando' ),
 	UNIQUE INDEX( fecha,  hora, idMedico )
 ) ENGINE=InnoDB;
-
-INSERT INTO turnos VALUES
-	( null, CURRENT_DATE(), '15:30:00', 1, 1, 'esperando' ),
-	( null, DATE_ADD( CURRENT_DATE(), INTERVAL 1 DAY ), '15:30:00', 2, 2, 'cancelado' ),
-	( null, DATE_ADD( CURRENT_DATE(), INTERVAL 2 DAY ), '18:00:00', 3, 3, 'esperando' ),
-	( null, DATE_ADD( CURRENT_DATE(), INTERVAL 3 DAY ), '13:15:00', 4, 4, 'confirmado' ),
-	( null, DATE_ADD( CURRENT_DATE(), INTERVAL 4 DAY ), '09:40:00', 5, 5, 'esperando' ),
-	( null, DATE_ADD( CURRENT_DATE(), INTERVAL 5 DAY ), '18:15:00', 6, 6, 'cancelado' ),
-	( null, DATE_ADD( CURRENT_DATE(), INTERVAL 6 DAY ), '19:00:00', 7, 7, 'cancelado' ),
-	( null, DATE_ADD( CURRENT_DATE(), INTERVAL 7 DAY ), '11:45:00', 8, 8, 'confirmado' )
-;
 /**
 *
 */
@@ -49,20 +38,21 @@ CREATE TABLE medicos(
 	apellidos VARCHAR( 100 ),
 	nombres VARCHAR( 100 ),
 	matricula VARCHAR( 20 ),
-	avatarMini TEXT NULL
+	avatarMini TEXT NULL,
+	avatar TEXT NULL
 ) ENGINE=InnoDB;
 
 INSERT INTO medicos VALUES
-	( null, 1, 'Inspector de', 'Boludos', '122434/21', 'inspector-de-boludos.png' ),
-	( null, 2, 'Hora de', 'Aventuras', '122434/21', 'finn.png' ),
-	( null, 3, 'Alf', 'de Melbac', '122434/21', 'alf.png' ),
-	( null, 4, 'El Holy', 'es hermoso', '122434/21', 'el-holy.png' ),
-	( null, 5, 'Ivan el', 'trolazo', '122434/21', 'ivan-el-trolazo.png' ),
-	( null, 6, 'Neonazi', 'Delia', '122434/21', 'neonazi-delia.png' ),
-	( null, 7, 'Yao', 'Ming', '122434/21', 'yao-ming.png' ),
-	( null, 8, 'Yaranaika', 'desu', '122434/21', 'yaranaika.png' ),
-	( null, 1, 'Weon', 'Tesla', '122434/21', 'tesla.png' ),
-	( null, 2, 'Patricio', 'Patricio', '122434/21', 'patricio.png' )
+	( null, 1, 'Inspector de', 'Boludos', '122434/21', 'inspector-de-boludos.mini.png', 'inspector-de-boludos.png' ),
+	( null, 2, 'Hora de', 'Aventura', '122434/21', 'finn.mini.png', 'finn.png' ),
+	( null, 3, 'Alf', 'de Melbac', '122434/21', 'alf.mini.png', 'alf.png' ),
+	( null, 4, 'El Holy', 'es hermoso', '122434/21', 'el-holy.mini.png', 'el-holy.png' ),
+	( null, 5, 'Ivan el', 'trolazo', '122434/21', 'ivan-el-trolazo.mini.png', 'ivan-el-trolazo.png' ),
+	( null, 6, 'Neonazi', 'Delia', '122434/21', 'neonazi-delia.mini.png', 'neonazi-delia.png' ),
+	( null, 7, 'Yao', 'Ming', '122434/21', 'yao-ming.mini.png', 'yao-ming.png' ),
+	( null, 8, 'Yaranaika', 'desu', '122434/21', 'yaranaika.mini.png', 'yaranaika.png' ),
+	( null, 1, 'Weon', 'Tesla', '122434/21', 'tesla.mini.png', 'tesla.png' ),
+	( null, 2, 'Patricio', 'Patricio', '122434/21', 'patricio.mini.png', 'patricio.png' )
 ;
 /**
 *

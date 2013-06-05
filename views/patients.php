@@ -85,13 +85,13 @@
 		</style>
 		<style>
 			/* popup de paciente detalles */
-			@import url(http://fonts.googleapis.com/css?family=Zeyada);
+			@import url(http://fonts.googleapis.com/css?family=Gloria+Hallelujah|Open+Sans);
 			
 			#is2-modal-details {
 				background: #fff;
 				border-radius: 0;
 				padding: 0;
-				font-family: 'Zeyada', cursive;
+				font-family: 'Gloria Hallelujah', cursive;
 				width: 850px;
 				max-height: 495px;
 				z-index: 100000;

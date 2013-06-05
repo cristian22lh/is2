@@ -1,5 +1,6 @@
-<link href="http://fonts.googleapis.com/css?family=Scada" rel="stylesheet">
 <style>
+	@import url(http://fonts.googleapis.com/css?family=Scada);
+	
 	body {
 		font-family: Scada,"Helvetica Neue",Helvetica,Arial,sans-serif !important;
 	}
