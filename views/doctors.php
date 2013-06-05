@@ -96,9 +96,6 @@
 			height: 495px;
 			overflow: hidden;
 		}
-		.is2-modal-details-body td:last-child {
-			width: 60px;
-		}
 		.is2-modal-details-body h3 {
 			margin: 5px 0 0 0;
 		}
@@ -146,13 +143,30 @@
 		}
 		.is2-grid-header th:first-child,
 		.is2-doctor-availability-grid td:first-child {
-			width: 45px;
+			width: 60px;
 		}
+		.is2-grid-header th:nth-child( 2 ) {
+			width: 75px;
+		}
+		.is2-grid-header th:nth-child( 3 ) {
+			width: 70px;
+		}
+		.is2-doctor-availability-grid td:last-child,
 		.is2-doctor-insurances-grid td:last-child {
 			width: 28px;
 		}
+		.is2-doctor-availability-grid td {
+			text-align: center
+		}
 		.bootstrap-timepicker-widget td {
 			border: 0;
+		}
+		
+		.record-removed * {
+			text-decoration: line-through;
+		}
+		.record-removed .btn {
+			visibility: hidden;
 		}
 	</style>
 
@@ -208,7 +222,7 @@
 								<th>Dia</th>
 								<th>Hora de ingreso</th>
 								<th>Hora de egreso</th>
-								<th>Acciones</th>
+								<th></th>
 							</tr>
 						</table>
 						<table class="table is2-doctor-availability-grid">
@@ -217,8 +231,7 @@
 								<td class="is2-field" data-field-name="horaIngreso"></td>
 								<td class="is2-field" data-field-name="horaEgreso"></td>
 								<td>
-									<a class="btn btn-mini" href="#" title="Editar" data-toggle="modal"><i class="icon-edit"></i></a>
-									<a class="btn btn-mini btn-danger is2-trigger-remove" href="#" data-toggle="modal" title="Borrar"><i class="icon-remove-sign icon-white"></i></a>
+									<a class="btn btn-mini btn-danger is2-doctor-availability-record-remove" href="#" data-toggle="modal" title="Borrar"><i class="icon-remove-sign icon-white"></i></a>
 								</td>
 							</tr>
 						</table>
@@ -239,7 +252,7 @@
 										</div>
 									</td>
 									<td>
-										<button class="btn btn-info" title="Agregar nuevo horario">Agregar</button>
+										<button class="btn btn-info is2-doctor-availability-trigger" title="Agregar nuevo horario">Agregar</button>
 									</td>
 								</tr>
 							</table>
@@ -281,9 +294,11 @@
 		e.stopPropagation();
 		window.location.hash = '';
 		$doctorModal.removeAttr( 'data-doctor-id' );
-	} );
 	
-	$doctorModal .css( 'left', $( window ).outerWidth() /2 - 850 / 2 ).css( 'margin-left', 0 );
+	} ).css( 'left', $( window ).outerWidth() /2 - 850 / 2 ).css( 'margin-left', 0 );
+	var cleanAllInputs = function() {
+		$doctorModal.find( 'input' ).val( '' );
+	};
 	var $doctorModalPreloader = $( '.is2-modal-preloader' );
 	var $doctorModalPreloaderBar = $doctorModalPreloader.find( '.bar' );
 	var showPreloader = function() {
@@ -333,6 +348,10 @@
 		}
 	};
 	
+	var addAvailabilityTokens = function( $record, data ) {
+		$record.attr( 'data-availability-id', data.id ).attr( 'data-availability-day', data.dia ).find( '.is2-doctor-availability-record-remove' ).attr( 'data-availability-id', data.id );
+	};
+	
 	var showDoctorDetails = function( dataResponse ) {
 		isWaiting = false;
 		hidePreloader();
@@ -352,9 +371,7 @@
 		}
 		$doctorAvatar.attr( 'src', '/img/' + doctorData['avatar'] );
 		
-		populateGrid( $doctorAvailabilitiesWrapper, $doctorAvailabilitiesRecord, availabilities, function( $record, data ) {
-			$record.attr( 'data-availability-id', data['id'] ).attr( 'data-availability-day', data['dia'] );
-		} );
+		populateGrid( $doctorAvailabilitiesWrapper, $doctorAvailabilitiesRecord, availabilities, addAvailabilityTokens );
 		populateGrid( $doctorInsurancesWrapper, $doctorInsurancesRecord, insurances, function( $record, data ) {
 			$record.attr( 'data-insurance-id', data['id'] );
 		} );
@@ -366,6 +383,7 @@
 			return;
 		}
 		
+		cleanAllInputs();
 		// show modal
 		$triggerModal.click();
 		showPreloader();
@@ -415,6 +433,7 @@
 	var createdAvailability = function( dataResponse ) {
 		isWaiting = false;
 		hidePreloader();
+		cleanAllInputs();
 		if( !dataResponse.success ) {
 			// duplicated entry
 			$availabilityForm.popover( 'show' );
@@ -422,11 +441,13 @@
 		}
 		hidePopover( $availabilityForm );
 		
-		populateGrid( $doctorAvailabilitiesWrapper, $doctorAvailabilitiesRecord, [ dataResponse.data ], function( $record, data ) {
-			$record.attr( 'data-availability-id', data['id'] ).attr( 'data-availability-day', data['dia'] );
-		}, true );
+		populateGrid( $doctorAvailabilitiesWrapper, $doctorAvailabilitiesRecord, [ dataResponse.data ], addAvailabilityTokens, true );
 		
 		$( '.is2-doctor-availability-record:last' ).effect( 'highlight', null, 1500 );
+	};
+	
+	var hidePopover = function( $el ) {
+		$el.data( 'popover' ).tip().hide();
 	};
 	
 	var $availabilityForm = $( '.is2-doctor-availability-form' );
@@ -434,13 +455,8 @@
 		html: true,
 		content: $( '.is2-doctor-availability-popover' ).prop( 'outerHTML' ),
 		trigger: 'manual'
-	} );
-	
-	var hidePopover = function( $el ) {
-		$el.data( 'popover' ).tip().hide();
-	};
-	
-	$availabilityForm.on( 'submit', function( e ) {
+
+	} ).on( 'submit', function( e ) {
 		e.stopPropagation();
 		e.preventDefault();
 		if( isWaiting ) {
@@ -503,6 +519,44 @@
 			error: createdAvailability
 		} );
 	} );
+	
+	// *** remover un horario *** //
+	var removedAvailability = function( dataResponse ) {
+		isWaiting = false;
+		hidePreloader();
+		if( !dataResponse.success ) {
+			return;
+		}
+		var appointmentID = dataResponse.data;
+		$( '.is2-doctor-availability-record[data-availability-id=' + appointmentID + ']' ).addClass( 'record-removed' );
+	};
+	
+	$doctorModal.delegate( '.is2-doctor-availability-record-remove', 'click', function( e ) {
+		e.preventDefault();
+		if( isWaiting ) {
+			return;
+		}
+		
+		hidePopover( $availabilityForm );
+		
+		$doctorModalPreloaderBar.css( 'width', '1%' );
+		$doctorModalPreloader.fadeIn( 'fast' );
+		isWaiting = true;
+		
+		var availabilityID = $( this ).attr( 'data-availability-id' );
+		$.ajax( {
+			url: '/medicos/' + getDoctorID() + '/borrar-horario',
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				id: availabilityID
+			},
+			success: removedAvailability,
+			error: removedAvailability
+		} );
+		
+	// create mode
+	} )
 	
 // *** change hash listener *** //
 	var $window = $( window );

@@ -51,6 +51,7 @@
 		'/medicos' => 'doctors',
 		'/medicos/:id' => 'doctors.details',
 		'/medicos/:id/crear-horario' => 'doctors.availability.new',
+		'/medicos/:id/borrar-horario' => 'doctors.availability.remove',
 		
 // *** PACIENTES *** //
 		'/pacientes' => 'patients',
