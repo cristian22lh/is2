@@ -1,204 +1,188 @@
 <?php t_startHead( 'Pacientes' ); ?>
-		<style>
-			label {
-				cursor: default;
-			}
-			.is2-grid-header th {
-				text-align: center !important;
-				vertical-align: middle !important;
-			}
-			.is2-grid-header th:nth-child( 1 ),
-			.is2-grid-header th:nth-child( 2 ) {
-				width: 164px;
-			}
-			.is2-grid-header th:nth-child( 4 ) {
-				width: 105px;
-				text-align: left !important;
-			}
-			.is2-grid-header th:nth-child( 4 ) > span {
-				display: inline-block;
-				text-align: center;
-				width: 77px;
-			}
-			.is2-grid-header th:nth-child( 4 ) .is2-dropdownmenu {
-				position: relative;
-				top: -10px;
-			}
-			.is2-grid-header th:nth-child( 5 ) {
-				width: 80px;
-			}
-			.is2-grid td {
-				text-align: center !important;
-				font-size: 13px;
-			}
-			.is2-grid td span {
-				display: block;
-				word-wrap: break-word;
-			}
-			.is2-grid td:nth-child( 1 ) span,
-			.is2-grid td:nth-child( 2 ) span {
-				width: 155px;
-				text-align: left;
-			}
-			.is2-grid td:nth-child( 3 ) {
-				width: 65px;
-			}
-			.is2-grid td:nth-child( 4 ) {
-				width: 65px;
-			}
-			.is2-grid td:nth-child( 5 ) {
-				width: 100px;
-			}
-			.is2-grid td:nth-child( 6 ) span {
-				width: 150px;
-				text-align: left;
-			}
-			.is2-grid td:nth-child( 7 ) span {
-				width: 100px;
-				text-transform: uppercase;
-			}
-			.is2-grid td:nth-child( 8 ) span {
-				width: 130px;
-			}
-			.is2-grid td:nth-child( 9 ) span {
-				text-align: center;
-			}
-			.is2-grid td:last-child {
-				width: 95px;
-			}
-			.pagination {
-				margin: 20px 0 10px 0;
-			}
-			.pager {
-				margin: 20px 0 0 0;
-			}
-			
-			.is2-search-trigger {
-				float: right;
-				margin: 0 0 10px;
-			}
-			.is2-insurances-listbox {
-				height: 200px;
-				margin: 0 0 0 10px;
-				overflow-y: scroll;
-			}
-		</style>
-		<style>
-			/* popup de paciente detalles */
-			@import url(http://fonts.googleapis.com/css?family=Gloria+Hallelujah|Open+Sans);
-			
-			#is2-modal-details {
-				background: #fff;
-				border-radius: 0;
-				padding: 0;
-				font-family: 'Gloria Hallelujah', cursive;
-				width: 850px;
-				max-height: 495px;
-				z-index: 100000;
-				box-shadow: 0 0 5px rgba(0, 0, 0, 0.2), inset 0 0 30px rgba(0, 0, 0, 0.1);
-			}
-			#is2-modal-details * {
-				margin: 0;
-			}
-			#is2-modal-details .modal-body {
-				line-height: 0;
-				padding: 0;
-				position: absolute;
-				right: 4px;
-				top: 5px;
-				overflow: hidden;
-			}
-			.is2-modal-details-header {
-				position: relative;
-				font-size: 30px;
-			}
-			.is2-modal-details-header h1 {
-				padding: 10px;
-			}
-			.is2-modal-details-header ul {
-				padding: 0 10px 10px 10px;
-			}
-			.is2-modal-details-header li {
-				list-style-type: none;
-				display: inline-block;
-				margin: 10px 0;
-			}
-			.is2-modal-details-header:after {
-				border-bottom: 1px solid #ffaa9f;
-				border-top: 1px solid #ffaa9f;
-				height: 2px;
-				width: 100%;
-				content: '';
-				position: absolute;
-			}
-			.is2-modal-details-body {
-				margin: 15px 0;
-			}
-			.is2-modal-details-body li {
-				display: block;
-				font-size: 25px;
-				border-bottom: 1px solid #ccc;
-				line-height: 2;
-				padding: 0 0 0 10px;
-			}
-			.is2-modal-details-body li:last-child {
-				border-bottom: 0;
-			}
-			.is2-modal-details-appointments {
-				height: 200px;
-				overflow-y: scroll;
-				margin: 5px 0 0 0;
-				border-top: 1px solid #ccc;
-				font-size: 25px;
-			}
+	<style>
+		label {
+			cursor: default;
+		}
+		.is2-grid-header th {
+			text-align: center !important;
+			vertical-align: middle !important;
+		}
+		.is2-grid-header th:nth-child( 1 ),
+		.is2-grid-header th:nth-child( 2 ) {
+			width: 164px;
+		}
+		.is2-grid-header th:nth-child( 4 ) {
+			width: 105px;
+			text-align: left !important;
+		}
+		.is2-grid-header th:nth-child( 4 ) > span {
+			display: inline-block;
+			text-align: center;
+			width: 77px;
+		}
+		.is2-grid-header th:nth-child( 4 ) .is2-dropdownmenu {
+			position: relative;
+			top: -10px;
+		}
+		.is2-grid-header th:nth-child( 5 ) {
+			width: 80px;
+		}
+		.is2-grid td {
+			text-align: center !important;
+			font-size: 13px;
+		}
+		.is2-grid td span {
+			display: block;
+			word-wrap: break-word;
+		}
+		.is2-grid td:nth-child( 1 ) span,
+		.is2-grid td:nth-child( 2 ) span {
+			width: 155px;
+			text-align: left;
+		}
+		.is2-grid td:nth-child( 3 ) {
+			width: 65px;
+		}
+		.is2-grid td:nth-child( 4 ) {
+			width: 65px;
+		}
+		.is2-grid td:nth-child( 5 ) {
+			width: 100px;
+		}
+		.is2-grid td:nth-child( 6 ) span {
+			width: 150px;
+			text-align: left;
+		}
+		.is2-grid td:nth-child( 7 ) span {
+			width: 100px;
+			text-transform: uppercase;
+		}
+		.is2-grid td:nth-child( 8 ) span {
+			width: 130px;
+		}
+		.is2-grid td:nth-child( 9 ) span {
+			text-align: center;
+		}
+		.is2-grid td:last-child {
+			width: 95px;
+		}
+		.pagination {
+			margin: 20px 0 10px 0;
+		}
+		.pager {
+			margin: 20px 0 0 0;
+		}
+		
+		.is2-search-trigger {
+			float: right;
+			margin: 0 0 10px;
+		}
+		.is2-insurances-listbox {
+			height: 200px;
+			margin: 0 0 0 10px;
+			overflow-y: scroll;
+		}
+	</style>
+	<style>
+		/* popup de paciente detalles */
+		@import url(http://fonts.googleapis.com/css?family=Gloria+Hallelujah|Open+Sans);
+		
+		#is2-modal-details {
+			background: #fff;
+			border-radius: 0;
+			padding: 0;
+			font-family: 'Gloria Hallelujah', cursive;
+			width: 850px;
+			max-height: 495px;
+			z-index: 100000;
+			box-shadow: 0 0 5px rgba(0, 0, 0, 0.2), inset 0 0 30px rgba(0, 0, 0, 0.1);
+		}
+		#is2-modal-details * {
+			margin: 0;
+		}
+		#is2-modal-details .modal-body {
+			line-height: 0;
+			padding: 0;
+			position: absolute;
+			right: 4px;
+			top: 5px;
+			overflow: hidden;
+		}
+		.is2-modal-details-header {
+			position: relative;
+			font-size: 30px;
+		}
+		.is2-modal-details-header h1 {
+			padding: 10px;
+		}
+		.is2-modal-details-header ul {
+			padding: 0 10px 10px 10px;
+		}
+		.is2-modal-details-header li {
+			list-style-type: none;
+			display: inline-block;
+			margin: 10px 0;
+		}
+		.is2-modal-details-header:after {
+			border-bottom: 1px solid #ffaa9f;
+			border-top: 1px solid #ffaa9f;
+			height: 2px;
+			width: 100%;
+			content: '';
+			position: absolute;
+		}
+		.is2-modal-details-body {
+			margin: 15px 0;
+		}
+		.is2-modal-details-body li {
+			display: block;
+			font-size: 25px;
+			border-bottom: 1px solid #ccc;
+			line-height: 2;
+			padding: 0 0 0 10px;
+		}
+		.is2-modal-details-body li:last-child {
+			border-bottom: 0;
+		}
+		.is2-modal-details-appointments {
+			height: 200px;
+			overflow-y: scroll;
+			margin: 5px 0 0 0;
+			border-top: 1px solid #ccc;
+			font-size: 25px;
+		}
 
-			.is2-modal-details-appointments tr:hover {
-				background-color: #eee;
-				-webkit-transition: 0.2s;
-				-moz-transition:    0.2s;
-				-ms-transition:     0.2s;
-				-o-transition:      0.2s;
-			}
-			.is2-modal-details-appointments td {
-				list-style: none;
-				overflow: hidden;
-				white-space: nowrap;
-				text-overflow: ellipsis;
-				padding: 10px 5px 10px 50px;
-				border-top: 0;
-			}
-			.is2-modal-details-appointments tr {
-				border-bottom: 1px dotted #ccc;
-			}
-			.is2-modal-details-appointments tr:last-child {
-				border-bottom: 0;
-			}
-			.wrapper {
-				position: relative;
-			}
-			.is2-preloader-wrapper {
-				background: #fff;
-				border: 1px solid #149BDF;
-				border-radius: 3px 3px 3px 3px;
-				box-shadow: 0 1px 0 #149BDF;
-				height: 8px;
-				left: 36%;
-				padding: 10px;
-				position: absolute;
-				top: 34%;
-				width: 200px;
-				z-index: 100;
-			}
-			.is2-modal-details-appointments-empty {
-				text-align: center;
-				padding: 10px 0 0 0;
-				color: #ffaa9f;
-			}
-			.is2-patient-data-insurance {
-				font-size: 20px;
-				color: #777;
-			}
-		</style>
+		.is2-modal-details-appointments tr:hover {
+			background-color: #eee;
+			-webkit-transition: 0.2s;
+			-moz-transition:    0.2s;
+			-ms-transition:     0.2s;
+			-o-transition:      0.2s;
+		}
+		.is2-modal-details-appointments td {
+			list-style: none;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			padding: 10px 5px 10px 50px;
+			border-top: 0;
+		}
+		.is2-modal-details-appointments tr {
+			border-bottom: 1px dotted #ccc;
+		}
+		.is2-modal-details-appointments tr:last-child {
+			border-bottom: 0;
+		}
+		.is2-modal-details-appointments-empty {
+			text-align: center;
+			padding: 10px 0 0 0;
+			color: #ffaa9f;
+		}
+		.is2-patient-data-insurance {
+			font-size: 20px;
+			color: #777;
+		}
+	</style>
 
 <?php t_endHead(); ?>
 <?php t_startBody( $username, 'patients'  ); ?>
@@ -360,7 +344,7 @@
 							<td>
 								<a class="btn btn-mini is2-patients-details-trigger" href="#is2-modal-details" data-toggle="modal" title="Ver en detalle" data-patient-id="<?php echo $patient['id']; ?>"><i class="icon-eye-open"></i></a>
 								<a class="btn btn-mini" href="/pacientes/<?php echo $patient['id']; ?>/editar" title="Editar"><i class="icon-edit"></i></a>
-								<a class="btn btn-mini btn-danger is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-patient-id="<?php echo $patient['id']; ?>"><i class="icon-remove-sign" title="Borrar"></i></a>
+								<a class="btn btn-mini btn-danger is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-patient-id="<?php echo $patient['id']; ?>" title="Borrar"><i class="icon-remove-sign"></i></a>
 							</td>
 						</tr>
 					<?php endforeach; ?>
@@ -412,9 +396,9 @@
 			<input type="hidden" name="id">
 		</form>
 		
-		<form id="is2-modal-details" class="modal hide fade">
-			<div class="wrapper">
-				<div class="progress progress-striped active is2-preloader-wrapper">
+		<div id="is2-modal-details" class="modal hide fade">
+			<div class="is2-modal-wrapper">
+				<div class="progress progress-striped active is2-modal-preloader">
 					<div class="bar"></div>
 				</div>
 				<div class="is2-modal-details-header">
@@ -456,7 +440,7 @@
 					</div>
 				</div>
 			</div>
-		</form>
+		</div>
 		
 <?php t_endBody(); ?>
 
@@ -471,7 +455,7 @@
 	
 // *** PARA EL DETALLE DEL PACIENTE *** //
 	var $patientDetailsModal = $( '#is2-modal-details');
-	var $patientDetailsModalPreloader = $( '.is2-preloader-wrapper' );
+	var $patientDetailsModalPreloader = $( '.is2-modal-preloader' );
 	var $patientDetailsModalPreloaderBar = $patientDetailsModalPreloader.find( '.bar' );
 	var isWaiting = false;
 	var $patientFields = $( '.is2-patient-data' );

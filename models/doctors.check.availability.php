@@ -14,17 +14,7 @@
 	
 	// pido los horarios del medico
 	// eso siempre va estar en la respuesta
-	$doctorAvailibilities = DB::select(
-		'
-			SELECT
-				*
-			FROM
-				horarios
-			WHERE
-				idMedico = ?
-		',
-		array( $doctorID )
-	);
+	$doctorAvailibilities = q_getDoctorAvailabilities( $doctorID );
 	
 	// debo saber cual es dia en donde case $date
 	$day = date( 'N', strtotime( $date ) );

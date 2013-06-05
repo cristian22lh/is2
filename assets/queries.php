@@ -56,4 +56,35 @@
 		);
 	}
 
+	function q_getDoctorAvailabilities( $doctorID ) {
+		return DB::select(
+			'
+				SELECT
+					*
+				FROM
+					horarios
+				WHERE
+					idMedico = ?
+			',
+			array( $doctorID )
+		);
+	}
+	
+	function q_getDoctorInsurances( $doctorID ) {
+		return DB::select(
+			'
+				SELECT
+					mos.id,
+					os.nombreCorto, os.nombreCompleto
+				FROM
+					medicosObrasSociales AS mos
+					INNER JOIN obrasSociales AS os
+						ON os.id = mos.idObraSocial
+				WHERE
+					mos.idMedico = ?
+			',
+			array( $doctorID )
+		);
+	}
+
 ?>

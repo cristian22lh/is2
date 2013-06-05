@@ -159,3 +159,20 @@ legend {
 .is2-record-new-popover-close {
 	margin: 5px 0 -7px 0;
 }
+
+.is2-modal-wrapper {
+	position: relative;
+}
+.is2-modal-preloader {
+	background: #fff;
+	border: 1px solid #149BDF;
+	border-radius: 3px 3px 3px 3px;
+	box-shadow: 0 1px 0 #149BDF;
+	height: 8px;
+	left: 36%;
+	padding: 10px;
+	position: absolute;
+	top: 34%;
+	width: 200px;
+	z-index: 100;
+}

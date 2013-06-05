@@ -308,9 +308,10 @@
 							<td class="is2-appointment-time"><?php echo substr( $appointment['hora'], 0, 5 ); ?></td>
 							<td>
 								<img class="is2-doctor-img" src="/img/<?php echo $appointment['medicoAvatar']; ?>">
-								<?php echo $appointment['medicoApellidos'] . ', ' .  $appointment['medicoNombres']; ?></td>
+								<a href="/medicos#id=<?php echo $appointment['idMedico']; ?>" target="_blank"><?php echo $appointment['medicoApellidos'] . ', ' .  $appointment['medicoNombres']; ?></a>
+							</td>
 							<td>
-								<a href="/pacientes?id=<?php echo $appointment['pacienteID']; ?>" target="_blank">
+								<a href="/pacientes?id=<?php echo $appointment['idPaciente']; ?>" target="_blank">
 								<?php echo $appointment['pacienteApellidos'] . ', ' .  $appointment['pacienteNombres']; ?></td>
 								</a>
 							<td data-appointment-id="<?php echo $appointment['id']; ?>" class="is2-appointment-status">

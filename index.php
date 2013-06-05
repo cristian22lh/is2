@@ -49,6 +49,7 @@
 // *** MEDICOS *** //
 		'/medicos/comprobar-horarios-disponibilidad' => 'doctors.check.availability',
 		'/medicos' => 'doctors',
+		'/medicos/:id' => 'doctors.details',
 		
 // *** PACIENTES *** //
 		'/pacientes' => 'patients',

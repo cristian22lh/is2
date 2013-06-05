@@ -235,6 +235,11 @@
 		return false;
 	}
 	
+	function __getDayName( $dayIndex ) {
+		$DAYNAME = [ 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo' ];
+		return isset( $DAYNAME[$dayIndex-1] ) ? $DAYNAME[$dayIndex-1] : false;
+	}
+	
 // ************** /
 // RENDER VIEWS
 // ************* /
