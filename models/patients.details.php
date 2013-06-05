@@ -22,7 +22,6 @@
 	}
 	
 	$patient = $patientData[0];
-	$patient['nombreCompleto'] = $patient['apellidos'] . ', ' . $patient['nombres'];
 	$patient['edad'] = date_diff( date_create( $patient['fechaNacimiento'] ), date_create() )->format( '%Y' );
 	$patient['fechaNacimiento'] = __dateISOToLocale( $patient['fechaNacimiento'] );
 	

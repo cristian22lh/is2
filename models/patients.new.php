@@ -25,7 +25,7 @@
 			__redirect( '/pacientes/crear?error=crear-paciente&campos=' . base64_encode( implode( '|', DB::getErrorList() ) ) );
 		}
 		
-		__redirect( '/pacientes?id=' . $insertId );
+		__redirect( '/pacientes?exito=crear-paciente&id=' . $insertId );
 	}
 /* }}} */
 

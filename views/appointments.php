@@ -87,6 +87,12 @@
 		.is2-record-new {
 			border-bottom: 0;
 		}
+		
+		.is2-doctor-img {
+			border: 2px solid #84D2DB;
+			border-radius: 20px;
+			display: inline-block;
+		}
 	</style>
 
 <?php t_endHead(); ?>
@@ -300,8 +306,13 @@
 						<tr class="is2-appointments-row" data-appointment-id="<?php echo $appointment['id']; ?>" data-appointment-date="<?php echo $dateLocale; ?>" data-appointment-status="<?php echo $appointment['estado']; ?>">
 							<td>&nbsp;</td>
 							<td class="is2-appointment-time"><?php echo substr( $appointment['hora'], 0, 5 ); ?></td>
-							<td><?php echo $appointment['medicoApellidos'] . ', ' .  $appointment['medicoNombres']; ?></td>
-							<td><?php echo $appointment['pacienteApellidos'] . ', ' .  $appointment['pacienteNombres']; ?></td>
+							<td>
+								<img class="is2-doctor-img" src="/img/<?php echo $appointment['medicoAvatar']; ?>">
+								<?php echo $appointment['medicoApellidos'] . ', ' .  $appointment['medicoNombres']; ?></td>
+							<td>
+								<a href="/pacientes?id=<?php echo $appointment['pacienteID']; ?>" target="_blank">
+								<?php echo $appointment['pacienteApellidos'] . ', ' .  $appointment['pacienteNombres']; ?></td>
+								</a>
 							<td data-appointment-id="<?php echo $appointment['id']; ?>" class="is2-appointment-status">
 								<button class="btn btn-small btn-success disabled" style="display:<?php echo $appointment['estado'] == 'confirmado' ? 'inline-block' : 'none'; ?>" data-appointment-id="<?php echo $appointment['id']; ?>"><i class="icon-ok"></i> Confirmado</button>
 								<button class="btn btn-small btn-warning disabled" style="display:<?php echo $appointment['estado'] == 'cancelado' ? 'inline-block' : 'none'; ?>" data-appointment-id="<?php echo $appointment['id']; ?>"><i class="icon-exclamation-sign"></i> Cancelado</button>

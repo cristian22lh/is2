@@ -85,15 +85,12 @@
 		</style>
 		<style>
 			/* popup de paciente detalles */
-			@import url(http://fonts.googleapis.com/css?family=Allura|Zeyada|Parisienne|Sue+Ellen+Francisco);
+			@import url(http://fonts.googleapis.com/css?family=Zeyada);
 			
 			#is2-modal-details {
 				background: #fff;
 				border-radius: 0;
 				padding: 0;
-				font-family: 'Allura', cursive;
-				font-family: 'Sue Ellen Francisco', cursive;
-				font-family: 'Parisienne', cursive;
 				font-family: 'Zeyada', cursive;
 				width: 850px;
 				max-height: 495px;
@@ -425,7 +422,7 @@
 							<i class="icon-remove-sign"></i>
 						</button>
 					</div>
-					<h1 class="is2-patient-data" data-field-name="nombreCompleto"></h1>
+					<h1 class="is2-patient-data"><span class="is2-patient-data" data-field-name="apellidos"></span>, <span class="is2-patient-data" data-field-name="nombres"></span></h1>
 					<ul>
 						<li class="is2-patient-data" data-field-name="dni"></li>
 						<li class="is2-patient-data" data-field-name="fechaNacimiento"></li>
@@ -602,7 +599,7 @@
 	} );
 	
 // *** cuando vengo de crear un nuevo paciente *** //
-	if( window.location.search.indexOf( 'id=' ) >= 0 ) {
+	if( window.location.search.indexOf( 'id=' ) >= 0 && window.location.search.indexOf( 'exito=crear-paciente' ) >= 0 ) {
 		IS2.showNewRecord( $( '.is2-patients-row' ) );
 	}
 	

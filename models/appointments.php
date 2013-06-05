@@ -175,8 +175,8 @@
 				'
 					SELECT
 						null AS id, ? AS fecha, null AS hora, null AS estado,
-						null AS medicoNombres, null AS medicoApellidos,
-						null AS pacienteNombres, null AS pacienteApellidos
+						null AS medicoID, null AS medicoNombres, null AS medicoApellidos, null AS medicoAvatar,
+						null AS pacienteID, null AS pacienteNombres, null AS pacienteApellidos
 				';
 				$baseDate = strtotime( 'next day', $baseDate );
 				$dummyReplacements[] = date( 'Y-m-d', $baseDate );
@@ -196,8 +196,8 @@
 			'
 				SELECT 
 					t.id, fecha, hora, estado,
-					m.nombres AS medicoNombres, m.apellidos AS medicoApellidos,
-					p.nombres AS pacienteNombres, p.apellidos AS pacienteApellidos
+					m.id AS medicoID, m.nombres AS medicoNombres, m.apellidos AS medicoApellidos, m.avatarMini AS medicoAvatar,
+					p.id AS pacienteID, p.nombres AS pacienteNombres, p.apellidos AS pacienteApellidos
 				FROM turnos AS t 
 					INNER JOIN medicos AS m 
 						ON m.id = t.idMedico 

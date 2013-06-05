@@ -48,18 +48,21 @@ CREATE TABLE medicos(
 	idEspecialidad INTEGER NULL,
 	apellidos VARCHAR( 100 ),
 	nombres VARCHAR( 100 ),
-	matricula VARCHAR( 20 )
+	matricula VARCHAR( 20 ),
+	avatarMini TEXT NULL
 ) ENGINE=InnoDB;
 
 INSERT INTO medicos VALUES
-	( null, 1, 'Marcelo', 'Rodríguez', '122434/21' ),
-	( null, 2, 'Fernando', 'Benavídez', '122434/21' ),
-	( null, 3, 'Carlos', 'Fernández', '122434/21' ),
-	( null, 4, 'Miguel', 'Méndez', '122434/21' ),
-	( null, 5, 'Cristián', 'González', '122434/21' ),
-	( null, 6, 'Mónica', 'Pérez', '122434/21' ),
-	( null, 7, 'Patricia', 'Velásquez', '122434/21' ),
-	( null, 8, 'María Marta', 'Suárez', '122434/21' )
+	( null, 1, 'Inspector de', 'Boludos', '122434/21', 'inspector-de-boludos.png' ),
+	( null, 2, 'Hora de', 'Aventuras', '122434/21', 'finn.png' ),
+	( null, 3, 'Alf', 'de Melbac', '122434/21', 'alf.png' ),
+	( null, 4, 'El Holy', 'es hermoso', '122434/21', 'el-holy.png' ),
+	( null, 5, 'Ivan el', 'trolazo', '122434/21', 'ivan-el-trolazo.png' ),
+	( null, 6, 'Neonazi', 'Delia', '122434/21', 'neonazi-delia.png' ),
+	( null, 7, 'Yao', 'Ming', '122434/21', 'yao-ming.png' ),
+	( null, 8, 'Yaranaika', 'desu', '122434/21', 'yaranaika.png' ),
+	( null, 1, 'Weon', 'Tesla', '122434/21', 'tesla.png' ),
+	( null, 2, 'Patricio', 'Patricio', '122434/21', 'patricio.png' )
 ;
 /**
 *
@@ -75,13 +78,33 @@ CREATE TABLE horarios(
 
 INSERT INTO horarios VALUES
 	( null, 1, '11:00:00', '17:00:00', 1 ),
-	( null, 2, '12:00:00', '15:00:00', 2 ),
-	( null, 3, '08:00:00', '20:00:00', 3 ),
-	( null, 4, '15:00:00', '20:00:00', 5 ),
-	( null, 5, '15:00:00', '19:00:00', 6 ),
+	( null, 2, '12:00:00', '15:00:00', 1 ),
+	( null, 3, '08:00:00', '20:00:00', 1 ),
+	( null, 4, '15:00:00', '20:00:00', 1 ),
+	( null, 5, '15:00:00', '19:00:00', 2 ),
+	( null, 6, '16:00:00', '19:00:00', 2 ),
+	( null, 7, '08:00:00', '13:00:00', 2 ),
+	( null, 8, '09:00:00', '14:00:00', 2 ),
+	( null, 9, '09:00:00', '14:00:00', 3 ),
+	( null, 10, '09:00:00', '14:00:00', 3 ),
+	( null, 1, '11:00:00', '17:00:00', 3 ),
+	( null, 2, '12:00:00', '15:00:00', 3 ),
+	( null, 3, '08:00:00', '20:00:00', 4 ),
+	( null, 4, '15:00:00', '20:00:00', 4 ),
+	( null, 5, '15:00:00', '19:00:00', 4 ),
 	( null, 6, '16:00:00', '19:00:00', 4 ),
-	( null, 7, '08:00:00', '13:00:00', 1 ),
-	( null, 8, '09:00:00', '14:00:00', 7 )
+	( null, 7, '08:00:00', '13:00:00', 5 ),
+	( null, 8, '09:00:00', '14:00:00', 5 ),
+	( null, 9, '09:00:00', '14:00:00', 5 ),
+	( null, 10, '09:00:00', '14:00:00', 5 ),
+	( null, 1, '11:00:00', '17:00:00', 6 ),
+	( null, 2, '12:00:00', '15:00:00', 6 ),
+	( null, 3, '08:00:00', '20:00:00', 6 ),
+	( null, 4, '15:00:00', '20:00:00', 6 ),
+	( null, 5, '15:00:00', '19:00:00', 7 ),
+	( null, 6, '16:00:00', '19:00:00', 7 ),
+	( null, 7, '08:00:00', '13:00:00', 7 ),
+	( null, 8, '09:00:00', '14:00:00', 7 ) 	
 ;
 /**
 *
@@ -139,12 +162,7 @@ CREATE TABLE obrasSociales(
 	nombreCompleto TEXT NULL,
 	UNIQUE INDEX( nombreCorto )
 ) ENGINE=InnoDB;
-	
-INSERT INTO obrasSociales VALUES
-	( null, 'LIBRE', 'LIBRE' ),
-	( null, 'IOMA', 'IOMA' ),
-	( null, 'PAMI', 'PAMI' )
-;
+
 LOAD DATA LOCAL INFILE "./_200_insurances.sql" INTO TABLE obrasSociales;
 /**
 *

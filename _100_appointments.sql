@@ -41,7 +41,7 @@ END$$
 DELIMITER ;
 /**
 */
-DROP FUNCTION IF EXISTS getDoctorIDBasedOnADayNameIndex;
+/*DROP FUNCTION IF EXISTS getDoctorIDBasedOnADayNameIndex;
 DELIMITER $$
 CREATE FUNCTION getDoctorIDBasedOnADayNameIndex( dayNameIndex INTEGER )
 RETURNS INTEGER
@@ -49,6 +49,19 @@ BEGIN
 	DECLARE doctorID INTEGER;
 	SELECT m.id FROM medicos AS m INNER JOIN horarios AS h ON h.idMedico = m.id WHERE h.dia = dayNameIndex LIMIT 1 INTO doctorID;
 	RETURN doctorID;
+END$$
+DELIMITER ;*/
+/**
+*/
+DROP PROCEDURE IF EXISTS getDoctorsIDBasedOnADayNameIndex;
+DELIMITER $$
+CREATE PROCEDURE getDoctorsIDBasedOnADayNameIndex( dayNameIndex INTEGER )
+BEGIN
+	DROP TEMPORARY TABLE IF EXISTS t_doctorsForAGivenDay;
+	CREATE TEMPORARY TABLE t_doctorsForAGivenDay(
+		id INTEGER
+	);
+	INSERT INTO t_doctorsForAGivenDay SELECT m.id FROM medicos AS m INNER JOIN horarios AS h ON h.idMedico = m.id WHERE h.dia = dayNameIndex;
 END$$
 DELIMITER ;
 /**
@@ -83,8 +96,8 @@ DELIMITER $$
 CREATE PROCEDURE insertAppointmentsForTheCurrentWeek()
 BEGIN
 	DECLARE lastPatientID INTEGER DEFAULT 0;
-	DECLARE doctorID INTEGER;
-	DECLARE entryTime TIME;
+	/*DECLARE doctorID INTEGER;
+	DECLARE entryTime TIME;*/
 	DECLARE appointmentDate DATE;
 	
 	DECLARE currentDayIndex INTEGER DEFAULT 0;
@@ -93,14 +106,28 @@ BEGIN
 
 	DECLARE patientID1, patientID2, patientID3, patientID4, patientID5, patientID6, patientID7, patientID8, patientID9, patientID10 INTEGER; 
 	
+	DECLARE doctorID1, doctorID2, doctorID3, doctorID4 INTEGER;
+	DECLARE entryTime1, entryTime2, entryTime3, entryTime4 TIME;
+	
 	theLoop: LOOP
 		SELECT getPatientWithNonInsurance( (SELECT lastPatientID) ) INTO lastPatientID;
 		
-		SELECT getDoctorIDBasedOnADayNameIndex( getDayNameIndex( (SELECT currentDayIndex) ) ) INTO doctorID;
+		/*SELECT getDoctorIDBasedOnADayNameIndex( getDayNameIndex( (SELECT currentDayIndex) ) ) INTO doctorID;*/
+		CALL getDoctorsIDBasedOnADayNameIndex( (SELECT currentDayIndex) );
+		SELECT id FROM t_doctorsForAGivenDay LIMIT 1 INTO doctorID1;
+		SELECT id FROM t_doctorsForAGivenDay LIMIT 1,1 INTO doctorID2;
+		SELECT id FROM t_doctorsForAGivenDay LIMIT 2,1 INTO doctorID3;
+		SELECT id FROM t_doctorsForAGivenDay LIMIT 3,1 INTO doctorID4;
+	
 		SELECT currentDayIndex + 1 INTO currentDayIndex;
 		
-		SELECT getDoctorEntryTimeWithID( (SELECT doctorID) ) INTO entryTime;
+		/*SELECT getDoctorEntryTimeWithID( (SELECT doctorID) ) INTO entryTime;*/
+		SELECT getDoctorEntryTimeWithID( (SELECT doctorID1) ) INTO entryTime1;
+		SELECT getDoctorEntryTimeWithID( (SELECT doctorID2) ) INTO entryTime2;
+		SELECT getDoctorEntryTimeWithID( (SELECT doctorID3) ) INTO entryTime3;
+		SELECT getDoctorEntryTimeWithID( (SELECT doctorID4) ) INTO entryTime4;
 		
+
 		SELECT getAppointmentDate( (SELECT currentDateNumber) ) INTO appointmentDate;
 		SELECT currentDateNumber + 1 INTO currentDateNumber;
 
@@ -114,21 +141,36 @@ BEGIN
 		SELECT id FROM t_patientsWithNonInsurance LIMIT 7,1 INTO patientID8;
 		SELECT id FROM t_patientsWithNonInsurance LIMIT 8,1 INTO patientID9;
 		SELECT id FROM t_patientsWithNonInsurance LIMIT 9,1 INTO patientID10;
-		
+
 		INSERT INTO
 			turnos
 		VALUES
-		( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '00:00:00' ), (SELECT doctorID), (SELECT patientID1), 'esperando' ),
-		( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '00:15:00' ), (SELECT doctorID), (SELECT patientID2), 'esperando' ),
-		( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '00:30:00' ), (SELECT doctorID), (SELECT patientID3), 'esperando' ),
-		( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '00:45:00' ), (SELECT doctorID), (SELECT patientID4), 'esperando' ),
-		( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '01:00:00' ), (SELECT doctorID), (SELECT patientID5), 'esperando' ),
-		( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '01:15:00' ), (SELECT doctorID), (SELECT patientID6), 'esperando' ),
-		( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '01:30:00' ), (SELECT doctorID), (SELECT patientID7), 'esperando' ),
-		( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '01:45:00' ), (SELECT doctorID), (SELECT patientID8), 'esperando' ),
-		( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '02:00:00' ), (SELECT doctorID), (SELECT patientID9), 'esperando' ),
-		( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '02:15:00' ), (SELECT doctorID), (SELECT patientID10), 'esperando' )
+			( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime1), '00:00:00' ), (SELECT doctorID1), (SELECT patientID1), 'esperando' ),
+			( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime2), '00:15:00' ), (SELECT doctorID2), (SELECT patientID2), 'esperando' ),
+			( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime3), '00:30:00' ), (SELECT doctorID3), (SELECT patientID3), 'esperando' ),
+			( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime4), '00:45:00' ), (SELECT doctorID4), (SELECT patientID4), 'esperando' ),
+			( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime1), '01:00:00' ), (SELECT doctorID1), (SELECT patientID5), 'esperando' ),
+			( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime2), '01:15:00' ), (SELECT doctorID2), (SELECT patientID6), 'esperando' ),
+			( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime3), '01:30:00' ), (SELECT doctorID3), (SELECT patientID7), 'esperando' ),
+			( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime4), '01:45:00' ), (SELECT doctorID4), (SELECT patientID8), 'esperando' ),
+			( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime1), '02:00:00' ), (SELECT doctorID1), (SELECT patientID9), 'esperando' ),
+			( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime2), '02:15:00' ), (SELECT doctorID2), (SELECT patientID10), 'esperando' )
 		;
+
+		/*INSERT INTO
+			turnos
+		VALUES
+			( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '00:00:00' ), (SELECT doctorID), (SELECT patientID1), 'esperando' ),
+			( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '00:15:00' ), (SELECT doctorID), (SELECT patientID2), 'esperando' ),
+			( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '00:30:00' ), (SELECT doctorID), (SELECT patientID3), 'esperando' ),
+			( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '00:45:00' ), (SELECT doctorID), (SELECT patientID4), 'esperando' ),
+			( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '01:00:00' ), (SELECT doctorID), (SELECT patientID5), 'esperando' ),
+			( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '01:15:00' ), (SELECT doctorID), (SELECT patientID6), 'esperando' ),
+			( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '01:30:00' ), (SELECT doctorID), (SELECT patientID7), 'esperando' ),
+			( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '01:45:00' ), (SELECT doctorID), (SELECT patientID8), 'esperando' ),
+			( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '02:00:00' ), (SELECT doctorID), (SELECT patientID9), 'esperando' ),
+			( null, (SELECT appointmentDate), ADDTIME( (SELECT entryTime), '02:15:00' ), (SELECT doctorID), (SELECT patientID10), 'esperando' )
+		;*/
 		
 		SELECT daysCount - 1 INTO daysCount;
 		IF daysCount <= 0 THEN
