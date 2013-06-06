@@ -34,13 +34,17 @@
 	}
 	
 	$insurances = q_getDoctorInsurances( $doctorID );
+	$insurancesID = array();
+	foreach( $insurances as $insurance ) {
+		$insurancesID[] = $insurance['id'];
+	}
 	
 	__echoJSON( array( 
 		'success' => true,
 		'data' => array(
 			'doctor' => $doctor,
 			'availabilities' => $availabilities,
-			'insurances' => $insurances
+			'insurances' => $insurancesID
 		)
 	) );
 	

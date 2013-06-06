@@ -427,54 +427,6 @@
 	} );
 	
 // *** ACA PARA CUANDO SORTEO LA GRID *** //
-	// LO NECESITO PARA ORDERNAR POR HORA Y POR FECHA
-	var BinaryTree = function() {};
-	BinaryTree.prototype = {
-		add: function( key, data ) {
-			if( !this.key ) {
-				this.key = key;
-				// es un array por el tema de los repetidos
-				this.data = [ data ];
-				this.left = null;
-				this.right = null;
-				
-			} else if( this.key > key ) {
-				if( !this.left ) { 
-					this.left = new BinaryTree();
-				}
-				this.left.add( key, data );
-				
-			} else if( this.key < key ) {
-				if( !this.right ) {
-					this.right = new BinaryTree();
-				}
-				this.right.add( key, data );
-				
-			} else {
-				// repetidos cuentan
-				this.data.push( data );
-			}
-		},
-		walkAsc: function( callback ) {
-			if( this.key ) {
-				this.walkAsc.call( this.left, callback );
-				while( this.data.length ) {
-					callback( this.key, this.data.shift() );
-				}
-				this.walkAsc.call( this.right, callback );
-			}
-		},
-		walkDesc: function( callback ) {
-			if( this.key ) {
-				this.walkDesc.call( this.right, callback );
-				while( this.data.length ) {
-					callback( this.key, this.data.shift() );
-				}
-				this.walkDesc.call( this.left, callback );
-			}
-		}
-	};
-	
 	// POR FECHA
 	$( '.is2-trigger-date' ).on( 'click', function( e ) {
 		// dont append the #

@@ -268,14 +268,17 @@
 					
 					<form class="is2-doctor-insurances">
 						<h3>Obras sociales</h3>
-						<div class="is2-doctor-insurances-grid">
-						<?php foreach( $insurances as $insurance ): ?>
-							<label class="checkbox" data-insurance-id="<?php echo $insurance['id']; ?>">
-								<span class="is2-field" data-field-name="nombreCorto"><?php echo $insurance['nombreCorto']; ?></span>
-								<span class="is2-field" data-field-name="nombreCompleto"><?php echo $insurance['nombreCompleto']; ?></span>
-								<input type="checkbox" name="insurancesList[]" value="<?php echo $insurance['id']; ?>">
-							</label>
-						<?php endforeach; ?>
+						<div class="is2-doctor-insurances-grid-wrapper">
+							<div class="is2-doctor-insurances-grid">
+							<?php $count = 0; ?>
+							<?php foreach( $insurances as $insurance ): ?>
+								<label class="checkbox" data-insurance-id="<?php echo $insurance['id']; ?>" data-insurance-order="<?php echo $count++; ?>">
+									<span class="is2-field" data-field-name="nombreCorto"><?php echo $insurance['nombreCorto']; ?></span>
+									<span class="is2-field" data-field-name="nombreCompleto"><?php echo $insurance['nombreCompleto']; ?></span>
+									<input type="checkbox" name="insurancesList[]" value="<?php echo $insurance['id']; ?>">
+								</label>
+							<?php endforeach; ?>
+							</div>
 						</div>
 						<button class="btn btn-info is2-doctor-insurances-trigger" title="Actualizar obras sociales admitidas por el medico">Actualizar</button>
 					</form>
@@ -327,7 +330,9 @@
 	var $doctorAvailabilitiesRecord = $( '.is2-doctor-availability-record' ).clone();
 	$( '.is2-doctor-availability-record' ).remove();
 	
-	var $doctorInsurancesWrapper = $( '.is2-doctor-insurances-grid' );
+	var $doctorInsurancesWrapper = $( '.is2-doctor-insurances-grid-wrapper' );
+	var $doctorInsurancesGrid = $( '.is2-doctor-insurances-grid' ).clone();
+	$( '.is2-doctor-insurances-grid' ).remove();
 	
 	var showAvailabilities = function( data, appendOnly ) {
 		if( !appendOnly ) {
@@ -349,7 +354,7 @@
 			$doctorAvailabilitiesWrapper.append( $record );
 		}
 	};
-	
+
 	var showDoctorDetails = function( dataResponse ) {
 		isWaiting = false;
 		hidePreloader();
@@ -371,14 +376,20 @@
 		
 		showAvailabilities( availabilities );
 		
-		var insurancesCollection = [], $insuranceChecked;
+		$doctorInsurancesWrapper.empty();
+		var selectedInsurances = [],
+			$doctorInsurancesGridCloned = $doctorInsurancesGrid.clone(),
+			insurance, $insurance;
 		while( insurances.length ) {
 			insurance = insurances.shift();
-			$insuranceChecked = $doctorInsurancesWrapper.find( 'label[data-insurance-id=' + insurance.id + ']' );
-			$insuranceChecked.find( 'input' ).click();
-			insurancesCollection.push( $insuranceChecked );
+			$insurance = $doctorInsurancesGridCloned.find( 'label[data-insurance-id=' + insurance + ']' );
+			$insurance.find( 'input[type=checkbox]' ).attr( 'checked', 'checked' );
+			selectedInsurances.push( $insurance );
 		}
-		$doctorInsurancesWrapper.children().first().before( insurancesCollection );
+		// reoder the grid
+		console.log( selectedInsurances );
+		$doctorInsurancesGridCloned.children().first().before( selectedInsurances );
+		$doctorInsurancesWrapper.append( $doctorInsurancesGridCloned );
 	};
 	
 	$( '.is2-doctor-presentation' ).on( 'click', function( e ) {
