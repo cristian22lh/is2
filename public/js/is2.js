@@ -57,7 +57,7 @@ IS2.savePrevState = function( name, skip ) {
 IS2.showNewRecord = function( $el ) {
 	
 	var $document = $( document ),
-		$popoverTemplate = $( '.is2-record-new-popover' ),
+		$popoverTemplate = $( '.is2-popover' ),
 		$popoverClose,
 		$popover,
 		closePopupTimeout;
@@ -74,7 +74,7 @@ IS2.showNewRecord = function( $el ) {
 	$el.popover( 'show' );
 	$popover.css( 'top', '+=10' ).hide().css( 'visibility', 'visible' ).fadeIn( 'fast' ).animate( { top: '-=15' } );
 
-	$popoverClose = $popover.find( '.is2-record-new-popover-close' );
+	$popoverClose = $popover.find( '.is2-popover-close' );
 	$popoverClose.on( 'click', function( e ) {
 		e.stopPropagation();
 		$el.popover( 'hide' ).removeClass( 'is2-record-new' ).off( 'click', arguments.callee );

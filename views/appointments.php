@@ -339,7 +339,7 @@
 			</div>
 			<?php endif; ?>
 
-			<div class="is2-record-new-popover">
+			<div class="is2-popover">
 				<div class="alert">
 					<strong>¡Nuevo turno ha sido creado satisfactoriamente!</strong>
 				</div>
@@ -347,7 +347,7 @@
 					<i class="icon-arrow-left"></i>
 					Listar turnos
 				</a>
-				<button class="btn btn-link btn-mini is2-record-new-popover-close">¡Entendido!</button>
+				<button class="btn btn-link btn-mini is2-popover-close">¡Entendido!</button>
 			</div>
 
 		<?php t_endWrapper(); ?>
