@@ -130,6 +130,10 @@
 			padding: 20px 0 20px 10px;
 			height: 100%;
 		}
+		.is2-doctor-insurances-grid {
+			overflow-y: scroll;
+			height: 390px;
+		}
 		
 		.is2-input-grid td {
 			padding: 5px 0;
@@ -262,20 +266,19 @@
 						</div>
 					</div>
 					
-					<div class="is2-doctor-insurances">
+					<form class="is2-doctor-insurances">
 						<h3>Obras sociales</h3>
-						<table class="table is2-doctor-insurances-grid">
-							<tr class="is2-doctor-insurances-record">
-								<td>
-									<p class="is2-field" data-field-name="nombreCorto"></p>
-									<p class="is2-field" data-field-name="nombreCompleto"></p>
-								</td>
-								<td>
-									<a class="btn btn-mini btn-danger is2-trigger-remove" href="#" data-toggle="modal" title="Borrar"><i class="icon-remove-sign icon-white"></i></a>
-								</td>
-							</tr>
-						</table>
-					</div>
+						<div class="is2-doctor-insurances-grid">
+						<?php foreach( $insurances as $insurance ): ?>
+							<label class="checkbox" data-insurance-id="<?php echo $insurance['id']; ?>">
+								<span class="is2-field" data-field-name="nombreCorto"><?php echo $insurance['nombreCorto']; ?></span>
+								<span class="is2-field" data-field-name="nombreCompleto"><?php echo $insurance['nombreCompleto']; ?></span>
+								<input type="checkbox" name="insurancesList[]" value="<?php echo $insurance['id']; ?>">
+							</label>
+						<?php endforeach; ?>
+						</div>
+						<button class="btn btn-info is2-doctor-insurances-trigger" title="Actualizar obras sociales admitidas por el medico">Actualizar</button>
+					</form>
 				</div>
 			</div>
 		</div>
@@ -297,7 +300,7 @@
 	
 	} ).css( 'left', $( window ).outerWidth() /2 - 850 / 2 ).css( 'margin-left', 0 );
 	var cleanAllInputs = function() {
-		$doctorModal.find( 'input' ).val( '' );
+		$availabilityForm.find( 'input' ).val( '' );
 	};
 	var $doctorModalPreloader = $( '.is2-modal-preloader' );
 	var $doctorModalPreloaderBar = $doctorModalPreloader.find( '.bar' );
@@ -325,31 +328,26 @@
 	$( '.is2-doctor-availability-record' ).remove();
 	
 	var $doctorInsurancesWrapper = $( '.is2-doctor-insurances-grid' );
-	var $doctorInsurancesRecord = $( '.is2-doctor-insurances-record' );
-	$( '.is2-doctor-insurances-record' ).remove();
 	
-	var populateGrid = function( $wrapper, $template, data, callback, appendOnly ) {
+	var showAvailabilities = function( data, appendOnly ) {
 		if( !appendOnly ) {
-			$wrapper.empty();
+			$doctorAvailabilitiesWrapper.empty();
 		}
-		var recordData, $record, $fields, $field;
+		var recordData, $record, $fields, $field,
+			i, l;
 		while( data.length ) {
 			recordData = data.shift();
-			$record = $template.clone();
+			$record = $doctorAvailabilitiesRecord.clone();
 			
 			$fields = $record.find( '.is2-field' );
 			for( i = 0, l = $fields.length; i < l; i++ ) {
 				$field = $fields.eq( i );
 				$field.html( recordData[$field.attr( 'data-field-name' )] );
 			}
-			callback( $record, recordData );
+			$record.attr( 'data-availability-id', data.id ).attr( 'data-availability-day', data.dia ).find( '.is2-doctor-availability-record-remove' ).attr( 'data-availability-id', data.id );
 			
-			$wrapper.append( $record );
+			$doctorAvailabilitiesWrapper.append( $record );
 		}
-	};
-	
-	var addAvailabilityTokens = function( $record, data ) {
-		$record.attr( 'data-availability-id', data.id ).attr( 'data-availability-day', data.dia ).find( '.is2-doctor-availability-record-remove' ).attr( 'data-availability-id', data.id );
 	};
 	
 	var showDoctorDetails = function( dataResponse ) {
@@ -371,11 +369,16 @@
 		}
 		$doctorAvatar.attr( 'src', '/img/' + doctorData['avatar'] );
 		
-		populateGrid( $doctorAvailabilitiesWrapper, $doctorAvailabilitiesRecord, availabilities, addAvailabilityTokens );
-		populateGrid( $doctorInsurancesWrapper, $doctorInsurancesRecord, insurances, function( $record, data ) {
-			$record.attr( 'data-insurance-id', data['id'] );
-		} );
+		showAvailabilities( availabilities );
 		
+		var insurancesCollection = [], $insuranceChecked;
+		while( insurances.length ) {
+			insurance = insurances.shift();
+			$insuranceChecked = $doctorInsurancesWrapper.find( 'label[data-insurance-id=' + insurance.id + ']' );
+			$insuranceChecked.find( 'input' ).click();
+			insurancesCollection.push( $insuranceChecked );
+		}
+		$doctorInsurancesWrapper.children().first().before( insurancesCollection );
 	};
 	
 	$( '.is2-doctor-presentation' ).on( 'click', function( e ) {
@@ -440,8 +443,8 @@
 			return;
 		}
 		hidePopover( $availabilityForm );
-		
-		populateGrid( $doctorAvailabilitiesWrapper, $doctorAvailabilitiesRecord, [ dataResponse.data ], addAvailabilityTokens, true );
+
+		showAvailabilities( [ dataResponse.data ], true );
 		
 		$( '.is2-doctor-availability-record:last' ).effect( 'highlight', null, 1500 );
 	};
@@ -455,7 +458,8 @@
 		html: true,
 		content: $( '.is2-doctor-availability-popover' ).prop( 'outerHTML' ),
 		trigger: 'manual'
-
+	
+	// create mode
 	} ).on( 'submit', function( e ) {
 		e.stopPropagation();
 		e.preventDefault();
@@ -554,9 +558,15 @@
 			success: removedAvailability,
 			error: removedAvailability
 		} );
-		
-	// create mode
-	} )
+	} );
+	
+// *** obra sociales functionality *** //
+	var $insuranceForm = $( '.is2-doctor-insurances-form' );
+	$insuranceForm.on( 'submit', function( e ) {
+		e.preventDefault();
+
+
+	} );
 	
 // *** change hash listener *** //
 	var $window = $( window );

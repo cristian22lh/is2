@@ -86,8 +86,7 @@
 		return DB::select(
 			'
 				SELECT
-					mos.id,
-					os.nombreCorto, os.nombreCompleto
+					os.id, os.nombreCorto, os.nombreCompleto
 				FROM
 					medicosObrasSociales AS mos
 					INNER JOIN obrasSociales AS os

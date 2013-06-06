@@ -16,12 +16,15 @@
 				m.apellidos ASC, m.nombres ASC
 		'
 	);
-
+	
+	$insurances = q_getAllInsurances();
+	
 	__render( 
 		'doctors', 
 		array(
 			'username' => $username,
-			'doctors' => $doctors
+			'doctors' => $doctors,
+			'insurances' => $insurances
 		)
 	);
 /* }}} */
