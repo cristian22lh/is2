@@ -18,7 +18,8 @@
 		private static $errorsCode = array(
 			'1062' => 'duplicado',
 			'1054' => 'columna desconocida',
-			'1064' => 'error en el diseño de la query'
+			'1064' => 'error en el diseño de la query',
+			'1451' => 'clave foreana restriccion'
 		);
 		private static $errorsList = array();
 		

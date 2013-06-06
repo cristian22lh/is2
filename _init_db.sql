@@ -192,14 +192,14 @@ ALTER TABLE turnos
 	ADD CONSTRAINT turnos_idMedico
 	FOREIGN KEY( idMedico )
 		REFERENCES medicos( id )
-		ON DELETE CASCADE
+		ON DELETE RESTRICT
 ;
 		
 ALTER TABLE turnos
 	ADD CONSTRAINT turnos_idPaciente
 	FOREIGN KEY( idPaciente )
 		REFERENCES pacientes( id )
-		ON DELETE CASCADE
+		ON DELETE RESTRICT
 ;
 
 DELIMITER $$
@@ -278,27 +278,6 @@ ALTER TABLE pacientes
 		REFERENCES obrasSociales( id )
 		ON DELETE RESTRICT
 ;
-
-DELIMITER $$
-CREATE TRIGGER pacientes_borrarPaciente
-	BEFORE DELETE ON pacientes
-	FOR EACH ROW
-	BEGIN
-		/** NO SE PUEDE BORRAR UN PACIENTE QUE TENGA TURNOS ASOCIADOS */
-		IF ( 
-			SELECT
-				id
-			FROM
-				turnos
-			WHERE
-				idPaciente = OLD.id
-
-		) IS NOT NULL THEN
-			CALL paciente_posee_turnos_asociados;
-		END IF;
-	END;
-$$
-DELIMITER ;
 
 ALTER TABLE medicos
 	ADD CONSTRAINT medicos_idEspecialidad
