@@ -268,11 +268,10 @@
 					
 					<form class="is2-doctor-insurances">
 						<h3>Obras sociales</h3>
-						<div class="is2-doctor-insurances-grid-wrapper">
+						<div class="is2-doctor-insurances-grid-wrapper" style="display:none">
 							<div class="is2-doctor-insurances-grid">
-							<?php $count = 0; ?>
 							<?php foreach( $insurances as $insurance ): ?>
-								<label class="checkbox" data-insurance-id="<?php echo $insurance['id']; ?>" data-insurance-order="<?php echo $count++; ?>">
+								<label class="checkbox" data-insurance-id="<?php echo $insurance['id']; ?>">
 									<span class="is2-field" data-field-name="nombreCorto"><?php echo $insurance['nombreCorto']; ?></span>
 									<span class="is2-field" data-field-name="nombreCompleto"><?php echo $insurance['nombreCompleto']; ?></span>
 									<input type="checkbox" name="insurancesList[]" value="<?php echo $insurance['id']; ?>">
@@ -376,7 +375,7 @@
 		
 		showAvailabilities( availabilities );
 		
-		$doctorInsurancesWrapper.empty();
+		$doctorInsurancesWrapper.hide().empty();
 		var selectedInsurances = [],
 			$doctorInsurancesGridCloned = $doctorInsurancesGrid.clone(),
 			insurance, $insurance;
@@ -389,7 +388,9 @@
 		// reoder the grid
 		console.log( selectedInsurances );
 		$doctorInsurancesGridCloned.children().first().before( selectedInsurances );
-		$doctorInsurancesWrapper.append( $doctorInsurancesGridCloned );
+		setTimeout( function() {
+			$doctorInsurancesWrapper.append( $doctorInsurancesGridCloned ).show();
+		}, 500 );
 	};
 	
 	$( '.is2-doctor-presentation' ).on( 'click', function( e ) {
@@ -572,11 +573,45 @@
 	} );
 	
 // *** obra sociales functionality *** //
-	var $insuranceForm = $( '.is2-doctor-insurances-form' );
-	$insuranceForm.on( 'submit', function( e ) {
+	var updatedInsurancesSupport = function( dataResponse ) {
+		isWaiting = false;
+		hidePreloader();
+		if( !dataResponse.success ) {
+			return;
+		}
+		var insurances = dataResponse.data;
+		while( insurances.length ) {
+			$( 'label[data-insurance-id=' + insurances.shift() + ']' ).effect( 'highlight', null, 1500 );
+		}
+	};
+	
+	$( '.is2-doctor-insurances' ).on( 'submit', function( e ) {
 		e.preventDefault();
-
-
+		if( isWaiting ) {
+			return;
+		}
+		var $insurances = $doctorInsurancesWrapper.find( 'input[type="checkbox"]:checked' ),
+			insurancesSelected = [],
+			i = 0, l = $insurances.length;
+			
+		for( ; i < l; i++ ) {
+			insurancesSelected.push( $insurances.eq( i ).val() );
+		}
+		
+		isWaiting = true;
+		showPreloader();
+		
+		// save a refrence for latter
+		$.ajax( {
+			url: '/medicos/' + getDoctorID() + '/actualizar-obras-sociales-admitidas',
+			dataType: 'json',
+			type: 'POST',
+			data: {
+				insurances: insurancesSelected
+			},
+			success: updatedInsurancesSupport,
+			error: updatedInsurancesSupport
+		} );
 	} );
 	
 // *** change hash listener *** //

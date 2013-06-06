@@ -133,6 +133,20 @@
 			return $insertId;
 		}
 		
+		static function batch( $queries ) {
+			self::$db->autocommit( false );
+			
+			foreach( $queries as $type => $data ) {
+				$exitCode = self::{$type}( $data['query'], $data['replacements'] );
+				if( ( is_integer( $exitCode ) && $exitCode < 0 ) || ( is_bool( $exitCode ) && !$exitCode ) ) {
+					self::$db->rollback();
+					return false;
+				}
+			}
+			self::$db->commit();
+			return true;
+		}
+		
 		static function getErrorList() {
 			return self::$errorsList;
 		}
