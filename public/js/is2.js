@@ -129,6 +129,12 @@ IS2.lookForEmptyFields = function( $theForm, notShowPopover ) {
 	return isError;
 };
 
+IS2.showCrudMsg = function( $msg ) {
+	$msg.css( 'top', -40 ).show().animate( { top: '+=36' }, { complete: function() {
+		$msg.delay( 2000 ).animate( { top: '-=44' } );
+	} } );	
+};
+
 var BinaryTree = function() {};
 BinaryTree.prototype = {
 	add: function( key, data ) {

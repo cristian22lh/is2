@@ -3,12 +3,13 @@
 		.is2-doctor-presentation {
 			display: inline-block;
 			width: 300px;
-			padding: 5px;
+			padding: 5px 5px 20px;
 			margin: 0 0 20px 0;
 			white-space: nowrap;
 			border-radius: 10px;
-			cursor: pointer;
 			transition: all 300ms ease-in-out;
+			position: relative;
+			background-color: #fff;
 		}
 		.is2-doctor-presentation img {
 			border-radius: 50px;
@@ -22,39 +23,60 @@
 		
 		}
 		.is2-doctor-presentation-name h3 {
-			display: block;
 			font-size: 20px;
 			white-space: pre-wrap;
 			width: 210px;
 			word-wrap: break-word;
 			transition: all 300ms linear;
 		}
-		.is2-doctor-presentation-name p {
+		.is2-doctor-presentation-name div {
 			transition: all 300ms linear; 
+		}
+		.is2-doctor-actions {
+			margin: 10px 0 0 0;
 		}
 		
 		/* animation effect */
 		@keyframes moveFromBottom {
-		    from {
-			opacity: 0;
-			transform: translateY(200%);
-		    }
-		    to {
-			opacity: 1;
-			transform: translateY(0%);
-		    }
+			from {
+				opacity: 0;
+				transform: translateY(200%);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0%);
+			}
 		}
 		@keyframes moveFromTop {
-		    from {
-			opacity: 0;
-			transform: translateY(-200%);
-		    }
-		    to {
-			opacity: 1;
-			transform: translateY(0%);
-		    }
+			from {
+				opacity: 0;
+				transform: translateY(-200%);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0%);
+			}
 		}
-		
+		@-webkit-keyframes moveFromTop {
+			from {
+				opacity: 0;
+				-webkit-transform: translateY(-200%);
+			}
+			to {
+				opacity: 1;
+				-webkit-transform: translateY(0%);
+			}
+		}
+		@-webkit-keyframes moveFromBottom {
+			from {
+				opacity: 0;
+				-webkit-transform: translateY(200%);
+			}
+			to {
+				opacity: 1;
+				-webkit-transform: translateY(0%);
+			}
+		}	
 		.is2-doctor-presentation:hover {
 			background: #5BC0DE;
 			box-shadow: 0 2px 0 #32a2c3;
@@ -66,11 +88,13 @@
 			opacity: 1;
 			color: #fff;
 			animation: moveFromTop 300ms ease-in-out;
+			-webkit-animation: moveFromTop 300ms ease-in-out;
 			text-shadow: 0 -1px 0 #555;
 		}
-		.is2-doctor-presentation:hover .is2-doctor-presentation-name p {
-			opacity: 1;
+		.is2-doctor-presentation:hover .is2-doctor-presentation-name-speciality {
 			animation: moveFromBottom 300ms ease-in-out;
+			-webkit-animation: moveFromBottom 300ms ease-in-out;
+			opacity: 1;
 			color: #fff;
 			text-shadow: 0 -1px 0 #555;
 		}
@@ -172,6 +196,16 @@
 		.record-removed .btn {
 			visibility: hidden;
 		}
+		
+		.is2-modal-doctor-status {
+			position: absolute;
+			top: -4px;
+			left: 20%;
+			opacity: .8;
+			width: 500px;
+			text-align: center;
+			padding-right: 14px;
+		}
 	</style>
 
 <?php t_endHead(); ?>
@@ -186,11 +220,16 @@
 		
 		<div class="is2-doctors-grid">
 		<?php foreach( $doctors as $doctor ): ?>
-			<div class="is2-doctor-presentation" data-doctor-id="<?php echo $doctor['id']; ?>">
+			<div class="is2-doctor-presentation">
 				<img src="/img/<?php echo $doctor['avatar']; ?>">
 				<div class="is2-doctor-presentation-name">
 					<h3><?php echo $doctor['apellidos'] . ', ' . $doctor['nombres']; ?></h3>
-					<p><?php echo $doctor['especialidad']; ?></p>
+					<div class="is2-doctor-presentation-name-speciality"><?php echo $doctor['especialidad']; ?></div>
+					<div class="is2-doctor-actions">
+						<button class="btn btn-mini is2-doctor-presentation-trigger" data-doctor-id="<?php echo $doctor['id']; ?>"><i class="icon-eye-open"></i></button>
+						<a href="/medicos/<?php echo $doctor['id']; ?>/editar" class="btn btn-mini"><i class="icon-edit"></i></a>
+						<button class="btn btn-mini btn-danger" data-doctor-id="<?php echo $doctor['id']; ?>"><i class="icon-remove-sign icon-white"></i></button>
+					</div>
 				</div>
 			</div>
 		<?php endforeach; ?>
@@ -201,6 +240,15 @@
 			<div class="is2-modal-wrapper">
 				<div class="progress progress-striped active is2-modal-preloader">
 					<div class="bar"></div>
+				</div>
+				<div class="is2-modal-doctor-status alert alert-success is2-new-availability" style="display:none">
+					Nuevo horario del médico ha sido creado satisfactoriamente
+				</div>
+				<div class="is2-modal-doctor-status alert alert-success is2-remove-availability" style="display:none">
+					El horario del médico ha sido eliminado satisfactoriamente
+				</div>
+				<div class="is2-modal-doctor-status alert alert-success is2-update-insurances" style="display:none">
+					Obras sociales admitidas por el médico han sido actualizadas satisfactoriamente
 				</div>
 				<div class="is2-modal-details-header">
 					<div class="modal-body">
@@ -348,7 +396,7 @@
 				$field = $fields.eq( i );
 				$field.html( recordData[$field.attr( 'data-field-name' )] );
 			}
-			$record.attr( 'data-availability-id', data.id ).attr( 'data-availability-day', data.dia ).find( '.is2-doctor-availability-record-remove' ).attr( 'data-availability-id', data.id );
+			$record.attr( 'data-availability-id', recordData.id ).find( '.is2-doctor-availability-record-remove' ).attr( 'data-availability-id', recordData.id );
 			
 			$doctorAvailabilitiesWrapper.append( $record );
 		}
@@ -393,7 +441,7 @@
 		}, 500 );
 	};
 	
-	$( '.is2-doctor-presentation' ).on( 'click', function( e ) {
+	$( '.is2-doctor-presentation-trigger' ).on( 'click', function( e ) {
 		if( isWaiting ) {
 			return;
 		}
@@ -445,20 +493,28 @@
 		return time;
 	};
 	
+	var $newAvailability = $( '.is2-new-availability' );
+	
 	var createdAvailability = function( dataResponse ) {
 		isWaiting = false;
 		hidePreloader();
-		cleanAllInputs();
+		
 		if( !dataResponse.success ) {
 			// duplicated entry
 			$availabilityForm.popover( 'show' );
+			$dayNameGroupControl.addClass( 'error' );
+			$timeEntryInGroupControl.addClass( 'error' );
+			$timeEntryOutGroupControl.addClass( 'error' );
 			return;
 		}
+		cleanAllInputs();
 		hidePopover( $availabilityForm );
 
 		showAvailabilities( [ dataResponse.data ], true );
 		
 		$( '.is2-doctor-availability-record:last' ).effect( 'highlight', null, 1500 );
+		
+		IS2.showCrudMsg( $newAvailability );
 	};
 	
 	var hidePopover = function( $el ) {
@@ -486,7 +542,7 @@
 			return;
 		}
 		
-		var dayName = $dayName.val().trim().toLowerCase(),
+		var dayName = $dayName.val().trim().toLowerCase().replace( /á/g, 'a' ).replace( /é/g, 'e' ),
 			dayIndex = DAYSNAME.indexOf( dayName );
 		if( dayIndex < 0 ) {
 			$dayNameGroupControl.addClass( 'error' );
@@ -537,6 +593,7 @@
 	} );
 	
 	// *** remover un horario *** //
+	var $removeAvailability = $( '.is2-remove-availability' );
 	var removedAvailability = function( dataResponse ) {
 		isWaiting = false;
 		hidePreloader();
@@ -545,6 +602,7 @@
 		}
 		var appointmentID = dataResponse.data;
 		$( '.is2-doctor-availability-record[data-availability-id=' + appointmentID + ']' ).addClass( 'record-removed' );
+		IS2.showCrudMsg( $removeAvailability );
 	};
 	
 	$doctorModal.delegate( '.is2-doctor-availability-record-remove', 'click', function( e ) {
@@ -573,6 +631,7 @@
 	} );
 	
 // *** obra sociales functionality *** //
+	var $updatedInsurances = $( '.is2-update-insurances' );
 	var updatedInsurancesSupport = function( dataResponse ) {
 		isWaiting = false;
 		hidePreloader();
@@ -583,6 +642,7 @@
 		while( insurances.length ) {
 			$( 'label[data-insurance-id=' + insurances.shift() + ']' ).effect( 'highlight', null, 1500 );
 		}
+		IS2.showCrudMsg( $updatedInsurances );
 	};
 	
 	$( '.is2-doctor-insurances' ).on( 'submit', function( e ) {
@@ -622,7 +682,7 @@
 			
 		if( doctorID ) {
 			doctorID = doctorID[1];
-			$( '.is2-doctor-presentation[data-doctor-id=' + doctorID + ']' ).click();
+			$( '.is2-doctor-presentation-trigger[data-doctor-id=' + doctorID + ']' ).click();
 			
 		} else {
 			$doctorModal.find( '.is2-modal-close' ).click();

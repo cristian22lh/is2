@@ -646,9 +646,7 @@
 				return;
 			}
 			$msg = this.$successMsg;
-			$msg.css( 'top', -40 ).show().animate( { top: '+=36' }, { complete: function() {
-				$msg.delay( 2000 ).animate( { top: '-=44' } );
-			} } );
+			IS2.showCrudMsg( $msg );
 			
 			showAppointmentAction( dataResponse.data.id, this.type );
 		}

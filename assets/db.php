@@ -140,10 +140,12 @@
 				$exitCode = self::{$type}( $data['query'], $data['replacements'] );
 				if( ( is_integer( $exitCode ) && $exitCode < 0 ) || ( is_bool( $exitCode ) && !$exitCode ) ) {
 					self::$db->rollback();
+					self::$db->autocommit( true );
 					return false;
 				}
 			}
 			self::$db->commit();
+			self::$db->autocommit( true );
 			return true;
 		}
 		
