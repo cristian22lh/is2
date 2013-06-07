@@ -53,6 +53,7 @@
 		'/medicos/:id/crear-horario' => 'doctors.availability.new',
 		'/medicos/:id/borrar-horario' => 'doctors.availability.remove',
 		'/medicos/:id/actualizar-obras-sociales-admitidas' => 'doctors.insurances.update',
+		'/medicos/:id/historial' => 'doctors.history',
 		
 // *** PACIENTES *** //
 		'/pacientes' => 'patients',

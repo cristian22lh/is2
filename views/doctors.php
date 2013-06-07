@@ -108,6 +108,13 @@
 			z-index: 100000;
 			overflow: hidden;
 		}
+		.is2-modal-preloader {
+			left: 54%;
+		}
+		.is2-modal-details-header {
+			z-index: 1000000;
+			position: relative;
+		}
 		#is2-modal-doctor .modal-body {
 			line-height: 0;
 			overflow: hidden;
@@ -132,6 +139,8 @@
 			text-align: center;
 			text-shadow: 0 -1px 0 #555;
 			border-right: 1px solid #58CAF5;
+			position: relative;
+			z-index: 100;
 		}
 		.is2-modal-doctor-information img {
 			border-radius: 50px;
@@ -139,24 +148,56 @@
 			margin: 0 auto;
 			box-shadow: 0 -2px 0 #555;
 		}
-		
-		.is2-modal-doctor-availability {
+		.is2-modal-details-tabs {
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			overflow: hidden;
+			z-index: 10;
+		}
+		.is2-modal-details-tabs .nav {
+			margin: 0 0 0 261px;
+			padding: 3px 0 0 3px;
+			border: 0;
+		}
+		.is2-modal-details-tabs .nav a {
+			color: #fff;
+			font-variant: small-caps;
+			border-radius: 0;
+		}
+		.nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
+			color: #555;
+			text-shadow: none;
+		}
+		.nav > li > a:hover, .nav > li > a:focus {
+			background-color: #F1F1F1;
+			color: #555;
+			text-decoration: none;
+			text-shadow: 0 1px 0 #F1F1F1;
+		}
+	
+		#is2-doctor-availability-insurances {
+			height: 495px;
 			border-left: 1px solid #0C688A;
+			padding: 35px 0 0 0;
+		}
+		.is2-modal-doctor-availability {
 			float: left;
 			width: 300px;
-			padding: 20px 10px;
+			padding: 0 10px;
 			height: 100%;
 			border-right: 1px solid #ddd;
 		}
 		.is2-doctor-insurances {
 			float: left;
 			width: 250px;
-			padding: 20px 0 20px 10px;
+			padding: 0 0 20px 10px;
 			height: 100%;
 		}
 		.is2-doctor-insurances-grid {
 			overflow-y: scroll;
-			height: 390px;
+			height: 380px;
 		}
 		
 		.is2-input-grid td {
@@ -198,13 +239,40 @@
 		}
 		
 		.is2-modal-doctor-status {
-			position: absolute;
-			top: -4px;
-			left: 20%;
-			opacity: .8;
-			width: 500px;
-			text-align: center;
+			left: 33%;
+			opacity: .9;
 			padding-right: 14px;
+			position: absolute;
+			text-align: center;
+			top: 39px;
+			width: 500px;
+		}
+		
+		#is2-doctor-appointments {
+			padding: 40px 0 0 0;
+			border-left: 1px solid #0C688A;
+		}
+		.is2-doctor-appointments-grid {
+			overflow-y: scroll;
+			height: 455px;
+		}
+		.is2-doctor-appointments-grid td {
+			text-align: center;
+			padding: 0;
+			font-size: 13px;
+		}
+		.is2-doctor-appointments-grid td a {
+			font-size: 13px;
+		}
+		.is2-doctor-appointments-grid table {
+			margin: 2px auto 0;
+			width: 99%;
+		}
+		.is2-doctor-appointments-grid table tr:first-child td { 
+			border-top: 0;
+		}
+		.is2-doctor-appointments-grid td:last-child {
+			width: 110px;
 		}
 	</style>
 
@@ -218,6 +286,9 @@
 			<a class="btn pull-right btn-warning" href="/medicos/crear"><i class="icon-plus"></i> Crear un nuevo médico</a>
 		</div>
 		
+		<div class="alert alert-info">
+			A continuación se muestran todos los médicos actualmente cargados en el sistema
+		</div>
 		<div class="is2-doctors-grid">
 		<?php foreach( $doctors as $doctor ): ?>
 			<div class="is2-doctor-presentation">
@@ -226,9 +297,9 @@
 					<h3><?php echo $doctor['apellidos'] . ', ' . $doctor['nombres']; ?></h3>
 					<div class="is2-doctor-presentation-name-speciality"><?php echo $doctor['especialidad']; ?></div>
 					<div class="is2-doctor-actions">
-						<button class="btn btn-mini is2-doctor-presentation-trigger" data-doctor-id="<?php echo $doctor['id']; ?>"><i class="icon-eye-open"></i></button>
-						<a href="/medicos/<?php echo $doctor['id']; ?>/editar" class="btn btn-mini"><i class="icon-edit"></i></a>
-						<button class="btn btn-mini btn-danger" data-doctor-id="<?php echo $doctor['id']; ?>"><i class="icon-remove-sign icon-white"></i></button>
+						<button class="btn btn-mini is2-doctor-presentation-trigger" data-doctor-id="<?php echo $doctor['id']; ?>" title="Ver en detalle"><i class="icon-eye-open"></i></button>
+						<a href="/medicos/<?php echo $doctor['id']; ?>/editar" class="btn btn-mini" title="Editar datos personales"><i class="icon-edit"></i></a>
+						<button class="btn btn-mini btn-danger" data-doctor-id="<?php echo $doctor['id']; ?>"  title="Borrar médico del sistema"><i class="icon-remove-sign icon-white"></i></button>
 					</div>
 				</div>
 			</div>
@@ -241,19 +312,10 @@
 				<div class="progress progress-striped active is2-modal-preloader">
 					<div class="bar"></div>
 				</div>
-				<div class="is2-modal-doctor-status alert alert-success is2-new-availability" style="display:none">
-					Nuevo horario del médico ha sido creado satisfactoriamente
-				</div>
-				<div class="is2-modal-doctor-status alert alert-success is2-remove-availability" style="display:none">
-					El horario del médico ha sido eliminado satisfactoriamente
-				</div>
-				<div class="is2-modal-doctor-status alert alert-success is2-update-insurances" style="display:none">
-					Obras sociales admitidas por el médico han sido actualizadas satisfactoriamente
-				</div>
 				<div class="is2-modal-details-header">
 					<div class="modal-body">
 						<button class="btn btn-link is2-modal-close" data-dismiss="modal">
-							<i class="icon-remove-sign"></i>
+							<i class="icon-remove-sign icon-white"></i>
 						</button>
 					</div>
 				</div>
@@ -267,70 +329,120 @@
 						</div>
 					</div>
 					
-					<div class="is2-modal-doctor-availability">
-						<h3>Horarios</h3>
-						<table class="table is2-grid-header">
-							<tr>
-								<th>Dia</th>
-								<th>Hora de ingreso</th>
-								<th>Hora de egreso</th>
-								<th></th>
-							</tr>
-						</table>
-						<table class="table is2-doctor-availability-grid">
-							<tr class="is2-doctor-availability-record">
-								<td class="is2-field" data-field-name="diaNombre"></td>
-								<td class="is2-field" data-field-name="horaIngreso"></td>
-								<td class="is2-field" data-field-name="horaEgreso"></td>
-								<td>
-									<a class="btn btn-mini btn-danger is2-doctor-availability-record-remove" href="#" data-toggle="modal" title="Borrar"><i class="icon-remove-sign icon-white"></i></a>
-								</td>
-							</tr>
-						</table>
-						<form class="is2-doctor-availability-form">
-							<table class="table is2-input-grid">
-								<tr>
-									<td class="control-group is2-doctor-availability-day">
-										<input type="text" class="input-mini is2-doctor-availability-day" name="diaNombre" placeholder="Día">
-									</td>
-									<td class="control-group is2-doctor-availability-in">
-										<div class="bootstrap-timepicker">
-											<input type="text" class="input-mini timepicker is2-doctor-availability-in" name="horaIngreso" placeholder="Hora de ingreso">
-										</div>
-									</td>
-									<td class="control-group is2-doctor-availability-out">
-										<div class="bootstrap-timepicker">
-											<input type="text" class="input-mini timepicker is2-doctor-availability-out" name="horaEgreso" placeholder="Hora de egreso">
-										</div>
-									</td>
-									<td>
-										<button class="btn btn-info is2-doctor-availability-trigger" title="Agregar nuevo horario">Agregar</button>
-									</td>
-								</tr>
-							</table>
-						</form>
-						<div class="is2-doctor-availability-popover alert alert-error is2-popover">
-							El médico ya posee un horario registrado con estos mismo parametros
+					
+					<div class="is2-modal-details-tabs btn-inverse">
+						<ul class="nav nav-tabs">
+							<li class="active">
+								<a class="is2-modal-details-tabs-default" href="#is2-doctor-availability-insurances" data-toggle="tab">Horarios y obras sociales</a>
+							</li>
+							<li>
+								<a class="is2-doctor-appointments-trigger" href="#is2-doctor-appointments" data-toggle="tab">Historial de turnos</a>
+							</li>
+							<li>
+								<a href="#is2-doctor-licenses" data-toggle="tab">Licencias</a>
+							</li>
+						</ul>
+					</div>
+					
+					<div class="tab-content">
+						<div id="is2-doctor-availability-insurances" class="tab-pane active">
+							<div class="is2-modal-doctor-status alert alert-success is2-new-availability" style="display:none">
+								Nuevo horario del médico ha sido creado satisfactoriamente
+							</div>
+							<div class="is2-modal-doctor-status alert alert-success is2-remove-availability" style="display:none">
+								El horario del médico ha sido eliminado satisfactoriamente
+							</div>
+							<div class="is2-modal-doctor-status alert alert-success is2-update-insurances" style="display:none">
+								Obras sociales admitidas por el médico han sido actualizadas satisfactoriamente
+							</div>
+							
+							<div class="is2-modal-doctor-availability">
+								<h3>Horarios</h3>
+								<table class="table is2-grid-header">
+									<tr>
+										<th>Día</th>
+										<th>Hora de ingreso</th>
+										<th>Hora de egreso</th>
+										<th></th>
+									</tr>
+								</table>
+								<table class="table is2-doctor-availability-grid">
+									<tr class="is2-doctor-availability-record">
+										<td class="is2-field" data-field-name="diaNombre"></td>
+										<td class="is2-field" data-field-name="horaIngreso"></td>
+										<td class="is2-field" data-field-name="horaEgreso"></td>
+										<td>
+											<a class="btn btn-mini btn-danger is2-doctor-availability-record-remove" href="#" data-toggle="modal" title="Borrar"><i class="icon-remove-sign icon-white"></i></a>
+										</td>
+									</tr>
+								</table>
+								<form class="is2-doctor-availability-form">
+									<table class="table is2-input-grid">
+										<tr>
+											<td class="control-group is2-doctor-availability-day">
+												<input type="text" class="input-mini is2-doctor-availability-day" name="diaNombre" placeholder="Día">
+											</td>
+											<td class="control-group is2-doctor-availability-in">
+												<div class="bootstrap-timepicker">
+													<input type="text" class="input-mini timepicker is2-doctor-availability-in" name="horaIngreso" placeholder="Hora de ingreso">
+												</div>
+											</td>
+											<td class="control-group is2-doctor-availability-out">
+												<div class="bootstrap-timepicker">
+													<input type="text" class="input-mini timepicker is2-doctor-availability-out" name="horaEgreso" placeholder="Hora de egreso">
+												</div>
+											</td>
+											<td>
+												<button class="btn btn-info is2-doctor-availability-trigger" title="Agregar nuevo horario">Agregar</button>
+											</td>
+										</tr>
+									</table>
+								</form>
+								<div class="is2-doctor-availability-popover alert alert-error is2-popover">
+									El médico ya posee un horario registrado con estos mismo parametros
+								</div>
+							</div>
+							
+							<form class="is2-doctor-insurances">
+								<h3>Obras sociales</h3>
+								<div class="is2-doctor-insurances-grid-wrapper" style="display:none">
+									<div class="is2-doctor-insurances-grid">
+									<?php foreach( $insurances as $insurance ): ?>
+										<label class="checkbox" data-insurance-id="<?php echo $insurance['id']; ?>">
+											<span class="is2-field" data-field-name="nombreCorto"><?php echo $insurance['nombreCorto']; ?></span>
+											<span class="is2-field" data-field-name="nombreCompleto"><?php echo $insurance['nombreCompleto']; ?></span>
+											<input type="checkbox" name="insurancesList[]" value="<?php echo $insurance['id']; ?>">
+										</label>
+									<?php endforeach; ?>
+									</div>
+								</div>
+								<button class="btn btn-info is2-doctor-insurances-trigger" title="Actualizar obras sociales admitidas por el medico">Actualizar</button>
+							</form>
+						</div><!-- is2-doctor-availability-insurances -->
+						
+						<div id="is2-doctor-appointments" class="tab-pane">
+							<div class="is2-doctor-appointments-grid">
+								<table class="table is2-doctor-appointments-table">
+									<tr class="is2-doctor-appointments-record">
+										<td class="is2-field" data-field-name="fecha"></td>
+										<td class="is2-field" data-field-name="hora"></td>
+										<td><span class="is2-field" data-field-name="apellidos"></span>, <span class="is2-field" data-field-name="nombres"></span></td>
+										<td class="is2-field" data-field-name="estado"></td>
+										<td>
+											<a href="" class="btn btn-link is2-doctor-appointment-link" target="_blank">Ir al turno <i class="icon-share-alt"></i></a>
+										</td>
+									</tr>
+								</table>
+							</div>
+						</div>
+						
+						<div id="is2-doctor-licenses" class="tab-pane">
+						
 						</div>
 					</div>
 					
-					<form class="is2-doctor-insurances">
-						<h3>Obras sociales</h3>
-						<div class="is2-doctor-insurances-grid-wrapper" style="display:none">
-							<div class="is2-doctor-insurances-grid">
-							<?php foreach( $insurances as $insurance ): ?>
-								<label class="checkbox" data-insurance-id="<?php echo $insurance['id']; ?>">
-									<span class="is2-field" data-field-name="nombreCorto"><?php echo $insurance['nombreCorto']; ?></span>
-									<span class="is2-field" data-field-name="nombreCompleto"><?php echo $insurance['nombreCompleto']; ?></span>
-									<input type="checkbox" name="insurancesList[]" value="<?php echo $insurance['id']; ?>">
-								</label>
-							<?php endforeach; ?>
-							</div>
-						</div>
-						<button class="btn btn-info is2-doctor-insurances-trigger" title="Actualizar obras sociales admitidas por el medico">Actualizar</button>
-					</form>
-				</div>
-			</div>
+				</div><!-- is2-modal-details-body -->
+			</div><!-- is2-modal-wrapper -->
 		</div>
 
 		<?php t_endWrapper(); ?>
@@ -343,11 +455,14 @@
 // *** modal functionality *** //
 	var $triggerModal = $( '.is2-modal-doctor-trigger' );
 	var $doctorModal = $( '#is2-modal-doctor' );
+	var $defaultTab = $( '.is2-modal-details-tabs-default' );
 	$doctorModal.on( 'hidden', function( e ) {
 		e.stopPropagation();
 		window.location.hash = '';
 		$doctorModal.removeAttr( 'data-doctor-id' );
-	
+		$appointmentsWrapper.hide().empty();
+		$defaultTab.click();
+		
 	} ).css( 'left', $( window ).outerWidth() /2 - 850 / 2 ).css( 'margin-left', 0 );
 	var cleanAllInputs = function() {
 		$availabilityForm.find( 'input' ).val( '' );
@@ -434,7 +549,6 @@
 			selectedInsurances.push( $insurance );
 		}
 		// reoder the grid
-		console.log( selectedInsurances );
 		$doctorInsurancesGridCloned.children().first().before( selectedInsurances );
 		setTimeout( function() {
 			$doctorInsurancesWrapper.append( $doctorInsurancesGridCloned ).show();
@@ -514,7 +628,7 @@
 		
 		$( '.is2-doctor-availability-record:last' ).effect( 'highlight', null, 1500 );
 		
-		IS2.showCrudMsg( $newAvailability );
+		IS2.showCrudMsg( $newAvailability, 2 );
 	};
 	
 	var hidePopover = function( $el ) {
@@ -602,7 +716,7 @@
 		}
 		var appointmentID = dataResponse.data;
 		$( '.is2-doctor-availability-record[data-availability-id=' + appointmentID + ']' ).addClass( 'record-removed' );
-		IS2.showCrudMsg( $removeAvailability );
+		IS2.showCrudMsg( $removeAvailability, 2 );
 	};
 	
 	$doctorModal.delegate( '.is2-doctor-availability-record-remove', 'click', function( e ) {
@@ -642,7 +756,7 @@
 		while( insurances.length ) {
 			$( 'label[data-insurance-id=' + insurances.shift() + ']' ).effect( 'highlight', null, 1500 );
 		}
-		IS2.showCrudMsg( $updatedInsurances );
+		IS2.showCrudMsg( $updatedInsurances, 2 );
 	};
 	
 	$( '.is2-doctor-insurances' ).on( 'submit', function( e ) {
@@ -671,6 +785,59 @@
 			},
 			success: updatedInsurancesSupport,
 			error: updatedInsurancesSupport
+		} );
+	} );
+	
+// *** cuando se hace click en "Historial de turnos" *** ///
+	var $appointmentsWrapper = $( '.is2-doctor-appointments-table' );
+	var $appointmentRecord = $( '.is2-doctor-appointments-record' ).clone();
+	$( '.is2-doctor-appointments-record' ).remove();
+	
+	var showAppointmentsHistory = function( dataResponse ) {
+		isWaiting = false;
+		hidePreloader();
+		if( !dataResponse.success ) {
+			return;
+		}
+		
+		$appointmentsWrapper.hide().empty();
+		var appointments = dataResponse.data, appointment,
+			$fields, $field, i, l;
+			
+		while( appointments.length ) {
+			appointment = appointments.shift();
+			$appointment = $appointmentRecord.clone();
+			$fields = $appointment.find( '.is2-field' );
+			for( i = 0, l = $fields.length; i < l; i++ ) {
+				$field = $fields.eq( i );
+				$field.html( appointment[$field.attr( 'data-field-name' )] );
+			}
+			$appointment.find( '.is2-doctor-appointment-link' ).attr( 'href', '/turnos?id=' + appointment.id );
+			
+			$appointmentsWrapper.append( $appointment );
+		}
+		$appointmentsWrapper.show();
+	};
+
+	$( '.is2-doctor-appointments-trigger' ).on( 'click', function( e ) {
+		e.preventDefault();
+		if( isWaiting ) {
+			return;
+		}
+		// dont request agina the appontmets if already has been loaded
+		if( $appointmentsWrapper.find( 'tr.is2-doctor-appointments-record' ).length ) {
+			return;
+		}
+		
+		isWaiting = true;
+		showPreloader();
+		
+		$.ajax( {
+			url: '/medicos/' + getDoctorID() + '/historial',
+			dataType: 'json',
+			type: 'GET',
+			success: showAppointmentsHistory,
+			error: showAppointmentsHistory
 		} );
 	} );
 	

@@ -129,9 +129,13 @@ IS2.lookForEmptyFields = function( $theForm, notShowPopover ) {
 	return isError;
 };
 
-IS2.showCrudMsg = function( $msg ) {
-	$msg.css( 'top', -40 ).show().animate( { top: '+=36' }, { complete: function() {
-		$msg.delay( 2000 ).animate( { top: '-=44' } );
+IS2.showCrudMsg = function( $msg, offset ) {
+	
+	var height = $msg.css( 'visibility', 'hidden' ).outerHeight(),
+		diff = height * ( offset || 1 );
+	
+	$msg.css( 'visibility', 'visible' ).css( 'top', height * -1 ).show().animate( { top: '+=' + (  diff - 3 ) }, { complete: function() {
+		$msg.delay( 2000 ).animate( { top: '-=' + diff } );
 	} } );	
 };
 
