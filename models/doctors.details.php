@@ -5,7 +5,7 @@
 	$doctorData = DB::select(
 		'
 			SELECT
-				m.id, m.apellidos, m.nombres, m.avatar, m.matricula,
+				m.id, m.apellidos, m.nombres, m.avatar, m.matriculaProvincial, m.matriculaNacional, m.telefono1, m.telefono2, m.direccion,
 				e.nombre AS especialidad
 			FROM
 				medicos AS m

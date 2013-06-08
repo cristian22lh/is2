@@ -35,24 +35,28 @@ DROP TABLE IF EXISTS medicos;
 CREATE TABLE medicos(
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
 	idEspecialidad INTEGER NULL,
-	apellidos VARCHAR( 100 ),
-	nombres VARCHAR( 100 ),
-	matricula VARCHAR( 20 ),
-	avatarMini TEXT NULL,
-	avatar TEXT NULL
+	apellidos VARCHAR( 255 ),
+	nombres VARCHAR( 255 ),
+	telefono1 VARCHAR( 255 ) NULL,
+	telefono2 VARCHAR( 255 ) NULL,
+	direccion TEXT NULL,
+	matriculaNacional VARCHAR( 255 ) NULL,
+	matriculaProvincial VARCHAR( 255 ) NULL,
+	avatarMini VARCHAR( 255 ) NULL,
+	avatar VARCHAR( 255 ) NULL
 ) ENGINE=InnoDB;
 
 INSERT INTO medicos VALUES
-	( null, 1, 'Inspector de', 'Boludos', '122434/21', 'inspector-de-boludos.mini.png', 'inspector-de-boludos.png' ),
-	( null, 2, 'Hora de', 'Aventura', '122434/21', 'finn.mini.png', 'finn.png' ),
-	( null, 3, 'Alf', 'de Melbac', '122434/21', 'alf.mini.png', 'alf.png' ),
-	( null, 4, 'El Holy', 'es hermoso', '122434/21', 'el-holy.mini.png', 'el-holy.png' ),
-	( null, 5, 'Ivan el', 'trolazo', '122434/21', 'ivan-el-trolazo.mini.png', 'ivan-el-trolazo.png' ),
-	( null, 6, 'Neonazi', 'Delia', '122434/21', 'neonazi-delia.mini.png', 'neonazi-delia.png' ),
-	( null, 7, 'Yao', 'Ming', '122434/21', 'yao-ming.mini.png', 'yao-ming.png' ),
-	( null, 8, 'Yaranaika', 'desu', '122434/21', 'yaranaika.mini.png', 'yaranaika.png' ),
-	( null, 1, 'Weon', 'Tesla', '122434/21', 'tesla.mini.png', 'tesla.png' ),
-	( null, 2, 'Patricio', 'Patricio', '122434/21', 'patricio.mini.png', 'patricio.png' )
+	( null, 1, 'Inspector de', 'Boludos', '45001212', '153221110', '12 esq 58', '122434/21', '423/12', 'inspector-de-boludos.mini.png', 'inspector-de-boludos.png' ),
+	( null, 2, 'Hora de', 'Aventura', '45001212', '153221110', '12 esq 58', '122434/21', '423/12','finn.mini.png', 'finn.png' ),
+	( null, 3, 'Alf', 'de Melbac', '45001212', '153221110', '12 esq 58', '122434/21', '423/12','alf.mini.png', 'alf.png' ),
+	( null, 4, 'El Holy', 'es hermoso', '45001212', '153221110', '12 esq 58', '122434/21', '423/12', 'el-holy.mini.png', 'el-holy.png' ),
+	( null, 5, 'Ivan el', 'trolazo', '45001212', '153221110', '12 esq 58', '122434/21', '423/12', 'ivan-el-trolazo.mini.png', 'ivan-el-trolazo.png' ),
+	( null, 6, 'Neonazi', 'Delia', '45001212', '153221110', '12 esq 58', '122434/21', '423/12', 'neonazi-delia.mini.png', 'neonazi-delia.png' ),
+	( null, 7, 'Yao', 'Ming', '45001212', '153221110', '12 esq 58', '122434/21', '423/12', 'yao-ming.mini.png', 'yao-ming.png' ),
+	( null, 8, 'Yaranaika', 'desu', '45001212', '153221110', '12 esq 58', '122434/21', '423/12','yaranaika.mini.png', 'yaranaika.png' ),
+	( null, 1, 'Weon', 'Tesla', '45001212', '153221110', '12 esq 58', '122434/21', '423/12', 'tesla.mini.png', 'tesla.png' ),
+	( null, 2, 'Patricio', 'Patricio', '45001212', '153221110', '12 esq 58', '122434/21', '423/12', 'patricio.mini.png', 'patricio.png' )
 ;
 /**
 *
@@ -135,12 +139,12 @@ INSERT INTO medicosObrasSociales VALUES
 DROP TABLE IF EXISTS pacientes;
 CREATE TABLE pacientes(
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
-	apellidos VARCHAR( 100 ),
-	nombres VARCHAR( 100 ),
+	apellidos VARCHAR( 255 ),
+	nombres VARCHAR( 255 ),
 	sexo ENUM( 'F', 'M' ),
-	dni VARCHAR( 20 ),
+	dni VARCHAR( 255 ),
 	fechaNacimiento DATE,
-	telefono VARCHAR( 100 ),
+	telefono VARCHAR( 255 ),
 	idObraSocial INTEGER NULL,
 	nroAfiliado VARCHAR( 255 ) NULL,
 	UNIQUE INDEX( dni )

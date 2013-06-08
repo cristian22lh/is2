@@ -356,7 +356,10 @@
 						<h3><span class="is2-modal-doctor-field" data-field-name="apellidos"></span>, <span class="is2-modal-doctor-field" data-field-name="nombres"></span></h3>
 						<p class="is2-modal-doctor-field" data-field-name="especialidad"></p>
 						<div class="is2-modal-doctor-information-misc">
-							<p>Matricula: <strong class="is2-modal-doctor-field" data-field-name="matricula"></strong></p>
+							<p>Mat. nac.: <strong class="is2-modal-doctor-field" data-field-name="matriculaNacional"></strong></p>
+							<p>Mat. prov.: <strong class="is2-modal-doctor-field" data-field-name="matriculaProvincial"></strong></p>
+							<p>Teléfonos:<br><strong class="is2-modal-doctor-field" data-field-name="telefono1"></strong><br><strong class="is2-modal-doctor-field" data-field-name="telefono2"></strong></p>
+							<p>Dirección personal:<br><strong class="is2-modal-doctor-field" data-field-name="direccion"></strong></p>
 						</div>
 					</div>
 					
