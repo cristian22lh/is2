@@ -123,7 +123,11 @@ INSERT INTO medicosObrasSociales VALUES
 	( null, 5, 2 ),
 	( null, 6, 2 ),
 	( null, 7, 2 ),
-	( null, 8, 2 )
+	( null, 8, 2 ),
+	( null, 9, 1 ),
+	( null, 9, 2 ),
+	( null, 10, 1 ),
+	( null, 10, 2 )
 ;
 /**
 *
@@ -176,7 +180,17 @@ INSERT INTO especialidades VALUES
 	( null, 'Pediatría' ),
 	( null, 'Psiquiatría' )
 ;
-
+/**
+*
+*/
+DROP TABLE IF EXISTS licencias;
+CREATE TABLE licencias(
+	id INTEGER PRIMARY KEY AUTO_INCREMENT,
+	idMedico INTEGER NULL,
+	fechaComienzo DATE,
+	fechaFin DATE,
+	UNIQUE INDEX( idMedico, fechaComienzo, fechaFin )
+) ENGINE=InnoDB;
 /**
 *
 */
@@ -203,7 +217,7 @@ ALTER TABLE turnos
 ;
 
 DELIMITER $$
-CREATE TRIGGER turnos_insertarTurno
+CREATE TRIGGER turnos_crearTurno
 	BEFORE INSERT ON turnos
 	FOR EACH ROW
 	BEGIN
@@ -285,3 +299,46 @@ ALTER TABLE medicos
 		REFERENCES especialidades( id )
 		ON DELETE RESTRICT
 ;
+
+ALTER TABLE licencias
+	ADD CONSTRAINT licencias_idMedico
+	FOREIGN KEY( idMedico )
+		REFERENCES medicos( id )
+		ON DELETE RESTRICT
+;
+
+DELIMITER $$
+CREATE TRIGGER licencias_crearLicencia
+	BEFORE INSERT ON licencias
+	FOR EACH ROW
+	BEGIN
+	
+		/** COMPOBRA QUE fechaComienzo < fechaFin */
+		IF NEW.fechaComienzo >= NEW.fechaFin THEN
+			CALL licencia_rango_fechas_invalido;
+		END IF;
+	
+		/** NO SE PUEDE CREAR UNA LICENCIA ANTERIOR AL DIA PRESENTE */
+		IF ( SELECT DATEDIFF( NEW.fechaComienzo, CURRENT_DATE() ) ) < 0 THEN
+			CALL licencia_en_pasado;
+		END IF;
+		
+		/** NO PUEDO CREAR UNA LICENCIA DONDE ACTUALMENTE EL MEDICO ESTE CON UNA LICENCIA */
+		IF (
+			SELECT
+				COUNT( id )
+			FROM
+				licencias
+			WHERE
+				( fechaComienzo >= NEW.fechaComienzo OR NEW.fechaFin <= fechaFin ) AND idMedico = NEW.idMedico
+			GROUP BY
+				id
+				
+		) IS NOT NULL THEN
+			CALL licencia_medico_ya_esta_con_licencia;
+		END IF;
+	END;
+$$
+DELIMITER ;
+	
+

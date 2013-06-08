@@ -77,26 +77,16 @@
 				-webkit-transform: translateY(0%);
 			}
 		}	
-		.is2-doctor-presentation:hover {
-			background: #5BC0DE;
-			box-shadow: 0 2px 0 #32a2c3;
-		}
 		.is2-doctor-presentation:hover img {
-			box-shadow: 0 -2px 0 #555;
+			box-shadow: 0 0 10px #32a2c3;
 		}
 		.is2-doctor-presentation:hover .is2-doctor-presentation-name h3 {
-			opacity: 1;
-			color: #fff;
 			animation: moveFromTop 300ms ease-in-out;
 			-webkit-animation: moveFromTop 300ms ease-in-out;
-			text-shadow: 0 -1px 0 #555;
 		}
 		.is2-doctor-presentation:hover .is2-doctor-presentation-name-speciality {
 			animation: moveFromBottom 300ms ease-in-out;
 			-webkit-animation: moveFromBottom 300ms ease-in-out;
-			opacity: 1;
-			color: #fff;
-			text-shadow: 0 -1px 0 #555;
 		}
 		
 		/* modal */
@@ -165,6 +155,11 @@
 			color: #fff;
 			font-variant: small-caps;
 			border-radius: 0;
+			width: 145px;
+			text-align: center;
+		}
+		.is2-modal-details-tabs .nav a:first-letter {
+			font-weight: 600;
 		}
 		.nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
 			color: #555;
@@ -273,6 +268,21 @@
 		}
 		.is2-doctor-appointments-grid td:last-child {
 			width: 110px;
+		}
+		
+		#is2-doctor-licenses {
+			padding: 50px 10px;
+			border-left: 1px solid #0C688A;
+			height: 455px;
+		}
+		.is2-doctor-licenses-form {
+			margin: 0 0 5px 0;
+		}
+		.is2-doctor-licenses-form label {
+			margin: 0 5px 0 0;
+		}
+		.is2-doctor-licenses-form .control-group {
+			display: inline-block;
 		}
 	</style>
 
@@ -437,7 +447,57 @@
 						</div>
 						
 						<div id="is2-doctor-licenses" class="tab-pane">
-						
+							<div class="is2-modal-doctor-status alert alert-error is2-error-lincense" style="display:none">
+								El médico ya posee una licencia en el rango de fechas suministrado
+							</div>
+							<div class="is2-modal-doctor-status alert alert-success is2-success-lincense" style="display:none">
+								<div>La licencia del médico ha sido creada satisfactoriamente</div>
+								<strong>Recuerde que durante la duración de la licencia, no se podrán crear nuevos turnos con este médico</strong>
+							</div>
+							<legend>Utilice este formulario para crear una licencia para este médico</legend>
+							<div class="alert">
+								Sepa que no puede crear una licencia para este médico, si es que este posee turnos que actualmente debe cumplir
+							</div>
+							<form class="is2-doctor-licenses-form form-inline">
+								<div class="control-group is2-doctor-licenses-start">
+									<label class="control-label">Desde la fecha
+										<input type="text" placeholder="desde" class="input-small datepicker is2-doctor-licenses-start">
+									</label>
+								</div>
+								<div class="control-group is2-doctor-licenses-end">
+									<label class="control-label">hasta el:
+										<input type="text" placeholder="hasta" class=" input-small datepicker is2-doctor-licenses-end">
+									</label>
+								</div>
+								<button type="submit" class="btn btn-info">Crear licencia</button>
+							</form>
+							<div class="alert alert-error is2-popover">
+								El médico ya posee una licencia para la fecha especificada
+							</div>
+							<div class="alert alert-error is2-popover">
+								No se pudo crear la licencia porque este médico posee actualmente turnos que debe cumplir
+							</div>
+							<div class="alert alert-error is2-popover is2-licenses-date-invalid">
+								La fecha es invalida, debe estar en el formato dd/mm/yyyy, por ejemplo algo como: 20/10/2010
+							</div>
+							<div class="alert alert-error is2-popover is2-licenses-date-range">
+								La fecha <strong>desde</strong> es mayor que la fecha <strong>hasta</strong>
+							</div>
+							<div class="alert alert-error is2-popover is2-licenses-date-underflow">
+								La fecha <strong>desde</strong> no puede ser anteror al día presente
+							</div>
+							<legend>Historial de licencias</legend>
+							<ul>
+								<li>
+									<span>Desde el 20/12/2010 hasta el 21/02/2011</span>
+								</li>
+								<li>
+									<span>Desde el 20/12/2010 hasta el 21/02/2011</span>
+								</li>
+								<li>
+									<span>Desde el 20/12/2010 hasta el 21/02/2011</span>
+								</li>
+							</ul>
 						</div>
 					</div>
 					
@@ -466,6 +526,7 @@
 	} ).css( 'left', $( window ).outerWidth() /2 - 850 / 2 ).css( 'margin-left', 0 );
 	var cleanAllInputs = function() {
 		$availabilityForm.find( 'input' ).val( '' );
+		$licensesForm.find( 'input' ).val( '' );
 	};
 	var $doctorModalPreloader = $( '.is2-modal-preloader' );
 	var $doctorModalPreloaderBar = $doctorModalPreloader.find( '.bar' );
@@ -632,7 +693,10 @@
 	};
 	
 	var hidePopover = function( $el ) {
-		$el.data( 'popover' ).tip().hide();
+		var popover = $el.data( 'popover' );
+		if( popover ) {
+			popover.tip().hide();
+		}
 	};
 	
 	var $availabilityForm = $( '.is2-doctor-availability-form' );
@@ -838,6 +902,130 @@
 			type: 'GET',
 			success: showAppointmentsHistory,
 			error: showAppointmentsHistory
+		} );
+	} );
+	
+// *** licencias funionalidad *** //
+	IS2.initDatepickers();
+	var $licensesForm = $( '.is2-doctor-licenses-form' );
+	
+	var $startDate = $( 'input.is2-doctor-licenses-start' );
+	$startDate.popover( {
+		html: true,
+		placement: 'bottom',
+		trigger: 'manual'
+	} );
+	var $startDateControlGroup = $( '.control-group.is2-doctor-licenses-start' );
+	var $endDate = $( 'input.is2-doctor-licenses-end' );
+	$endDate.popover( {
+		html: true,
+		placement: 'bottom',
+		trigger: 'manual'
+	} );
+	var $endDateControlGroup = $( '.control-group.is2-doctor-licenses-start' );
+	var validateDate = function( $el ) {
+		var date = $el.val().trim().match( /^(\d{2})\/(\d{2})\/(\d{4})$/ );
+		var $controlGroup = IS2.findGroupControl( $el );
+		if( !date ) {
+			$controlGroup.addClass( 'error' );
+			$el.popover( {
+				content: $( '.is2-licenses-date-invalid' ).prop( 'outerHTML' ),
+				trigger: 'manual',
+				placement: 'bottom',
+				html: true
+			} ).popover( 'show' );
+			return false;
+		}
+		$controlGroup.removeClass( 'error' );
+		return true;
+	};
+	
+	var $licenseError = $( '.is2-error-lincense' );
+	var $licenseSuccess = $( '.is2-success-lincense' );
+	
+	var createDateObject = function( val ) {
+		val = val.trim().split( '/' );
+		var d = new Date();
+		d.setDate( 1 );
+		d.setFullYear( val[2] );
+		d.setMonth( val[1]-1 );
+		d.setDate( val[0] );
+		return d;
+	};
+	
+	var validateDateRange = function( $start, $end ) {
+		var start = createDateObject( $start.val() ),
+			end = createDateObject( $end.val() ),
+			$startControlGroup = IS2.findGroupControl( $start ),
+			$endControlGroup = IS2.findGroupControl( $end );
+			
+		hidePopover( $start );
+		hidePopover( $end );
+
+		if( start < new Date() ) {
+			$startControlGroup.addClass( 'error' );
+			$start.data( 'popover' ).options.content = $( '.is2-licenses-date-underflow' ).prop( 'outerHTML' );
+			$start.popover( 'show' );
+			return false;
+		}
+		$startControlGroup.removeClass( 'error' );
+		
+		if( start >= end ) {
+			$startControlGroup.addClass( 'error' );
+			$start.data( 'popover' ).options.content = $( '.is2-licenses-date-range' ).prop( 'outerHTML' );
+			$start.popover( 'show' );
+			return false;
+		}
+		$startControlGroup.removeClass( 'error' );
+		
+		return true;
+	};
+	
+	var createdLicense = function( dataResponse ) {
+		isWaiting = false;
+		hidePreloader();
+		if( !dataResponse.success ) {
+			IS2.showCrudMsg( $licenseError, 2 );
+			return;
+		}
+		IS2.showCrudMsg( $licenseSuccess , 2, 20000 );
+		cleanAllInputs();
+	};
+	
+	$licensesForm.on( 'submit', function( e ) {
+		e.preventDefault();
+		hidePopover( $startDate );
+		hidePopover( $endDate );
+		hidePopover( $licensesForm );
+		if( isWaiting ) {
+			return;
+		}
+		
+		if( IS2.lookForEmptyFields( $licensesForm, true ) ) {
+			return;
+		}
+		
+		if( !validateDate( $startDate ) || !validateDate( $endDate ) ) {
+			return;
+		}
+		
+		if( !validateDateRange( $startDate, $endDate ) ) {
+			return;
+		}
+		
+		isWaiting = true;
+		showPreloader();
+		
+		$.ajax( {
+			url: '/medicos/' + getDoctorID() + '/crear-licencia',
+			dataType: 'json',
+			type: 'POST',
+			data: {
+				start: $startDate.val(),
+				end: $endDate.val()
+			},
+			success: createdLicense,
+			error: createdLicense
 		} );
 	} );
 	

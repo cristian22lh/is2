@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<link href="/css/bootstrap.css" rel="stylesheet">
-		<link href="/css/is2.main.css" rel="stylesheet">
+		<link href="/css/is2.css" rel="stylesheet">
     <style>
 		.container {
 			margin-top: 50px;

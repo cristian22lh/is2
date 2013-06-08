@@ -12,7 +12,8 @@
 		);
 		
 		private static $errorsDict = array(
-			'PROCEDURE is2.medico_no_antiende_fecha_hora_requerido does not exist' => 'fecha|hora'
+			'PROCEDURE is2.medico_no_antiende_fecha_hora_requerido does not exist' => 'fecha|hora',
+			'PROCEDURE is2.licencia_medico_ya_esta_con_licencia does not exist' => 'licencia-ya-existe'
 		);
 		private static $errorsCode = array(
 			'1062' => 'duplicado',

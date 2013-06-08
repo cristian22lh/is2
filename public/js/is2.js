@@ -110,11 +110,8 @@ IS2.lookForEmptyFields = function( $theForm, notShowPopover ) {
 		if( !notShowPopover ) {
 			$field.popover( 'destroy' );
 		}
-		
-		$groupControl = $field;
-		// search $groupControl
-		while( ( $groupControl = $groupControl.parent() ).length && !$groupControl.hasClass( 'control-group' ) );
-		
+		$groupControl = IS2.findGroupControl( $field );
+
 		if( !$field.val().trim() ) {
 			if( !notShowPopover ) {
 				$field.popover( { content: IS2.emptyFieldMsg, html: true, trigger: 'manual' } ).popover( 'show' );
@@ -129,13 +126,18 @@ IS2.lookForEmptyFields = function( $theForm, notShowPopover ) {
 	return isError;
 };
 
-IS2.showCrudMsg = function( $msg, offset ) {
+IS2.findGroupControl = function( $groupControl ) {
+	while( ( $groupControl = $groupControl.parent() ).length && !$groupControl.hasClass( 'control-group' ) );
+	return $groupControl;
+};
+
+IS2.showCrudMsg = function( $msg, offset, delay ) {
 	
 	var height = $msg.css( 'visibility', 'hidden' ).outerHeight(),
 		diff = height * ( offset || 1 );
 	
 	$msg.css( 'visibility', 'visible' ).css( 'top', height * -1 ).show().animate( { top: '+=' + (  diff - 3 ) }, { complete: function() {
-		$msg.delay( 2000 ).animate( { top: '-=' + diff } );
+		$msg.delay( delay || 2000 ).animate( { top: '-=' + diff } );
 	} } );	
 };
 
