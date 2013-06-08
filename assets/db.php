@@ -12,9 +12,16 @@
 		);
 		
 		private static $errorsDict = array(
-			'PROCEDURE is2.medico_no_antiende_fecha_hora_requerido does not exist' => 'turnos_fecha|hora',
+			// errores para crear turno
+			'PROCEDURE is2.medico_no_antiende_fecha_hora_requerido does not exist' => 'turnos_medico_no_atiende',
+			'/^.*turnos_medico_ocupado.*$/' => 'turnos_medico_ocupado',
+			'/^.*turnos_paciente_ya_tiene_turno.*$/' => 'turnos_paciente_ya_tiene_turno',
+			'PROCEDURE is2.medico_esta_con_licencia does not exist' => 'turnos_medico_con_licencia',
+			
+			// errores para crear licencia
+			'PROCEDURE is2.licencia_medico_tiene_turnos does not exist' => 'licencia-medico-tiene-turnos',
 			'PROCEDURE is2.licencia_medico_ya_esta_con_licencia does not exist' => 'licencia-ya-existe',
-			'PROCEDURE is2.licencia_medico_tiene_turnos does not exist' => 'licencia-medico-tiene-turnos'
+			'PROCEDURE is2.licencia_en_pasado does not exist' => 'licencia-en-pasado'
 		);
 		private static $errorsCode = array(
 			'1062' => 'duplicado',
@@ -215,10 +222,19 @@
 			__err( $msg );
 			
 			$errorString = self::$db->error;
-			if( isset( self::$errorsDict[$errorString] ) ) {
-				self::$errorsList[] = self::$errorsDict[$errorString];
-			} else {
+			$theError = null;
+			
+			foreach( self::$errorsDict as $errorStringMap => $errorMeaning ) {
+				if( $errorString == $errorStringMap || @preg_match( $errorStringMap, $errorString ) ) {
+					$theError = $errorMeaning;
+					break;
+				}
+			}
+			
+			if( !$theError ) {
 				self::$errorsList[] = self::$errorsCode[self::$db->errno];
+			} else {
+				self::$errorsList[] = $theError;
 			}
 		}
 	}

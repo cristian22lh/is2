@@ -476,6 +476,9 @@
 							<div class="is2-modal-doctor-status alert alert-error is2-error-lincense-busy" style="display:none">
 								<strong>El médico actualmente posee turnos que debe cumplir, no se puede crear la licencia bajo esta circunstancia</strong>
 							</div>
+							<div class="is2-modal-doctor-status alert alert-error is2-error-lincense-underflow" style="display:none">
+								<strong>No puede crear una licencia para tiempo pasado</strong>
+							</div>
 							<div class="is2-modal-doctor-status alert alert-success is2-success-lincense" style="display:none">
 								<div>La licencia del médico ha sido creada satisfactoriamente</div>
 								<strong>Recuerde que durante la duración de la licencia, no se podrán crear nuevos turnos para este médico</strong>
@@ -547,11 +550,13 @@
 	var $defaultTab = $( '.is2-modal-details-tabs-default' );
 	$doctorModal.on( 'hidden', function( e ) {
 		e.stopPropagation();
-		window.location.hash = '';
+		window.location.hash = 'dummy';
 		$doctorModal.removeAttr( 'data-doctor-id' );
 		$appointmentsWrapper.hide().empty();
 		$licensesGrid.hide().empty();
 		$defaultTab.click();
+		$doctorModal.find( '.popover' ).hide();
+		$doctorModal.find( '.error' ).removeClass( 'error' );
 		
 	} ).css( 'left', $( window ).outerWidth() /2 - 850 / 2 ).css( 'margin-left', 0 );
 	var cleanAllInputs = function() {
@@ -978,7 +983,7 @@
 	
 	$( '.is2-doctor-licenses-trigger' ).on( 'click', function( e ) {
 		e.preventDefault();
-		if( $licensesGrid.find( 'tr.is2-licenses-record' ).length ) {
+		if( $licensesGrid.find( 'tr.is2-licenses-record' ).length || $licenseEmpty.css( 'display' ) === 'block' ) {
 			return;
 		}
 		
@@ -1030,6 +1035,7 @@
 	
 	var $licenseErrorDuplicated = $( '.is2-error-lincense-duplicated' );
 	var $licenseErrorBusy = $( '.is2-error-lincense-busy' );
+	var $licenseErrorUnderflow = $( '.is2-error-lincense-underflow' );
 	var $licenseSuccess = $( '.is2-success-lincense' );
 	
 	var createDateObject = function( val ) {
@@ -1077,6 +1083,8 @@
 		if( !dataResponse.success ) {
 			if( data[0] === 'licencia-medico-tiene-turnos' ) {
 				IS2.showCrudMsg( $licenseErrorBusy, 2, 5000 );
+			} else if( data[0] === 'licencia-en-pasado' ) {
+				IS2.showCrudMsg( $licenseErrorUnderflow, 2 );
 			} else {
 				IS2.showCrudMsg( $licenseErrorDuplicated, 2 );
 			}

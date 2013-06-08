@@ -39,6 +39,7 @@
 				<ul>
 					<li>Verifique que la fecha del turno este dentro del rango de 7 días en adelante a partir de hoy</li>
 					<li>No puede crear un turno con un mismo médico a la misma hora y fecha que ya exista en el sistema</li>
+					<li>No puede crear un turno si el médico en cuestión está con licencia en la fecha requerida</li>
 					<li>Verifique que la hora esté dentro del rango de horarios que posee el médico</li>
 					<li>Verifique que el médico soporte la misma obra social que la del paciente</li>
 				</ul>
@@ -76,6 +77,12 @@
 				<div class="alert alert-error is2-error-datetimedoctorduplicated is2-error-msg">
 					El médico ya posee un turno registrado para la fecha y hora que han sido requeridos
 				</div>
+				<div class="alert alert-error is2-error-datetimepatienthasappointment is2-error-msg">
+					El paciente ya posee un turno para la fecha y hora que han sido requeridos con otro médico
+				</div>
+				<div class="alert alert-error is2-error-datedoctorhaslicense is2-error-msg">
+					El médico esta de licencia para la fecha que ha sido requerida
+				</div>
 				<div class="control-group is2-time">
 					<label class="control-label">Hora</label>
 					<div class="controls bootstrap-timepicker">
@@ -110,6 +117,9 @@
 					</div>
 					<div class="alert alert-error is2-availability-unavailable is2-popover-template">
 						<strong>El médico no está disponible para la fecha y hora requerido</strong>
+					</div>
+					<div class="alert alert-error is2-availability-license is2-popover-template">
+						<strong>El médico se encuentra de licencia, no puede crear el turno para la fecha requerida</strong>
 					</div>
 					<div class="alert alert-success is2-availability-success is2-popover-template">
 						<strong>¡El médico esta disponible para la fecha y hora especifícado!</strong>
@@ -254,8 +264,6 @@
 			
 			$successMsg.slideDown();
 		}
-		
-		console.log( $patientID.val() );
 	};
 	
 	$search.bind( 'click', function( e ) {
@@ -329,7 +337,9 @@
 		}
 		
 		$availabilityTemplate.find( '.alert' ).hide();
-		if( data.hasAppointmentAlready ) {
+		if( data.hasLicense ) {
+			$availabilityTemplate.find( '.is2-availability-license' ).show();
+		} else if( data.hasAppointmentAlready ) {
 			$availabilityTemplate.find( '.is2-availability-already' ).show();
 		} else if( data.isAvailable ) {
 			$availabilityTemplate.find( '.is2-availability-success' ).show();
@@ -476,13 +486,22 @@
 	var $dateTimePopover = $( '.is2-error-datetime-popover' );
 	var $dateTimeUnavailableDoctorMsg = $( '.is2-error-datetimedoctorunavailable' );
 	var $dateTimeDuplicatedDoctorMsg = $( '.is2-error-datetimedoctorduplicated' );
-	if( errors === 'turnos_fecha|hora' || errors === 'duplicado' ) {
+	var $dateTimePatientHasAppointment = $( '.is2-error-datetimepatienthasappointment' );
+	var $dateDoctorHasLicense = $( '.is2-error-datedoctorhaslicense' );
+	var mapErrors = {
+		turnos_medico_no_atiende: $dateTimeUnavailableDoctorMsg,
+		turnos_medico_ocupado: $dateTimeDuplicatedDoctorMsg,
+		turnos_paciente_ya_tiene_turno: $dateTimePatientHasAppointment,
+		turnos_medico_con_licencia: $dateDoctorHasLicense
+	};
+	var $theError = mapErrors[errors];
+	if( $theError ) {
 		$dateGroupControl.addClass( 'error' );
 		$timeGroupControl.addClass( 'error' );
 		$dateTimePopover.popover( {
 			trigger: 'manual',
 			html: true,
-			content: ( errors === 'fecha|hora' ? $dateTimeUnavailableDoctorMsg : $dateTimeDuplicatedDoctorMsg ).prop( 'outerHTML' )
+			content: $theError.prop( 'outerHTML' )
 		} ).popover( 'show' );
 		setTimeout( function() {
 			$dateTimePopover.popover( 'hide' );

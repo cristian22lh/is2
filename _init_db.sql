@@ -25,8 +25,7 @@ CREATE TABLE turnos(
 	hora TIME,
 	idMedico INTEGER NULL,
 	idPaciente INTEGER NULL,
-	estado ENUM( 'confirmado', 'cancelado', 'esperando' ),
-	UNIQUE INDEX( fecha,  hora, idMedico )
+	estado ENUM( 'confirmado', 'cancelado', 'esperando' )
 ) ENGINE=InnoDB;
 /**
 *
@@ -220,6 +219,14 @@ ALTER TABLE turnos
 		ON DELETE RESTRICT
 ;
 
+CREATE UNIQUE INDEX turnos_medico_ocupado
+	ON turnos( fecha,  hora, idMedico )
+;
+
+CREATE UNIQUE INDEX turnos_paciente_ya_tiene_turno
+	ON turnos( fecha, hora, idPaciente )
+;
+
 DELIMITER $$
 CREATE TRIGGER turnos_crearTurno
 	BEFORE INSERT ON turnos
@@ -275,9 +282,29 @@ CREATE TRIGGER turnos_crearTurno
 			CALL medico_no_soporta_obra_social_paciente;
 		END IF;
 		
+		/** SI EL MEDICO ESTA CON LICENCIA NO SE PUEDE CONTINUAR */
+		IF (
+			SELECT
+				COUNT( l.idMedico )
+			FROM
+				licencias AS l
+			WHERE
+				l.idMedico = NEW.idMedico AND NEW.fecha >= l.fechaComienzo  AND NEW.fecha <= l.fechaFin
+			GROUP BY
+				l.idMedico
+				
+		) IS NOT NULL THEN
+			CALL medico_esta_con_licencia;
+		END IF;
+		
 		/**
 		* SI YA EXISTE UN TURNO CON EL MISMO MEDICO, FECHA Y HORA
 		* LA CONSTRAINT UNIQUE( idMedico, fecha, hora ) WILL TAKE CARE OF THIS
+		*/
+		
+		/**
+		* SI YA EL PACIENTE TIENE OTRO TURNO A LA MISMA FECHA Y HORA
+		* LA CONSTRAINT UNIQUE( idPaciente, fecha, hora ) SE ENCARGARA DE ESTO
 		*/
 	END;
 $$
