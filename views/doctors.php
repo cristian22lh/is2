@@ -285,11 +285,25 @@
 			display: inline-block;
 		}
 
+		.is2-licenses-legend {
+			margin: 0;
+		}
+		.is2-licenses-wrapper {
+			height: 250px;
+			overflow-y: scroll;
+		}
 		.is2-licenses-table td {
 			text-transform: none !important;
 		}
 		.is2-licenses-table tr:first-child td { 
 			border-top: 0;
+		}
+		.is2-licenses-table td:last-child {
+			text-align: right;
+		}
+		.is2-licenses-record-empty {
+			margin: 5px 10px 0;
+			text-align: center;
 		}
 	</style>
 
@@ -495,17 +509,22 @@
 							<div class="alert alert-error is2-popover is2-licenses-date-underflow">
 								La fecha <strong>desde</strong> no puede ser anteror al día presente
 							</div>
-							<legend>Historial de licencias</legend>
-							<table class="table is2-licenses-table" style="display:none">
-								<tr class="is2-licenses-record">
-									<td>
-									Desde el <strong class="is2-field" data-field-name="fechaComienzo"></strong> hasta el <strong class="is2-field" data-field-name="fechaFin"></strong>
-									</td>
-									<td>
-										<button class="btn btn-mini btn-danger is2-license-remove-trigger" title="Borrar licencia"><i class="icon-remove-sign icon-white"></i></button>
-									</td>
-								</tr>
-							</table>
+							<legend class="is2-licenses-legend">Historial de licencias</legend>
+							<div class="is2-licenses-wrapper">
+								<table class="table is2-licenses-table" style="display:none">
+									<tr class="is2-licenses-record">
+										<td>
+										Desde el <strong class="is2-field" data-field-name="fechaComienzo"></strong> hasta el <strong class="is2-field" data-field-name="fechaFin"></strong>
+										</td>
+										<td>
+											<button class="btn btn-mini btn-danger is2-license-remove-trigger" title="Borrar licencia"><i class="icon-remove-sign icon-white"></i></button>
+										</td>
+									</tr>
+								</table>
+								<div class="alert alert-info is2-licenses-record-empty" style="display:none">
+									<strong>Médico sin licencias registradas hasta el momento</strong>
+								</div>
+							</div>
 						</div>
 					</div>
 					
@@ -516,7 +535,6 @@
 		<?php t_endWrapper(); ?>
 	
 <?php t_endBody(); ?>
-
 <script>
 (function() {
 
@@ -914,6 +932,7 @@
 	var $licensesGrid = $( '.is2-licenses-table' );
 	var $licensesRecord = $( '.is2-licenses-record' ).clone();
 	$( '.is2-licenses-record' ).remove();
+	var $licenseEmpty = $( '.is2-licenses-record-empty' );
 	
 	var populateLicensesGrid = function( licenses, isAppend ) {
 		if( !isAppend ) {
@@ -923,19 +942,25 @@
 		var license, $license, $fields, $field,
 			i, l;
 			
-		while( licenses.length ) {
-			license = licenses.shift();
-			$license = $licensesRecord.clone();
-			$fields = $license.find( '.is2-field' );
-			for( i = 0, l = $fields.length; i < l; i++ ) {
-				$field = $fields.eq( i );
-				$field.html( license[$field.attr( 'data-field-name' )] );
+		if( licenses.length ) {
+			while( licenses.length ) {
+				license = licenses.shift();
+				$license = $licensesRecord.clone();
+				$fields = $license.find( '.is2-field' );
+				for( i = 0, l = $fields.length; i < l; i++ ) {
+					$field = $fields.eq( i );
+					$field.html( license[$field.attr( 'data-field-name' )] );
+				}
+				$license.attr( 'data-license-id', license.id ).find( '.is2-license-remove-trigger' ).attr( 'data-license-id', license.id );
+				
+				$licensesGrid.append( $license );
 			}
-			$license.find( '.is2-license-remove-trigger' ).attr( 'data-license-id', license.id );
-			
-			$licensesGrid.append( $license );
+			$licenseEmpty.hide();
+			$licensesGrid.show();
+		} else {
+			$licensesGrid.hide();
+			$licenseEmpty.show();
 		}
-		$licensesGrid.show();
 	};
 	
 	var showLicensesHistory = function( dataResponse ) {
@@ -950,7 +975,7 @@
 	
 	$( '.is2-doctor-licenses-trigger' ).on( 'click', function( e ) {
 		e.preventDefault();
-		if( $licensesGrid.find( '.is2-licenses-record' ).length ) {
+		if( $licensesGrid.find( 'tr.is2-licenses-record' ).length ) {
 			return;
 		}
 		
@@ -1057,7 +1082,8 @@
 		IS2.showCrudMsg( $licenseSuccess , 2, 20000 );
 		
 		populateLicensesGrid( [ dataResponse.data ], true );
-		$( '.is2-licenses-record:last' ).effect( 'highlight', null, 1500 );
+		// some hack
+		$( '.is2-licenses-record:first' ).before( $( '.is2-licenses-record:last' ).effect( 'highlight', null, 1500 ) );
 		
 		cleanAllInputs();
 	};
@@ -1096,6 +1122,42 @@
 			},
 			success: createdLicense,
 			error: createdLicense
+		} );
+	} );
+	
+	var removedLicense = function( dataResponse ) {
+		isWaiting = false;
+		hidePreloader();
+		
+		if( !dataResponse.success ) {
+			return;
+		}
+		
+		var licenseID = dataResponse.data;
+		$( 'tr.is2-licenses-record[data-license-id=' + licenseID + ']' ).addClass( 'record-removed' );
+	};
+	
+	// borrar licencia
+	$licensesGrid.delegate( '.is2-license-remove-trigger', 'click', function( e ) {
+		e.preventDefault();
+		if( isWaiting ) {
+			return;
+		}
+		
+		var licenseID = $( this ).attr( 'data-license-id' );
+		
+		isWaiting = true;
+		showPreloader();
+		
+		$.ajax( {
+			url: '/medicos/' + getDoctorID() + '/borrar-licencia',
+			dataType: 'json',
+			type: 'POST',
+			data: {
+				id: licenseID
+			},
+			success: removedLicense,
+			error: removedLicense
 		} );
 	} );
 	

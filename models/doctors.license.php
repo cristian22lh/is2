@@ -10,6 +10,8 @@
 				licencias
 			WHERE
 				idMedico = ?
+			ORDER BY
+				fechaFin DESC
 		',
 		array( $doctorID )
 	);
