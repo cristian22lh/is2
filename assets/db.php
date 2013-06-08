@@ -14,7 +14,7 @@
 		private static $errorsDict = array(
 			'PROCEDURE is2.medico_no_antiende_fecha_hora_requerido does not exist' => 'turnos_fecha|hora',
 			'PROCEDURE is2.licencia_medico_ya_esta_con_licencia does not exist' => 'licencia-ya-existe',
-			'PROCEDURE is2.lincecia_medico_tiene_turnos does not exist' => 'licencia-medico-tiene-turnos'
+			'PROCEDURE is2.licencia_medico_tiene_turnos does not exist' => 'licencia-medico-tiene-turnos'
 		);
 		private static $errorsCode = array(
 			'1062' => 'duplicado',

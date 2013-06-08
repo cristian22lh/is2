@@ -34,10 +34,10 @@
 	__echoJSON( array( 
 		'success' => true,
 		'data' => array(
-			'start' => $start,
-			'end' => $end
+			'fechaComienzo' => $start,
+			'fechaFin' => $end,
+			'id' => $insertId
 		)
 	) );
-
 	
 ?>

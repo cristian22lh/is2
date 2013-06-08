@@ -284,6 +284,13 @@
 		.is2-doctor-licenses-form .control-group {
 			display: inline-block;
 		}
+
+		.is2-licenses-table td {
+			text-transform: none !important;
+		}
+		.is2-licenses-table tr:first-child td { 
+			border-top: 0;
+		}
 	</style>
 
 <?php t_endHead(); ?>
@@ -339,7 +346,6 @@
 						</div>
 					</div>
 					
-					
 					<div class="is2-modal-details-tabs btn-inverse">
 						<ul class="nav nav-tabs">
 							<li class="active">
@@ -349,7 +355,7 @@
 								<a class="is2-doctor-appointments-trigger" href="#is2-doctor-appointments" data-toggle="tab">Historial de turnos</a>
 							</li>
 							<li>
-								<a href="#is2-doctor-licenses" data-toggle="tab">Licencias</a>
+								<a class="is2-doctor-licenses-trigger" href="#is2-doctor-licenses" data-toggle="tab">Licencias</a>
 							</li>
 						</ul>
 					</div>
@@ -490,17 +496,16 @@
 								La fecha <strong>desde</strong> no puede ser anteror al día presente
 							</div>
 							<legend>Historial de licencias</legend>
-							<ul>
-								<li>
-									<span>Desde el 20/12/2010 hasta el 21/02/2011</span>
-								</li>
-								<li>
-									<span>Desde el 20/12/2010 hasta el 21/02/2011</span>
-								</li>
-								<li>
-									<span>Desde el 20/12/2010 hasta el 21/02/2011</span>
-								</li>
-							</ul>
+							<table class="table is2-licenses-table" style="display:none">
+								<tr class="is2-licenses-record">
+									<td>
+									Desde el <strong class="is2-field" data-field-name="fechaComienzo"></strong> hasta el <strong class="is2-field" data-field-name="fechaFin"></strong>
+									</td>
+									<td>
+										<button class="btn btn-mini btn-danger is2-license-remove-trigger" title="Borrar licencia"><i class="icon-remove-sign icon-white"></i></button>
+									</td>
+								</tr>
+							</table>
 						</div>
 					</div>
 					
@@ -524,6 +529,7 @@
 		window.location.hash = '';
 		$doctorModal.removeAttr( 'data-doctor-id' );
 		$appointmentsWrapper.hide().empty();
+		$licensesGrid.hide().empty();
 		$defaultTab.click();
 		
 	} ).css( 'left', $( window ).outerWidth() /2 - 850 / 2 ).css( 'margin-left', 0 );
@@ -861,7 +867,6 @@
 	$( '.is2-doctor-appointments-record' ).remove();
 	
 	var showAppointmentsHistory = function( dataResponse ) {
-		isWaiting = false;
 		hidePreloader();
 		if( !dataResponse.success ) {
 			return;
@@ -888,15 +893,11 @@
 
 	$( '.is2-doctor-appointments-trigger' ).on( 'click', function( e ) {
 		e.preventDefault();
-		if( isWaiting ) {
-			return;
-		}
 		// dont request agina the appontmets if already has been loaded
 		if( $appointmentsWrapper.find( 'tr.is2-doctor-appointments-record' ).length ) {
 			return;
 		}
 		
-		isWaiting = true;
 		showPreloader();
 		
 		$.ajax( {
@@ -909,6 +910,62 @@
 	} );
 	
 // *** licencias funionalidad *** //
+	// cuando hace click en mostrar licencias
+	var $licensesGrid = $( '.is2-licenses-table' );
+	var $licensesRecord = $( '.is2-licenses-record' ).clone();
+	$( '.is2-licenses-record' ).remove();
+	
+	var populateLicensesGrid = function( licenses, isAppend ) {
+		if( !isAppend ) {
+			$licensesGrid.hide().empty();
+		}
+		
+		var license, $license, $fields, $field,
+			i, l;
+			
+		while( licenses.length ) {
+			license = licenses.shift();
+			$license = $licensesRecord.clone();
+			$fields = $license.find( '.is2-field' );
+			for( i = 0, l = $fields.length; i < l; i++ ) {
+				$field = $fields.eq( i );
+				$field.html( license[$field.attr( 'data-field-name' )] );
+			}
+			$license.find( '.is2-license-remove-trigger' ).attr( 'data-license-id', license.id );
+			
+			$licensesGrid.append( $license );
+		}
+		$licensesGrid.show();
+	};
+	
+	var showLicensesHistory = function( dataResponse ) {
+		hidePreloader();
+		
+		if( !dataResponse.success ) {
+			return;
+		}
+		
+		populateLicensesGrid( dataResponse.data );
+	};
+	
+	$( '.is2-doctor-licenses-trigger' ).on( 'click', function( e ) {
+		e.preventDefault();
+		if( $licensesGrid.find( '.is2-licenses-record' ).length ) {
+			return;
+		}
+		
+		showPreloader();
+		
+		$.ajax( {
+			url: '/medicos/' + getDoctorID() + '/licencias',
+			dataType: 'json',
+			type: 'GET',
+			success: showLicensesHistory,
+			error: showLicensesHistory
+		} );
+	} );
+
+	// crear licencia funcionalidad
 	IS2.initDatepickers();
 	var $licensesForm = $( '.is2-doctor-licenses-form' );
 	
@@ -998,6 +1055,10 @@
 			return;
 		}
 		IS2.showCrudMsg( $licenseSuccess , 2, 20000 );
+		
+		populateLicensesGrid( [ dataResponse.data ], true );
+		$( '.is2-licenses-record:last' ).effect( 'highlight', null, 1500 );
+		
 		cleanAllInputs();
 	};
 	

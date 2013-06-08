@@ -350,7 +350,7 @@ CREATE TRIGGER licencias_crearLicencia
 				idMedico
 				
 		) IS NOT NULL THEN
-			CALL lincecia_medico_tiene_turnos;
+			CALL licencia_medico_tiene_turnos;
 		END IF;
 	END;
 $$

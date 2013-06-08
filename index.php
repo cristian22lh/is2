@@ -55,6 +55,7 @@
 		'/medicos/:id/actualizar-obras-sociales-admitidas' => 'doctors.insurances.update',
 		'/medicos/:id/historial' => 'doctors.history',
 		'/medicos/:id/crear-licencia' => 'doctors.license.new',
+		'/medicos/:id/licencias' => 'doctors.license',
 		
 // *** PACIENTES *** //
 		'/pacientes' => 'patients',
