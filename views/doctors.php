@@ -447,12 +447,15 @@
 						</div>
 						
 						<div id="is2-doctor-licenses" class="tab-pane">
-							<div class="is2-modal-doctor-status alert alert-error is2-error-lincense" style="display:none">
+							<div class="is2-modal-doctor-status alert alert-error is2-error-lincense-duplicated" style="display:none">
 								El médico ya posee una licencia en el rango de fechas suministrado
+							</div>
+							<div class="is2-modal-doctor-status alert alert-error is2-error-lincense-busy" style="display:none">
+								<strong>El médico actualmente posee turnos que debe cumplir, no se puede crear la licencia bajo esta circunstancia</strong>
 							</div>
 							<div class="is2-modal-doctor-status alert alert-success is2-success-lincense" style="display:none">
 								<div>La licencia del médico ha sido creada satisfactoriamente</div>
-								<strong>Recuerde que durante la duración de la licencia, no se podrán crear nuevos turnos con este médico</strong>
+								<strong>Recuerde que durante la duración de la licencia, no se podrán crear nuevos turnos para este médico</strong>
 							</div>
 							<legend>Utilice este formulario para crear una licencia para este médico</legend>
 							<div class="alert">
@@ -940,7 +943,8 @@
 		return true;
 	};
 	
-	var $licenseError = $( '.is2-error-lincense' );
+	var $licenseErrorDuplicated = $( '.is2-error-lincense-duplicated' );
+	var $licenseErrorBusy = $( '.is2-error-lincense-busy' );
 	var $licenseSuccess = $( '.is2-success-lincense' );
 	
 	var createDateObject = function( val ) {
@@ -962,7 +966,7 @@
 		hidePopover( $start );
 		hidePopover( $end );
 
-		if( start < new Date() ) {
+		if( start < new Date() - 86400000 ) {
 			$startControlGroup.addClass( 'error' );
 			$start.data( 'popover' ).options.content = $( '.is2-licenses-date-underflow' ).prop( 'outerHTML' );
 			$start.popover( 'show' );
@@ -984,8 +988,13 @@
 	var createdLicense = function( dataResponse ) {
 		isWaiting = false;
 		hidePreloader();
+		var data = dataResponse.data;
 		if( !dataResponse.success ) {
-			IS2.showCrudMsg( $licenseError, 2 );
+			if( data[0] === 'licencia-medico-tiene-turnos' ) {
+				IS2.showCrudMsg( $licenseErrorBusy, 2, 5000 );
+			} else {
+				IS2.showCrudMsg( $licenseErrorDuplicated, 2 );
+			}
 			return;
 		}
 		IS2.showCrudMsg( $licenseSuccess , 2, 20000 );

@@ -25,7 +25,10 @@
 	);
 	
 	if( $insertId <= 0 ) {
-		__echoJSON( array( 'success' => false ) );
+		__echoJSON( array( 
+			'success' => false,
+			'data' => DB::getErrorList()
+		) );
 	}
 	
 	__echoJSON( array( 

@@ -476,7 +476,7 @@
 	var $dateTimePopover = $( '.is2-error-datetime-popover' );
 	var $dateTimeUnavailableDoctorMsg = $( '.is2-error-datetimedoctorunavailable' );
 	var $dateTimeDuplicatedDoctorMsg = $( '.is2-error-datetimedoctorduplicated' );
-	if( errors === 'fecha|hora' || errors === 'duplicado' ) {
+	if( errors === 'turnos_fecha|hora' || errors === 'duplicado' ) {
 		$dateGroupControl.addClass( 'error' );
 		$timeGroupControl.addClass( 'error' );
 		$dateTimePopover.popover( {

@@ -326,19 +326,32 @@ CREATE TRIGGER licencias_crearLicencia
 		/** NO PUEDO CREAR UNA LICENCIA DONDE ACTUALMENTE EL MEDICO ESTE CON UNA LICENCIA */
 		IF (
 			SELECT
-				COUNT( id )
+				COUNT( idMedico )
 			FROM
 				licencias
 			WHERE
 				( fechaComienzo >= NEW.fechaComienzo OR NEW.fechaFin <= fechaFin ) AND idMedico = NEW.idMedico
 			GROUP BY
-				id
+				idMedico
 				
 		) IS NOT NULL THEN
 			CALL licencia_medico_ya_esta_con_licencia;
 		END IF;
+		
+		/** NO SE PUEDE CREAR UNA LICENCIA SI EL MEDICO EN CUESTION TIENE ACTUALMENTE TURNOS */
+		IF (
+			SELECT
+				COUNT( idMedico )
+			FROM
+				turnos
+			WHERE
+				idMedico = NEW.idMedico AND fecha >= NEW.fechaComienzo AND estado <> 'confirmado'
+			GROUP BY
+				idMedico
+				
+		) IS NOT NULL THEN
+			CALL lincecia_medico_tiene_turnos;
+		END IF;
 	END;
 $$
 DELIMITER ;
-	
-
