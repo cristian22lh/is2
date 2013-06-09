@@ -312,11 +312,6 @@
 	$availabilityTrigger.popover();
 	var defaultMsg = $availabilityTrigger.attr( 'data-content' );
 	var $availabilityTemplate = $( '.is2-availability-template' );
-	var DAYNAME = [ 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo' ];
-	
-	var padTime = function( value ) {
-		return value.substring( 0, 5 );
-	};
 
 	var checkedAvailability = function( dataResponse ) {
 		isWaiting = false;
@@ -333,7 +328,7 @@
 		var availability;
 		while( availabilities.length ) {
 			availability = availabilities.shift();
-			$( '<li></li>' ).html( DAYNAME[availability.dia-1] + ' de ' + padTime( availability.horaIngreso ) + ' hasta ' + padTime( availability.horaEgreso ) ).appendTo( $availabilitiesWrapper );
+			$( '<li></li>' ).html( availability.diaNombre + ' de ' + availability.horaIngreso + ' hasta ' + availability.horaEgreso ).appendTo( $availabilitiesWrapper );
 		}
 		
 		$availabilityTemplate.find( '.alert' ).hide();
@@ -507,7 +502,6 @@
 			$dateTimePopover.popover( 'hide' );
 		}, 10000 );
 	}
-	
 	
 })();
 </script>
