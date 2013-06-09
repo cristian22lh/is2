@@ -97,9 +97,9 @@ IS2.showNewRecord = function( $el ) {
 };
 
 IS2.emptyFieldMsg = '<div class="alert alert-error is2-popover-msg is2-patient-empty">Este campo no puede estar vacio</div>';
-IS2.lookForEmptyFields = function( $theForm, notShowPopover ) {
+IS2.lookForEmptyFields = function( $theForm, notShowPopover, notFind ) {
 	
-	var $fields = $theForm.find( 'input:not( [type=hidden] )' ), $field,
+	var $fields = !notFind ? $theForm.find( 'input:not( [type=hidden] )' ) : $theForm, $field,
 		$groupControl,
 		isError = false,
 		i = 0, l = $fields.length;

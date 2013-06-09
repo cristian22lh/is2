@@ -203,14 +203,14 @@
 <script>
 (function() {
 
-	IS2.initDatepickers( true );
-	IS2.initTimepickers();
 	IS2.loadPrevState( 'is2-appointment-state', function( prevState ) {
 		// debo realizar la busqyeda del paciente
 		if( prevState['dni'] ) {
 			$( '.is2-patients-search-value' ).attr( 'data-automatic-search', 'true' );
 		}
 	} );
+	IS2.initTimepickers();
+	IS2.initDatepickers(  $( '.is2-availability-date' ).val().trim() ? false : true );
 	
 // *** LA BUSQUEDA DE PACIENTE SE HACE MEDIATE AJAX *** //
 	var isWaiting = false;

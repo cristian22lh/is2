@@ -99,5 +99,18 @@
 			array( $doctorID )
 		);
 	}
+	
+	function q_getAllSpecialities() {
+		return DB::select(
+			'
+				SELECT
+					*
+				FROM
+					especialidades
+				ORDER BY
+					nombre
+			'
+		);
+	}
 
 ?>

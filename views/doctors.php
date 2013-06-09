@@ -318,7 +318,8 @@
 		</div>
 		
 		<div class="alert alert-info">
-			A continuación se muestran todos los médicos actualmente cargados en el sistema
+			<p>A continuación se muestran todos los médicos actualmente cargados en el sistema</p>
+			Para saber/modificar los horarios, obras sociales y/ó licencias de un médico haga click en el botón <strong>Ver en detalle</strong> (<button class="btn btn-mini" title="Ver en detalle"><i class="icon-eye-open"></i></button>) que aparece debajo de cada uno de ellos
 		</div>
 		<div class="is2-doctors-grid">
 		<?php foreach( $doctors as $doctor ): ?>
