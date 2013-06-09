@@ -406,7 +406,6 @@
 		</form>
 		
 <?php t_endBody(); ?>
-
 <script>
 (function() {
 	IS2.cleanPrevState();

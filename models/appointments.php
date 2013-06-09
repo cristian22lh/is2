@@ -110,6 +110,7 @@
 		if( $field == 'fecha' ) {
 			$whereClause[] = ' fecha = ? ';
 			$replacements[] = $value;
+			$value = __dateISOToLocale( $value );
 			
 		} else if( $field == 'hora' ) {
 			$whereClause[] = ' hora = ? ';
