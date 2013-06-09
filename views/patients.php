@@ -81,8 +81,6 @@
 	</style>
 	<style>
 		/* popup de paciente detalles */
-		@import url(http://fonts.googleapis.com/css?family=Gloria+Hallelujah|Open+Sans);
-		
 		#is2-modal-details {
 			background: #fff;
 			border-radius: 0;
