@@ -20,7 +20,7 @@
 		.is2-doctor-presentation-name {
 			display: inline-block;
 			vertical-align: bottom;
-		
+			text-transform: capitalize;
 		}
 		.is2-doctor-presentation-name h3 {
 			font-size: 20px;

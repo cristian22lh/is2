@@ -64,8 +64,7 @@
 				'fechaNacimiento' => '',
 				'telefono' => '',
 				'idObraSocial' => '',
-				'nroAfiliado' => '',
-				'id' => false
+				'nroAfiliado' => ''
 			)
 		)
 	);

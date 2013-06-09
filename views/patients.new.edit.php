@@ -17,6 +17,7 @@
 <?php t_startBody( $username, 'patients'  ); ?>
 	
 		<?php t_startWrapper(); ?>
+
 			<?php if( $createError ): ?>
 			<div class="alert alert-error">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
@@ -43,6 +44,7 @@
 				</ul>
 			</div>
 			<?php endif; ?>
+			
 			<div class="is2-pagetitle clearfix">
 				<h3>Pacientes - <?php echo $page; ?></h3>
 				<a class="btn pull-right" href="/pacientes"><i class="icon-arrow-left"></i> Listar pacientes</a>
@@ -128,9 +130,6 @@
 						<button type="submit" class="btn btn-primary btn-large"><?php echo $buttonLabel; ?></button>
 					</div>
 				</div>
-				<?php if( $patient['id'] ): ?>
-				<input type="hidden" name="id" value="<?php echo $patient['id']; ?>">
-				<?php endif; ?>
 			</form>
 			
 		<?php t_endWrapper(); ?>

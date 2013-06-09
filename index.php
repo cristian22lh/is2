@@ -58,6 +58,7 @@
 		'/medicos/:id/licencias' => 'doctors.license',
 		'/medicos/:id/borrar-licencia' => 'doctors.license.remove',
 		'/medicos/crear' => 'doctors.new',
+		'/medicos/:id/editar' => 'doctors.edit',
 		
 // *** PACIENTES *** //
 		'/pacientes' => 'patients',

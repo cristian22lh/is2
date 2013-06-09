@@ -22,7 +22,6 @@
 			$insuranceNumber = trim( $_POST['insuranceNumber'] );
 		}
 		
-		$errors = array();
 		if( !$lastName ) {
 			$errors[] = 'lastName';
 		}
