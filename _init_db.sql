@@ -146,6 +146,7 @@ CREATE TABLE pacientes(
 	dni VARCHAR( 255 ),
 	fechaNacimiento DATE,
 	telefono VARCHAR( 255 ),
+	direccion TEXT,
 	idObraSocial INTEGER NULL,
 	nroAfiliado VARCHAR( 255 ) NULL,
 	UNIQUE INDEX( dni )

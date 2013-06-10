@@ -407,6 +407,7 @@
 						<li class="is2-patient-data" data-field-name="dni"></li>
 						<li class="is2-patient-data" data-field-name="fechaNacimiento"></li>
 						<li class="is2-patient-data" data-field-name="edad"></li>
+						<li class="is2-patient-data" data-field-name="direccion"></li>
 					</ul>
 				</div>
 				<div class="is2-modal-details-body">

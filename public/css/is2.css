@@ -91,6 +91,12 @@ legend {
 	line-height: 30px;
 	margin-bottom: 10px;
 }
+textarea {
+	resize: vertical;
+	height: 50px;
+	max-height: 100px;
+	min-height: 50px;
+}
 
 .is2-pagetitle {
 	margin: 0 0 10px 0;

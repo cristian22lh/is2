@@ -51,18 +51,21 @@
 			</div>
 			
 			<form class="form-horizontal is2-patient-form" method="post" action="">
+			
 				<div class="control-group">
 					<label class="control-label">Apellidos</label>
 					<div class="controls">
 						<input type="text" class="input-xlarge" placeholder="Apellidos" name="lastName" value="<?php echo $patient['apellidos']; ?>" data-html="true" data-trigger="manual">
 					</div>
 				</div>
+				
 				<div class="control-group">
 					<label class="control-label">Nombres</label>
 					<div class="controls">
 						<input type="text" class="input-xlarge" placeholder="Nombres" name="firstName" value="<?php echo $patient['nombres']; ?>" data-html="true" data-trigger="manual">
 					</div>
 				</div>
+				
 				<div class="control-group">
 					<label class="control-label">Sexo</label>
 					<div class="controls">
@@ -72,6 +75,7 @@
 						</select>
 					</div>
 				</div>
+				
 				<div class="control-group is2-patient-dni-wrapper">
 					<label class="control-label">DNI</label>
 					<div class="controls">
@@ -84,6 +88,7 @@
 						El número de documento no es válido
 					</div>
 				</div>
+				
 				<div class="control-group is2-patient-birthdate-wrapper">
 					<label class="control-label">Fecha de nacimiento</label>
 					<div class="controls">
@@ -96,6 +101,7 @@
 						La fecha debe estar en el formato dd/mm/yyyy para ser reconocida como valida, por ejemplo algo como: 21/03/1940
 					</div>
 				</div>
+				
 				<div class="control-group is2-patient-phone-wrapper">
 					<label class="control-label">Teléfono</label>
 					<div class="controls">
@@ -105,6 +111,14 @@
 						El número de teléfono no es válido
 					</div>
 				</div>
+				
+				<div class="control-group">
+					<label class="control-label">Dirección</label>
+					<div class="controls">
+						<textarea class="input-xlarge is2-patient-address" placeholder="Dirección" name="address"><?php echo $patient['direccion']; ?></textarea>
+					</div>
+				</div>
+				
 				<div class="alert">
 					Si el paciente no tiene obra social, eliga la opción <strong>LIBRE</strong>
 				</div>
@@ -125,6 +139,7 @@
 						<input type="text" class="input-xlarge is2-insurance-number" placeholder="Número de afiliado" name="insuranceNumber" value="<?php echo $patient['nroAfiliado']; ?>" data-html="true" data-trigger="manual">
 					</div>
 				</div>
+				
 				<div class="control-group">
 					<div class="controls">
 						<button type="submit" class="btn btn-primary btn-large"><?php echo $buttonLabel; ?></button>

@@ -32,7 +32,7 @@
 	$patients = DB::select(
 		'
 			SELECT
-				p.id, p.apellidos, p.nombres, p.dni, p.telefono,
+				p.id, p.apellidos, p.nombres, p.dni, p.telefono, p.direccion,
 				os.nombreCorto AS obraSocialNombre
 			FROM
 				pacientes AS p

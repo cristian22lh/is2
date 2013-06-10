@@ -87,6 +87,11 @@
 			color: #BB0000;
 			font-size: 11px;
 		}
+		.is2-patient-autocompleteitem .is2-patient-address {
+			display: block;
+			font-size: 12px;
+			color: #777;
+		}
 		.ui-autocomplete .ui-menu-item > a:hover *, .ui-autocomplete .ui-menu-item > a.ui-state-hover *, .ui-autocomplete .ui-menu-item > a.ui-state-active *, .ui-autocomplete .ui-menu-item > a.ui-state-focus * {
 			color: #fff !important;
 		}
@@ -218,7 +223,7 @@
 						</div>
 					</div>
 					<div class="alert">
-						Debido a que una búsqueda puede devolver muchos pacientes, esta se encuentra limitada a 50 resultados máximo, por eso se recomienda buscar por número de DNI ó por el télefono del paciente en cuestión
+						Debido a que una búsqueda puede devolver muchos pacientes, esta se encuentra limitada a 50 resultados máximo, por eso se recomienda buscar por número de DNI ó por el télefono del paciente a asociar con este turno
 					</div>
 				</div>
 				<div class="control-group">
@@ -301,7 +306,7 @@
 			isWaiting = true;
 			
 			$.ajax( {
-				url: '/pacientes/buscar-por-nombre',
+				url: '/pacientes/buscar-para-turno',
 				dataType: 'json',
 				type: 'POST',
 				data: {
@@ -323,7 +328,7 @@
 		if( !patient ) {
 			return $item.hide();
 		}
-		return $item.data( 'item.autocomplete', item ).attr( 'data-patient-id', patient.id ).append( '<a class="is2-patient-autocompleteitem"><span class="is2-patient-name">' + patient.apellidos + ', ' + patient.nombres + '</span> <span class="is2-patient-phone">' + patient.telefono + '</span> <span class="is2-patient-insurance">' + patient.obraSocialNombre + '</span></a>' ).appendTo( ul );
+		return $item.data( 'item.autocomplete', item ).attr( 'data-patient-id', patient.id ).append( '<a class="is2-patient-autocompleteitem"><span class="is2-patient-name">' + patient.apellidos + ', ' + patient.nombres + '</span> <span class="is2-patient-phone">' + patient.telefono + '</span> <span class="is2-patient-insurance">' + patient.obraSocialNombre + '</span><span class="is2-patient-address">' + patient.direccion + '</span></a>' ).appendTo( ul );
 	};
 	
 	// init

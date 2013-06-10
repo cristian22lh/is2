@@ -1,7 +1,7 @@
 <?php
 
 	function m_issetPOST() {
-		return __issetPOST( array( 'lastName', 'firstName', 'gender', 'dni', 'birthDate', 'phone', 'insuranceID', 'insuranceNumber' ) );
+		return __issetPOST( array( 'lastName', 'firstName', 'gender', 'dni', 'birthDate', 'phone', 'address', 'insuranceID', 'insuranceNumber' ) );
 	}
 	
 	function m_processPOST( &$fields, &$errors ) {
@@ -15,6 +15,7 @@
 			$birthDate = false;
 		}
 		$phone = __cleanTel( $_POST['phone'] );
+		$address = __sanitizeValue( $_POST['address'] );
 		$insuranceID = $_POST['insuranceID'];
 		if( $insuranceID === 1 ) {
 			$insuranceNumber = '---';
@@ -40,6 +41,9 @@
 		if( !$phone ) {
 			$errors[] = 'phone';
 		}
+		if( !$address ) {
+			$errors[] = 'address';
+		}
 		if( !$insuranceID ) {
 			$errors[] = 'insuranceID';
 		}
@@ -53,6 +57,7 @@
 		$fields[] = $dni;
 		$fields[] = $birthDate;
 		$fields[] = $phone;
+		$fields[] = $address;
 		$fields[] = $insuranceID;
 		$fields[] = $insuranceNumber;
 

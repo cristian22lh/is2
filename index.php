@@ -70,7 +70,7 @@
 		'/pacientes/busqueda-avanzada' => 'patients.search.advanced',
 		'/pacientes/busqueda-rapida' => 'patients.search.quick',
 		'/pacientes/:id' => 'patients.details',
-		'/pacientes/buscar-por-nombre' => 'patients.search.by.name',
+		'/pacientes/buscar-para-turno' => 'patients.search.for.appointment',
 
 // *** ESPECIALIDADES *** //
 		'/especialidades' => 'specialities',

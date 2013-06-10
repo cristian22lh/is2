@@ -44,7 +44,7 @@ IS2.loadPrevState = function( name, callback ) {
 
 IS2.savePrevState = function( name, skip ) {
 	var prevState = {};
-	$( 'form ' ).find( 'input, select' ).each( function( e ) {
+	$( 'form ' ).find( 'input, select, textarea' ).each( function( e ) {
 		var $el = $( this ),
 			fieldName = $el.attr( 'name' );
 		if( fieldName && fieldName !== skip ) {
@@ -99,7 +99,7 @@ IS2.showNewRecord = function( $el ) {
 IS2.emptyFieldMsg = '<div class="alert alert-error is2-popover-msg is2-patient-empty">Este campo no puede estar vacio</div>';
 IS2.lookForEmptyFields = function( $theForm, notShowPopover, notFind ) {
 	
-	var $fields = !notFind ? $theForm.find( 'input:not( [type=hidden] )' ) : $theForm, $field,
+	var $fields = !notFind ? $theForm.find( 'input:not( [type=hidden] ), textarea' ) : $theForm, $field,
 		$groupControl,
 		isError = false,
 		i = 0, l = $fields.length;

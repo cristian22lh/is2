@@ -6,12 +6,6 @@
 		select {
 			width: 285px !important;
 		}
-		textarea {
-			resize: vertical;
-			height: 50px;
-			max-height: 100px;
-			min-height: 50px;
-		}
 	</style>
 
 <?php t_endHead(); ?>
