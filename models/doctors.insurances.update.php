@@ -1,13 +1,18 @@
 <?php
 
 	$doctorID = Router::seg( 2 );
-	
-	if( !__issetPOST( array( 'insurances' ) ) ) {
+
+	if( $_SERVER['REQUEST_METHOD'] != 'POST' ) {
 		__echoJSON( array( 'success' => false ) );
 	}
-	$insurances = $_POST['insurances'];
-	if( !is_array( $insurances ) ) {
-		__echoJSON( array( 'success' => false ) );
+
+	if( __issetPOST( array( 'insurances' ) ) ) {
+		$insurances = $_POST['insurances'];
+		if( !is_array( $insurances ) ) {
+			__echoJSON( array( 'success' => false ) );
+		}
+	} else {
+		$insurances = array();
 	}
 	
 	$setValuesClause = array();

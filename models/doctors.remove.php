@@ -18,6 +18,7 @@
 		',
 		array( $id )
 	);
+
 	// error si borrar un paciente con turnos
 	if( $rowsAffected != 1 ) {
 		__redirect( '/medicos?error=borrar-medico' );

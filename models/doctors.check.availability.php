@@ -24,11 +24,12 @@
 		',
 		array( $doctorID, $date, $date )
 	);
-	$hasLicense = (bool) count( $res );
+	$hasLicense = (bool) $res->rowCount();
 	
 	// pido los horarios del medico
 	// eso siempre va estar en la respuesta
 	$doctorAvailabilities = q_getDoctorAvailabilities( $doctorID );
+	$doctorAvailabilities = $doctorAvailabilities->fetchAll();
 	for( $i = 0, $l = count( $doctorAvailabilities ); $i < $l; $i++ ) {
 		$doctorAvailability = &$doctorAvailabilities[$i];
 		$doctorAvailability['horaIngreso'] = __trimTime( $doctorAvailability['horaIngreso'] );
@@ -50,7 +51,7 @@
 		array( $doctorID, $time, $time, $day )
 	);
 	// el doctor antiende dia querido??
-	$isDoctorAvailable = (bool) count( $res );
+	$isDoctorAvailable = (bool) $res->rowCount();
 	
 	// ahora debo fijarme que no tenga ya un turno para ese ida
 	$res = DB::select(
@@ -64,7 +65,7 @@
 		',
 		array( $date, $time, $doctorID )
 	);
-	$hasAppointmentAlready = (bool) count( $res );
+	$hasAppointmentAlready = (bool) $res->rowCount();
 	
 	__echoJSON( array( 
 		'success' => true,

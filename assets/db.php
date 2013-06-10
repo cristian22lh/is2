@@ -43,58 +43,33 @@
 					'clave' => ''
 				);
 			}
-
-			self::$db = new mysqli( 'localhost', $credenciales['usuario'], $credenciales['clave'], 'is2' );
-			if( self::$db->connect_errno ) {
-			    die( 'Failed to connect to MySQL: ' . self::$db->connect_error );
+			
+			try {
+				self::$db = new PDO( 'mysql:host=localhost;dbname=is2', $credenciales['usuario'], $credenciales['clave'] );
+				self::$db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+				
+			} catch( PDOException $e ) {
+				die( 'Failed to connect to MySQL: ' . $e->getMessage() );
 			}
 
-			self::$db->set_charset( 'utf8' );
+			self::$db->exec( 'SET names utf8' );
 		}
 		
 		static function select( $query, $replacements = array() ) {
 		
 			self::_log( $query, $replacements );
-	
-			$res = array();
 			
-			if( $stmt = self::$db->prepare( $query ) ) {
+			$stmt = null;
 			
-				if( self::_executeQuery( $stmt, $replacements ) ) {
-					// debo conseguir el nombre de las columnas
-					$metadata = $stmt->result_metadata();
-					$columns = array();
-					while( $field = $metadata->fetch_field() ) {
-						$columns[] = $field->name;
-					}
-					// ahora por cada nombre de columna
-					// creo una variable con ese nombre de columna
-					foreach( $columns as $field ) {
-					    $values[] = &${$field};
-					}
-					
-					// internamente hace un $stmt->bind_result
-					self::_bindResult( $stmt, $values );
-				       
-					// lito, solo queda iterar cada fila y guardarla en $res
-					$res = array();
-					$i = 0;
-					// pido la fila actual y la proceso
-					while( $stmt->fetch() ) {
-						foreach( $columns as $field ) {
-							$res[$i][$field] = $$field;
-						}
-						$i++;
-					}
-				}
-				
-				$stmt->close();
-				
-			} else {
-				self::_err( self::$db->error );
+			try {
+				$stmt = self::$db->prepare( $query );
+				$stmt->execute( $replacements );
+			
+			} catch( PDOException $e ) {
+				self::_err( $e );
 			}
-			
-			return $res;
+
+			return $stmt;
 		}
 		
 		static function update( $query, $replacements ) {
@@ -103,16 +78,13 @@
 
 			$rowsAffected = -1;
 			
-			if( $stmt = self::$db->prepare( $query ) ) {
+			try {
+				$stmt = self::$db->prepare( $query );
+				$stmt->execute( $replacements );
+				$rowsAffected = $stmt->rowCount();
 				
-				if( self::_executeQuery( $stmt, $replacements ) ) {
-					$rowsAffected = $stmt->affected_rows;
-				}
-				
-				$stmt->close();
-				
-			} else {
-				self::_err( self::$db->error );
+			} catch( PDOException $e ) {
+				self::_err( $e );
 			}
 			
 			return $rowsAffected;
@@ -128,88 +100,35 @@
 		
 			$insertId = null;
 			
-			if( $stmt = self::$db->prepare( $query ) ) {
+			try {
+				$stmt = self::$db->prepare( $query );
+				$stmt->execute( $replacements );
+				$insertId = self::$db->lastInsertId();
 				
-				if( self::_executeQuery( $stmt, $replacements ) ) {
-					$insertId = $stmt->insert_id;
-				}
-				
-				$stmt->close();
-				
-			} else {
-				self::_err( self::$db->error );
+			} catch( PDOException $e ) {
+				self::_err( $e );
 			}
 			
 			return $insertId;
 		}
 		
 		static function batch( $queries ) {
-			self::$db->autocommit( false );
+			self::$db->beginTransaction();
 			
 			foreach( $queries as $type => $data ) {
 				$exitCode = call_user_func_array( array( 'DB', $type ), array( $data['query'], $data['replacements'] ) );
-				if( ( is_integer( $exitCode ) && $exitCode < 0 ) || ( is_bool( $exitCode ) && !$exitCode ) ) {
-					self::$db->rollback();
-					self::$db->autocommit( true );
+				if( ( is_integer( $exitCode ) && $exitCode < 0 ) || is_null( $exitCode ) ) {
+					self::$db->rollBack();
 					return false;
 				}
 			}
+			
 			self::$db->commit();
-			self::$db->autocommit( true );
 			return true;
 		}
 		
 		static function getErrorList() {
 			return self::$errorsList;
-		}
-		
-	// *** PRIVATE METHODS *** //
-		private static function _executeQuery( $stmt, $replacements ) {
-			// capaz que no hay tokens a reemplezar
-			if( count( $replacements ) ) {
-				// internamente aca se hace un $stmt->bind_param()
-				self::_bindParams( $stmt, self::_addParams( $replacements ) );
-			}
-			
-			// ejecutamos la consultado
-			if( !$stmt->execute() ) {
-				self::_err( $stmt->error );
-				return false;
-			}
-			
-			return true;
-		}
-	
-		private static function _addParams( $replacements ) {
-			$types = '';
-			self::$replacements = array();
-			
-			for( $i = 0, $l = count( $replacements ); $i < $l; $i++ ) {
-				$types .= self::_gettype( $replacements[$i] );
-				self::$replacements[] = &$replacements[$i];
-			}
-
-			// esto sera el argumento para $stmt->bind_param();
-			$args = array_merge( array( $types ), self::$replacements );
-			return $args;
-		}
-		
-		private static function _gettype( $value ) {
-			$type = gettype( $value );
-
-			if( isset( self::$typesDict[$type] ) ) {
-				return self::$typesDict[$type];
-			}
-			
-			self::_err( 'Invalid data type: ' . $type );
-		}
-		
-		private static function _bindParams( $stmt, $args ) {
-			call_user_func_array( array( $stmt, 'bind_param' ), $args );
-		}
-		
-		private static function _bindResult( $stmt, $args ) {
-			call_user_func_array( array( $stmt, 'bind_result' ) , $args );
 		}
 		
 		private static function _log( $query, $replacements ) {
@@ -219,11 +138,11 @@
 			__log( $replacements );
 		}
 		
-		private static function _err( $msg ) {
-			__err( $msg );
+		private static function _err( $PDOError ) {
+			__err( $PDOError->getMessage() );
 			
-			$errorString = self::$db->error;
-			$errorNro = self::$db->errno;
+			$errorString =  $PDOError->errorInfo[2];
+			$errorNro = $PDOError->errorInfo[1];
 			$theError = null;
 			
 			foreach( self::$errorsDict as $errorStringMap => $errorMeaning ) {

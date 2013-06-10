@@ -29,7 +29,7 @@
 	}
 	
 	$availabilities = q_getDoctorAvailabilities( $doctorID, $insertId );
-	$availability = $availabilities[0];
+	$availability = $availabilities->fetch();
 	$availability['diaNombre'] = __getDayName( $availability['dia'] );
 	$availability['horaEgreso'] = __trimTime( $availability['horaEgreso'] );
 	$availability['horaIngreso'] = __trimTime( $availability['horaIngreso'] );

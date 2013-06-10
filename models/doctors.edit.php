@@ -57,7 +57,7 @@
 	if( !count( $doctors ) ) {
 		__redirect( '/medicos?error=editar-medico' );
 	}
-	$doctor = $doctors[0];
+	$doctor = $doctors->fetch();
 	
 /* }}} */
 

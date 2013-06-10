@@ -44,11 +44,24 @@
 /* }}} */
 
 /* {{{ DEBO PEDIR EL PACIENTE QUE ESTA EN LA URL */
-	$patients = q_getPatients( array( ' p.id = ? ' ), array( $patientID ) );
-	if( !count( $patients ) ) {
+	$patients = DB::select(
+		'
+			SELECT
+				p.id, p.apellidos, p.nombres, p.sexo, p.dni, p.idObraSocial, p.fechaNacimiento, p.telefono, p.direccion, p.nroAfiliado,
+				os.nombreCorto AS obraSocialNombre
+			FROM
+				pacientes AS p
+				INNER JOIN obrasSociales AS os
+					ON os.id = p.idObraSocial
+			WHERE 
+				p.id = ?
+		',
+		array( $patientID )
+	);
+	if( !$patients->rowCount() ) {
 		__redirect( '/pacientes?error=editar-paciente' );
 	}
-	$patient = $patients[0];
+	$patient = $patients->fetch();
 /* }}} */
 
 /* {{{ */

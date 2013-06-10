@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
   WebFontConfig = {
     google: { families: [ 'Scada::latin', 'Open+Sans::latin' ] }
   };

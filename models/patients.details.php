@@ -16,12 +16,11 @@
 		',
 		array( $patientID )
 	);
-	
-	if( !count( $patientData ) ) {
+	if( !$patientData->rowCount() ) {
 		__echoJSON( array( 'success' => false ) );
 	}
 	
-	$patient = $patientData[0];
+	$patient = $patientData->fetch();
 	$patient['edad'] = date_diff( date_create( $patient['fechaNacimiento'] ), date_create() )->format( '%Y' );
 	$patient['fechaNacimiento'] = __dateISOToLocale( $patient['fechaNacimiento'] );
 	
@@ -42,6 +41,7 @@
 		array( $patientID )
 	
 	);
+	$appointments = $appointments->fetchAll();
 	for( $i = 0, $l = count( $appointments ); $i < $l; $i++ ) {
 		$appointment = &$appointments[$i];
 		$appointment['fecha'] = __dateISOToLocale( $appointment['fecha'] );

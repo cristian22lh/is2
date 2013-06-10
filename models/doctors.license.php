@@ -16,6 +16,7 @@
 		array( $doctorID )
 	);
 	
+	$licenses = $licenses->fetchAll();
 	for( $i = 0, $l = count( $licenses ); $i < $l; $i++ ) {
 		$license = &$licenses[$i];
 		$license['fechaComienzo'] = __dateISOToLocale( $license['fechaComienzo'] );

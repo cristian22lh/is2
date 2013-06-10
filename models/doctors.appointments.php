@@ -19,6 +19,7 @@
 		array( $doctorID )
 	);
 	
+	$appointments = $appointments->fetchAll();
 	for( $i = 0, $l = count( $appointments ); $i < $l; $i++ ) {
 		$appointment = &$appointments[$i];
 		$appointment['fecha'] = __dateISOToLocale( $appointment['fecha'] );

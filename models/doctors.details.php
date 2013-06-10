@@ -19,13 +19,13 @@
 		array( $doctorID )
 	);
 	
-	if( !count( $doctorData ) ) {
+	if( !$doctorData->rowCount() ) {
 		__echoJSON( array( 'success' => false ) );
 	}
-	
-	$doctor = $doctorData[0];
+	$doctor = $doctorData->fetch();
 	
 	$availabilities = q_getDoctorAvailabilities( $doctorID );
+	$availabilities = $availabilities->fetchAll();
 	for( $i = 0, $l = count( $availabilities ); $i < $l; $i++) {
 		$availability = &$availabilities[$i];
 		$availability['diaNombre'] = __getDayName( $availability['dia'] );

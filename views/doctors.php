@@ -954,7 +954,7 @@
 		showPreloader();
 		
 		$.ajax( {
-			url: '/medicos/' + getDoctorID() + '/historial',
+			url: '/medicos/' + getDoctorID() + '/turnos',
 			dataType: 'json',
 			type: 'GET',
 			success: showAppointmentsHistory,

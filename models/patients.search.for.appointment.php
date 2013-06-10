@@ -50,6 +50,8 @@
 		$replacements
 	);
 	
+	$patients = $patients->fetchAll();
+	
 	__echoJSON( array( 
 		'success' => true,
 		'data' => $patients

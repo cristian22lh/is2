@@ -197,11 +197,29 @@ CASO CONTRARIO LISTO LOS APELLIDO QUE EMPIECEN CON 'A' */
 	if( !$offset ) {
 		$offset = 0;
 	}
-	// pido los pacientes en base a un $offset
-	$patients = q_getPatients( $whereClause, $replacements, $orderByClause, $offset );
+	
+	$patients = DB::select(
+		'
+			SELECT
+				p.id, p.apellidos, p.nombres, p.dni, p.fechaNacimiento, p.telefono, p.nroAfiliado, 
+				os.nombreCorto AS obraSocialNombre 
+			FROM pacientes AS p 
+				INNER JOIN obrasSociales AS os 
+					ON os.id = p.idObraSocial 
+			WHERE 
+		' .
+			implode( ' AND ', $whereClause ) .
+		'
+			ORDER BY 
+		' .
+				implode( ', ', $orderByClause ) .
+		'
+			LIMIT ' . $offset * 30 . ' , 31 
+		',
+		$replacements
+	);
 	// veo si tengo que SEGUIR paginar
-	if( count( $patients ) == 31 ) {
-		array_pop( $patients );
+	if( $patients->rowCount() == 31 ) {
 		$stillMorePages = true;
 	} else {
 		$stillMorePages = false;

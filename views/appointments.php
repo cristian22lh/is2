@@ -253,7 +253,7 @@
 			</div>
 			<?php endif; ?>
 			
-			<?php if( count( $appointments ) ): ?>
+			<?php if( $appointments->rowCount() ): ?>
 			<table class="table is2-grid-header btn-inverse">
 				<thead>
 					<tr>
@@ -312,8 +312,9 @@
 							</td>
 							<td>
 								<a href="/pacientes?id=<?php echo $appointment['idPaciente']; ?>" target="_blank">
-								<?php echo $appointment['pacienteApellidos'] . ', ' .  $appointment['pacienteNombres']; ?></td>
+								<?php echo $appointment['pacienteApellidos'] . ', ' .  $appointment['pacienteNombres']; ?>
 								</a>
+							</td>
 							<td data-appointment-id="<?php echo $appointment['id']; ?>" class="is2-appointment-status">
 								<button class="btn btn-small btn-success disabled" style="display:<?php echo $appointment['estado'] == 'confirmado' ? 'inline-block' : 'none'; ?>" data-appointment-id="<?php echo $appointment['id']; ?>"><i class="icon-ok"></i> Confirmado</button>
 								<button class="btn btn-small btn-warning disabled" style="display:<?php echo $appointment['estado'] == 'cancelado' ? 'inline-block' : 'none'; ?>" data-appointment-id="<?php echo $appointment['id']; ?>"><i class="icon-exclamation-sign"></i> Cancelado</button>

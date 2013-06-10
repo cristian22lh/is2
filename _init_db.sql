@@ -317,7 +317,13 @@ ALTER TABLE horarios
 	ADD CONSTRAINT horarios_idMedico
 	FOREIGN KEY( idMedico )
 		REFERENCES medicos( id )
-		ON DELETE RESTRICT
+		ON DELETE CASCADE
+;
+ALTER TABLE medicosObrasSociales
+	ADD	CONSTRAINT medicosObrasSociales_idMedico
+	FOREIGN KEY( idMedico )
+		REFERENCES medicos( id )
+		ON DELETE CASCADE
 ;
 
 ALTER TABLE pacientes

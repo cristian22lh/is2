@@ -219,15 +219,14 @@
 			array_merge( $dummyReplacements, $replacements )
 		);
 		// too much records
-		if( $isQuickSearch && count( $appointments ) == 21 ) {
-			array_pop( $appointments );
+		if( $isQuickSearch && $appointments->rowCount() == 21 ) {
 			$tooMuchRecords = true;
 		}
 		
 	} else {
 		$appointments = array();
 	}
-
+	
 // PIDO LOS MEDICOS, ESTOS ES DEBIDO A QUE LA BUSQUEDA DESPLIEGA UNA
 // LISTA QUE CONTIENE TODOS LOS MEDICOS EN EL SISTEMA
 	$doctors = q_getAllDoctors();

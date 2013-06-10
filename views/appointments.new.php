@@ -52,7 +52,9 @@
 			margin: 0;
 			padding: 4px;
 			position: absolute;
-			width: 434px;
+			width: 410px;
+			overflow: hidden;
+			text-overflow: ellipsis;
 		}
 		.is2-patients-norecords {
 			box-shadow: 0 1px 2px #B94A48;
@@ -65,7 +67,7 @@
 		
 		.ui-autocomplete {
 			max-height: 150px;
-			width: 443px !important;
+			max-width: 600px;
 			overflow-y: auto;
 			overflow-x: hidden;
 			text-overflow: ellipsis;
@@ -94,6 +96,14 @@
 		}
 		.ui-autocomplete .ui-menu-item > a:hover *, .ui-autocomplete .ui-menu-item > a.ui-state-hover *, .ui-autocomplete .ui-menu-item > a.ui-state-active *, .ui-autocomplete .ui-menu-item > a.ui-state-focus * {
 			color: #fff !important;
+		}
+		.is2-patients-selected .ui-menu-item {
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+		.is2-patients-selected .is2-patient-address {
+			display: inline-block;
 		}
 		
 	</style>
@@ -328,7 +338,7 @@
 		if( !patient ) {
 			return $item.hide();
 		}
-		return $item.data( 'item.autocomplete', item ).attr( 'data-patient-id', patient.id ).append( '<a class="is2-patient-autocompleteitem"><span class="is2-patient-name">' + patient.apellidos + ', ' + patient.nombres + '</span> <span class="is2-patient-phone">' + patient.telefono + '</span> <span class="is2-patient-insurance">' + patient.obraSocialNombre + '</span><span class="is2-patient-address">' + patient.direccion + '</span></a>' ).appendTo( ul );
+		return $item.data( 'item.autocomplete', item ).attr( 'data-patient-id', patient.id ).append( '<a class="is2-patient-autocompleteitem"><span class="is2-patient-name">' + patient.apellidos + ', ' + patient.nombres + '</span> <span class="is2-patient-phone">' + patient.telefono + '</span> <span class="is2-patient-insurance">' + patient.obraSocialNombre + '</span> <span class="is2-patient-address">' + patient.direccion + '</span></a>' ).appendTo( ul );
 	};
 	
 	// init
@@ -337,7 +347,7 @@
 		select: function( e, ui ) {
 			var patient = ui.item.data,
 				$item = $( '.ui-menu-item[data-patient-id=' + patient.id + ']' ).clone();
-
+			
 			$selectedPatient.empty().append( $item ).show();
 			$removeSelectedClient.show();
 			// leave a mark
