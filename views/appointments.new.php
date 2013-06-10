@@ -19,10 +19,13 @@
 			width: 190px;
 		}
 		
-		.is2-error-datetime-popover {
+		.is2-popover-creationerror {
 			height: 0;
 			overflow: hidden;
 			width: 300px;
+		}
+		.is2-popover-creationerror.is2-error-patient-popover {
+			width: 625px;
 		}
 		.is2-error-msg {
 			display: none;
@@ -190,12 +193,16 @@
 					<div class="alert alert-info">
 						Utilice este campo para buscar el paciente mediante su número de DNI, ó por número de teléfono, ó por su nombre y/o apellido, para éste último caso, ingrese primero el apellido del paciente, seguido de una coma (,) y luego su nombre, por ejemplo para buscar al paciente <strong>Marcos Perez</strong>, debe ingresarlo de la siguiente forma: <strong>perez, marcos</strong>
 					</div>
+					<div class="is2-error-patient-popover is2-popover-creationerror"></div>
+					<div class="alert alert-error is2-error-patientinsurancedisallowed is2-error-msg">
+						El paciente posee una obra social que no es admitida por el médico en cuestión
+					</div>
 					<label class="control-label">Paciente</label>
 					<div class="controls is2-dni-wrapper">
 						<input type="text" class="input-xlarge is2-patients-search-value" placeholder="Buscar paciente por DNI, número de télefono, apellido ó nombre..." name="dni">
 						<input type="hidden" class="is2-patients-search-result" name="idPaciente">
 						<span class="is2-preloader is2-patients-search-preloader"></span>
-						<span class="is2-patients-search-popover" data-paclement="right" data-html="true" data-trigger="hover">&nbsp;</span>
+						<span class="is2-patients-search-popover" data-html="true" data-trigger="hover">&nbsp;</span>
 						<div class="is2-patients-search-remove" style="display:none">
 							<button type="button" class="btn btn-mini btn-link btn-danger" title="Quitar este paciente para buscar otro">
 								<i class="icon-remove-sign"></i>
@@ -204,6 +211,10 @@
 						<ul class="is2-patients-selected"></ul>
 						<div class="alert alert-error is2-patients-norecords" style="display:none">
 							<strong>No se han encontrado resultados</strong>
+						</div>
+						<div class="alert alert-error is2-patient-search-popover-template is2-popover-template">
+							<div>Debe seleccionar un paciente de la lista de resutados para poder proseguir con la creación del turno.</div>
+							Ademas sepa que el paciente debe tener una obra social que sea admitida por el médico
 						</div>
 					</div>
 					<div class="alert">
@@ -430,8 +441,8 @@
 		}
 	} );
 	
-	var scrollToTheError = function() {
-		$.scrollTo( $theForm, 600 );
+	var scrollToTheError = function( $el ) {
+		$.scrollTo( $el, 600 );
 	};
 	
 	// si no ha paciente elegido, no contunio
@@ -465,7 +476,7 @@
 			e.preventDefault();
 			$dateGroupControl.addClass( 'error' );
 			$datePopover.popover( { content: $( '.is2-template-empty.is2-popover-date-template' ).prop( 'outerHTML' ) } ).popover( 'show' );
-			scrollToTheError();
+			scrollToTheError( $theForm );
 			return;
 		}
 		target = new Date();
@@ -478,14 +489,14 @@
 			e.preventDefault();
 			$dateGroupControl.addClass( 'error' );
 			$datePopover.popover( { content: $( '.is2-template-underflow.is2-popover-date-template' ).prop( 'outerHTML' ) } ).popover( 'show' );
-			scrollToTheError();
+			scrollToTheError( $theForm );
 			return;
 		}
 		if( target - base > 604800000 ) {
 			e.preventDefault();
 			$dateGroupControl.addClass( 'error' );
 			$datePopover.popover( { content: $( '.is2-template-overflow.is2-popover-date-template' ).prop( 'outerHTML' ) } ).popover( 'show' );
-			scrollToTheError();
+			scrollToTheError( $theForm );
 			return;
 		}
 		$dateGroupControl.removeClass( 'error' );
@@ -495,7 +506,7 @@
 			e.preventDefault();
 			$timeGroupControl.addClass( 'error' );
 			$timePopover.popover( 'show' );
-			scrollToTheError();
+			scrollToTheError( $theForm );
 			return;
 		}
 		$timePopover.popover( 'hide' );
@@ -525,25 +536,58 @@
 	var $dateTimeDuplicatedDoctorMsg = $( '.is2-error-datetimedoctorduplicated' );
 	var $dateTimePatientHasAppointment = $( '.is2-error-datetimepatienthasappointment' );
 	var $dateDoctorHasLicense = $( '.is2-error-datedoctorhaslicense' );
+	
+	var $patientPopover = $( '.is2-error-patient-popover' );
+	var $patientDoctorInsuranceIncompatible = $( '.is2-error-patientinsurancedisallowed' );
+	
 	var mapErrors = {
-		turnos_medico_no_atiende: $dateTimeUnavailableDoctorMsg,
-		turnos_medico_ocupado: $dateTimeDuplicatedDoctorMsg,
-		turnos_paciente_ya_tiene_turno: $dateTimePatientHasAppointment,
-		turnos_medico_con_licencia: $dateDoctorHasLicense
+		turnos_medico_no_atiende: {
+			$thePopover: $dateTimePopover,
+			$popoverContent: $dateTimeUnavailableDoctorMsg,
+			$scrollTo: $theForm,
+			groupControl: [ $dateGroupControl, $timeGroupControl ]
+		},
+		turnos_medico_ocupado: {
+			$thePopover: $dateTimePopover,
+			$popoverContent: $dateTimeDuplicatedDoctorMsg,
+			$scrollTo: $theForm,
+			groupControl: [ $dateGroupControl, $timeGroupControl ]
+		},
+		turnos_paciente_ya_tiene_turno: {
+			$thePopover: $dateTimePopover,
+			$popoverContent: $dateTimePatientHasAppointment,
+			$scrollTo: $theForm,
+			groupControl: [ $dateGroupControl, $timeGroupControl ]
+		},
+		turnos_medico_con_licencia: {
+			$thePopover: $dateTimePopover,
+			$popoverContent: $dateDoctorHasLicense,
+			$scrollTo: $theForm,
+			groupControl: [ $dateGroupControl, $timeGroupControl ]
+		},
+		turnos_obra_social_incompatibe: {
+			$thePopover: $patientPopover,
+			$popoverContent: $patientDoctorInsuranceIncompatible,
+			$scrollTo: $dni,
+			groupControl: [ $dniGroupControl ]
+		}
 	};
-	var $theError = mapErrors[errors];
-	if( $theError ) {
-		$dateGroupControl.addClass( 'error' );
-		$timeGroupControl.addClass( 'error' );
-		$dateTimePopover.popover( {
+	var errorData = mapErrors[errors];
+	if( errorData ) {
+		errorData.groupControl.forEach( function( $el ) {
+			$el.addClass( 'error' );
+		} );
+		
+		errorData.$thePopover.popover( {
 			trigger: 'manual',
 			html: true,
-			content: $theError.prop( 'outerHTML' )
+			content: errorData.$popoverContent.prop( 'outerHTML' )
 		} ).popover( 'show' );
 		setTimeout( function() {
-			$dateTimePopover.popover( 'hide' );
+			errorData.$thePopover.popover( 'hide' );
 		}, 10000 );
-		scrollToTheError();
+		
+		scrollToTheError( errorData.$scrollTo );
 	}
 	
 })();

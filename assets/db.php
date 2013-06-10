@@ -17,6 +17,7 @@
 			'/^.*turnos_medico_ocupado.*$/' => 'turnos_medico_ocupado',
 			'/^.*turnos_paciente_ya_tiene_turno.*$/' => 'turnos_paciente_ya_tiene_turno',
 			'PROCEDURE is2.medico_esta_con_licencia does not exist' => 'turnos_medico_con_licencia',
+			'PROCEDURE is2.medico_no_soporta_obra_social_paciente does not exist' => 'turnos_obra_social_incompatibe',
 			
 			// errores para crear licencia
 			'PROCEDURE is2.licencia_medico_tiene_turnos does not exist' => 'licencia-medico-tiene-turnos',
