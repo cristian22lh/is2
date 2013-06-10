@@ -236,7 +236,7 @@
 	}
 	
 	function __getDayName( $dayIndex ) {
-		$DAYNAME = [ 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo' ];
+		$DAYNAME = array( 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo' );
 		return isset( $DAYNAME[$dayIndex-1] ) ? $DAYNAME[$dayIndex-1] : false;
 	}
 	
