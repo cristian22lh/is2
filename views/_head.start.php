@@ -139,19 +139,25 @@
 				}, 2000 );
 			} );
 			
+			var checkFullScreen = function() {
+				if( Math.abs( $( window ).height() - window.screen.height ) <= 1 && !isFullscreen ) {
+					$document.trigger( 'fullscreen' );
+				} else {
+					isFullscreen = false;
+					window.localStorage.removeItem( 'is2-fullscreen' );
+				}
+			};
+			
 			$document.on( 'keyup', function( e ) {
 				// <F11>
-				if( e.keyCode === 122 )
-					if( Math.abs( $( window ).height() - window.screen.height ) <= 1 && !isFullscreen ) {
-						$document.trigger( 'fullscreen' );
-					} else {
-						isFullscreen = false;
-						window.localStorage.removeItem( 'is2-fullscreen' );
-					}
+				if( e.keyCode === 122 ) {
+					checkFullScreen();
+				}
 			} );
 			
 			if( window.localStorage.getItem( 'is2-fullscreen' ) - 0 ) {
-				$document.trigger( 'fullscreen' );
+				checkFullScreen();
 			}
+
 		})();
 		</script>

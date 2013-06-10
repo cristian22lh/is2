@@ -63,7 +63,6 @@
 		
 // *** PACIENTES *** //
 		'/pacientes' => 'patients',
-		'/pacientes/buscar/dni' => 'patients.search.dni',
 		'/pacientes/borrar' => 'patients.remove',
 		'/pacientes/crear' => 'patients.new',
 		'/pacientes/:id/editar' => 'patients.edit',
@@ -71,6 +70,7 @@
 		'/pacientes/busqueda-avanzada' => 'patients.search.advanced',
 		'/pacientes/busqueda-rapida' => 'patients.search.quick',
 		'/pacientes/:id' => 'patients.details',
+		'/pacientes/buscar-por-nombre' => 'patients.search.by.name',
 
 // *** ESPECIALIDADES *** //
 		'/especialidades' => 'specialities',

@@ -222,6 +222,7 @@
 			__err( $msg );
 			
 			$errorString = self::$db->error;
+			$errorNro = self::$db->errno;
 			$theError = null;
 			
 			foreach( self::$errorsDict as $errorStringMap => $errorMeaning ) {
@@ -230,13 +231,18 @@
 					break;
 				}
 			}
-			
-			$errorNro = self::$db->errno;
-			if( !$theError && isset( self::$errorsCode[$errorNro] ) ) {
-				self::$errorsList[] = self::$errorsCode[$errorNro];
-			} else {
-				self::$errorsList[] = $errorNro;
+		
+			if( !$theError ) {
+				// check for error code
+				if( isset( self::$errorsCode[$errorNro] ) ) {
+					$theError = self::$errorsCode[$errorNro];
+				// an error that has not mapping
+				} else {
+					$theError = $errorNro;
+				}
 			}
+			
+			self::$errorsList[] = $theError;
 		}
 	}
 	

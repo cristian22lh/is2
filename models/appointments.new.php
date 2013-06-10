@@ -43,8 +43,8 @@
 			',
 			array( $date, $time, $doctorID, $patientID, 'esperando' )
 		);
+
 		if( !$insertId ) {
-			
 			__redirect( '/turnos/crear?error=crear-turno&campos=' . base64_encode( implode( '|', DB::getErrorList() ) ) );
 		}
 		
