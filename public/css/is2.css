@@ -78,7 +78,8 @@ header .is2-welcome {
 
 footer {
 	width: 900px;
-	margin: 10px auto;
+	margin: 0 auto;
+	padding: 10px 0;
 }
 footer span {
 	float: right;

@@ -110,3 +110,47 @@
 				$( 'body' ).append( $clock );
 			} );
 		</script>
+		<script>
+		var isFullscreen = false;
+		(function() {
+			var $document = $( document );
+			$document.on( 'fullscreen', function( e ) {
+				window.setTimeout( function() {
+					isFullscreen = true;
+					window.localStorage.setItem( 'is2-fullscreen', 1 );
+					var $wrapper = $( '.container' ),
+						prevHeight = $wrapper.innerHeight(),
+						newHeight = window.innerHeight - $( 'header' ).outerHeight() - $( 'footer' ).outerHeight() - 3;
+					if( newHeight <= prevHeight ) {
+						return;
+					}
+					$wrapper.css( 'min-height', newHeight - parseFloat( $wrapper.css( 'padding-top' ) ) - parseFloat( $wrapper.css( 'padding-bottom' ) ) );
+					var height = 0;
+					$wrapper.children().filter( ':not( .is2-grid-wrapper )' ).each( function() {
+						var $el = $( this );
+						if( $el.css( 'display' ) !== 'none' ) {
+							height += $el.outerHeight() + parseFloat( $el.css( 'margin-top' ) ) + parseFloat( $el.css( 'margin-bottom' ) );
+						}
+					} );
+					var $grid = $( '.is2-grid-wrapper' );
+					var gridHeight = $grid.height() + parseFloat( $grid.css( 'margin-top' ) ) + parseFloat( $grid.css( 'margin-bottom' ) );
+					$grid.height( $wrapper.outerHeight() - gridHeight - height + gridHeight );
+				}, 2000 );
+			} );
+			
+			$document.on( 'keyup', function( e ) {
+				// <F11>
+				if( e.keyCode === 122 )
+					if( Math.abs( $( window ).height() - window.screen.height ) <= 1 && !isFullscreen ) {
+						$document.trigger( 'fullscreen' );
+					} else {
+						isFullscreen = false;
+						window.localStorage.removeItem( 'is2-fullscreen' );
+					}
+			} );
+			
+			if( window.localStorage.getItem( 'is2-fullscreen' ) - 0 ) {
+				$document.trigger( 'fullscreen' );
+			}
+		})();
+		</script>
