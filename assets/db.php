@@ -146,7 +146,7 @@
 			self::$db->autocommit( false );
 			
 			foreach( $queries as $type => $data ) {
-				$exitCode = call_user_func_array( array( 'DB', $type), array( $data['query'], $data['replacements'] ) );
+				$exitCode = call_user_func_array( array( 'DB', $type ), array( $data['query'], $data['replacements'] ) );
 				if( ( is_integer( $exitCode ) && $exitCode < 0 ) || ( is_bool( $exitCode ) && !$exitCode ) ) {
 					self::$db->rollback();
 					self::$db->autocommit( true );

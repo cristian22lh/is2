@@ -116,6 +116,12 @@
 <script>
 (function() {
 
+	if( window.location.search.indexOf( 'exito=editar-medico' ) >= 0 ) {
+		IS2.cleanPrevState();
+	} else {
+		IS2.loadPrevState( 'is2-doctor-state' );
+	}
+
 	var $theForm = $( '.is2-doctor-form' );
 	var $requiredFields = $( '.is2-required' );
 	var $tel1 = $( '.is2-doctor-tel1' );
@@ -134,7 +140,8 @@
 		// validate the non required fields
 		cleanTel( $tel1 );
 		cleanTel( $tel2 );
-	
+		
+		IS2.savePrevState( 'is2-doctor-state' );
 	} );
 })();
 </script>

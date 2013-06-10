@@ -10,6 +10,7 @@
 		<script src="/js/bootstrap.js"></script>
 		<script src="/js/bootstrap-datepicker.js"></script>
 		<script src="/js/bootstrap-datepicker.es.js"></script>
+		<script src="/js/jquery.scrollTo.min.js"></script>
 		<link href="/css/datepicker.css" rel="stylesheet">
 		<script src="/js/bootstrap-timepicker.js"></script>
 		<link href="/css/bootstrap-timepicker.css" rel="stylesheet">
@@ -19,7 +20,7 @@
 			.ar-clock {
 				position: fixed;
 				top: 110px;
-				left: 10px;
+				left: 20px;
 				text-align: center;
 				z-index: -1;
 			}
@@ -82,7 +83,7 @@
 					month = MONTHNAMES[d.getMonth()];
 					
 				$clock.find( 'h1' ).html( padInteger( date ) );
-				$clock.find( '.ar-clock-month' ).html( month );
+				$clock.find( '.ar-clock-month' ).html( month.toLowerCase() );
 				$clock.find( '.ar-clock-year' ).html( d.getFullYear() );
 				
 				var $hours = $clock.find( '.ar-clock-time-hours' ),

@@ -27,6 +27,15 @@
 		.popover .is2-error-msg {
 			display: block;
 		}
+		
+		.is2-dni {
+			position: relative;
+		}
+		.is2-patients-search-remove {
+			position: absolute;
+			bottom: 4px;
+			left: 400px;
+		}
 	</style>
 <?php t_endHead(); ?>
 <?php t_startBody( $username, 'appointments'  ); ?>
@@ -131,11 +140,16 @@
 					</div>
 					<label class="control-label">Paciente</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge is2-patients-search-value" placeholder="Buscar paciente por DNI..." name="dni">
+						<input type="text" class="input-xlarge is2-patients-search-value" placeholder="Buscar paciente por DNI..." name="dni" data-placement="top">
 						<input type="hidden" class="is2-patients-search-result" name="idPaciente">
 						<button type="button" class="btn btn-info is2-patients-search-trigger">Buscar paciente</button>
 						<span class="is2-preloader is2-patients-search-preloader"></span>
 						<span class="is2-patients-search-popover" data-paclement="right" data-html="true" data-trigger="hover">&nbsp;</span>
+						<div class="is2-patients-search-remove" style="display:none">
+							<button type="button" class="btn btn-mini btn-link btn-danger" title="Quitar este paciente para buscar otro">
+								<i class="icon-remove-sign"></i>
+							</button>
+						</div>
 					</div>
 					<div class="alert alert-error is2-patient-search-popover-template is2-popover-template">
 						Debe buscar un paciente cuya obra social sea soportada por el médico en cuestón para poder crear el turno
@@ -224,14 +238,18 @@
 	var $successMsg = $( '.is2-patient-search-success' );
 	var $errorInsuranceMsg = $( '.is2-patient-search-insurance-error' );
 	var $patientID = $( '.is2-patients-search-result' );
+	var $removeSelectedClient = $( '.is2-patients-search-remove' );
+	$removeSelectedClient.on( 'click', function( e ) {
+		$dni.removeAttr( 'disabled' ).val( '' );
+		$patientID.val( '' );
+		$successMsg.slideUp();
+		$removeSelectedClient.hide();
+	} );
 	
 	var searchedPatient = function( dataResponse ) {
 		isWaiting = false;
 		$preloaderSearch.css( 'visibility', 'hidden' );
-		
-		if( !dataResponse.success ) {
-			return;
-		}
+
 		$( '.is2-patient-search-info' ).hide();
 		// si esto se setta es que hay paciente
 		$patientID.val( '' );
@@ -249,7 +267,7 @@
 			supportInsurance = data.supportInsurance;
 		
 			$errorMsg.hide();
-			$successMsg.find(  'span' ).each( function() {
+			$successMsg.find( 'span' ).each( function() {
 				var $el = $( this );
 				$el.html( patientData[$el.attr( 'data-field-name' )] );
 			} );
@@ -257,8 +275,11 @@
 			if( supportInsurance ) {
 				// dejo la marca
 				$patientID.val( patientData['id'] );
+				$dni.attr( 'disabled', 'disabled' );
+				$removeSelectedClient.show();
+				
 				$errorInsuranceMsg.hide();
-			} else {
+			} else {				
 				$errorInsuranceMsg.show();
 			}
 			
@@ -399,6 +420,10 @@
 		}
 	} );
 	
+	var scrollToTheError = function() {
+		$.scrollTo( $theForm, 600 );
+	};
+	
 	// si no ha paciente elegido, no contunio
 	var $theForm = $( '.is2-appointment-form' );
 	$theForm.on( 'submit', function( e ) {
@@ -430,6 +455,7 @@
 			e.preventDefault();
 			$dateGroupControl.addClass( 'error' );
 			$datePopover.popover( { content: $( '.is2-template-empty.is2-popover-date-template' ).prop( 'outerHTML' ) } ).popover( 'show' );
+			scrollToTheError();
 			return;
 		}
 		target = new Date();
@@ -442,12 +468,14 @@
 			e.preventDefault();
 			$dateGroupControl.addClass( 'error' );
 			$datePopover.popover( { content: $( '.is2-template-underflow.is2-popover-date-template' ).prop( 'outerHTML' ) } ).popover( 'show' );
+			scrollToTheError();
 			return;
 		}
 		if( target - base > 604800000 ) {
 			e.preventDefault();
 			$dateGroupControl.addClass( 'error' );
 			$datePopover.popover( { content: $( '.is2-template-overflow.is2-popover-date-template' ).prop( 'outerHTML' ) } ).popover( 'show' );
+			scrollToTheError();
 			return;
 		}
 		$dateGroupControl.removeClass( 'error' );
@@ -457,6 +485,7 @@
 			e.preventDefault();
 			$timeGroupControl.addClass( 'error' );
 			$timePopover.popover( 'show' );
+			scrollToTheError();
 			return;
 		}
 		$timePopover.popover( 'hide' );
@@ -501,6 +530,7 @@
 		setTimeout( function() {
 			$dateTimePopover.popover( 'hide' );
 		}, 10000 );
+		scrollToTheError();
 	}
 	
 })();

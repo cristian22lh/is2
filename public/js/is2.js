@@ -114,7 +114,7 @@ IS2.lookForEmptyFields = function( $theForm, notShowPopover, notFind ) {
 
 		if( !$field.val().trim() ) {
 			if( !notShowPopover ) {
-				$field.popover( { content: IS2.emptyFieldMsg, html: true, trigger: 'manual' } ).popover( 'show' );
+				$field.popover( { content: IS2.emptyFieldMsg, html: true, trigger: 'manual', placement: $field.attr( 'data-placement' ) || 'right' } ).popover( 'show' );
 			}
 			$groupControl.addClass( 'error' );
 			isError = true;
