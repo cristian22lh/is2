@@ -231,10 +231,11 @@
 				}
 			}
 			
-			if( !$theError ) {
-				self::$errorsList[] = self::$errorsCode[self::$db->errno];
+			$errorNro = self::$db->errno;
+			if( !$theError && isset( self::$errorsCode[$errorNro] ) ) {
+				self::$errorsList[] = self::$errorsCode[$errorNro];
 			} else {
-				self::$errorsList[] = $theError;
+				self::$errorsList[] = $errorNro;
 			}
 		}
 	}

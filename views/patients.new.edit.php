@@ -156,6 +156,11 @@
 		}
 	} );
 	
+	var scrollTo = function( $el ) {
+		$.scrollTo( $el, 800 );
+	}
+	
+	var $pageTitle = $( '.is2-pagetitle' );
 	var $birthDate = $( '.is2-patient-birthdate' );
 	var $birthDateGroupError = $( '.is2-patient-birthdate-wrapper' );
 	var $dni = $( '.is2-patient-dni' );
@@ -168,6 +173,7 @@
 
 		if( IS2.lookForEmptyFields( $theForm ) ) {
 			e.preventDefault();
+			scrollTo( $pageTitle );
 			return;
 		}
 		
@@ -177,6 +183,7 @@
 			e.preventDefault();
 			$birthDate.popover( { content: $( '.is2-patient-birthdate-popover-invalid' ).prop( 'outerHTML' ) } ).popover( 'show' );
 			$birthDateGroupError.addClass( 'error' );
+			scrollTo( $dniGroupControl );
 			return;
 		}
 		var target = new Date();
@@ -190,6 +197,7 @@
 			e.preventDefault();
 			$birthDateGroupError.addClass( 'error' );
 			$birthDate.popover( { content: $( '.is2-patient-birthdate-popover-overflow' ).prop( 'outerHTML' ) } ).popover( 'show' );
+			scrollTo( $dniGroupControl );
 			return;
 		}
 		$birthDateGroupError.removeClass( 'error' );
@@ -199,6 +207,7 @@
 			e.preventDefault();
 			$dniGroupControl.addClass( 'error' );
 			$dni.popover( { content: $( '.is2-patient-dni-popover-invalid' ).prop( 'outerHTML' ) } ).popover( 'show' );
+			scrollTo( $dniGroupControl );
 			return;
 		}
 		$dniGroupControl.removeClass( 'error' );
@@ -208,6 +217,7 @@
 			e.preventDefault();
 			$phoneGroupControl.addClass( 'error' );
 			$phone.popover( { content: $( '.is2-patient-phone-popover' ).prop( 'outerHTML' ) } ).popover( 'show' );
+			scrollTo( $phoneGroupControl );
 			return;
 		}
 		$phoneGroupControl.removeClass( 'error' );
@@ -231,6 +241,7 @@
 		if( errors === 'duplicado' ) {
 			$dni.popover( 'show' );
 			$dniGroupControl.addClass( 'error' );
+			scrollTo( $pageTitle );
 		}
 	}
 	

@@ -134,6 +134,7 @@
 	$theForm.on( 'submit', function( e ) {
 		if( IS2.lookForEmptyFields( $requiredFields, false, true ) ) {
 			e.preventDefault();
+			$.scrollTo( $theForm, 600 );
 			return;
 		}
 		

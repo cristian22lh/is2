@@ -1,6 +1,6 @@
 <script type="text/javascript">
   WebFontConfig = {
-    google: { families: [ 'Scada::latin', 'Gloria+Hallelujah::latin', 'Open+Sans::latin' ] }
+    google: { families: [ 'Scada::latin', 'Open+Sans::latin' ] }
   };
   (function() {
     var wf = document.createElement('script');
@@ -13,9 +13,9 @@
   })(); </script>
 <style>
 	body {
-		font-family: Scada,"Helvetica Neue",Helvetica,Arial,sans-serif !important;
+		font-family: Scada,"Helvetica Neue","Trebuchet MS",Ubuntu,Helvetica,Arial,sans-serif !important;
 	}
 	input, button, select, textarea {
-		font-family: Scada,"Helvetica Neue",Helvetica,Arial,sans-serif !important;
+		font-family: Scada,"Helvetica Neue","Trebuchet MS",Ubuntu,Helvetica,Arial,sans-serif !important;
 	}
 </style>

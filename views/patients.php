@@ -85,7 +85,7 @@
 			background: #fff;
 			border-radius: 0;
 			padding: 0;
-			font-family: 'Gloria Hallelujah', cursive;
+			font-family: "Open Sans", cursive;
 			width: 850px;
 			max-height: 495px;
 			z-index: 100000;
@@ -160,6 +160,7 @@
 			text-overflow: ellipsis;
 			padding: 10px 5px 10px 50px;
 			border-top: 0;
+			font-size: 22px;
 		}
 		.is2-modal-details-appointments tr {
 			border-bottom: 1px dotted #ccc;
