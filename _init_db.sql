@@ -313,6 +313,7 @@ CREATE TRIGGER turnos_crearTurno
 $$
 DELIMITER ;
 
+/** CUANDO SE BORRA UN MEDICO, TODAS ESTAS TAMBIEN CAES */
 ALTER TABLE horarios
 	ADD CONSTRAINT horarios_idMedico
 	FOREIGN KEY( idMedico )
@@ -321,6 +322,12 @@ ALTER TABLE horarios
 ;
 ALTER TABLE medicosObrasSociales
 	ADD	CONSTRAINT medicosObrasSociales_idMedico
+	FOREIGN KEY( idMedico )
+		REFERENCES medicos( id )
+		ON DELETE CASCADE
+;
+ALTER TABLE licencias
+	ADD CONSTRAINT licencias_idMedico
 	FOREIGN KEY( idMedico )
 		REFERENCES medicos( id )
 		ON DELETE CASCADE
@@ -337,13 +344,6 @@ ALTER TABLE medicos
 	ADD CONSTRAINT medicos_idEspecialidad
 	FOREIGN KEY( idEspecialidad )
 		REFERENCES especialidades( id )
-		ON DELETE RESTRICT
-;
-
-ALTER TABLE licencias
-	ADD CONSTRAINT licencias_idMedico
-	FOREIGN KEY( idMedico )
-		REFERENCES medicos( id )
 		ON DELETE RESTRICT
 ;
 

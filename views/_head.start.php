@@ -79,11 +79,11 @@
 			
 				var d = new Date(),
 					date = d.getDate(),
-					MONTHNAMES = [ 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre' ],
+					MONTHNAMES = [ 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre' ],
 					month = MONTHNAMES[d.getMonth()];
 					
 				$clock.find( 'h1' ).html( padInteger( date ) );
-				$clock.find( '.ar-clock-month' ).html( month.toLowerCase() );
+				$clock.find( '.ar-clock-month' ).html( month );
 				$clock.find( '.ar-clock-year' ).html( d.getFullYear() );
 				
 				var $hours = $clock.find( '.ar-clock-time-hours' ),

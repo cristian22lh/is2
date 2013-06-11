@@ -67,11 +67,13 @@
 		
 		.ui-autocomplete {
 			max-height: 150px;
-			max-width: 600px;
+			max-width: 460px;
+			width: 460px !important;
 			overflow-y: auto;
 			overflow-x: hidden;
 			text-overflow: ellipsis;
 			white-space: nowrap;
+			left: 350px !important;
 		}
 		.is2-patient-autocompleteitem {
 			display: block;

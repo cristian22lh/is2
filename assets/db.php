@@ -3,13 +3,6 @@
 	class DB {
 	
 		private static $db;
-		private static $replacements = array();
-		
-		private static $typesDict = array(
-			'integer' => 'i',
-			'string' => 's',
-			'double' => 'd'
-		);
 		
 		private static $errorsDict = array(
 			// errores para crear turno
