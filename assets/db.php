@@ -45,7 +45,7 @@
 				die( 'Failed to connect to MySQL: ' . $e->getMessage() );
 			}
 
-			self::$db->exec( 'SET names utf8' );
+			self::$db->exec( 'SET NAMES utf8' );
 		}
 		
 		static function select( $query, $replacements = array() ) {

@@ -257,6 +257,7 @@ CREATE TRIGGER turnos_crearTurno
 					dia = ( SELECT CASE
 						WHEN dayNameIndex = 1 THEN 7
 						ELSE dayNameIndex - 1 END )
+						
 		) IS NULL THEN
 			CALL medico_no_antiende_fecha_hora_requerido;
 		END IF;
@@ -321,7 +322,7 @@ ALTER TABLE horarios
 		ON DELETE CASCADE
 ;
 ALTER TABLE medicosObrasSociales
-	ADD	CONSTRAINT medicosObrasSociales_idMedico
+	ADD CONSTRAINT medicosObrasSociales_idMedico
 	FOREIGN KEY( idMedico )
 		REFERENCES medicos( id )
 		ON DELETE CASCADE

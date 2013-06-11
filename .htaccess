@@ -12,3 +12,11 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ /index.php/$1 [L]
 
+<FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)(\.gz)?$">
+	FileETag MTime Size
+	Header set Cache-Control "max-age=3600, public"
+	ExpiresActive On
+	ExpiresDefault "modification"
+	Header unset Expires
+	SetOutputFilter DEFLATE
+</FilesMatch>

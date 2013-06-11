@@ -6,6 +6,7 @@
 	
 	$whereClause = array();
 	$replacements = array();
+	$whereOperator = ' OR ';
 	$keyword = trim( $_POST['keyword'] );
 	// is a dni or tel
 	if( ( $m = preg_replace( '/^[^\d]+$/', '', $keyword ) ) && is_numeric( $m ) ) {
@@ -22,10 +23,11 @@
 			__echoJSON( array( 'success' => false ) );
 		}
 		$whereClause[] = ' p.apellidos LIKE ? ';
-		$replacements[] = '%' . $fullname[0] . '%';
+		$replacements[] = '%' . trim( $fullname[0] ) . '%';
 		if( isset( $fullname[1] ) ) {
+			$whereOperator = ' AND ';
 			$whereClause[] = ' p.nombres LIKE ? ';
-			$replacements[] = '%' . $fullname[1] . '%';
+			$replacements[] = '%' . trim( $fullname[1] ) . '%';
 		}
 	}
 
@@ -40,7 +42,7 @@
 					ON os.id = p.idObraSocial
 			WHERE
 			' .
-				implode( ' OR ', $whereClause ) .
+				implode( $whereOperator, $whereClause ) .
 			'
 			ORDER BY
 				p.apellidos ASC, p.nombres ASC
