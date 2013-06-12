@@ -255,83 +255,78 @@
 			
 			<?php if( $appointments->rowCount() ): ?>
 			<table class="table is2-grid-header btn-inverse">
-				<thead>
-					<tr>
-						<th>
-							Fecha
-							<?php t_dateMenu(); ?>
-						</th>
-						<th>Hora</th>
-						<th>Médico</th>
-						<th>Paciente</th>
-						<th>Acciones</th>
-					</tr>
-				</thead>
-				<tbody></tbody>
+				<tr>
+					<th>
+						Fecha
+						<?php t_dateMenu(); ?>
+					</th>
+					<th>Hora</th>
+					<th>Médico</th>
+					<th>Paciente</th>
+					<th>Acciones</th>
+				</tr>
 			</table>
 			<div class="is2-grid-wrapper">
 				<table class="table is2-grid">
-					<tbody>
-					<?php $currentDate = null; ?>
-					<?php $currentMonth = null; ?>
+				<?php $currentDate = null; ?>
+				<?php $currentMonth = null; ?>
+				
+				<?php foreach( $appointments as $appointment ): ?>
+				
+					<?php if( $appointment['fecha'] != $currentDate ): ?>
+						<?php $currentDate = $appointment['fecha']; ?>
+						<?php $currentAppointmentDate = strtotime( $currentDate ); ?>
+						<?php $dateLocale = date( 'd/m/Y', $currentAppointmentDate ); ?>
+					<?php t_appointmentNewRow( date( 'd/m/Y',  strtotime( $currentDate . ' previous day' ) ) ); ?>
+					<?php if( !$currentMonth || $currentMonth != date( 'm', $currentAppointmentDate ) ): ?>
+						<?php $currentMonth = date( 'm', $currentAppointmentDate ); ?>
+					<tr class="is2-appointments-monthbreak" data-appointment-group="<?php echo $currentMonth; ?>">
+						<td></td>
+						<td></td>
+						<td><?php echo $MONTHNAME[date( 'M', $currentAppointmentDate )]; ?></td>
+						<td><?php echo date( 'Y', $currentAppointmentDate ); ?></td>
+						<td></td>
+					</tr>
+					<?php endif; ?>
 					
-					<?php foreach( $appointments as $appointment ): ?>
+					<tr class="is2-appointments-dayrow" data-appointment-date="<?php echo $dateLocale; ?>" data-appointment-group="<?php echo $currentMonth; ?>" data-appointment-timestamp="<?php echo $currentAppointmentDate; ?>">
+						<td><?php echo $DAYNAME[date( 'D', $currentAppointmentDate )] . ', ' . date( 'j', $currentAppointmentDate ); ?></td>
+						<td><?php t_timeMenu(); ?></td>
+						<td></td>
+						<td></td>
+						<td><?php t_statusMenu(); ?></td>
+					</tr>
+					<?php endif; ?>
 					
-						<?php if( $appointment['fecha'] != $currentDate ): ?>
-							<?php $currentDate = $appointment['fecha']; ?>
-							<?php $currentAppointmentDate = strtotime( $currentDate ); ?>
-							<?php $dateLocale = date( 'd/m/Y', $currentAppointmentDate ); ?>
-						<?php t_appointmentNewRow( date( 'd/m/Y',  strtotime( $currentDate . ' previous day' ) ) ); ?>
-						<?php if( !$currentMonth || $currentMonth != date( 'm', $currentAppointmentDate ) ): ?>
-							<?php $currentMonth = date( 'm', $currentAppointmentDate ); ?>
-						<tr class="is2-appointments-monthbreak" data-appointment-group="<?php echo $currentMonth; ?>">
-							<td></td>
-							<td></td>
-							<td><?php echo $MONTHNAME[date( 'M', $currentAppointmentDate )]; ?></td>
-							<td><?php echo date( 'Y', $currentAppointmentDate ); ?></td>
-							<td></td>
-						</tr>
-						<?php endif; ?>
-						
-						<tr class="is2-appointments-dayrow" data-appointment-date="<?php echo $dateLocale; ?>" data-appointment-group="<?php echo $currentMonth; ?>" data-appointment-timestamp="<?php echo $currentAppointmentDate; ?>">
-							<td><?php echo $DAYNAME[date( 'D', $currentAppointmentDate )] . ', ' . date( 'j', $currentAppointmentDate ); ?></td>
-							<td><?php t_timeMenu(); ?></td>
-							<td></td>
-							<td></td>
-							<td><?php t_statusMenu(); ?></td>
-						</tr>
-						<?php endif; ?>
-						
-						<?php if( $appointment['hora'] ): ?>
-						<tr class="is2-appointments-row" data-appointment-id="<?php echo $appointment['id']; ?>" data-appointment-date="<?php echo $dateLocale; ?>" data-appointment-status="<?php echo $appointment['estado']; ?>">
-							<td>&nbsp;</td>
-							<td class="is2-appointment-time"><?php echo __trimTime( $appointment['hora'] ); ?></td>
-							<td>
-								<img class="is2-doctor-img" src="/img/<?php echo $appointment['medicoAvatar']; ?>">
-								<a href="/medicos#id=<?php echo $appointment['idMedico']; ?>" target="_blank"><?php echo $appointment['medicoApellidos'] . ', ' .  $appointment['medicoNombres']; ?></a>
-							</td>
-							<td>
-								<a href="/pacientes?id=<?php echo $appointment['idPaciente']; ?>" target="_blank">
-								<?php echo $appointment['pacienteApellidos'] . ', ' .  $appointment['pacienteNombres']; ?>
-								</a>
-							</td>
-							<td data-appointment-id="<?php echo $appointment['id']; ?>" class="is2-appointment-status">
-								<button class="btn btn-small btn-success disabled" style="display:<?php echo $appointment['estado'] == 'confirmado' ? 'inline-block' : 'none'; ?>" data-appointment-id="<?php echo $appointment['id']; ?>"><i class="icon-ok"></i> Confirmado</button>
-								<button class="btn btn-small btn-warning disabled" style="display:<?php echo $appointment['estado'] == 'cancelado' ? 'inline-block' : 'none'; ?>" data-appointment-id="<?php echo $appointment['id']; ?>"><i class="icon-exclamation-sign"></i> Cancelado</button>
-								<?php $isWaiting = $appointment['estado'] == 'esperando'; ?>
-								<a class="btn btn-mini btn-link is2-trigger-restore" href="#is2-modal-restore" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>" style="display:<?php echo !$isWaiting ? 'inline-block' : 'none'; ?>">Deshacer acción</a>
-								<div style="display:<?php echo $isWaiting ? 'block' : 'none'; ?>" data-appointment-id="<?php echo $appointment['id']; ?>">
-									<a class="btn btn-small is2-trigger-confirm" href="#is2-modal-confirm" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Confirmar</a>
-									<a class="btn btn-small is2-trigger-cancel" href="#is2-modal-cancel" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Cancelar</a>
-									<a class="btn btn-small btn-danger is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Borrar</a>
-								</div>
-							</td>
-						</tr>
-						<?php endif; ?>
-						
-					<?php endforeach; ?>
-						<?php t_appointmentNewRow( $dateLocale ); ?>
-					</tbody>
+					<?php if( $appointment['hora'] ): ?>
+					<tr class="is2-appointments-row" data-appointment-id="<?php echo $appointment['id']; ?>" data-appointment-date="<?php echo $dateLocale; ?>" data-appointment-status="<?php echo $appointment['estado']; ?>">
+						<td>&nbsp;</td>
+						<td class="is2-appointment-time"><?php echo __trimTime( $appointment['hora'] ); ?></td>
+						<td>
+							<img class="is2-doctor-img" src="/img/<?php echo $appointment['medicoAvatar']; ?>">
+							<a href="/medicos#id=<?php echo $appointment['idMedico']; ?>" target="_blank"><?php echo $appointment['medicoApellidos'] . ', ' .  $appointment['medicoNombres']; ?></a>
+						</td>
+						<td>
+							<a href="/pacientes?id=<?php echo $appointment['idPaciente']; ?>" target="_blank">
+							<?php echo $appointment['pacienteApellidos'] . ', ' .  $appointment['pacienteNombres']; ?>
+							</a>
+						</td>
+						<td data-appointment-id="<?php echo $appointment['id']; ?>" class="is2-appointment-status">
+							<button class="btn btn-small btn-success disabled" style="display:<?php echo $appointment['estado'] == 'confirmado' ? 'inline-block' : 'none'; ?>" data-appointment-id="<?php echo $appointment['id']; ?>"><i class="icon-ok"></i> Confirmado</button>
+							<button class="btn btn-small btn-warning disabled" style="display:<?php echo $appointment['estado'] == 'cancelado' ? 'inline-block' : 'none'; ?>" data-appointment-id="<?php echo $appointment['id']; ?>"><i class="icon-exclamation-sign"></i> Cancelado</button>
+							<?php $isWaiting = $appointment['estado'] == 'esperando'; ?>
+							<a class="btn btn-mini btn-link is2-trigger-restore" href="#is2-modal-restore" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>" style="display:<?php echo !$isWaiting ? 'inline-block' : 'none'; ?>">Deshacer acción</a>
+							<div style="display:<?php echo $isWaiting ? 'block' : 'none'; ?>" data-appointment-id="<?php echo $appointment['id']; ?>">
+								<a class="btn btn-small is2-trigger-confirm" href="#is2-modal-confirm" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Confirmar</a>
+								<a class="btn btn-small is2-trigger-cancel" href="#is2-modal-cancel" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Cancelar</a>
+								<a class="btn btn-small btn-danger is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-appointment-id="<?php echo $appointment['id']; ?>">Borrar</a>
+							</div>
+						</td>
+					</tr>
+					<?php endif; ?>
+					
+				<?php endforeach; ?>
+					<?php t_appointmentNewRow( $dateLocale ); ?>
 				</table>
 			</div>
 			<?php else: ?>

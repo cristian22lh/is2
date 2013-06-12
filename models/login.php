@@ -32,7 +32,7 @@
 			__setUserLogin();
 			__setUsername( $username );
 			// check if the user comes from: /iniciar-sesion?destino=/turnos for example
-			__redirect( __GETField( 'destino' ) ?: '/turnos' );
+			__redirect( ( __GETField( 'destino' ) ?: '/turnos' ) . __getGETComplete( 'destino' ) );
 		}
 		
 		$isErrorLogin = true;

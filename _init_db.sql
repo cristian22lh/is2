@@ -161,6 +161,7 @@ CREATE TABLE obrasSociales(
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,
 	nombreCorto VARCHAR( 255 ),
 	nombreCompleto TEXT NULL,
+	estado ENUM( 'habilitada', 'deshabilitada' ),
 	UNIQUE INDEX( nombreCorto )
 ) ENGINE=InnoDB;
 

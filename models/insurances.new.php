@@ -1,12 +1,12 @@
 <?php
 
-	if( !__issetPOST( array( 'shortName', 'fullName' ) ) ) {
+	if( !__issetPOST( array( 'abbr', 'full' ) ) ) {
 		__redirect( '/obras-sociales?error=crear-obra-social' );
 	}
 	
-	$shortName = __sanitizeValue( $_POST['shortName'] );
-	$fullName = __sanitizeValue( $_POST['fullName'] );
-	if( !$shortName || !$fullName ) {
+	$abbr = __sanitizeValue( $_POST['abbr'] );
+	$full = __sanitizeValue( $_POST['full'] );
+	if( !$abbr || !$full ) {
 		__redirect( '/obras-sociales?error=crear-obra-social' );
 	}
 	
@@ -15,9 +15,9 @@
 			INSERT INTO
 				obrasSociales
 			VALUES
-				( null, ?, ? )
+				( null, ?, ?, ? )
 		',
-		array( strtolower( $shortName ), $fullName )
+		array( strtolower( $abbr ), $full, 'habilitada' )
 	);
 	
 	// maybe a constraint error
@@ -25,6 +25,6 @@
 		__redirect( '/obras-sociales?error=crear-obra-social' );
 	}
 	
-	__redirect( '/obras-sociales?exito=crear-obra-social' );
+	__redirect( '/obras-sociales?exito=crear-obra-social&id=' . $insertId );
 	
 ?>

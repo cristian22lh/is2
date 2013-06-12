@@ -295,55 +295,50 @@
 			
 			<?php if( count( $patients ) ): ?>
 			<table class="table is2-grid-header btn-inverse">
-				<thead>
-					<tr>
-						<th>
-							Apellidos
-							<?php t_lastNameMenu(); ?>
-						</th>
-						<th>
-							Nombres
-							<?php t_firstNameMenu(); ?>
-						</th>
-						<th>DNI</th>
-						<th>
-							<span>Fecha de</span>
-							nacimiento
-							<?php t_birthDateMenu(); ?>
-						</th>
-						<th>Teléfono</th>
-						<th>Obra social</th>
-						<th>Acciones</th>
-					</tr>
-				</thead>
-				<tbody></tbody>
+				<tr>
+					<th>
+						Apellidos
+						<?php t_lastNameMenu(); ?>
+					</th>
+					<th>
+						Nombres
+						<?php t_firstNameMenu(); ?>
+					</th>
+					<th>DNI</th>
+					<th>
+						<span>Fecha de</span>
+						nacimiento
+						<?php t_birthDateMenu(); ?>
+					</th>
+					<th>Teléfono</th>
+					<th>Obra social</th>
+					<th>Acciones</th>
+				</tr>
 			</table>
 			<div class="is2-grid-wrapper">
 				<table class="table is2-grid">
-					<tbody>
 					<?php foreach( $patients as $patient ): ?>
-						<tr class="is2-patients-row" data-patient-id="<?php echo $patient['id']; ?>">
-							<td>
-								<span title="<?php echo $patient['apellidos']; ?>"><?php echo $patient['apellidos']; ?></span>
-							</td>
-							<td>
-								<span title="<?php echo $patient['nombres']; ?>"><?php echo $patient['nombres']; ?></span>
-							</td>
-							<td><?php echo $patient['dni']; ?></td>
-							<td><?php echo __dateISOToLocale( $patient['fechaNacimiento'] ); ?></td>
-							<td>
-								<span title="<?php echo $patient['telefono']; ?>"><?php echo $patient['telefono']; ?></span>
-							</td>
-							<td>
-								<span title="<?php echo $patient['obraSocialNombre']; ?>"><?php echo $patient['obraSocialNombre']; ?></span>
-							<td>
-								<a class="btn btn-mini is2-patients-details-trigger" href="#is2-modal-details" data-toggle="modal" title="Ver en detalle" data-patient-id="<?php echo $patient['id']; ?>"><i class="icon-eye-open"></i></a>
-								<a class="btn btn-mini" href="/pacientes/<?php echo $patient['id']; ?>/editar" title="Editar"><i class="icon-edit"></i></a>
-								<a class="btn btn-mini btn-danger is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-patient-id="<?php echo $patient['id']; ?>" title="Borrar"><i class="icon-remove-sign icon-white"></i></a>
-							</td>
-						</tr>
-					<?php endforeach; ?>
-					</tbody>
+					<tr class="is2-patients-row" data-patient-id="<?php echo $patient['id']; ?>">
+						<td>
+							<span title="<?php echo $patient['apellidos']; ?>"><?php echo $patient['apellidos']; ?></span>
+						</td>
+						<td>
+							<span title="<?php echo $patient['nombres']; ?>"><?php echo $patient['nombres']; ?></span>
+						</td>
+						<td><?php echo $patient['dni']; ?></td>
+						<td><?php echo __dateISOToLocale( $patient['fechaNacimiento'] ); ?></td>
+						<td>
+							<span title="<?php echo $patient['telefono']; ?>"><?php echo $patient['telefono']; ?></span>
+						</td>
+						<td>
+							<span title="<?php echo $patient['obraSocialNombre']; ?>"><?php echo $patient['obraSocialNombre']; ?></span>
+						<td>
+							<a class="btn btn-mini is2-patients-details-trigger" href="#is2-modal-details" data-toggle="modal" title="Ver en detalle" data-patient-id="<?php echo $patient['id']; ?>"><i class="icon-eye-open"></i></a>
+							<a class="btn btn-mini" href="/pacientes/<?php echo $patient['id']; ?>/editar" title="Editar"><i class="icon-edit"></i></a>
+							<a class="btn btn-mini btn-danger is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-patient-id="<?php echo $patient['id']; ?>" title="Borrar"><i class="icon-remove-sign icon-white"></i></a>
+						</td>
+					</tr>
+				<?php endforeach; ?>
 				</table>
 			</div>
 			

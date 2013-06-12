@@ -18,7 +18,9 @@ IS2.initTimepickers = function( config ) {
 };
 
 IS2.prevStateDict = [
-	'is2-appointment-state'
+	'is2-appointment-state',
+	'is2-patient-state',
+	'is2-insurance-state'
 ];
 
 IS2.cleanPrevState = function( skip ) {
@@ -29,7 +31,10 @@ IS2.cleanPrevState = function( skip ) {
 	} );
 };
 
-IS2.loadPrevState = function( name, callback ) {
+IS2.loadPrevState = function( name, callback, $form ) {
+	if( !$form ) {
+		$form = $( 'form' );
+	}
 	var prevState = JSON.parse( localStorage.getItem( name ) );
 	if( prevState ) {
 		if( window.location.search.indexOf( 'error' ) >= 0 ) {
@@ -42,9 +47,9 @@ IS2.loadPrevState = function( name, callback ) {
 	}
 };
 
-IS2.savePrevState = function( name, skip ) {
+IS2.savePrevState = function( name, skip, $form ) {
 	var prevState = {};
-	$( 'form ' ).find( 'input, select, textarea' ).each( function( e ) {
+	( $form || $( 'form' ) ).find( 'input, select, textarea' ).each( function( e ) {
 		var $el = $( this ),
 			fieldName = $el.attr( 'name' );
 		if( fieldName && fieldName !== skip ) {

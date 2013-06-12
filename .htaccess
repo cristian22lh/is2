@@ -18,5 +18,8 @@ RewriteRule ^(.*)$ /index.php/$1 [L]
 	ExpiresActive On
 	ExpiresDefault "modification"
 	Header unset Expires
+</FilesMatch>
+
+<FilesMatch "\.(js|css)$">
 	SetOutputFilter DEFLATE
 </FilesMatch>

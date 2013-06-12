@@ -18,9 +18,10 @@ Ubicar esta línea (yo la tengo en la linea numero **116**)
 
 **ESTO ES NUEVO**
 Le agregue a la aplicacion HTTP caching y DEFLATE sobre los archivos publicos css, js e imagenes, para esto van a tener que habilitar los siguients modulos, con estos cambios la aplicacion es mas rapida en su descarga, buenos los modulos son:
-`LoadModule deflate_module modules/mod_deflate.so
 
-LoadModule expires_module modules/mod_expires.so`
+`LoadModule deflate_module modules/mod_deflate.so`
+
+`LoadModule expires_module modules/mod_expires.so`
 
 Solo hay que quitarle el numeral al principio de la línea, nada mas que eso.
 
