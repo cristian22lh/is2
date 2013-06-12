@@ -89,7 +89,7 @@
 						<?php if( $insurance['id'] != 1 ): ?>
 							<a class="btn btn-small btn-warning">Deshabilitar</a>
 							<div class="is2-insurances-crud">
-								<a class="btn btn-small is2-trigger-edit" href="#is2-modal-edit" data-toggle="modal" data-insurance-id="<?php echo $insurance['id']; ?>">Editar</a>
+								<a class="btn btn-small is2-trigger-edit" href="#is2-modal-theform" data-toggle="modal" data-insurance-id="<?php echo $insurance['id']; ?>">Editar</a>
 								<a class="btn btn-small btn-danger is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-insurance-id="<?php echo $insurance['id']; ?>">Borrar</a>
 							</div>
 						<?php else: ?>
@@ -133,11 +133,11 @@
 			</div>
 			<div class="modal-footer">
 				<button class="btn" data-dismiss="modal">Cancelar</button>
-				<button class="btn btn-primary is2-insurance-edit" type="submit">Editar</button>
+				<button class="btn btn-primary is2-insurance-edit" type="submit">Confirmar cambios</button>
 				<button class="btn btn-primary is2-insurance-new" type="submit">Crear obra social</button>
 				<span class="is2-preloader is2-preloader-bg pull-left is2-preloader-newedit"></span>
 			</div>
-			<input type="hidden" name="id">
+			<input class="is2-insurances-id" type="hidden" name="id">
 		</form>
 		
 		<form method="post" action="/obras-sociales/borrar" id="is2-modal-remove" class="modal hide fade">
@@ -152,36 +152,46 @@
 			</div>
 			<input type="hidden" name="id">
 		</form>
-		
-		
+
 <?php t_endBody(); ?>
 
 <script>
 (function() {
+
+// *** crear/edicion obra social *** //
 	var $theGrid = $( '.is2-grid-wrapper' );
-	$theGrid.delegate( '.is2-trigger-edit', 'click', function( e ) {
-		var insuranceID = $( this ).attr( 'data-insurance-id' );
-		$( '#is2-modal-edit input[name=id]' ).val( insuranceID );
-		$( '#is2-modal-edit input[name=shortName]' ).val( $( 'tr[data-insurance-id=' + insuranceID + '] .is2-insurance-shortName'  ).html() );
-		$( '#is2-modal-edit input[name=fullName]' ).val( $( 'tr[data-insurance-id=' + insuranceID + '] .is2-insurance-fullName'  ).html() );
-		
-	} ).delegate( '.is2-trigger-remove', 'click', function( e ) {
-		$( '#is2-modal-remove input[name=id]' ).val( $( this ).attr( 'data-insurance-id' ) );
-	} );
-	
-// *** crear obra social *** //
+	var $theForm = $( '#is2-modal-theform' );
+	var $insuranceID = $( '.is2-insurances-id' );
 	var $abbrName = $( 'input.is2-insurances-abbr' );
-	var $abbrNameControlGroup = $( '.control-group.is2-insurances-abbr' );
 	var $fullName = $( '.is2-insurances-full' );
+	var ajaxConfig;
+	var $abbrNameControlGroup = $( '.control-group.is2-insurances-abbr' );
 	var $preloader = $( '.is2-preloader-newedit' );
 	var $insuranceCreateError = $( '.is2-insurance-new-error' );
 	var isWaiting = false;
 	
+	// ** create insurance funcionality
+	var ajaxCreate = function() {
+		return {
+			url: '/obras-sociales/crear',
+			dataType: 'json',
+			type: 'POST',
+			data: {
+				abbr: $abbrName.val(),
+				full: $fullName.val()
+			},
+			success: createdInsurance,
+			error: createdInsurance
+		};
+	};
+	
 	$( '.is2-trigger-new' ).on( 'click', function( e ) {
 		$( '.is2-insurance-edit' ).hide();
 		$( '.is2-insurance-new' ).show();
+		
+		ajaxConfig = ajaxCreate;
 	} );
-	
+
 	var createdInsurance = function( dataResponse ) {
 		isWaiting = false;
 		$preloader.css( 'visibility', 'hidden' );
@@ -195,7 +205,7 @@
 		window.location = '/obras-sociales?exito=crear-obra-social&id=' + dataResponse.data.id;
 	};
 
-	$( '#is2-modal-theform' ).on( 'submit', function( e ) {
+	$theForm.on( 'submit', function( e ) {
 		e.preventDefault();
 		if( IS2.lookForEmptyFields( $abbrName, true, true ) ) {
 			return;
@@ -205,22 +215,56 @@
 		isWaiting = true;
 		$preloader.css( 'visibility', 'visible' );
 		
-		$.ajax( {
-			url: '/obras-sociales/crear',
+		$.ajax( ajaxConfig() );
+	} );
+	
+	// *** edit insurance funcionality
+	var editedInsurance = function( dataResponse ) {
+		isWaiting = false;
+		$preloader.css( 'visibility', 'hidden' );
+		
+		if( !dataResponse.success ) {
+			IS2.showCrudMsg( $insuranceCreateError, 0, 6000 );
+			$abbrNameControlGroup.addClass( 'error' );
+			return;
+		}
+		
+		window.location = '/obras-sociales?exito=editar-obra-social&id=' + dataResponse.data.id;
+	};
+	
+	var ajaxEdit = function() {
+		return {
+			url: '/obras-sociales/editar',
 			dataType: 'json',
 			type: 'POST',
 			data: {
 				abbr: $abbrName.val(),
-				full: $fullName.val()
+				full: $fullName.val(),
+				id: $insuranceID.val()
 			},
-			success: createdInsurance,
-			error: createdInsurance
-		} );
+			success: editedInsurance,
+			error: editedInsurance
+		};
+	};
+	
+	$theGrid.delegate( '.is2-trigger-edit', 'click', function( e ) {
+		$( '.is2-insurance-edit' ).show();
+		$( '.is2-insurance-new' ).hide();
+	
+		var insuranceID = $( this ).attr( 'data-insurance-id' ),
+			$row = $( 'tr[data-insurance-id=' + insuranceID + ']' );
+			
+		$insuranceID.val( insuranceID );
+		$abbrName.val( $row.find( '.is2-insurance-abbrname' ).html() );
+		$fullName.val( $row.find( '.is2-insurance-fullname' ).html() );
+		
+		ajaxConfig = ajaxEdit;
 	} );
 	
+	// *** esto es caudnbo vegno de crear/editar una bora social
 	var newInsuranceID;
 	var $newInsurance;
-	if( window.location.search.indexOf( 'exito=crear-obra-social' ) >= 0 && ( newInsuranceID = window.location.search.match( /id=(\d+)/ ) ) ) {
+	if( ( newInsuranceID = window.location.search.match( /id=(\d+)/ ) ) ) {
 		$( '.is2-insurances-crudmessages' )[0].scrollIntoView();
 		$newInsurance = $( '.is2-grid-row[data-insurance-id=' + newInsuranceID[1] + ']' );
 		$theGrid.scrollTo( $newInsurance, 1000, { onAfter: function() {
