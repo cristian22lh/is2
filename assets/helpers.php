@@ -76,17 +76,23 @@
 		return count( $_GET ) > 0 && isset( $_GET[$name] ) ? __sanitizeValue( $_GET[$name] ) : false;
 	}
 	
-	function __getGETComplete( $skip = '' ) {
+	function __getGETComplete( $skip = '', $append = array() ) {
 		$q = array();
+		$append = count( $append ) == 2 ? __sanitizeValue( implode( '=', $append ) ) : '';
+		
 		if( count( $_GET ) ) {
 			foreach( $_GET as $name => $value ) {
 				if( $name != $skip ) {
 					$q[] = $name . '=' . $value;
 				}
 			}
+			if( $append ) {
+				$q[] = $append;
+			}
 			return '?' . __sanitizeValue( implode( '&', $q ) );
 		}
-		return '?';
+		
+		return $append ? '?' . $append : '';
 	}
 	
 // ************** /

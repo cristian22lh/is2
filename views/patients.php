@@ -356,10 +356,10 @@
 			<?php else: ?>
 			<ul class="pager">
 				<li class="previous <?php echo $offset ? 'active': 'disabled'; ?>">
-					<a href="<?php echo $offset == 0 ? '#' : $queryString . '&pagina=' . ($offset-1); ?>">&larr; Anterior</a>
+					<a href="<?php echo $offset == 0 ? '#' : __getGETComplete( 'pagina', array( 'pagina', $offset - 1 ) ); ?>">&larr; Anterior</a>
 				</li>
 				<li class="next <?php echo $stillMorePages ? 'active': 'disabled'; ?>">
-					<a href="<?php echo $stillMorePages ? $queryString . '&pagina=' . ($offset+1) : '#'; ?>">Siguiente &rarr;</a>
+					<a href="<?php echo $stillMorePages ? __getGETComplete( 'pagina', array( 'pagina', $offset + 1 ) ) : '#'; ?>">Siguiente &rarr;</a>
 				</li>
 			</ul>
 			<?php endif; ?>

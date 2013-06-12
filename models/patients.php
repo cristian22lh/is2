@@ -247,8 +247,6 @@ CASO CONTRARIO LISTO LOS APELLIDO QUE EMPIECEN CON 'A' */
 		$searchQuickError = true;
 	}
 	
-	$queryString = __getGETComplete( 'pagina' );
-	
 	$insurances = q_getAllInsurances();
 	
 	__render( 
@@ -263,7 +261,6 @@ CASO CONTRARIO LISTO LOS APELLIDO QUE EMPIECEN CON 'A' */
 			'stillMorePages' => $stillMorePages,
 			'offset' => $offset,
 			'isSingle' => $isSingle,
-			'queryString' => $queryString,
 			'insurances' => $insurances,
 			'persistValues' => $persistValues,
 			'searchQuickError' => $searchQuickError,
