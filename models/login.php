@@ -26,7 +26,7 @@
 			', 
 			array( $username, $password )
 		);
-		
+
 		// hubo exito en la query
 		if( count( $res ) == 1 ) {
 			__setUserLogin();

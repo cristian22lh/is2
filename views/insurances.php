@@ -140,17 +140,24 @@
 			<input class="is2-insurances-id" type="hidden" name="id">
 		</form>
 		
-		<form method="post" action="/obras-sociales/borrar" id="is2-modal-remove" class="modal hide fade">
+		<form id="is2-modal-remove" class="modal hide fade">
 			<div class="modal-body">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<span><strong>¿Estás seguro que desea borrar esta obra social del sistema?</strong></span>
-				<p>Sepa que aquellos pacientes que tenga esta obra social asociada serán asociados a la obra social LIBRE automaticamente.</p>
+				<div class="alert alert-error is2-ajax-msg is2-ajax-msg-full is2-insurance-remove-error" style="display:none">
+					<strong>¡No se ha podido borrar obra social!</strong>
+					<div>Verifique no existan pacientes que tengan asociado esta obra social</div>
+				</div>
+				<button type="button" class="close is2-insurances-modal-close" data-dismiss="modal">&times;</button>
+				<p><strong>¿Estás seguro que desea borrar esta obra social del sistema?</strong></p>
+				<div class="alert">
+					<strong>Tenga en cuenta que no puede borrar una obra social que tenga pacientes asociados</strong>
+				</div>
 			</div>
 			<div class="modal-footer">
 				<button class="btn" data-dismiss="modal">Cancelar</button>
 				<button class="btn btn-primary" type="submit">Borrar</button>
+				<span class="is2-preloader is2-preloader-bg pull-left is2-preloader-remove"></span>
 			</div>
-			<input type="hidden" name="id">
+			<input class="is2-insurances-remove-id" type="hidden" name="id">
 		</form>
 
 <?php t_endBody(); ?>
@@ -216,6 +223,10 @@
 		$preloader.css( 'visibility', 'visible' );
 		
 		$.ajax( ajaxConfig() );
+	
+	} );
+	$( '#is2-modal-theform' ).on( 'hidden', function( e ) {
+		$( 'tr.is2-record-new' ).removeClass( 'is2-record-new' );
 	} );
 	
 	// *** edit insurance funcionality
@@ -254,6 +265,7 @@
 		var insuranceID = $( this ).attr( 'data-insurance-id' ),
 			$row = $( 'tr[data-insurance-id=' + insuranceID + ']' );
 			
+		$row.addClass( 'is2-record-new' );
 		$insuranceID.val( insuranceID );
 		$abbrName.val( $row.find( '.is2-insurance-abbrname' ).html() );
 		$fullName.val( $row.find( '.is2-insurance-fullname' ).html() );
@@ -274,6 +286,56 @@
 			}, 3000 );
 		} } );
 	}
+	
+// *** remover obra social funcionalidad *** //
+	var $insuranceIDFoRemove = $( '.is2-insurances-remove-id' );
+	var $preloaderForRemove = $( '.is2-preloader-remove' );
+	var $insuranceRemoveError = $( '.is2-insurance-remove-error' );
+	var $closeRemoveModal = $( '.is2-insurances-modal-close' );
+	$theGrid.delegate( '.is2-trigger-remove', 'click', function( e ) {
+		var insuranceID = $( this ).attr( 'data-insurance-id' ),
+			$row = $( 'tr[data-insurance-id=' + insuranceID + ']' );
+			
+		$insuranceRemoveError.hide();
+		$row.addClass( 'is2-record-new' );
+		$insuranceIDFoRemove.val( insuranceID );
+	} );
+	$( '#is2-modal-remove' ).on( 'hidden', function( e ) {
+		$( 'tr.is2-record-new' ).removeClass( 'is2-record-new' );
+	} );
+	
+	var removedInsurance = function( dataResponse ) {
+		isWaiting = false;
+		$preloaderForRemove.css( 'visibility', 'hidden' );
+		if( !dataResponse.success ) {
+			IS2.showCrudMsg( $insuranceRemoveError, 0, 6000 );
+			return;
+		}
+		
+		$( 'tr[data-insurance-id=' + dataResponse.data.id + ']' ).addClass( 'is2-record-removed' ).find( 'a, button' ).css( 'visibility', 'hidden' );
+		$closeRemoveModal.click();
+	};
+	
+	$( '#is2-modal-remove' ).on( 'submit', function( e ) {
+		e.preventDefault();
+		if( isWaiting ) {
+			return;
+		}
+		
+		isWaiting = true;
+		$preloaderForRemove.css( 'visibility', 'visible' );
+		
+		$.ajax( {
+			url: '/obras-sociales/borrar',
+			dataType: 'json',
+			type: 'POST',
+			data: {
+				id: $insuranceIDFoRemove.val()
+			},
+			success: removedInsurance,
+			error: removedInsurance
+		} );
+	} );
 	
 })();
 </script>

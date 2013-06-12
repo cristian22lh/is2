@@ -172,6 +172,10 @@ textarea {
 	margin: 5px 0 -7px 0;
 }
 
+.is2-record-removed * {
+	text-decoration: line-through;
+}
+
 .is2-modal-wrapper {
 	position: relative;
 }

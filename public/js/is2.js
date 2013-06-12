@@ -137,10 +137,10 @@ IS2.findGroupControl = function( $groupControl ) {
 
 IS2.showCrudMsg = function( $msg, offset, delay ) {
 	
-	var height = $msg.css( 'visibility', 'hidden' ).outerHeight(),
+	var height = $msg.css( 'visibility', 'hidden' ).show().outerHeight(),
 		diff = height * ( offset || 1 );
 	
-	$msg.css( 'visibility', 'visible' ).css( 'top', height * -1 ).show().animate( { top: '+=' + (  diff - 3 ) }, { complete: function() {
+	$msg.stop().css( 'visibility', 'visible' ).css( 'top', height * -1 ).show().animate( { top: '+=' + (  diff - 3 ) }, { complete: function() {
 		$msg.delay( delay || 2000 ).animate( { top: '-=' + diff } );
 	} } );	
 };

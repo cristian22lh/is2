@@ -89,7 +89,7 @@
 			if( $append ) {
 				$q[] = $append;
 			}
-			return '?' . __sanitizeValue( implode( '&', $q ) );
+			return count( $q ) ? '?' . __sanitizeValue( implode( '&', $q ) ) : '';
 		}
 		
 		return $append ? '?' . $append : '';

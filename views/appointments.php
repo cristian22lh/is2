@@ -25,9 +25,6 @@
 			display: inline-block;
 		}
 		
-		tr.is2-appointment-removed * {
-			text-decoration: line-through;
-		}
 		tr.is2-appointments-dayrow td {
 			background: #f1f1f1;
 			font-weight: 600;
@@ -573,7 +570,7 @@
 			status = 'cancelado';
 		
 		} else if( type === 'remove' ) {
-			$row.addClass( 'is2-appointment-removed' );
+			$row.addClass( 'is2-record-removed' );
 			status = 'borrado';
 		}
 		
