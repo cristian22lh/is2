@@ -35,74 +35,41 @@
 		
 			<div class="is2-pagetitle clearfix">
 				<h3>Obra sociales</h3>
+				<a class="is2-trigger-new btn pull-right btn-warning" href="#is2-modal-theform" data-toggle="modal"><i class="icon-plus"></i> Crear una nueva obra social</a>
 			</div>
-			
-			<form class="is2-insurances-new form-horizontal" method="post" action="/obras-sociales/crear">
-				<fieldset>
-					<legend>Crear una nueva obra social</legend>
-					
-					<div class="alert alert-info">
-						Utilice este formulario para crear una nueva obra social en el sistema
-					</div>
-					<?php if( $createError ): ?>
-					<div class="alert alert-error">
-						<a class="close" data-dismiss="alert" href="#">&times;</a>
-						<strong>¡No se ha podido crear la nueva obra social!</strong> Verifique no exista una con el mismo nombre corto ya cargada en el sistema.
-					</div>
-					<?php endif; ?>
 
-					<div class="control-group">
-						<label class="control-label">Nombre abreviado:</label>
-						<div class="controls">
-							<input type="text" class="is2-insurances-new-abbr input-xlarge" name="abbr">
-						</div>
-					</div>
-					<div class="control-group">
-						<label class="control-label">Nombre completo:</label>
-						<div class="controls">
-							<input type="text" class="input-xlarge" name="full">
-						</div>
-					</div>
-					<div class="control-group">
-						<div class="controls">
-							<button type="submit" class="btn btn-primary">Crear obra social</button>
-						</div>
-					</div>
-				</fieldset>
-			</form>
-			
-			<hr>
-	
-			<legend>Listado de obras sociales</legend>
 			<div class="alert">
 				A continuación se muestran todas las obra sociales cargadas en el sistema
 			</div>
-			<?php if( $createSuccess ): ?>
-			<div class="alert alert-success">
-				<a class="close" data-dismiss="alert" href="#">&times;</a>
-				¡La nueva obra social ha sido creada satisfactoriamente!
+
+			<div class="is2-insurances-crudmessages">
+				<?php if( $createSuccess ): ?>
+				<div class="alert alert-success">
+					<a class="close" data-dismiss="alert" href="#">&times;</a>
+					¡La nueva obra social ha sido creada satisfactoriamente!
+				</div>
+				<?php elseif( $editSuccess ): ?>
+				<div class="alert alert-success">
+					<a class="close" data-dismiss="alert" href="#">&times;</a>
+					¡La obra social ha sido editada satisfactoriamente!
+				</div>
+				<?php elseif( $editError ): ?>
+				<div class="alert alert-error">
+					<a class="close" data-dismiss="alert" href="#">&times;</a>
+					<strong>¡No se ha podido editar la obra social!</strong> Capaz ya exista una con el mismo nombre abreviado en el sistema.
+				</div>
+				<?php elseif( $removeSuccess ): ?>
+				<div class="alert alert-success">
+					<a class="close" data-dismiss="alert" href="#">&times;</a>
+					¡La obra social ha sido borrada satisfactoriamente!
+				</div>
+				<?php elseif( $removeError ): ?>
+				<div class="alert alert-error">
+					<a class="close" data-dismiss="alert" href="#">&times;</a>
+					<strong>¡No se ha podido borrar la obra social!</strong> Intentelo nuevamente.
+				</div>
+				<?php endif; ?>
 			</div>
-			<?php elseif( $editSuccess ): ?>
-			<div class="alert alert-success">
-				<a class="close" data-dismiss="alert" href="#">&times;</a>
-				¡La obra social ha sido editada satisfactoriamente!
-			</div>
-			<?php elseif( $editError ): ?>
-			<div class="alert alert-error">
-				<a class="close" data-dismiss="alert" href="#">&times;</a>
-				<strong>¡No se ha podido editar la obra social!</strong> Capaz ya exista una con el mismo nombre abreviado en el sistema.
-			</div>
-			<?php elseif( $removeSuccess ): ?>
-			<div class="alert alert-success">
-				<a class="close" data-dismiss="alert" href="#">&times;</a>
-				¡La obra social ha sido borrada satisfactoriamente!
-			</div>
-			<?php elseif( $removeError ): ?>
-			<div class="alert alert-error">
-				<a class="close" data-dismiss="alert" href="#">&times;</a>
-				<strong>¡No se ha podido borrar la obra social!</strong> Intentelo nuevamente.
-			</div>
-			<?php endif; ?>
 			
 			<table class="table is2-grid-header btn-inverse">
 				<tr>
@@ -137,28 +104,38 @@
 		<?php t_endWrapper(); ?>
 
 		<!-- los modals -->
-		<form method="post" action="/obras-sociales/editar" id="is2-modal-edit" class="modal hide fade">
+		<form id="is2-modal-theform" class="modal hide fade form-horizontal">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<strong>Editar obra social</strong>
+				<strong class="is2-insurance-edit">Editar obra social</strong>
+				<strong class="is2-insurance-new">Crear obra social</strong>
 			</div>
 			<div class="modal-body">
-				<div class="control-group">
+				<div class="alert is2-insurance-new">
+					Sepa que no pueden existir dos obras sociales con el mismo nombre abreviado
+				</div>
+				<div class="alert alert-error is2-ajax-msg is2-ajax-msg-full is2-insurance-new-error" style="display:none">
+					<strong>¡No se ha podido crear la nueva obra social!</strong>
+					<div>Verifique no exista una con el mismo nombre abreviado ya cargada en el sistema</div>
+				</div>
+				<div class="control-group is2-insurances-abbr">
 					<label class="control-label">Nombre abreviado:</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" name="shortName">
+						<input type="text" class="is2-insurances-abbr input-xlarge" name="abbr">
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label">Nombre completo:</label>
 					<div class="controls">
-						<input type="text" class="input-xlarge" name="fullName">
+						<textarea class="is2-insurances-full input-xlarge" name="full"></textarea>
 					</div>
 				</div>
 			</div>
 			<div class="modal-footer">
 				<button class="btn" data-dismiss="modal">Cancelar</button>
-				<button class="btn btn-primary" type="submit">Editar</button>
+				<button class="btn btn-primary is2-insurance-edit" type="submit">Editar</button>
+				<button class="btn btn-primary is2-insurance-new" type="submit">Crear obra social</button>
+				<span class="is2-preloader is2-preloader-bg pull-left is2-preloader-newedit"></span>
 			</div>
 			<input type="hidden" name="id">
 		</form>
@@ -193,28 +170,60 @@
 	} );
 	
 // *** crear obra social *** //
-	var $newForm = $( '.is2-insurances-new' );
-	var $abbrName = $( '.is2-insurances-new-abbr' );
-
-	if( window.location.search.indexOf( 'error' ) >= 0 ) {
-		IS2.loadPrevState( 'is2-insurance-state', false, $newForm );
-	}
-
-	$newForm.on( 'submit', function( e ) {
-		if( IS2.lookForEmptyFields( $abbrName, false, true ) ) {
-			e.preventDefault();
+	var $abbrName = $( 'input.is2-insurances-abbr' );
+	var $abbrNameControlGroup = $( '.control-group.is2-insurances-abbr' );
+	var $fullName = $( '.is2-insurances-full' );
+	var $preloader = $( '.is2-preloader-newedit' );
+	var $insuranceCreateError = $( '.is2-insurance-new-error' );
+	var isWaiting = false;
+	
+	$( '.is2-trigger-new' ).on( 'click', function( e ) {
+		$( '.is2-insurance-edit' ).hide();
+		$( '.is2-insurance-new' ).show();
+	} );
+	
+	var createdInsurance = function( dataResponse ) {
+		isWaiting = false;
+		$preloader.css( 'visibility', 'hidden' );
+		
+		if( !dataResponse.success ) {
+			IS2.showCrudMsg( $insuranceCreateError, 0, 6000 );
+			$abbrNameControlGroup.addClass( 'error' );
 			return;
 		}
 		
-		IS2.savePrevState( 'is2-insurance-state', false, $newForm );
+		window.location = '/obras-sociales?exito=crear-obra-social&id=' + dataResponse.data.id;
+	};
+
+	$( '#is2-modal-theform' ).on( 'submit', function( e ) {
+		e.preventDefault();
+		if( IS2.lookForEmptyFields( $abbrName, true, true ) ) {
+			return;
+		}
+		$abbrNameControlGroup.removeClass( 'error' );
+
+		isWaiting = true;
+		$preloader.css( 'visibility', 'visible' );
+		
+		$.ajax( {
+			url: '/obras-sociales/crear',
+			dataType: 'json',
+			type: 'POST',
+			data: {
+				abbr: $abbrName.val(),
+				full: $fullName.val()
+			},
+			success: createdInsurance,
+			error: createdInsurance
+		} );
 	} );
 	
 	var newInsuranceID;
 	var $newInsurance;
 	if( window.location.search.indexOf( 'exito=crear-obra-social' ) >= 0 && ( newInsuranceID = window.location.search.match( /id=(\d+)/ ) ) ) {
-		$theGrid[0].scrollIntoView();
+		$( '.is2-insurances-crudmessages' )[0].scrollIntoView();
 		$newInsurance = $( '.is2-grid-row[data-insurance-id=' + newInsuranceID[1] + ']' );
-		$theGrid.scrollTo( $newInsurance, 1000, { onAfter: function() { 
+		$theGrid.scrollTo( $newInsurance, 1000, { onAfter: function() {
 			$newInsurance.addClass( 'is2-record-new' )[0].scrollIntoView();
 			window.setTimeout( function() {
 				$newInsurance.removeClass( 'is2-record-new' );

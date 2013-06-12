@@ -30,6 +30,11 @@
 		__echoJSON( array( 'success' => false ) );
 	}
 	
-	__echoJSON( array( 'success' => true, 'data' => array( 'id' => $id ) ) );
+	__echoJSON( array( 
+		'success' => true, 
+		'data' => array( 
+			'id' => $id 
+		) 
+	) );
 
 ?>

@@ -69,17 +69,6 @@
 		tr.is2-appointments-monthbreak td:nth-child( 4 ) {
 			text-align: left;
 		}
-		
-		.alert.is2-ajax-msg {
-			box-shadow: 0 1px 3px #eee;
-			color: #468847;
-			left: 30%;
-			position: absolute;
-			top: -3px;
-			z-index: 100;
-			opacity: .9;
-		}
-		
 		.btn.disabled {
 			width: 110px;
 		}

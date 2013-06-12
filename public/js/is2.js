@@ -19,8 +19,7 @@ IS2.initTimepickers = function( config ) {
 
 IS2.prevStateDict = [
 	'is2-appointment-state',
-	'is2-patient-state',
-	'is2-insurance-state'
+	'is2-patient-state'
 ];
 
 IS2.cleanPrevState = function( skip ) {

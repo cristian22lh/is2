@@ -73,7 +73,6 @@
 			overflow-x: hidden;
 			text-overflow: ellipsis;
 			white-space: nowrap;
-			left: 350px !important;
 		}
 		.is2-patient-autocompleteitem {
 			display: block;

@@ -20,7 +20,6 @@
 			.ar-clock {
 				position: fixed;
 				top: 110px;
-				left: 20px;
 				text-align: center;
 				z-index: -1;
 			}
@@ -108,7 +107,9 @@
 				
 				updateClock();
 				
-				$( 'body' ).append( $clock );
+				var clockWidth = $clock.css( 'visibility', 'hidden' ).appendTo( 'body' ).outerWidth();
+				$clock.css( 'left', $( '.container' ).offset().left - clockWidth );
+				$clock.css( 'visibility', 'visible' );
 			} );
 		</script>
 		<script>

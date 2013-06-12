@@ -1,13 +1,14 @@
 <?php
 
 	if( !__issetPOST( array( 'abbr', 'full' ) ) ) {
-		__redirect( '/obras-sociales?error=crear-obra-social' );
+		__echoJSON( array( 'success' => false ) );
 	}
 	
 	$abbr = __sanitizeValue( $_POST['abbr'] );
+	// full puede estar vacio
 	$full = __sanitizeValue( $_POST['full'] );
-	if( !$abbr || !$full ) {
-		__redirect( '/obras-sociales?error=crear-obra-social' );
+	if( !$abbr ) {
+		__echoJSON( array( 'success' => false ) );
 	}
 	
 	$insertId = DB::insert(
@@ -22,9 +23,14 @@
 	
 	// maybe a constraint error
 	if( !$insertId ) {
-		__redirect( '/obras-sociales?error=crear-obra-social' );
+		__echoJSON( array( 'success' => false ) );
 	}
 	
-	__redirect( '/obras-sociales?exito=crear-obra-social&id=' . $insertId );
+	__echoJSON( array( 
+		'success' => true,
+		'data' => array(
+			'id' => $insertId
+		)
+	) );
 	
 ?>
