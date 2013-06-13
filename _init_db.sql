@@ -176,17 +176,7 @@ CREATE TABLE especialidades(
 	UNIQUE INDEX( nombre )
 ) ENGINE=InnoDB;
 
-INSERT INTO especialidades VALUES
-	( null, 'Sin asignar' ),
-	( null, 'Otorrinolaringología' ),
-	( null, 'Odontología' ),
-	( null, 'Nefrología' ),
-	( null, 'Endocrinología' ),
-	( null, 'Urología' ),
-	( null, 'Oftalmología' ),
-	( null, 'Pediatría' ),
-	( null, 'Psiquiatría' )
-;
+LOAD DATA LOCAL INFILE "./_50_specialities.sql" INTO TABLE especialidades;
 /**
 *
 */

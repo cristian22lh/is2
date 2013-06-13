@@ -16,9 +16,6 @@
 			color: #777;
 			font-size: 12px;
 		}
-		.is2-grid td:not( :first-child ) {
-			text-transform: none;
-		}
 		.is2-grid td:last-child {
 			width: 215px;
 			vertical-align: middle;
