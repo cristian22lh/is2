@@ -55,6 +55,12 @@
 			<div class="is2-pagetitle clearfix">
 				<h3>Obra sociales</h3>
 				<a class="is2-trigger-new btn pull-right btn-warning" href="#is2-modal-theform" data-toggle="modal"><i class="icon-plus"></i> Crear una nueva obra social</a>
+				<form class="form-search pull-right is2-search-quick-form">
+					<div class="is2-search-quick-control input-append control-group">
+						<input type="text" class="input-large search-query is2-search-quick-input" placeholder="Buscar por nombre abreviado..." name="keyword">
+						<button type="submit" class="btn"><i class="icon-search"></i></button>
+					</div>
+				</form>
 			</div>
 
 			<div class="alert">
@@ -100,7 +106,7 @@
 				<?php foreach( $insurances as $insurance ): ?>
 					<tr class="is2-grid-row <?php echo $insurance['estado'] == 'deshabilitada' ? 'is2-insurance-disabled' : ''; ?>" data-insurance-id="<?php echo $insurance['id']; ?>" data-insurance-status="<?php echo $insurance['estado']; ?>">
 						<td>
-							<span class="is2-insurance-abbrname"><?php echo $insurance['nombreCorto']; ?></span>
+							<span class="is2-insurance-abbrname" data-insurance-id="<?php echo $insurance['id']; ?>"><?php echo $insurance['nombreCorto']; ?></span>
 							<span class="is2-insurance-fullname"><?php echo $insurance['nombreCompleto']; ?></span>
 						</td>
 						<td>
@@ -461,7 +467,61 @@
 		
 	} ).on( 'hidden', function( e ) {
 		$( 'tr.is2-record-new' ).removeClass( 'is2-record-new' );
-	} )
+	} );
+	
+// *** search functionality *** //
+	var $keyword = $( '.is2-search-quick-input' );
+	var $keywordGroupControl = $( '.is2-search-quick-control' );
+	var $allAbbrNames = $( 'tr .is2-insurance-abbrname' );
+	var currentMatch = 0;
+	var curKeyword;
+	var matches = [];
+	$( '.is2-search-quick-form' ).on( 'submit', function( e ) {
+		e.preventDefault();
+		
+		var keyword = $keyword.val().trim().toLowerCase();
+		
+		if( keyword && keyword !== curKeyword ) {
+			// reset
+			curKeyword = keyword;
+			currentMatch = 0;
+			matches = [];
+		
+			var $abbrName,
+				i = 0, l = $allAbbrNames.length;
+
+			for( ; i < l; i++ ) {
+				$abbrName = $allAbbrNames.eq( i );
+				if( $abbrName.html().toLowerCase().indexOf( keyword ) >= 0 ) {
+					matches.push( $abbrName );
+				}
+			}
+		}
+		
+		if( matches.length ) {
+			$keywordGroupControl.removeClass( 'error' );
+		
+			var $row,
+				$prevRow;
+				
+			$abbrName = matches[currentMatch++];
+			if( currentMatch === matches.length ) {
+				currentMatch = 0;
+			}
+			$row = $( 'tr[data-insurance-id=' + $abbrName.attr( 'data-insurance-id' ) + ']' );
+			$row.effect( 'highlight' );
+			$prevRow = $row.prev();
+			if( !$prevRow.length ) {
+				$prevRow = $row;
+			}
+			$prevRow[0].scrollIntoView();
+			
+		// not matches
+		} else {
+			$keywordGroupControl.addClass( 'error' );
+		}
+		
+	} );
 	
 })();
 </script>
