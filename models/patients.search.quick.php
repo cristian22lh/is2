@@ -9,7 +9,7 @@
 		__redirect( '/pacientes?error=buscar-paciente-rapido' );
 	}
 	
-	// es una fecha?
+	// es una fecha ?
 	if( ( $value = __toISODate( $keyword ) ) ) {
 		$field = 'fechaNacimiento';
 		
@@ -17,6 +17,11 @@
 	} else if( ( $value = __cleanDNI( $keyword ) ) || ( $value = __cleanTel( $keyword ) ) ) {
 		$field = 'dni|telefono';
 	
+	// es un "lopez, marcos" ?
+	} else if( ( $value = explode( ',', $keyword ) ) && count( $value ) == 2 ) {
+		$field = 'fullname';
+		$value = $keyword;
+
 	// aca es tanto un nombre, apellido o nombre de la obra social
 	} else {
 		$field = 'comodin';

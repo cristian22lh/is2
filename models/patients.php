@@ -159,6 +159,12 @@
 			$whereClause[] = ' p.dni = ? OR p.telefono = ? ';
 			$replacements[] = $value;
 			$replacements[] = $value;
+			
+		} else if( $field == 'fullname' && ( $fullname = explode( ',', $value ) ) && count( $fullname ) == 2 ) {
+			$whereClause[] = ' p.apellidos LIKE ? ';
+			$replacements[] = '%' . trim( $fullname[0] ) . '%';
+			$whereClause[] = ' p.nombres LIKE ? ';
+			$replacements[] = '%' . trim( $fullname[1] ) . '%';
 
 		} else if( $field == 'comodin' ) {
 			$whereClause[] = ' ( p.nombres LIKE ? OR p.apellidos LIKE ? OR os.nombreCorto LIKE ? ) ';

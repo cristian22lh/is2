@@ -231,17 +231,17 @@
 								<legend>Buscar pacientes con apellidos</legend>
 
 								<label>Apellidos:</label>
-								<input type="text" class="input-xxlarge" name="lastName" value="<?php echo __sanitizeValue( $persistValues['lastName'] ); ?>" placeholder="Para buscar por varios apellidos simplemente separelos con un espacio">
+								<input type="text" class="input-xxlarge" name="lastName" value="<?php echo $persistValues['lastName']; ?>" placeholder="Para buscar por varios apellidos simplemente separelos con un espacio">
 							</fieldset>
 							<fieldset>
 								<legend>Buscar pacientes con nombres</legend>
 								<label>Nombres:</label>
-								<input type="text" class="input-xxlarge" name="firstName" value="<?php echo __sanitizeValue( $persistValues['firstName'] ); ?>" placeholder="Para buscar por varios nombres simplemente separelos con un espacio">
+								<input type="text" class="input-xxlarge" name="firstName" value="<?php echo $persistValues['firstName']; ?>" placeholder="Para buscar por varios nombres simplemente separelos con un espacio">
 							</fieldset>
 							<fieldset>
 								<legend>Buscar pacientes con numero de DNI</legend>
 								<label>Número de DNI:</label>
-								<input type="text" class="input-xxlarge" name="patientsList" value="<?php echo __sanitizeValue( $persistValues['patientsList'] ); ?>" placeholder="Para buscar por varios números de DNI simplemente separelos con un espacio">
+								<input type="text" class="input-xxlarge" name="patientsList" value="<?php echo $persistValues['patientsList']; ?>" placeholder="Para buscar por varios números de DNI simplemente separelos con un espacio">
 							</fieldset>
 							<fieldset class="form-inline">
 								<legend>Buscar pacientes con fecha de nacimiento</legend>
@@ -275,7 +275,7 @@
 							<fieldset>
 								<legend>Buscar pacientes con número de afiliado</legend>
 								<label>Número de afiliado de la obra social:</label>
-								<input type="text" class="input-xxlarge" name="affiliateInsuranceNumber" placeholder="Separe con espacios para buscar por varios números de afiliado" value="<?php echo __sanitizeValue( $persistValues['affiliateInsuranceNumber'] ); ?>">
+								<input type="text" class="input-xxlarge" name="affiliateInsuranceNumber" placeholder="Separe con espacios para buscar por varios números de afiliado" value="<?php echo $persistValues['affiliateInsuranceNumber']; ?>">
 							</fieldset>
 							<button type="submit" class="btn btn-large btn-primary is2-search-trigger">Buscar</button>
 						</form>
@@ -293,7 +293,7 @@
 				</ul>
 			</div>
 			
-			<?php if( count( $patients ) ): ?>
+			<?php if( $patients->rowCount() ): ?>
 			<table class="table is2-grid-header btn-inverse">
 				<tr>
 					<th>
@@ -342,7 +342,7 @@
 				</table>
 			</div>
 			
-			<?php if( $isSingle ): ?>
+				<?php if( $isSingle ): ?>
 			<div class="is2-popover">
 				<div class="alert">
 					<strong>¡Nuevo paciente ha sido creado satisfactoriamente!</strong>
@@ -353,7 +353,7 @@
 				</a>
 				<button class="btn btn-link btn-mini is2-popover-close">¡Entendido!</button>
 			</div>
-			<?php else: ?>
+				<?php else: ?>
 			<ul class="pager">
 				<li class="previous <?php echo $offset ? 'active': 'disabled'; ?>">
 					<a href="<?php echo $offset == 0 ? '#' : __getGETComplete( 'pagina', array( 'pagina', $offset - 1 ) ); ?>">&larr; Anterior</a>
@@ -362,7 +362,7 @@
 					<a href="<?php echo $stillMorePages ? __getGETComplete( 'pagina', array( 'pagina', $offset + 1 ) ) : '#'; ?>">Siguiente &rarr;</a>
 				</li>
 			</ul>
-			<?php endif; ?>
+				<?php endif; ?>
 			
 			<?php else: ?>
 			<div class="alert alert-error">
