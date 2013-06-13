@@ -69,6 +69,7 @@ header .is2-welcome {
 	border: 1px solid #ccc;
 	border-right: 0;
 	border-top: 0;
+	position: relative;
 }
 
 .modal-backdrop, .modal-backdrop.fade.in {
@@ -157,9 +158,9 @@ textarea {
     padding: 0;
 }
 .is2-record-new {
-	background: #FCF8E3;
-	color: #C09853;
-	border-bottom: 1px solid #ddd;
+	background: #FCF8E3 !important;
+	color: #C09853 !important;
+	border-bottom: 1px solid #ddd !important;
 }
 .is2-popover {
 	text-align: center;
@@ -200,6 +201,7 @@ textarea {
 	position: absolute;
 	top: -3px;
 	z-index: 100;
+	display: none;
 }
 .is2-ajax-msg-full {
 	opacity: 1;

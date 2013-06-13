@@ -22,10 +22,29 @@
 		.is2-grid td:last-child {
 			width: 215px;
 			vertical-align: middle;
+			white-space: nowrap;
+		}
+		.is2-grid-row.is2-insurance-disabled {
+			background: #f1f1f1;
+		}
+		.btn.is2-trigger-status {
+			width: 60px;
+		}
+		.is2-insurances-togglestatus {
+			display: inline-block;
 		}
 		.is2-insurances-crud {
 			display: inline-block;
 			margin: 0 0 0 15px;
+		}
+		
+		.is2-grid-header-wrapper {
+			position: relative;
+			overflow: hidden;
+		}
+		.is2-grid-header-wrapper .alert {
+			opacity: 1;
+			box-shadow: none;
 		}
 	</style>
 <?php t_endHead(); ?>
@@ -53,41 +72,43 @@
 					<a class="close" data-dismiss="alert" href="#">&times;</a>
 					¡La obra social ha sido editada satisfactoriamente!
 				</div>
-				<?php elseif( $editError ): ?>
-				<div class="alert alert-error">
-					<a class="close" data-dismiss="alert" href="#">&times;</a>
-					<strong>¡No se ha podido editar la obra social!</strong> Capaz ya exista una con el mismo nombre abreviado en el sistema.
-				</div>
-				<?php elseif( $removeSuccess ): ?>
-				<div class="alert alert-success">
-					<a class="close" data-dismiss="alert" href="#">&times;</a>
-					¡La obra social ha sido borrada satisfactoriamente!
-				</div>
-				<?php elseif( $removeError ): ?>
-				<div class="alert alert-error">
-					<a class="close" data-dismiss="alert" href="#">&times;</a>
-					<strong>¡No se ha podido borrar la obra social!</strong> Intentelo nuevamente.
-				</div>
 				<?php endif; ?>
 			</div>
 			
-			<table class="table is2-grid-header btn-inverse">
-				<tr>
-					<th>Nombre</th>
-					<th>Acciones</th>
-				</tr>
-			</table>
+			<div class="is2-grid-header-wrapper">
+				<table class="table is2-grid-header btn-inverse">
+					<tr>
+						<th>Nombre</th>
+						<th>Acciones</th>
+					</tr>
+				</table>
+				<div class="alert alert-success is2-remove-success is2-ajax-msg">
+					<a class="close" data-dismiss="alert" href="#">&times;</a>
+					¡La obra social ha sido borrada satisfactoriamente!
+				</div>
+				<div class="alert alert-success is2-status-enable-success is2-ajax-msg">
+					<a class="close" data-dismiss="alert" href="#">&times;</a>
+					¡La obra social ha sido habilitada satisfactoriamente!
+				</div>
+				<div class="alert alert-success is2-status-disable-success is2-ajax-msg">
+					<a class="close" data-dismiss="alert" href="#">&times;</a>
+					¡La obra social ha sido deshabilitada satisfactoriamente!
+				</div>
+			</div>
 			<div class="is2-grid-wrapper">
 				<table class="table is2-grid">
 				<?php foreach( $insurances as $insurance ): ?>
-					<tr class="is2-grid-row" data-insurance-id="<?php echo $insurance['id']; ?>">
+					<tr class="is2-grid-row <?php echo $insurance['estado'] == 'deshabilitada' ? 'is2-insurance-disabled' : ''; ?>" data-insurance-id="<?php echo $insurance['id']; ?>" data-insurance-status="<?php echo $insurance['estado']; ?>">
 						<td>
 							<span class="is2-insurance-abbrname"><?php echo $insurance['nombreCorto']; ?></span>
 							<span class="is2-insurance-fullname"><?php echo $insurance['nombreCompleto']; ?></span>
 						</td>
 						<td>
 						<?php if( $insurance['id'] != 1 ): ?>
-							<a class="btn btn-small btn-warning">Deshabilitar</a>
+							<div class="is2-insurances-togglestatus">
+								<a class="btn btn-small btn-warning is2-trigger-status is2-trigger-status-disable" href="#is2-modal-status-disable" data-toggle="modal" data-insurance-id="<?php echo $insurance['id']; ?>" style="display:<?php echo $insurance['estado'] == 'habilitada' ? 'block' : 'none'; ?>">Deshabilitar</a>
+								<a class="btn btn-small btn-link is2-trigger-status is2-trigger-status-enable" href="#is2-modal-status-enable" data-toggle="modal" data-insurance-id="<?php echo $insurance['id']; ?>" style="display:<?php echo $insurance['estado'] == 'habilitada' ? 'none' : 'block'; ?>">Habilitar</a>
+							</div>
 							<div class="is2-insurances-crud">
 								<a class="btn btn-small is2-trigger-edit" href="#is2-modal-theform" data-toggle="modal" data-insurance-id="<?php echo $insurance['id']; ?>">Editar</a>
 								<a class="btn btn-small btn-danger is2-trigger-remove" href="#is2-modal-remove" data-toggle="modal" data-insurance-id="<?php echo $insurance['id']; ?>">Borrar</a>
@@ -146,7 +167,7 @@
 					<strong>¡No se ha podido borrar obra social!</strong>
 					<div>Verifique no existan pacientes que tengan asociado esta obra social</div>
 				</div>
-				<button type="button" class="close is2-insurances-modal-close" data-dismiss="modal">&times;</button>
+				<button type="button" class="close is2-insurances-remove-close" data-dismiss="modal">&times;</button>
 				<p><strong>¿Estás seguro que desea borrar esta obra social del sistema?</strong></p>
 				<div class="alert">
 					<strong>Tenga en cuenta que no puede borrar una obra social que tenga pacientes asociados</strong>
@@ -158,6 +179,35 @@
 				<span class="is2-preloader is2-preloader-bg pull-left is2-preloader-remove"></span>
 			</div>
 			<input class="is2-insurances-remove-id" type="hidden" name="id">
+		</form>
+		
+		<form id="is2-modal-status-disable" class="modal hide fade">
+			<div class="modal-body">
+				<button type="button" class="close is2-insurances-status-close" data-dismiss="modal">&times;</button>
+				<p><strong>¿Estás seguro que desea deshabilitar esta obra social?</strong></p>
+				<div class="alert">
+					Deshabilitar una obra social hace que no se puedan crear turnos con pacientes que tengan asociada esta obra social en cuestión
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn" data-dismiss="modal">Cancelar</button>
+				<button class="btn btn-primary" type="submit">Deshabilitar obra social</button>
+				<span class="is2-preloader is2-preloader-bg pull-left is2-preloader-status"></span>
+			</div>
+			<input class="is2-insurances-status-id" type="hidden" name="id">
+		</form>
+		
+		<form id="is2-modal-status-enable" class="modal hide fade">
+			<div class="modal-body">
+				<button type="button" class="close is2-insurances-status-close" data-dismiss="modal">&times;</button>
+				<strong>¿Estás seguro que desea habilitar esta obra social?</strong>
+			</div>
+			<div class="modal-footer">
+				<button class="btn" data-dismiss="modal">Cancelar</button>
+				<button class="btn btn-primary" type="submit">Habilitar obra social</button>
+				<span class="is2-preloader is2-preloader-bg pull-left is2-preloader-status"></span>
+			</div>
+			<input class="is2-insurances-status-id" type="hidden" name="id">
 		</form>
 
 <?php t_endBody(); ?>
@@ -291,7 +341,9 @@
 	var $insuranceIDFoRemove = $( '.is2-insurances-remove-id' );
 	var $preloaderForRemove = $( '.is2-preloader-remove' );
 	var $insuranceRemoveError = $( '.is2-insurance-remove-error' );
-	var $closeRemoveModal = $( '.is2-insurances-modal-close' );
+	var $insuranceRemoveSuccess = $( '.is2-remove-success' );
+	var $closeRemoveModal = $( '.is2-insurances-remove-close' );
+	
 	$theGrid.delegate( '.is2-trigger-remove', 'click', function( e ) {
 		var insuranceID = $( this ).attr( 'data-insurance-id' ),
 			$row = $( 'tr[data-insurance-id=' + insuranceID + ']' );
@@ -314,6 +366,7 @@
 		
 		$( 'tr[data-insurance-id=' + dataResponse.data.id + ']' ).addClass( 'is2-record-removed' ).find( 'a, button' ).css( 'visibility', 'hidden' );
 		$closeRemoveModal.click();
+		IS2.showCrudMsg( $insuranceRemoveSuccess );
 	};
 	
 	$( '#is2-modal-remove' ).on( 'submit', function( e ) {
@@ -336,6 +389,75 @@
 			error: removedInsurance
 		} );
 	} );
+	
+// *** habilitar/deshabilitar obra social funcionalidad *** //
+	var $insuranceIDForStatus = $( '.is2-insurances-status-id' );
+	var $preloaderForStatus = $( '.is2-preloader-status' );
+	var $closeStatusModal = $( '.is2-insurances-status-close' );
+	var $disableMsg = $( '.is2-status-disable-success' );
+	var $enableMsg = $( '.is2-status-enable-success' );
+	var toggleStatus;
+	
+	$theGrid.delegate( '.is2-trigger-status', 'click', function( e ) {
+		var $el = $( this ),
+			insuranceID = $el.attr( 'data-insurance-id' ),
+			$row = $( 'tr[data-insurance-id=' + insuranceID + ']' ),
+			status = $row.attr( 'data-insurance-status' );
+
+		toggleStatus = status === 'habilitada' ? 'deshabilitar' : 'habilitar';
+
+		$row.addClass( 'is2-record-new' );
+		$insuranceIDForStatus.val( insuranceID );
+	} );
+	
+	var statusedInsurance = function( dataResponse ) {
+		isWaiting = false;
+		$preloaderForStatus.css( 'visibility', 'hidden' );
+		
+		if( !dataResponse.success ) {
+			return;
+		}
+		
+		var $row = $( 'tr[data-insurance-id=' + dataResponse.data.id + ']' );
+		if( $row.attr( 'data-insurance-status' ) === 'habilitada' ) {
+			$row.attr( 'data-insurance-status', 'deshabilitada' ).addClass( 'is2-insurance-disabled' );
+			$row.find( '.is2-trigger-status-disable' ).hide();
+			$row.find( '.is2-trigger-status-enable' ).show();
+			IS2.showCrudMsg( $disableMsg );
+		} else {
+			$row.attr( 'data-insurance-status', 'habilitada' ).removeClass( 'is2-insurance-disabled' );
+			$row.find( '.is2-trigger-status-disable' ).show();
+			$row.find( '.is2-trigger-status-enable' ).hide();
+			IS2.showCrudMsg( $enableMsg );
+		}
+		
+		$row.effect( 'highlight', null, 3000 );
+		$closeStatusModal.click();
+	};
+	
+	$( '#is2-modal-status-enable, #is2-modal-status-disable' ).on( 'submit', function( e ) {
+		e.preventDefault();
+		if( isWaiting ) {
+			return;
+		}
+		
+		isWaiting = true
+		$preloaderForStatus.css( 'visibility', 'visible' );
+		
+		$.ajax( {
+			url: '/obras-sociales/' + toggleStatus,
+			dataType: 'json',
+			type: 'POST',
+			data: {
+				id: $insuranceIDForStatus.val()
+			},
+			success: statusedInsurance,
+			error: statusedInsurance
+		} );
+		
+	} ).on( 'hidden', function( e ) {
+		$( 'tr.is2-record-new' ).removeClass( 'is2-record-new' );
+	} )
 	
 })();
 </script>

@@ -82,7 +82,9 @@
 		'/obras-sociales' => 'insurances',
 		'/obras-sociales/crear' => 'insurances.new',
 		'/obras-sociales/editar' => 'insurances.edit',
-		'/obras-sociales/borrar' => 'insurances.remove'
+		'/obras-sociales/borrar' => 'insurances.remove',
+		'/obras-sociales/habilitar' => 'insurances.enable',
+		'/obras-sociales/deshabilitar' => 'insurances.disable'
 	);
 	
 	require Router::start( $routes, '/404' );

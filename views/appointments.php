@@ -85,35 +85,35 @@
 <?php t_startBody( $username, 'appointments'  ); ?>
 
 		<?php t_startWrapper(); ?>
-			<div class="alert alert-success is2-confirm-success is2-ajax-msg" style="display:none">
+			<div class="alert alert-success is2-confirm-success is2-ajax-msg">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
 				¡El turno ha sido confirmado satisfactoriamente!
 			</div>
-			<div class="alert alert-error is2-confirm-error is2-ajax-msg" style="display:none">
+			<div class="alert alert-error is2-confirm-error is2-ajax-msg">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
 				¡No se ha podido confirmar el turno! Vuelva a intentarlo.
 			</div>
-			<div class="alert alert-success is2-cancel-success is2-ajax-msg" style="display:none">
+			<div class="alert alert-success is2-cancel-success is2-ajax-msg">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
 				¡El turno ha sido cancelado satisfactoriamente!
 			</div>
-			<div class="alert alert-error is2-cancel-error is2-ajax-msg" style="display:none">
+			<div class="alert alert-error is2-cancel-error is2-ajax-msg">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
 				¡No se ha podido cancelar el turno! Vuelva a intentarlo.
 			</div>
-			<div class="alert alert-success is2-remove-success is2-ajax-msg" style="display:none">
+			<div class="alert alert-success is2-remove-success is2-ajax-msg">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
 				¡El turno ha sido borrado satisfactoriamente!
 			</div>
-			<div class="alert alert-error is2-remove-error is2-ajax-msg" style="display:none">
+			<div class="alert alert-error is2-remove-error is2-ajax-msg">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
 				¡No se ha podido borar el turno! Vuelva a intentarlo.
 			</div>
-			<div class="alert alert-success is2-restore-success is2-ajax-msg" style="display:none">
+			<div class="alert alert-success is2-restore-success is2-ajax-msg">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
 				¡El turno ha sido reiniciado satisfactoriamente!
 			</div>
-			<div class="alert alert-error is2-restore-error is2-ajax-msg" style="display:none">
+			<div class="alert alert-error is2-restore-error is2-ajax-msg">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
 				¡No se ha podido reiniciar el turno! Vuelva a intentarlo.
 			</div>
