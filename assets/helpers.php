@@ -68,8 +68,8 @@
 	}
 	
 	// con este function me fijo si en el $_GET, existe $_GET[$name] = $value
-	function __issetGETField( $name, $value ) {
-		return count( $_GET ) > 0 && isset( $_GET[$name] ) && $_GET[$name] == $value;
+	function __issetGETField( $name, $value = false ) {
+		return count( $_GET ) > 0 && isset( $_GET[$name] ) && ( ( $value && $_GET[$name] == $value ) || !$value );
 	}
 
 	function __GETField( $name ) {

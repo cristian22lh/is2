@@ -7,9 +7,9 @@
 	
 	$createSuccess = false;
 	$editSuccess = false;
-	if( __issetGETField( 'exito', 'crear-especialidad' ) ) {
+	if( __issetGETField( 'exito-crear' ) ) {
 		$createSuccess = true;
-	} else if( __issetGETField( 'exito', 'editar-especialidad' ) ) {
+	} else if( __issetGETField( 'exito-editar' ) ) {
 		$editSuccess = true;
 	}
 	

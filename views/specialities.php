@@ -19,14 +19,14 @@
 		
 			<div class="is2-pagetitle clearfix">
 				<h3>Especialidades</h3>
-				<a class="is2-trigger-new btn pull-right btn-warning" href="#is2-modal-theform" data-toggle="modal"><i class="icon-plus"></i> Crear una nueva especialidad</a>
+				<a class="is2-trigger-create btn pull-right btn-warning" href="#is2-modal-theform" data-toggle="modal"><i class="icon-plus"></i> Crear una nueva especialidad</a>
 			</div>
 
 			<div class="alert">
 				A continuación se muestran todas las especialidades cargadas en el sistema
 			</div>
 			
-			<div class="is2-speciality-crudmessages">
+			<div class="is2-crud-messages">
 				<?php if( $createSuccess ): ?>
 				<div class="alert alert-success">
 					<a class="close" data-dismiss="alert" href="#">&times;</a>
@@ -56,7 +56,7 @@
 				<table class="table is2-grid">
 				<?php foreach( $specialities as $speciality ): ?>
 					<tr class="is2-grid-row" data-speciality-id="<?php echo $speciality['id']; ?>">
-						<td class="is2-speciality-name"><?php echo $speciality['nombre']; ?></td>
+						<td class="is2-speciality-name" data-field-name="name"><?php echo $speciality['nombre']; ?></td>
 						<td>
 						<?php if( $speciality['id'] != 1 ): ?>
 							<a class="btn btn-small is2-trigger-edit" href="#is2-modal-theform" data-toggle="modal" data-speciality-id="<?php echo $speciality['id']; ?>">Editar</a>
@@ -71,43 +71,46 @@
 		<?php t_endWrapper(); ?>
 		
 		<!-- los modals -->
-		<form id="is2-modal-theform" class="modal hide fade form-horizontal">
+		<form id="is2-modal-theform" class="is2-modal-create is2-modal-edit modal hide fade form-horizontal">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<strong class="is2-speciality-edit">Editar especialidad</strong>
-				<strong class="is2-speciality-new">Crear especialidad</strong>
+				<strong class="is2-edit">Editar especialidad</strong>
+				<strong class="is2-new">Crear especialidad</strong>
 			</div>
 			<div class="modal-body">
-				<div class="alert alert-error is2-ajax-msg is2-ajax-msg-full is2-speciality-new-error" style="display:none">
+				<div class="alert alert-error is2-ajax-msg is2-ajax-msg-full is2-create-error" style="display:none">
+					<a class="close" data-dismiss="alert" href="#">&times;</a>
 					<strong>¡No se ha podido crear la nueva especialidad!</strong>
 					<div>Verifique no exista una con el mismo nombre ya cargada en el sistema</div>
 				</div>
-				<div class="alert alert-error is2-ajax-msg is2-ajax-msg-full is2-speciality-edit-error" style="display:none">
+				<div class="alert alert-error is2-ajax-msg is2-ajax-msg-full is2-edit-error" style="display:none">
+					<a class="close" data-dismiss="alert" href="#">&times;</a>
 					<strong>¡No se ha podido editar la especialidad!</strong>
 					<div>Verifique no exista una con el mismo nombre ya cargada en el sistema</div>
 				</div>
 				<div class="control-group is2-speciality-name">
 					<label class="control-label">Nombre de la especialidad:</label>
 					<div class="controls">
-						<input type="text" class="is2-speciality-name input-xlarge" name="name">
+						<input type="text" class="is2-field input-xlarge" name="name" data-field-required="true">
 					</div>
 				</div>
 			</div>
 			<div class="modal-footer">
 				<button class="btn" data-dismiss="modal">Cancelar</button>
-				<button class="btn btn-primary is2-speciality-edit" type="submit">Confirmar cambios</button>
-				<button class="btn btn-primary is2-speciality-new" type="submit">Crear especialidad</button>
-				<span class="is2-preloader is2-preloader-bg pull-left is2-preloader-newedit"></span>
+				<button class="btn btn-primary is2-edit" type="submit">Confirmar cambios</button>
+				<button class="btn btn-primary is2-new" type="submit">Crear especialidad</button>
+				<span class="is2-preloader is2-preloader-bg pull-left"></span>
 			</div>
 		</form>
 		
 		<form id="is2-modal-remove" class="modal hide fade">
 			<div class="modal-body">
-				<div class="alert alert-error is2-ajax-msg is2-ajax-msg-full is2-speciality-remove-error" style="display:none">
+				<div class="alert alert-error is2-ajax-msg is2-ajax-msg-full is2-remove-error" style="display:none">
+					<a class="close" data-dismiss="alert" href="#">&times;</a>
 					<strong>¡No se ha podido borrar la especialidad!</strong>
 					<div>Verifique no existan médicos que tengan asociado esta especialidad</div>
 				</div>
-				<button type="button" class="close is2-speciality-remove-close" data-dismiss="modal">&times;</button>
+				<button type="button" class="close is2-close-button" data-dismiss="modal">&times;</button>
 				<p><strong>¿Estás seguro que desea borrar esta especialidad del sistema?</strong></p>
 				<div class="alert">
 					<strong>Tenga en cuenta que no puede borrar una especialidad que tenga médicos asociados</strong>
@@ -116,7 +119,7 @@
 			<div class="modal-footer">
 				<button class="btn" data-dismiss="modal">Cancelar</button>
 				<button class="btn btn-primary" type="submit">Borrar</button>
-				<span class="is2-preloader is2-preloader-bg pull-left is2-preloader-remove"></span>
+				<span class="is2-preloader is2-preloader-bg pull-left"></span>
 			</div>
 		</form>
 		
@@ -125,178 +128,16 @@
 <script>
 (function() {
 
-	var $theGrid = $( '.is2-grid-wrapper' );
-	var ajaxConfig;
-	var isWaiting = false;
-	var $preloader = $( '.is2-preloader-newedit' );
-	var $theForm = $( '#is2-modal-theform' );
-	var $specialityName = $( 'input.is2-speciality-name' );
-	var $specialityNameControlGroup = $( '.control-group.is2-speciality-name' );
+	var crud = new IS2.CRUD( 'especialidades', 'data-speciality-id' );
+	// look if the user comes from a create/edit redirection
+	crud.lookForCRUD();
 	
-// *** create speciality funcionality *** //
-	var $specialityCreateError = $( '.is2-speciality-new-error' );
-	var ajaxCreateSpeciality = function() {
-		return {
-			url: '/especialidades/crear',
-			dataType: 'json',
-			type: 'POST',
-			data: {
-				name: $specialityName.val()
-			},
-			success: createdSpeciality,
-			error: createdSpeciality	
-		};
-	};
-	
-	var createdSpeciality = function( dataResponse ) {
-		isWaiting = false;
-		$preloader.css( 'visibility', 'hidden' );
-		
-		if( !dataResponse.success ) {
-			IS2.showCrudMsg( $specialityCreateError, 0, 6000 );
-			$specialityNameControlGroup.addClass( 'error' );
-			return;
-		}
-		
-		window.location = '/especialidades?exito=crear-especialidad&id=' + dataResponse.data.id;
-	};
-	
-	$( '.is2-trigger-new' ).on( 'click', function( e ) {
-		$theForm.find( '.is2-speciality-edit' ).hide();
-		$theForm.find( '.is2-speciality-new' ).show();
-
-		$specialityName.val( '' );
-		
-		ajaxConfig = ajaxCreateSpeciality;
-	} );
-	
-// *** edit especiality functionality *** //
-	var currentSpecialityID;
-	var ajaxEditSpeciality = function() {
-		return {
-			url: '/especialidades/' + currentSpecialityID + '/editar',
-			dataType: 'json',
-			type: 'POST',
-			data: {
-				name: $specialityName.val()
-			},
-			success: editedSpeciality,
-			error: editedSpeciality
-		}
-	};
-	
-	$theGrid.delegate( '.is2-trigger-edit', 'click', function( e ) {
-		$theForm.find( '.is2-speciality-edit' ).show();
-		$theForm.find( '.is2-speciality-new' ).hide();
-		
-		var $el = $( this ),
-			specialityID = $el.attr( 'data-speciality-id' ),
-			$row = $( 'tr[data-speciality-id=' + specialityID + ']' );
-		
-		$row.addClass( 'is2-record-new' );
-		$specialityName.val( $row.find( '.is2-speciality-name' ).html() );
-		
-		currentSpecialityID = specialityID;
-		ajaxConfig = ajaxEditSpeciality;
-	} );
-
-	var $specialityEditError = $( '.is2-speciality-edit-error' );
-	var editedSpeciality = function( dataResponse ) {
-		isWaiting = false;
-		$preloader.css( 'visibility', 'hidden' );
-		
-		if( !dataResponse.success ) {
-			IS2.showCrudMsg( $specialityEditError, 0, 6000 );
-			$specialityNameControlGroup.addClass( 'error' );
-			return;
-		}
-		
-		window.location = '/especialidades?exito=editar-especialidad&id=' + dataResponse.data.id;
-	};
-	
-	$theForm.on( 'submit', function( e ) {
-		e.preventDefault();
-		if( isWaiting ) {
-			return;
-		}
-		
-		if( IS2.lookForEmptyFields( $specialityName, true, true ) ) {
-			return;
-		}
-		
-		isWaiting = true;
-		$preloader.css( 'visibility', 'visible' );
-		
-		$.ajax( ajaxConfig() );
-	
-	} ).on( 'hidden', function( e ) {
-		$( 'tr.is2-record-new' ).removeClass( 'is2-record-new' );
-	} );
-	
-	// *** esto es cuando vengo de crear/editar una especialidad *** //
-	var newSpecialityID;
-	var $newSpeciality;
-	if( ( newSpecialityID = window.location.search.match( /id=(\d+)/ ) ) ) {
-		$( '.is2-speciality-crudmessages' )[0].scrollIntoView();
-		$newSpeciality = $( '.is2-grid-row[data-speciality-id=' + newSpecialityID[1] + ']' );
-		$theGrid.scrollTo( $newSpeciality, 1000, { onAfter: function() {
-			$newSpeciality.addClass( 'is2-record-new' )[0].scrollIntoView();
-			window.setTimeout( function() {
-				$newSpeciality.removeClass( 'is2-record-new' );
-			}, 3000 );
-		} } );
-	}
-	
-// *** remove speciality funcionality *** //
-	var $preloaderForRemove = $( '.is2-preloader-remove' );
-	var $specialityRemoveError = $( '.is2-speciality-remove-error' );
-	var $specialityRemoveSuccess = $( '.is2-remove-success' );
-	var $closeRemoveModal = $( '.is2-speciality-remove-close' );
-	
-	$theGrid.delegate( '.is2-trigger-remove', 'click', function( e ) {
-		var $el = $( this ),
-			specialityID = $el.attr( 'data-speciality-id' ),
-			$row = $( 'tr[data-speciality-id=' + specialityID + ']' );
-		
-		$row.addClass( 'is2-record-new' );
-		
-		currentSpecialityID = specialityID;
-	} );
-	
-	var removedSpeciality = function( dataResponse ) {
-		isWaiting = false;
-		$preloaderForRemove.css( 'visibility', 'hidden' );
-		
-		if( !dataResponse.success ) {
-			IS2.showCrudMsg( $specialityRemoveError, 0, 6000 );
-			return;
-		}
-		
-		$( 'tr[data-speciality-id=' + dataResponse.data.id + ']' ).addClass( 'is2-record-removed' ).find( 'a, button' ).css( 'visibility', 'hidden' );
-		$closeRemoveModal.click();
-		IS2.showCrudMsg( $specialityRemoveSuccess );
-	};
-
-	$( '#is2-modal-remove' ).on( 'submit', function( e ) {
-		e.preventDefault();
-		if( isWaiting ) {
-			return;
-		}
-		
-		isWaiting = true;
-		$preloaderForRemove.css( 'visibility', 'visible' );
-		
-		$.ajax( {
-			url: '/especialidades/' + currentSpecialityID + '/borrar',
-			dataType: 'json',
-			type: 'POST',
-			success: removedSpeciality,
-			error: removedSpeciality
-		} );
-	
-	} ).on( 'hidden', function( e ) {
-		$( 'tr.is2-record-new' ).removeClass( 'is2-record-new' );
-	} );
+// *** create *** //
+	new crud.Create( crud );
+// *** edit *** //
+	new crud.Edit( crud );
+// *** remove *** //
+	new crud.Remove( crud );
 
 })();
 </script>
