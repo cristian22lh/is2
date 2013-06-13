@@ -226,6 +226,8 @@
 	var $preloader = $( '.is2-preloader-newedit' );
 	var $insuranceCreateError = $( '.is2-insurance-new-error' );
 	var isWaiting = false;
+	var currentInsuranceID;
+
 	
 	// ** create insurance funcionality
 	var ajaxCreate = function() {
@@ -295,7 +297,7 @@
 	
 	var ajaxEdit = function() {
 		return {
-			url: '/obras-sociales/editar',
+			url: '/obras-sociales/' + currentInsuranceID + '/editar',
 			dataType: 'json',
 			type: 'POST',
 			data: {
@@ -321,6 +323,7 @@
 		$fullName.val( $row.find( '.is2-insurance-fullname' ).html() );
 		
 		ajaxConfig = ajaxEdit;
+		currentInsuranceID = insuranceID;
 	} );
 	
 	// *** esto es caudnbo vegno de crear/editar una bora social
@@ -408,6 +411,7 @@
 
 		$row.addClass( 'is2-record-new' );
 		$insuranceIDForStatus.val( insuranceID );
+		currentInsuranceID = insuranceID;
 	} );
 	
 	var statusedInsurance = function( dataResponse ) {
@@ -445,7 +449,7 @@
 		$preloaderForStatus.css( 'visibility', 'visible' );
 		
 		$.ajax( {
-			url: '/obras-sociales/' + toggleStatus,
+			url: '/obras-sociales/' + currentInsuranceID + '/' + toggleStatus,
 			dataType: 'json',
 			type: 'POST',
 			data: {

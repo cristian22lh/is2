@@ -81,10 +81,10 @@
 // *** OBRA SOCIALES *** //
 		'/obras-sociales' => 'insurances',
 		'/obras-sociales/crear' => 'insurances.new',
-		'/obras-sociales/editar' => 'insurances.edit',
+		'/obras-sociales/:id/editar' => 'insurances.edit',
 		'/obras-sociales/borrar' => 'insurances.remove',
-		'/obras-sociales/habilitar' => 'insurances.enable',
-		'/obras-sociales/deshabilitar' => 'insurances.disable'
+		'/obras-sociales/:id/habilitar' => 'insurances.status',
+		'/obras-sociales/:id/deshabilitar' => 'insurances.status'
 	);
 	
 	require Router::start( $routes, '/404' );
