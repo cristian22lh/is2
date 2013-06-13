@@ -194,6 +194,14 @@
 			overflow-y: scroll;
 			height: 380px;
 		}
+		.is2-doctor-insurances-grid label .is2-insurance-wrapper {
+			float: left;
+		}
+		.is2-doctor-insurances-grid label span.is2-insurance-fullname {
+			display: block;
+			font-size: 11px;
+			color: #777;
+		}
 		
 		.is2-input-grid td {
 			padding: 5px 0;
@@ -453,12 +461,14 @@
 								<form class="is2-doctor-insurances">
 									<h3>Obras sociales</h3>
 									<div class="is2-doctor-insurances-grid-wrapper" style="display:none">
-										<div class="is2-doctor-insurances-grid">
+										<div class="is2-doctor-insurances-grid clearfix">
 										<?php foreach( $insurances as $insurance ): ?>
-											<label class="checkbox" data-insurance-id="<?php echo $insurance['id']; ?>">
-												<span class="is2-field" data-field-name="nombreCorto"><?php echo $insurance['nombreCorto']; ?></span>
-												<span class="is2-field" data-field-name="nombreCompleto"><?php echo $insurance['nombreCompleto']; ?></span>
+											<label class="checkbox clearfix" data-insurance-id="<?php echo $insurance['id']; ?>">
 												<input type="checkbox" name="insurancesList[]" value="<?php echo $insurance['id']; ?>">
+												<div class="is2-insurance-wrapper">
+													<span class="is2-field" data-field-name="nombreCorto"><?php echo $insurance['nombreCorto']; ?></span>
+													<span class="is2-field is2-insurance-fullname" data-field-name="nombreCompleto"><?php echo $insurance['nombreCompleto']; ?></span>
+												</div>
 											</label>
 										<?php endforeach; ?>
 										</div>

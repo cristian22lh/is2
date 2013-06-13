@@ -122,6 +122,7 @@
 					<li>No puede crear un turno si el médico en cuestión está con licencia en la fecha requerida</li>
 					<li>Verifique que la hora esté dentro del rango de horarios que posee el médico</li>
 					<li>Verifique que el médico soporte la misma obra social que la del paciente</li>
+					<li>Verifique que la obra social del paciente no se encuentre deshabilitada en el sistema</li>
 				</ul>
 			</div>
 			<?php endif; ?>
@@ -212,6 +213,9 @@
 					<div class="is2-error-patient-popover is2-popover-creationerror"></div>
 					<div class="alert alert-error is2-error-patientinsurancedisallowed is2-error-msg">
 						El paciente posee una obra social que no es admitida por el médico en cuestión
+					</div>
+					<div class="alert alert-error is2-error-patientinsurancedisabled is2-error-msg">
+						<strong>La obra social del paciente se encuentra deshabilitada, no es posible crear el turno bajo esta circunstancia</strong>
 					</div>
 					<label class="control-label">Paciente</label>
 					<div class="controls is2-dni-wrapper">
@@ -555,6 +559,7 @@
 	
 	var $patientPopover = $( '.is2-error-patient-popover' );
 	var $patientDoctorInsuranceIncompatible = $( '.is2-error-patientinsurancedisallowed' );
+	var $patientDoctorInsuranceDisabled = $( '.is2-error-patientinsurancedisabled' );
 	
 	var mapErrors = {
 		turnos_medico_no_atiende: {
@@ -584,6 +589,12 @@
 		turnos_obra_social_incompatibe: {
 			$thePopover: $patientPopover,
 			$popoverContent: $patientDoctorInsuranceIncompatible,
+			$scrollTo: $dni,
+			groupControl: [ $dniGroupControl ]
+		},
+		turnos_obra_social_deshabilitada: {
+			$thePopover: $patientPopover,
+			$popoverContent: $patientDoctorInsuranceDisabled,
 			$scrollTo: $dni,
 			groupControl: [ $dniGroupControl ]
 		}

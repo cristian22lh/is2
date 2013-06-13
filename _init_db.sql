@@ -302,6 +302,21 @@ CREATE TRIGGER turnos_crearTurno
 			CALL medico_esta_con_licencia;
 		END IF;
 		
+		/** COMPROBRAR QUE LA OBRA SOCIAL NO ESTE DESHABILITADA */
+		IF (
+			SELECT
+				os.id
+			FROM
+				obrasSociales AS os
+				INNER JOIN pacientes AS p
+					ON p.idObraSocial = os.id
+			WHERE
+				p.id = NEW.idPaciente AND os.id = p.idObraSocial AND estado = 'deshabilitada'
+		
+		) IS NOT NULL THEN
+			CALL obra_social_deshabilitada;
+		END IF;
+		
 		/**
 		* SI YA EXISTE UN TURNO CON EL MISMO MEDICO, FECHA Y HORA
 		* LA CONSTRAINT UNIQUE( idMedico, fecha, hora ) WILL TAKE CARE OF THIS
@@ -355,7 +370,7 @@ CREATE TRIGGER licencias_crearLicencia
 	FOR EACH ROW
 	BEGIN
 	
-		/** COMPOBRA QUE fechaComienzo < fechaFin */
+		/** COMPROBRAR QUE fechaComienzo < fechaFin */
 		IF NEW.fechaComienzo >= NEW.fechaFin THEN
 			CALL licencia_rango_fechas_invalido;
 		END IF;

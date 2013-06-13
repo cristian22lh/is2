@@ -45,9 +45,6 @@ header .is2-welcome {
 	vertical-align: middle;
 	text-transform: capitalize;
 }
-.table td * {
-	text-transform: none;
-}
 .table {
 	margin: 0;
 }
