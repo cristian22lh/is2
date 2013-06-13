@@ -9,7 +9,7 @@
 		__echoJSON( array( 'success' => false ) );
 	}
 	
-	$rowsAffected = DB::update(
+	$rowsAffected = DB::delete(
 		'
 			DELETE FROM
 				obrasSociales

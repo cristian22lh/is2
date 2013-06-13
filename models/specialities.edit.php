@@ -1,14 +1,14 @@
 <?php
 
-	if( !__issetPOST( array( 'id', 'speciality' ) ) ) {
-		__redirect( '/especialidades?error=editar-especialidad' );
+	if( !__issetPOST( array( 'name' ) ) ) {
+		__echoJSON( array( 'success' => false ) );
 	}
 	
-	$speciality = __sanitizeValue( $_POST['speciality'] );
-	$id = __validateID( $_POST['id'] );
-	if( !$speciality || !$id ) {
-		__redirect( '/especialidades?error=editar-especialidad' );
+	$name = __sanitizeValue( $_POST['name'] );
+	if( !$name ) {
+		__echoJSON( array( 'success' => false ) );
 	}
+	$id = Router::seg( 2 );
 	
 	$rowsAffected = DB::update(
 		'
@@ -19,14 +19,19 @@
 			WHERE
 				id = ?
 		',
-		array( strtolower( $speciality ), $id )
+		array( strtolower( $name ), $id )
 	);
 
 	// maybe a constraint error or id point to an inesisten record
-	if( $rowsAffected != 1 ) {
-		__redirect( '/especialidades?error=editar-especialidad' );
+	if( $rowsAffected < 0 ) {
+		__echoJSON( array( 'success' => false ) );
 	}
 	
-	__redirect( '/especialidades?exito=editar-especialidad' );
+	__echoJSON( array( 
+		'success' => true,
+		'data' => array(
+			'id' => $id
+		)
+	) );
 	
 ?>

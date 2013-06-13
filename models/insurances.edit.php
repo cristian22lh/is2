@@ -1,15 +1,15 @@
 <?php
 
-	if( !__issetPOST( array( 'id', 'abbr', 'full' ) ) ) {
+	if( !__issetPOST( array( 'abbr', 'full' ) ) ) {
 		__echoJSON( array( 'success' => false ) );
 	}
 	
 	$shortName = __sanitizeValue( $_POST['abbr'] );
 	$fullName = __sanitizeValue( $_POST['full'] );
-	$id = __validateID( $_POST['id'] );
-	if( !$shortName || !$id ) {
+	if( !$shortName ) {
 		__echoJSON( array( 'success' => false ) );
 	}
+	$id = Router::seg( 2 );
 	
 	$rowsAffected = DB::update(
 		'

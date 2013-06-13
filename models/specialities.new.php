@@ -1,12 +1,12 @@
 <?php
 
-	if( !__issetPOST( array( 'speciality' ) ) ) {
-		__redirect( '/especialidades?error=crear-especialidad' );
+	if( !__issetPOST( array( 'name' ) ) ) {
+		__echoJSON( array( 'success' => false ) );
 	}
 	
-	$speciality = __sanitizeValue( $_POST['speciality'] );
-	if( !$speciality ) {
-		__redirect( '/especialidades?error=crear-especialidad' );
+	$name = __sanitizeValue( $_POST['name'] );
+	if( !$name ) {
+		__echoJSON( array( 'success' => false ) );
 	}
 	
 	$insertId = DB::insert(
@@ -16,14 +16,19 @@
 			VALUES
 				( null, ? )
 		',
-		array( strtolower( $speciality ) )
+		array( strtolower( $name ) )
 	);
 	
 	// maybe a constraint error
 	if( !$insertId ) {
-		__redirect( '/especialidades?error=crear-especialidad' );
+		__echoJSON( array( 'success' => false ) );
 	}
 	
-	__redirect( '/especialidades?exito=crear-especialidad' );
+	__echoJSON( array( 
+		'success' => true,
+		'data' => array(
+			'id' => $insertId
+		)
+	) );
 	
 ?>

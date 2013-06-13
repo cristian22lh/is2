@@ -34,15 +34,6 @@
 			display: inline-block;
 			margin: 0 0 0 15px;
 		}
-		
-		.is2-grid-header-wrapper {
-			position: relative;
-			overflow: hidden;
-		}
-		.is2-grid-header-wrapper .alert {
-			opacity: 1;
-			box-shadow: none;
-		}
 	</style>
 <?php t_endHead(); ?>
 <?php t_startBody( $username, 'insurances'  ); ?>
@@ -140,6 +131,10 @@
 				</div>
 				<div class="alert alert-error is2-ajax-msg is2-ajax-msg-full is2-insurance-new-error" style="display:none">
 					<strong>¡No se ha podido crear la nueva obra social!</strong>
+					<div>Verifique no exista una con el mismo nombre abreviado ya cargada en el sistema</div>
+				</div>
+				<div class="alert alert-error is2-ajax-msg is2-ajax-msg-full is2-insurance-edit-error" style="display:none">
+					<strong>¡No se ha podido editar la obra social!</strong>
 					<div>Verifique no exista una con el mismo nombre abreviado ya cargada en el sistema</div>
 				</div>
 				<div class="control-group is2-insurances-abbr">
@@ -251,6 +246,9 @@
 		$( '.is2-insurance-edit' ).hide();
 		$( '.is2-insurance-new' ).show();
 		
+		$abbrName.val( '' );
+		$fullName.val( '' );
+		
 		ajaxConfig = ajaxCreate;
 	} );
 
@@ -285,12 +283,13 @@
 	} );
 	
 	// *** edit insurance funcionality
+	var $insuranceEditError = $( '.is2-insurance-edit-error' );
 	var editedInsurance = function( dataResponse ) {
 		isWaiting = false;
 		$preloader.css( 'visibility', 'hidden' );
 		
 		if( !dataResponse.success ) {
-			IS2.showCrudMsg( $insuranceCreateError, 0, 6000 );
+			IS2.showCrudMsg( $insuranceEditError, 0, 6000 );
 			$abbrNameControlGroup.addClass( 'error' );
 			return;
 		}
@@ -305,8 +304,7 @@
 			type: 'POST',
 			data: {
 				abbr: $abbrName.val(),
-				full: $fullName.val(),
-				id: $insuranceID.val()
+				full: $fullName.val()
 			},
 			success: editedInsurance,
 			error: editedInsurance
@@ -329,7 +327,7 @@
 		currentInsuranceID = insuranceID;
 	} );
 	
-	// *** esto es caudnbo vegno de crear/editar una bora social
+	// *** esto es caudnbo vegno de crear/editar una bora social *** //
 	var newInsuranceID;
 	var $newInsurance;
 	if( ( newInsuranceID = window.location.search.match( /id=(\d+)/ ) ) ) {

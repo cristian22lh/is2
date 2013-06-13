@@ -205,6 +205,20 @@ textarea {
 	left: inherit;
 }
 
+.is2-grid-header-wrapper {
+    overflow: hidden;
+    position: relative;
+}
+.is2-grid-header-wrapper .alert {
+	opacity: 1;
+	box-shadow: none;
+}
+
+/**
+*
+* JQUERY AUTOCOMPLETE
+*
+*/
 .ui-helper-hidden-accessible {
 	display:none;
 }

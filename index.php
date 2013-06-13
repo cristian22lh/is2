@@ -75,8 +75,8 @@
 // *** ESPECIALIDADES *** //
 		'/especialidades' => 'specialities',
 		'/especialidades/crear' => 'specialities.new',
-		'/especialidades/editar' => 'specialities.edit',
-		'/especialidades/borrar' => 'specialities.remove',
+		'/especialidades/:id/editar' => 'specialities.edit',
+		'/especialidades/:id/borrar' => 'specialities.remove',
 
 // *** OBRA SOCIALES *** //
 		'/obras-sociales' => 'insurances',
