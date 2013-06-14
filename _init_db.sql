@@ -165,7 +165,7 @@ CREATE TABLE obrasSociales(
 	UNIQUE INDEX( nombreCorto )
 ) ENGINE=InnoDB;
 
-LOAD DATA LOCAL INFILE "./_200_insurances.sql" INTO TABLE obrasSociales;
+LOAD DATA LOCAL INFILE "./_100_insurances.sql" INTO TABLE obrasSociales;
 /**
 *
 */
