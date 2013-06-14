@@ -48,6 +48,7 @@
 		}
 		tr.is2-appointments-row td:last-child {
 			width: 206px;
+			white-space: nowrap;
 		}
 		tr.is2-appointments-monthbreak td {
 			background: #84d2db;
@@ -153,7 +154,7 @@
 									<input type="text" class="input-small datepicker" name="fromDate" value="<?php echo __dateISOToLocale( $persistValues['fromDate'] ); ?>">
 								</label>
 								<label>hasta:
-									<input type="text" class="input-small datepicker" name="toDate" value="<?php echo __dateISOToLocale(  $persistValues['toDate'] ); ?>">
+									<input type="text" class="input-small datepicker" name="toDate" value="<?php echo __dateISOToLocale( $persistValues['toDate'] ); ?>">
 								</label>
 							</fieldset>
 							<fieldset class="form-inline">
@@ -163,12 +164,12 @@
 								</div>
 								<div class="bootstrap-timepicker">
 									<label>Desde:
-										<input type="text" class="input-mini timepicker" name="fromTime" value="<?php echo __timeISOToLocale( __sanitizeValue( $persistValues['fromTime'] ) ); ?>">
+										<input type="text" class="input-mini timepicker" name="fromTime" value="<?php echo __timeISOToLocale( $persistValues['fromTime'] ); ?>">
 									</label>
 								</div>
 								<div class="bootstrap-timepicker">
 									<label>hasta:
-										<input type="text" class="input-mini timepicker" name="toTime" value="<?php echo __timeISOToLocale( __sanitizeValue( $persistValues['toTime'] ) ); ?>">
+										<input type="text" class="input-mini timepicker" name="toTime" value="<?php echo __timeISOToLocale( $persistValues['toTime'] ); ?>">
 									</label>
 								</div>
 							</fieldset>
@@ -201,7 +202,7 @@
 									<input type="radio" name="patientsSearch" value="custom" class="is2-patients-custom" <?php echo $persistValues['patientsDNI'] ? 'checked' : ''; ?>>
 									Solos los turnos que tenga asociados estos pacientes con DNI...
 								</label>
-								<input class="input-xxlarge is2-patients-search" type="text" placeholder="Separe con espacios cada DNI de los pacientes" name="patientsList" value="<?php echo __sanitizeValue( $persistValues['patientsDNI'] ); ?>">
+								<input class="input-xxlarge is2-patients-search" type="text" placeholder="Separe con espacios cada DNI de los pacientes" name="patientsList" value="<?php echo $persistValues['patientsDNI']; ?>">
 								<div class="alert alert-info">
 									Si desea buscar varios pacientes a la vez, ingrese los DNI en cuestión separados por espacios, por ejemplo: <strong>7.432.211 4.533.667 7.667.888</strong> <em>(no es necesario que los escriba con puntos)</em>
 								</div>
@@ -345,7 +346,6 @@
 				<button class="btn is2-modal-confirm-close" data-dismiss="modal">No</button>
 				<button class="btn btn-primary" type="submit">Sí</button>
 			</div>
-			<input type="hidden" name="id" class="is2-modal-confirm-id">
 		</form>
 		
 		<form id="is2-modal-cancel" class="modal hide fade">
@@ -358,7 +358,6 @@
 				<button class="btn is2-modal-cancel-close" data-dismiss="modal">No</button>
 				<button class="btn btn-primary" type="submit">Sí</button>
 			</div>
-			<input type="hidden" name="id" class="is2-modal-cancel-id">
 		</form>
 		
 		<form id="is2-modal-remove" class="modal hide fade">
@@ -371,7 +370,6 @@
 				<button class="btn is2-modal-remove-close" data-dismiss="modal">No</button>
 				<button class="btn btn-primary" type="submit">Sí</button>
 			</div>
-			<input type="hidden" name="id" class="is2-modal-remove-id">
 		</form>
 		
 		<form id="is2-modal-restore" class="modal hide fade">
@@ -384,7 +382,6 @@
 				<button class="btn is2-modal-restore-close" data-dismiss="modal">No</button>
 				<button class="btn btn-primary" type="submit">Sí</button>
 			</div>
-			<input type="hidden" name="id" class="is2-modal-restore-id">
 		</form>
 		
 <?php t_endBody(); ?>
@@ -394,17 +391,16 @@
 
 // *** ACA PARA CUANDO MUESTRO LOS MODALS *** //
 	$( '.is2-grid' ).delegate( '.is2-trigger-confirm', 'click', function( e ) {
-		// hay que poner el turno id en input hidden
-		$( '#is2-modal-confirm input' ).val( $( this ).attr( 'data-appointment-id' ) );
+		$( '#is2-modal-confirm' ).attr( 'data-appointment-id', $( this ).attr( 'data-appointment-id' ) );
 	
 	} ).delegate( '.is2-trigger-cancel', 'click', function( e ) {
-		$( '#is2-modal-cancel input' ).val( $( this ).attr( 'data-appointment-id' ) );
+		$( '#is2-modal-cancel' ).attr( 'data-appointment-id', $( this ).attr( 'data-appointment-id' ) );
 	
 	} ).delegate( '.is2-trigger-remove', 'click', function( e ) {
-		$( '#is2-modal-remove input' ).val( $( this ).attr( 'data-appointment-id' ) );
+		$( '#is2-modal-remove' ).attr( 'data-appointment-id', $( this ).attr( 'data-appointment-id' ) );
 		
 	} ).delegate( '.is2-trigger-restore', 'click', function( e ) {
-		$( '#is2-modal-restore input' ).val( $( this ).attr( 'data-appointment-id' ) );
+		$( '#is2-modal-restore' ).attr( 'data-appointment-id', $( this ).attr( 'data-appointment-id' ) );
 	} );
 	
 // *** ACA PARA CUANDO SORTEO LA GRID *** //
@@ -578,15 +574,15 @@
 		$row.attr( 'data-appointment-status', status );
 	};
 	
-	var AppointmentActionAjax = function( type, url ) {
+	var AppointmentActionAjax = function( type, action ) {
 		this.type = type;
+		this.action = action;
 		this.$preloader = $( '.is2-preloader-' + type );
-		this.url = url;
-		this.$id = $( '.is2-modal-' + type + '-id' );
 		this.$closeModal = $( '.is2-modal-' + type + '-close' );
 		this.$successMsg = $( '.is2-' + type + '-success' );
 		this.$errorMsg = $( '.is2-' + type + '-error' );
-		$( '#is2-modal-' + type ).on( 'submit', $.proxy( this.send, this ) );
+		this.$theForm = $( '#is2-modal-' + type );
+		this.$theForm.on( 'submit', $.proxy( this.send, this ) );
 	};
 	AppointmentActionAjax.isWaiting = false;
 	AppointmentActionAjax.$allMsgs = $( '.is2-ajax-msg' );
@@ -601,10 +597,12 @@
 			AppointmentActionAjax.isWaiting = true;
 			this.$preloader.css( 'visibility', 'visible' );
 			
+			var appointmentID = this.$theForm.attr( 'data-appointment-id' );
+			
 			$.ajax( {
-				url: this.url,
+				url: '/turnos/' + appointmentID + '/' + this.action,
 				data: {
-					id: this.$id.val()
+					id: appointmentID
 				},
 				type: 'POST',
 				dataType: 'json',
@@ -617,6 +615,7 @@
 		response: function( dataResponse ) {
 			AppointmentActionAjax.isWaiting = false;
 			this.$preloader.css( 'visibility', 'hidden' );
+			this.$theForm.removeAttr( 'data-appointment-id' );
 			this.$closeModal.click();
 			
 			AppointmentActionAjax.$allMsgs.hide();
@@ -633,10 +632,10 @@
 		}
 	};
 	
-	new AppointmentActionAjax( 'confirm', '/turnos/confirmar' );
-	new AppointmentActionAjax( 'cancel', '/turnos/cancelar' );
-	new AppointmentActionAjax( 'remove', '/turnos/borrar' );
-	new AppointmentActionAjax( 'restore', '/turnos/reiniciar' );
+	new AppointmentActionAjax( 'confirm', 'confirmar' );
+	new AppointmentActionAjax( 'cancel', 'cancelar' );
+	new AppointmentActionAjax( 'remove', 'borrar' );
+	new AppointmentActionAjax( 'restore', 'reiniciar' );
 
 // *** ACA MUESTRO UN POPOVER CUANDO SE ACABA DE CREAR UN TURNO NUEVO *** //
 	var $newlyAppointment, 

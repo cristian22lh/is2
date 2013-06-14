@@ -11,6 +11,7 @@
 		}
 		.is2-insurances-list {
 			width: 284px;
+			text-transform: capitalize;
 		}
 	</style>
 <?php t_endHead(); ?>

@@ -373,7 +373,7 @@
 		<?php t_endWrapper(); ?>
 		
 		<!-- los modals -->
-		<form method="post" action="/pacientes/borrar" id="is2-modal-remove" class="modal hide fade">
+		<form method="post" action="" id="is2-modal-remove" class="modal hide fade">
 			<div class="modal-body">
 				<button class="close" data-dismiss="modal">&times;</button>
 				<p><strong>¿Estás seguro que desea borrar este paciente?</strong></p>
@@ -383,7 +383,6 @@
 				<button class="btn" data-dismiss="modal">Cancelar</button>
 				<button class="btn btn-primary" type="submit">Borrar</button>
 			</div>
-			<input type="hidden" name="id">
 		</form>
 		
 		<div id="is2-modal-details" class="modal hide fade">
@@ -440,8 +439,9 @@
 
 	IS2.initDatepickers();
 
+// *** borrar paciente funcionalidd *** //
 	$( '.is2-grid' ).delegate( '.is2-trigger-remove', 'click', function( e ) {
-		$( '#is2-modal-remove' ).find( 'input[name="id"]' ).val( $( this ).attr( 'data-patient-id' ) );
+		$( '#is2-modal-remove' ).attr( 'action', '/pacientes/' + $( this ).attr( 'data-patient-id' ) + '/borrar' );
 	} );
 	
 // *** PARA EL DETALLE DEL PACIENTE *** //

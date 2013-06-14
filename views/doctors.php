@@ -562,7 +562,7 @@
 				</div><!-- is2-modal-wrapper -->
 			</div>
 
-			<form method="post" action="/medicos/borrar" id="is2-modal-remove" class="modal hide fade">
+			<form method="post" action="" id="is2-modal-remove" class="modal hide fade">
 				<div class="modal-body">
 					<button class="close" data-dismiss="modal">&times;</button>
 					<p><strong>¿Estás seguro que desea borrar este médico?</strong></p>
@@ -572,7 +572,6 @@
 					<button class="btn" data-dismiss="modal">Cancelar</button>
 					<button class="btn btn-primary" type="submit">Borrar</button>
 				</div>
-				<input type="hidden" name="id">
 			</form>
 
 		<?php t_endWrapper(); ?>
@@ -1211,7 +1210,7 @@
 	
 // *** remove medico funcionalidad *** //
 	$( '.is2-doctors-grid' ).delegate( '.is2-trigger-remove', 'click', function( e ) {
-		$( '#is2-modal-remove' ).find( 'input[name="id"]' ).val( $( this ).attr( 'data-doctor-id' ) );
+		$( '#is2-modal-remove' ).attr( 'action', '/medicos/' + $( this ).attr( 'data-doctor-id' ) + '/borrar' );
 	} );
 	
 // *** change hash listener *** //

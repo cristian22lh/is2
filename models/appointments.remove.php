@@ -1,15 +1,6 @@
 <?php
 	
-	// no se puede acceder a esta pagina sin el $_POST
-	if( !__issetPOST( array( 'id' ) ) ) {
-		__echoJSON( array( 'success' => false ) );
-	}
-	
-	// id del turno
-	$id = $_POST['id'];
-	if( !__validateID( $id ) ) {
-		__echoJSON( array( 'success' => false ) );
-	}
+	$id = Router::seg( 2 );
 	
 	$rowsAffected = DB::delete(
 		'

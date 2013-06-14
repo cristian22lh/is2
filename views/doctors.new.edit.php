@@ -5,6 +5,7 @@
 		}
 		select {
 			width: 285px !important;
+			text-transform: capitalize;
 		}
 	</style>
 

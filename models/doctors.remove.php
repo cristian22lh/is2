@@ -1,13 +1,6 @@
 <?php
 
-	if( !__issetPOST( array( 'id' ) ) ) {
-		__redirect( '/medicos?error=borrar-medico' );
-	}
-	
-	$id = __validateID( $_POST['id'] );
-	if( !$id ) {
-		__redirect( '/medicos?error=borrar-medico' );
-	}
+	$id = Router::seg( 2 );
 
 	$rowsAffected = DB::delete(
 		'

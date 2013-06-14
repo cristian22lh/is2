@@ -38,10 +38,10 @@
 		
 // *** TURNOS *** //
 		'/turnos' => 'appointments',
-		'/turnos/confirmar' => 'appointments.confirm',
-		'/turnos/cancelar' => 'appointments.cancel',
-		'/turnos/borrar' => 'appointments.remove',
-		'/turnos/reiniciar' => 'appointments.reset',
+		'/turnos/:id/confirmar' => 'appointments.confirm',
+		'/turnos/:id/cancelar' => 'appointments.cancel',
+		'/turnos/:id/borrar' => 'appointments.remove',
+		'/turnos/:id/reiniciar' => 'appointments.reset',
 		'/turnos/busqueda-rapida' => 'appointments.search.quick',
 		'/turnos/busqueda-avanzada' => 'appointments.search.advanced',
 		'/turnos/crear' => 'appointments.new',
@@ -59,11 +59,11 @@
 		'/medicos/:id/borrar-licencia' => 'doctors.license.remove',
 		'/medicos/crear' => 'doctors.new',
 		'/medicos/:id/editar' => 'doctors.edit',
-		'/medicos/borrar' => 'doctors.remove',
+		'/medicos/:id/borrar' => 'doctors.remove',
 		
 // *** PACIENTES *** //
 		'/pacientes' => 'patients',
-		'/pacientes/borrar' => 'patients.remove',
+		'/pacientes/:id/borrar' => 'patients.remove',
 		'/pacientes/crear' => 'patients.new',
 		'/pacientes/:id/editar' => 'patients.edit',
 		'/pacientes/listar-por-letra/:char' => 'patients',
