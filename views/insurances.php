@@ -233,6 +233,7 @@
 	var $disableMsg = $( '.is2-status-disable-success' );
 	var $enableMsg = $( '.is2-status-enable-success' );
 	var toggleStatus;
+	var isWaiting = false;
 	
 	$theGrid.delegate( '.is2-trigger-status', 'click', function( e ) {
 		var $el = $( this ),

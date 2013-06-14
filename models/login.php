@@ -5,7 +5,6 @@
 		__redirect( '/turnos' );
 	}
 
-	// defaults variales que son usadas en la view
 	$isErrorLogin = false;
 
 	// el usuario ha hecho click en el button "Iniciar sesion"
