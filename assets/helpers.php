@@ -250,6 +250,36 @@
 		return in_array( $dayIndex, array( 1, 2, 3, 4, 5, 6, 7 ) ) ? $dayIndex : false;
 	}
 	
+	function __getPatientOld( $birthDate ) {
+		$currentDate = explode( '-', date( 'Y-m-d' ) );
+		$birthDate = explode( '-', $birthDate );
+
+		$years = $currentDate[0] - $birthDate[0];
+		$months = $currentDate[1] - $birthDate[1];
+		$days = $currentDate[2] - $birthDate[2];
+		
+		if( $days < 0 ) {
+			$days += date( 'd', strtotime( $currentDate[0] . '-' . $currentDate[1] . ' next month previous day' ) );
+			$months--;
+			if( $months < 0 ) {
+				$months += 12;
+				$years--;
+			}
+		}
+		if( $months < 0 ) {
+			$months += 12;
+			$years--;
+		}
+		
+		if( !$years && $months ) {
+			return $months . ' meses';
+		}
+		if( !$years && !$months ) {
+			return $days . ' dias';
+		}
+		return $years . ' años';
+	}
+	
 // ************** /
 // RENDER VIEWS
 // ************* /

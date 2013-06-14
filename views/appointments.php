@@ -80,6 +80,15 @@
 			border-radius: 20px;
 			display: inline-block;
 		}
+		
+		.is2-appointments-export {
+			border-radius: 0 0 5px 5px;
+			padding: 5px;
+		}
+		.is2-appointments-export a {
+			margin: 0 10px 0 0;
+			vertical-align: middle;
+		}
 	</style>
 
 <?php t_endHead(); ?>
@@ -326,6 +335,14 @@
 					<?php t_appointmentNewRow( $dateLocale ); ?>
 					
 				</table>
+			</div>
+			
+			<div class="is2-appointments-export btn-inverse clearfix">
+				<div class="pull-right">
+					<a class="is2-icon is2-icon-print" href="" title="Ver listado en formato imprimible"></a>
+					<a class="is2-icon is2-icon-excel" href="" title="Descargar listado en un archivo excel"></a>
+					<a class="is2-icon is2-icon-pdf" href="" title="Descargar listado en un archivo pdf"></a>
+				</div>
 			</div>
 			
 			<?php else: ?>

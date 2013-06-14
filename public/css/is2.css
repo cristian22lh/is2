@@ -214,9 +214,24 @@ textarea {
 	box-shadow: none;
 }
 
+.is2-icon {
+	width: 24px;
+	height: 24px;
+	display: inline-block;
+}
+.is2-icon-print {
+	background: url( /img/icon-printer.png ) no-repeat;
+}
+.is2-icon-excel {
+	background: url( /img/icon-excel.png ) no-repeat;
+}
+.is2-icon-pdf {
+	background: url( /img/icon-pdf.png ) no-repeat;
+}
+
 /**
 *
-* JQUERY AUTOCOMPLETE
+* JQUERY UI AUTOCOMPLETE
 *
 */
 .ui-helper-hidden-accessible {
