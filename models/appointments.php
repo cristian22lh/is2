@@ -34,21 +34,21 @@
 		$dateRange = explode( '@', $searchParts[0] );
 		// no pasa nada si se mete mano en estos datos
 		if( isset( $dateRange[0] ) && $dateRange[0] ) {
-			$whereClause[] = ' fecha >= ? ';
+			$whereClause[] = ' t.fecha >= ? ';
 			$replacements[] = $persistValues['fromDate'] = $dateRange[0];
 		}
 		if( isset( $dateRange[1] ) && $dateRange[1] ) {
-			$whereClause[] = ' fecha <= ? ';
+			$whereClause[] = ' t.fecha <= ? ';
 			$replacements[] = $persistValues['toDate'] = $dateRange[1];
 		}
 		// la segunda parte el time range
 		$timeRange = explode( '@', $searchParts[1] );
 		if( isset( $timeRange[0] ) && $timeRange[0] ) {
-			$whereClause[] = ' hora >= ? ';
+			$whereClause[] = ' t.hora >= ? ';
 			$replacements[] = $persistValues['fromTime'] = $timeRange[0];
 		}
 		if( isset( $timeRange[1] ) && $timeRange[1] ) {
-			$whereClause[] = ' hora <= ? ';
+			$whereClause[] = ' t.hora <= ? ';
 			$replacements[] = $persistValues['toTime'] = $timeRange[1];
 		}
 		// la tercera parte es una lista de doctores
@@ -108,16 +108,16 @@
 		$field =  $keyword[0];
 		$value = $keyword[1];
 		if( $field == 'fecha' ) {
-			$whereClause[] = ' fecha = ? ';
+			$whereClause[] = ' t.fecha = ? ';
 			$replacements[] = $value;
 			$value = __dateISOToLocale( $value );
 			
 		} else if( $field == 'hora' ) {
-			$whereClause[] = ' hora = ? ';
+			$whereClause[] = ' t.hora = ? ';
 			$replacements[] = $value;
 			
 		} else if( $field == 'estado' ) {
-			$whereClause[] = ' estado = ? ';
+			$whereClause[] = ' t.estado = ? ';
 			$replacements[] = $value;
 			
 		} else if( $field == 'comodin' ) {
@@ -138,16 +138,16 @@
 	
 // ESTE ES EL WHERE NORMAL, OSEA CUANDO SE ESTA ACCEDIENDO DIRECTAMENTE A /turnos
 	} else {
-		$whereClause[] = ' fecha >= ? ';
+		$whereClause[] = ' t.fecha >= ? ';
 		$replacements[] = $startDate = date( 'Y-m-d' );
-		$whereClause[] = ' fecha <= ? ';
+		$whereClause[] = ' t.fecha <= ? ';
 		// en modo normal se muestran los turnos desde la fecha actual hasta + 7 dias
 		$replacements[] = $endDate = date( 'Y-m-d', strtotime( '+7 days' ) );
 	}
 	
 	// SE PUEDEN FILTAR LOS TURNOS MEDIANTE LA COLUMNA "ACCIONES" O MEDINATE UNA BUSQUEDA
 	if( $statusValue && ( $statusValue = __getAppointmentStatus( $statusValue ) ) ) {
-		$whereClause[] = ' estado = ? ';
+		$whereClause[] = ' t.estado = ? ';
 		$replacements[] = $statusValue;
 	}
 	
@@ -196,7 +196,7 @@
 		
 			'
 				SELECT 
-					t.id, fecha, hora, estado,
+					t.id, t.fecha, t.hora, t.estado,
 					m.id AS idMedico, m.nombres AS medicoNombres, m.apellidos AS medicoApellidos, m.avatarMini AS medicoAvatar,
 					p.id AS idPaciente, p.nombres AS pacienteNombres, p.apellidos AS pacienteApellidos
 				FROM turnos AS t 
@@ -224,7 +224,7 @@
 		}
 		
 	} else {
-		$appointments = array();
+		$appointments = null;
 	}
 	
 // PIDO LOS MEDICOS, ESTOS ES DEBIDO A QUE LA BUSQUEDA DESPLIEGA UNA
@@ -278,7 +278,12 @@
 			'doctors' => $doctors,
 			'persistValues' => $persistValues,
 			'DAYNAME' => $DAYNAME,
-			'MONTHNAME' => $MONTHNAME
+			'MONTHNAME' => $MONTHNAME,
+			// NECESITO LA WHERE CLAUSE PARA QUE LOS ICONOS
+			// DE GENERAR LISTADO SEPAN COMO SE GENERO EL
+			// EL LISTADO DE TURNOS
+			'listingFields' => base64_encode( implode( '|', $whereClause ) ),
+			'listingValues' => base64_encode( implode( '|', $replacements ) )
 		)
 	);
 

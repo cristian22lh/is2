@@ -249,7 +249,7 @@
 			</div>
 			<?php endif; ?>
 			
-			<?php if( $appointments->rowCount() ): ?>
+			<?php if( $appointments && $appointments->rowCount() ): ?>
 			<table class="table is2-grid-header btn-inverse">
 				<tr>
 					<th>
@@ -340,7 +340,7 @@
 			<div class="is2-appointments-export btn-inverse clearfix">
 				<div class="pull-right">
 					<a class="is2-icon is2-icon-print" href="" title="Ver listado en formato imprimible"></a>
-					<a class="is2-icon is2-icon-excel" href="" title="Descargar listado en un archivo excel"></a>
+					<a class="is2-icon is2-icon-excel" href="/turnos/exportar/excel?campos=<?php echo $listingFields; ?>&valores=<?php echo $listingValues; ?>" title="Descargar listado en un archivo excel"></a>
 					<a class="is2-icon is2-icon-pdf" href="" title="Descargar listado en un archivo pdf"></a>
 				</div>
 			</div>

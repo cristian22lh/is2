@@ -63,9 +63,23 @@
 // ************** /
 // PHPEXCEL funcionality
 // ************* /
-	function __initPHPExcel() {
+	function __getPHPExcelInstance() {
 		require_once './modules/phpexcel/PHPExcel.php';
 		return new PHPExcel();
+	}
+	
+	function __echoExcel( $phpExcel ) {
+		require_once './modules/phpexcel/PHPExcel.php';
+		
+		header( 'Content-Type: application/vnd.ms-excel' );
+		header( 'Content-Disposition: attachment; filename="Listado de turnos (' . time() . ').xls' . '"' );
+		header( 'Cache-Control: max-age=0' );
+		
+		$excelWriter = PHPExcel_IOFactory::createWriter( $phpExcel, 'Excel5' );
+		$excelWriter->setPreCalculateFormulas( false );
+		$excelWriter->save( 'php://output' );
+		
+		die;
 	}
 	
 // ************** /

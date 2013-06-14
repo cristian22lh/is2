@@ -45,6 +45,7 @@
 		'/turnos/busqueda-rapida' => 'appointments.search.quick',
 		'/turnos/busqueda-avanzada' => 'appointments.search.advanced',
 		'/turnos/crear' => 'appointments.new',
+		'/turnos/exportar/excel' => 'appointments.export.excel',
 
 // *** MEDICOS *** //
 		'/medicos/comprobar-horarios-disponibilidad' => 'doctors.check.availability',

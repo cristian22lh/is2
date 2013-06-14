@@ -20,7 +20,7 @@
 		__echoJSON( array( 'success' => false ) );
 	}
 	
-	$patient = $patientData->fetch( PDO::FETCH_ASSOC );
+	$patient = $patientData->fetch();
 	$patient['edad'] = __getPatientOld( $patient['fechaNacimiento'] );
 	$patient['fechaNacimiento'] = __dateISOToLocale( $patient['fechaNacimiento'] );
 	
@@ -41,7 +41,7 @@
 		array( $patientID )
 	
 	);
-	$appointments = $appointments->fetchAll( PDO::FETCH_ASSOC );
+	$appointments = $appointments->fetchAll();
 	for( $i = 0, $l = count( $appointments ); $i < $l; $i++ ) {
 		$appointment = &$appointments[$i];
 		$appointment['fecha'] = __dateISOToLocale( $appointment['fecha'] );

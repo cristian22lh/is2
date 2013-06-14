@@ -58,6 +58,7 @@
 			try {
 				$stmt = self::$db->prepare( $query );
 				$stmt->execute( $replacements );
+				$stmt->setFetchMode( PDO::FETCH_ASSOC );
 			
 			} catch( PDOException $e ) {
 				self::_err( $e );
