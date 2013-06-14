@@ -261,23 +261,29 @@
 				<?php foreach( $appointments as $appointment ): ?>
 				
 					<?php if( $appointment['fecha'] != $currentDate ): ?>
+
 						<?php $currentDate = $appointment['fecha']; ?>
-						<?php $currentAppointmentDate = strtotime( $currentDate ); ?>
-						<?php $dateLocale = date( 'd/m/Y', $currentAppointmentDate ); ?>
+						<?php $currentAppointmentMilliseconds = strtotime( $currentDate ); ?>
+						<?php $appointmentDateData = explode( '-', date( 'm-d-Y-M-D-j', $currentAppointmentMilliseconds ) ); ?>
+						<?php $dateLocale = $appointmentDateData[1] . '/' . $appointmentDateData[0] . '/' . $appointmentDateData[2]; ?>
+
 					<?php t_appointmentNewRow( date( 'd/m/Y',  strtotime( $currentDate . ' previous day' ) ) ); ?>
-					<?php if( !$currentMonth || $currentMonth != date( 'm', $currentAppointmentDate ) ): ?>
-						<?php $currentMonth = date( 'm', $currentAppointmentDate ); ?>
+
+					<?php if( !$currentMonth || $currentMonth != $appointmentDateData[0] ): ?>
+						<?php $currentMonth = $appointmentDateData[0]; ?>
+
 					<tr class="is2-appointments-monthbreak" data-appointment-group="<?php echo $currentMonth; ?>">
 						<td></td>
 						<td></td>
-						<td><?php echo $MONTHNAME[date( 'M', $currentAppointmentDate )]; ?></td>
-						<td><?php echo date( 'Y', $currentAppointmentDate ); ?></td>
+						<td><?php echo $MONTHNAME[$appointmentDateData[3]]; ?></td>
+						<td><?php echo $appointmentDateData[2]; ?></td>
 						<td></td>
 					</tr>
+
 					<?php endif; ?>
 					
-					<tr class="is2-appointments-dayrow" data-appointment-date="<?php echo $dateLocale; ?>" data-appointment-group="<?php echo $currentMonth; ?>" data-appointment-timestamp="<?php echo $currentAppointmentDate; ?>">
-						<td><?php echo $DAYNAME[date( 'D', $currentAppointmentDate )] . ', ' . date( 'j', $currentAppointmentDate ); ?></td>
+					<tr class="is2-appointments-dayrow" data-appointment-date="<?php echo $dateLocale; ?>" data-appointment-group="<?php echo $currentMonth; ?>" data-appointment-timestamp="<?php echo $currentAppointmentMilliseconds; ?>">
+						<td><?php echo $DAYNAME[$appointmentDateData[4]] . ', ' . $appointmentDateData[5]; ?></td>
 						<td><?php t_timeMenu(); ?></td>
 						<td></td>
 						<td></td>
