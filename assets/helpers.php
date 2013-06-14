@@ -68,7 +68,7 @@
 		return new PHPExcel();
 	}
 	
-	function __echoExcel( $phpExcel ) {
+	function __echoPHPExcel( $phpExcel ) {
 		require_once './modules/phpexcel/PHPExcel.php';
 		
 		header( 'Content-Type: application/vnd.ms-excel' );

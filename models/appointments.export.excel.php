@@ -98,10 +98,15 @@
 			)
 		)
 	);
+	$BACKGROUNDS = array(
+		'confirmado' => $styleForAppointmentConfirmed,
+		'cancelado' => $styleForAppointmentCancelled,
+		'esperando' => array()
+	);
 
 	if( $appointments->rowCount() ) {
 		$phpExcelSheet->getColumnDimension( 'C' )->setAutoSize( true );
-		$phpExcelSheet->getColumnDimension( 'D' )->setAutoSize( true );
+		$phpExcelSheet->getColumnDimension( 'E' )->setAutoSize( true );
 		$phpExcelSheet->getStyle( 'A1:E1' )->applyFromArray( $styleForFieldNames );
 		$phpExcelSheet->setCellValue( 'A1', 'Dia' );
 		$phpExcelSheet->setCellValue( 'B1', 'Hora' );
@@ -121,11 +126,8 @@
 			$phpExcelSheet->getRowDimension( $phpExcelSheet->getCell( $phpExcelSheet->getStyle( 'A' . $cellIndex . ':E' . $cellIndex++ )->applyFromArray( $styleForAppointmentBar )->getActiveCell() )->getRow() )->setRowHeight( 5 );	
 		}
 		
-		if( $appointment['estado'] == 'confirmado' ) {
-			$phpExcelSheet->getStyle( 'A' . $cellIndex . ':E' . $cellIndex )->applyFromArray( $styleForAppointmentConfirmed );
-		} else if( $appointment['estado'] == 'cancelado' ) {
-			$phpExcelSheet->getStyle( 'A' . $cellIndex . ':E' . $cellIndex )->applyFromArray( $styleForAppointmentCancelled );
-		}
+		// set background for the row
+		$phpExcelSheet->getStyle( 'A' . $cellIndex . ':E' . $cellIndex )->applyFromArray( $BACKGROUNDS[$appointment['estado']] );
 	
 		$phpExcelSheet->setCellValue( 'A' . $cellIndex, __dateISOToLocale( $appointment['fecha'] ) );
 		$phpExcelSheet->setCellValue( 'B' . $cellIndex, __trimTime( $appointment['hora'] ) );
@@ -136,6 +138,6 @@
 		$previousAppointmentDate = $appointment['fecha'];
 	}
 
-	__echoExcel( $phpExcel );
+	__echoPHPExcel( $phpExcel );
 	
 ?>
