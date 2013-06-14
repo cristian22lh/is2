@@ -282,8 +282,7 @@
 			// NECESITO LA WHERE CLAUSE PARA QUE LOS ICONOS
 			// DE GENERAR LISTADO SEPAN COMO SE GENERO EL
 			// EL LISTADO DE TURNOS
-			'listingFields' => base64_encode( implode( '|', $whereClause ) ),
-			'listingValues' => base64_encode( implode( '|', $replacements ) )
+			'listingData' => 'campos=' . base64_encode( implode( '|', $whereClause ) ) . '&valores='  . base64_encode( implode( '|', $replacements ) )
 		)
 	);
 

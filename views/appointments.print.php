@@ -28,7 +28,7 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 			font-weight: 600;
 			font-size: 18px;
 			text-align: center;
-			border-bottom: 2px solid #ccc;
+			border-bottom: 1px solid #555;
 		}
 		tbody tr:not( .is2-empty-row ):nth-child( even ) {
 			background: #f1f1f1;
@@ -39,11 +39,22 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 			font-size: 16px;
 			border-top: 1px solid #ccc;
 			text-transform: capitalize;
-			vertical-align: center;
+			vertical-align: middle;
 		}
 		td:nth-child( 3 ),
 		td:nth-child( 4 ) {
 			text-align: left;
+		}
+		
+		tr.is2-appointment-confirmed td {
+			background: #A0DA8F;
+		}
+		tr.is2-appointment-cancelled td {
+			background: #F89406;
+			color: #fff;
+		}
+		tr.is2-appointment-waiting td {
+		
 		}
 		
 		tr.is2-empty-row:first-of-type {
@@ -101,6 +112,11 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 				</thead>
 				<tbody>
 				<?php $previousAppointmentDate = null; ?>
+				<?php $BACKGROUNDS = array(
+					'confirmado' => 'is2-appointment-confirmed',
+					'cancelado' => 'is2-appointment-cancelled',
+					'esperando' => 'is2-appointment-waiting'
+				); ?>
 				<?php foreach( $appointments as $appointment ): ?>
 				
 					<?php if( $previousAppointmentDate != $appointment['fecha'] ): ?>
@@ -112,7 +128,7 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 					</tr>
 					<?php endif; ?>
 					
-					<tr>
+					<tr class="<?php echo $BACKGROUNDS[$appointment['estado']]; ?>">
 						<td><?php echo __dateISOToLocale( $appointment['fecha'] ); ?></td>
 						<td><?php echo __trimTime( $appointment['hora'] ); ?></td>
 						<td><?php echo $appointment['medicoApellidos'] . ', ' . $appointment['medicoNombres']; ?></td>

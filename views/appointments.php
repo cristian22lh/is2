@@ -340,9 +340,9 @@
 			
 			<div class="is2-appointments-export btn-inverse clearfix">
 				<div class="pull-right">
-					<a class="is2-icon is2-icon-print" href="/turnos/exportar/imprimir?campos=<?php echo $listingFields; ?>&valores=<?php echo $listingValues; ?>" title="Ver listado en formato imprimible" target="_blank"></a>
-					<a class="is2-icon is2-icon-excel" href="/turnos/exportar/excel?campos=<?php echo $listingFields; ?>&valores=<?php echo $listingValues; ?>" title="Descargar listado en un archivo excel"></a>
-					<a class="is2-icon is2-icon-pdf" href="" title="Descargar listado en un archivo pdf"></a>
+					<a class="is2-icon is2-icon-print" href="/turnos/exportar/imprimir?<?php echo $listingData; ?>" title="Ver listado en formato imprimible" target="_blank"></a>
+					<a class="is2-icon is2-icon-excel" href="/turnos/exportar/excel?<?php echo $listingData; ?>" title="Descargar listado en un archivo excel"></a>
+					<a class="is2-icon is2-icon-pdf" href="/turnos/exportar/pdf?<?php echo $listingData; ?>" title="Descargar listado en un archivo pdf"></a>
 				</div>
 			</div>
 
