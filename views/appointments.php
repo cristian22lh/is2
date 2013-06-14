@@ -268,9 +268,9 @@
 						<?php $dateLocale = $appointmentDateData[1] . '/' . $appointmentDateData[0] . '/' . $appointmentDateData[2]; ?>
 
 					<?php t_appointmentNewRow( date( 'd/m/Y',  strtotime( $currentDate . ' previous day' ) ) ); ?>
-
-					<?php if( !$currentMonth || $currentMonth != $appointmentDateData[0] ): ?>
-						<?php $currentMonth = $appointmentDateData[0]; ?>
+					
+						<?php if( !$currentMonth || $currentMonth != $appointmentDateData[0] ): ?>
+							<?php $currentMonth = $appointmentDateData[0]; ?>
 
 					<tr class="is2-appointments-monthbreak" data-appointment-group="<?php echo $currentMonth; ?>">
 						<td></td>
@@ -279,8 +279,8 @@
 						<td><?php echo $appointmentDateData[2]; ?></td>
 						<td></td>
 					</tr>
-
-					<?php endif; ?>
+					
+						<?php endif; ?>
 					
 					<tr class="is2-appointments-dayrow" data-appointment-date="<?php echo $dateLocale; ?>" data-appointment-group="<?php echo $currentMonth; ?>" data-appointment-timestamp="<?php echo $currentAppointmentMilliseconds; ?>">
 						<td><?php echo $DAYNAME[$appointmentDateData[4]] . ', ' . $appointmentDateData[5]; ?></td>
@@ -289,9 +289,11 @@
 						<td></td>
 						<td><?php t_statusMenu(); ?></td>
 					</tr>
+					
 					<?php endif; ?>
 					
 					<?php if( $appointment['hora'] ): ?>
+					
 					<tr class="is2-appointments-row" data-appointment-id="<?php echo $appointment['id']; ?>" data-appointment-date="<?php echo $dateLocale; ?>" data-appointment-status="<?php echo $appointment['estado']; ?>">
 						<td>&nbsp;</td>
 						<td class="is2-appointment-time"><?php echo __trimTime( $appointment['hora'] ); ?></td>
@@ -316,16 +318,22 @@
 							</div>
 						</td>
 					</tr>
+					
 					<?php endif; ?>
 					
 				<?php endforeach; ?>
+				
 					<?php t_appointmentNewRow( $dateLocale ); ?>
+					
 				</table>
 			</div>
+			
 			<?php else: ?>
+			
 			<div class="alert alert-error">
 				No se han encontrado turnos según el criterio de búsqueda específicado
 			</div>
+			
 			<?php endif; ?>
 
 			<div class="is2-popover">
