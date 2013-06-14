@@ -344,7 +344,7 @@
 					<a class="is2-icon is2-icon-pdf" href="" title="Descargar listado en un archivo pdf"></a>
 				</div>
 			</div>
-			
+
 			<?php else: ?>
 			
 			<div class="alert alert-error">

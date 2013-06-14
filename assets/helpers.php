@@ -38,26 +38,34 @@
 		}
 	}
 	
+	function ___echoToFirePHP( $type, $args ) {
+		require_once './modules/firephp/FirePHP.class.php';
+		$firephp = FirePHP::getInstance( true );
+		foreach( $args as $arg ) {
+			call_user_func_array( array( $firephp, $type ), array( $arg ) );
+		}
+	}
+	
 	function __log() {
 		global $DEBUG;
 		if( $DEBUG ) {
-			require_once './debug/FirePHP.class.php';
-			$firephp = FirePHP::getInstance( true );
-			foreach( func_get_args() as $arg ) {
-				$firephp->log( is_bool( $arg ) ? ( $arg ? 'true' : 'false' ) : $arg );
-			}
+			___echoToFirePHP( 'log', func_get_args() );
 		}
 	}
 	
 	function __err() {
 		global $DEBUG;
 		if( $DEBUG ) {
-			require_once './debug/FirePHP.class.php';
-			$firephp = FirePHP::getInstance( true );
-			foreach( func_get_args() as $arg ) {
-				$firephp->log( is_bool( $arg ) ? ( $arg ? 'true' : 'false' ) : $arg );
-			}
+			___echoToFirePHP( 'error', func_get_args() );
 		}
+	}
+	
+// ************** /
+// PHPEXCEL funcionality
+// ************* /
+	function __initPHPExcel() {
+		require_once './modules/phpexcel/PHPExcel.php';
+		return new PHPExcel();
 	}
 	
 // ************** /
@@ -275,7 +283,7 @@
 			return $months . ' meses';
 		}
 		if( !$years && !$months ) {
-			return $days . ' dias';
+			return $days . ' días';
 		}
 		return $years . ' años';
 	}
