@@ -39,6 +39,7 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 			font-size: 16px;
 			border-top: 1px solid #ccc;
 			text-transform: capitalize;
+			vertical-align: center;
 		}
 		td:nth-child( 3 ),
 		td:nth-child( 4 ) {
@@ -51,10 +52,44 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 		tr.is2-empty-row td {
 			background: #aaa;
 		}
+		
+		@media print {
+			.is2-print-button {
+				display: none;
+			}
+		}
+		.is2-print-button {
+			position: fixed;
+			padding: 5px 10px;
+			top: 5px;
+			left: 5px;
+			opacity: .5;
+		}
+		.is2-print-button:hover {
+			opacity: 1;
+		}
+		.is2-print-button-trigger {
+			padding: 2px 15px;
+			background: #f1f1f1;
+			border: 0;
+			font-weight: 600;
+			font-size: 12px;
+			border-radius: 5px;
+			box-shadow: 0 0 10px #000;
+			line-height: 2;
+			color: #000;
+			text-shadow: 0 -1px 0 #fff;
+			cursor: pointer;
+		}
 
 		</style>
 	</head>
 	<body>
+	
+			<div class="is2-print-button">
+				<button class="is2-print-button-trigger">Imprimir</button>
+			</div>
+		
 			<table>
 				<thead>
 						<tr>
@@ -96,3 +131,6 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 	print();
 </script>
 <?php endif; ?>
+<script>
+	document.querySelector( '.is2-print-button-trigger' ).addEventListener( 'click', function( e ) { print(); } );
+</script>
