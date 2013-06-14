@@ -95,6 +95,7 @@
 <?php t_startBody( $username, 'appointments'  ); ?>
 
 		<?php t_startWrapper(); ?>
+
 			<div class="alert alert-success is2-confirm-success is2-ajax-msg">
 				<a class="close" data-dismiss="alert" href="#">&times;</a>
 				¡El turno ha sido confirmado satisfactoriamente!
@@ -339,7 +340,7 @@
 			
 			<div class="is2-appointments-export btn-inverse clearfix">
 				<div class="pull-right">
-					<a class="is2-icon is2-icon-print" href="" title="Ver listado en formato imprimible"></a>
+					<a class="is2-icon is2-icon-print" href="/turnos/exportar/imprimir?campos=<?php echo $listingFields; ?>&valores=<?php echo $listingValues; ?>" title="Ver listado en formato imprimible" target="_blank"></a>
 					<a class="is2-icon is2-icon-excel" href="/turnos/exportar/excel?campos=<?php echo $listingFields; ?>&valores=<?php echo $listingValues; ?>" title="Descargar listado en un archivo excel"></a>
 					<a class="is2-icon is2-icon-pdf" href="" title="Descargar listado en un archivo pdf"></a>
 				</div>
