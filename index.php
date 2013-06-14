@@ -82,7 +82,7 @@
 		'/obras-sociales' => 'insurances',
 		'/obras-sociales/crear' => 'insurances.new',
 		'/obras-sociales/:id/editar' => 'insurances.edit',
-		'/obras-sociales/borrar' => 'insurances.remove',
+		'/obras-sociales/:id/borrar' => 'insurances.remove',
 		'/obras-sociales/:id/habilitar' => 'insurances.status',
 		'/obras-sociales/:id/deshabilitar' => 'insurances.status'
 	);

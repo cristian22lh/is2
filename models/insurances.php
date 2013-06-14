@@ -7,9 +7,9 @@
 	
 	$createSuccess = false;
 	$editSuccess = false;
-	if( __issetGETField( 'exito', 'crear-obra-social' ) ) {
+	if( __issetGETField( 'exito-crear' ) ) {
 		$createSuccess = true;
-	} else if( __issetGETField( 'exito', 'editar-obra-social' ) ) {
+	} else if( __issetGETField( 'exito-editar' ) ) {
 		$editSuccess = true;
 	}
 

@@ -75,7 +75,7 @@
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<strong class="is2-edit">Editar especialidad</strong>
-				<strong class="is2-new">Crear especialidad</strong>
+				<strong class="is2-create">Crear especialidad</strong>
 			</div>
 			<div class="modal-body">
 				<div class="alert alert-error is2-ajax-msg is2-ajax-msg-full is2-create-error" style="display:none">
@@ -88,7 +88,7 @@
 					<strong>¡No se ha podido editar la especialidad!</strong>
 					<div>Verifique no exista una con el mismo nombre ya cargada en el sistema</div>
 				</div>
-				<div class="control-group is2-speciality-name">
+				<div class="control-group">
 					<label class="control-label">Nombre de la especialidad:</label>
 					<div class="controls">
 						<input type="text" class="is2-field input-xlarge" name="name" data-field-required="true">
@@ -98,7 +98,7 @@
 			<div class="modal-footer">
 				<button class="btn" data-dismiss="modal">Cancelar</button>
 				<button class="btn btn-primary is2-edit" type="submit">Confirmar cambios</button>
-				<button class="btn btn-primary is2-new" type="submit">Crear especialidad</button>
+				<button class="btn btn-primary is2-create" type="submit">Crear especialidad</button>
 				<span class="is2-preloader is2-preloader-bg pull-left"></span>
 			</div>
 		</form>

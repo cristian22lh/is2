@@ -253,7 +253,7 @@ IS2.CRUD.prototype = {
 		this.$fields = this.$theForm.find( '.is2-field' );
 		this.$requiredFields = this.$theForm.find( '.is2-field[data-field-required="true"]' );
 		this.$editElems = this.$theForm.find( '.is2-edit' );
-		this.$newElems = this.$theForm.find( '.is2-new' );
+		this.$createElems = this.$theForm.find( '.is2-create' );
 		
 		this.$preloader = this.$theForm.find( '.is2-preloader' );
 		
@@ -269,7 +269,7 @@ IS2.CRUD.prototype = {
 		this.$fields = this.$theForm.find( '.is2-field' );
 		this.$requiredFields = this.$theForm.find( '.is2-field[data-field-required="true"]' );
 		this.$editElems = this.$theForm.find( '.is2-edit' );
-		this.$newElems = this.$theForm.find( '.is2-new' );
+		this.$createElems = this.$theForm.find( '.is2-create' );
 		
 		this.$preloader = this.$theForm.find( '.is2-preloader' );
 		
@@ -306,7 +306,14 @@ IS2.CRUD.prototype = {
 	* scope loosed
 	*/
 	_highlightRecord: function( $row, data ) {
-		$row.addClass( 'is2-record-new' )[0].scrollIntoView();
+		var $prevRow = $row.prev();
+		if( !$prevRow.length ) {
+			$prevRow = $row;
+		}
+		
+		$row.addClass( 'is2-record-new' );
+		$prevRow[0].scrollIntoView();
+		
 		window.setTimeout( function() {
 			$row.removeClass( 'is2-record-new' );
 		}, 3000 );
@@ -319,7 +326,7 @@ IS2.CRUD.prototype.Remove.prototype = {
 		var theID = $( e.target ).attr( this.parent.identifierAttr ),
 			$row = $( 'tr[' + this.parent.identifierAttr + '=' + theID + ']' );
 			
-		this.$msgError.hide();
+		this.$msgError.stop().hide();
 		$row.addClass( 'is2-record-new' );
 		
 		this.parent.currentID = theID;
@@ -371,11 +378,11 @@ IS2.CRUD.prototype.Edit.prototype = {
 		$row.addClass( 'is2-record-new' );
 		
 		this.$editElems.show();
-		this.$newElems.hide();
+		this.$createElems.hide();
 		
 		for( ; i < l; i++ ) {
 			$field = this.$fields.eq( i );
-			$field.val( $row.find( '[data-field-name=' + $field.attr( $field.attr( 'name' ) ) + ']' ).html() );
+			$field.val( $row.find( '[data-field-name=' + $field.attr( 'name' ) + ']' ).html() );
 		}
 		
 		this.parent.currentID = theID;
@@ -397,7 +404,7 @@ IS2.CRUD.prototype.Create.prototype = {
 	
 	onclick: function( e ) {
 		this.$editElems.hide();
-		this.$newElems.show();
+		this.$createElems.show();
 		
 		this.$fields.val( '' );
 		
