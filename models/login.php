@@ -28,7 +28,7 @@
 		);
 
 		// hubo exito en la query
-		if( count( $res ) == 1 ) {
+		if( $res->rowCount() == 1 ) {
 			__setUserLogin();
 			__setUsername( $username );
 			// check if the user comes from: /iniciar-sesion?destino=/turnos for example
