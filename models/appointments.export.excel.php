@@ -4,13 +4,20 @@
 	$fields = explode( '|', base64_decode( __GETField( 'campos' ) ) );
 	$whereClause = array();
 	$pat = '/^\s*(?:(?:t\.fecha|t\.hora)\s*(?:>=|<=|=)\s*\?|\(\s*(m\.id\s*=\s*\?)(?:\s*OR\s*\1)*\s*\)|\(\s*(p\.dni\s*=\s*\?)(?:\s*OR\s*\1)*\s*\)|\s*t\.estado\s*=\s*\?|\(\s*m\.nombres\s*LIKE\s*\?\s*OR\s*m\.apellidos\s*LIKE\s*\?\s*OR\s*p\.apellidos\s*LIKE\s*\?\s*OR\s*p\.nombres\s*LIKE\s*\?|\s*1\s*=\s*1)/';
+	$tokens = -1;
 	foreach( $fields as $field ) {
 		if( !preg_match( $pat, $field ) ) {
 			__redirect( '/404' );
 		}
+		str_replace( '?', '?', $field, $count );
+		$tokens += $count;
+		
 		$whereClause[] = $field;
 	}
 	$replacements = explode( '|', base64_decode( __GETField( 'valores' ) ) );
+	if( $tokens != count( $replacements ) ) {
+		__redirect( '/404' );
+	}
 	
 	$appointments = DB::select(
 		'
@@ -36,6 +43,7 @@
 		$replacements
 	);
 	
+	// ahora si, creo el excel
 	$phpExcel = __getPHPExcelInstance();
 	$phpExcelSheet = $phpExcel->getActiveSheet();
 
