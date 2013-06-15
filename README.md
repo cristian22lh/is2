@@ -12,28 +12,38 @@ httpd.conf
 -------------
 Hay que congiurar el archivo `httpd.conf` de la aplicación Apache, este se abre desde el icono del WampServer haciendole click izquierdo, opcion `Apache` -> `httpd.conf`
 
-Ubicar esta línea (yo la tengo en la linea numero **116**)
-
-`#LoadModule rewrite_module modules/mod_rewrite.so`
-
-**ESTO ES NUEVO**
-Le agregue a la aplicacion HTTP caching y DEFLATE sobre los archivos publicos css, js e imagenes, para esto van a tener que habilitar los siguients modulos, con estos cambios la aplicacion es mas rapida en su descarga, buenos los modulos son:
-
+Tiene que tener los siguientes modulos cargados
 `LoadModule deflate_module modules/mod_deflate.so`
-
 `LoadModule expires_module modules/mod_expires.so`
+`LoadModule headers_module modules/mod_headers.so`
+`LoadModule rewrite_module modules/mod_rewrite.so`
 
-Solo hay que quitarle el numeral al principio de la línea, nada mas que eso.
+Ademas obviamente el modulo necesario para cargar PHP, la mia es
+`LoadModule php5_module "c:/wamp/bin/php/php5.4.3/php5apache2_2.dll`
 
-Siguiente, ubicar la linea ( **178** )
+Listo ahora, hay que decirle a Apache que en la URL `localhost:8080` va a cargar nuestra aplicacion, para eso al final del `htppd.conf` ponemos
 
-`DocumentRoot "c:\wamp\bla..."`
+```
+Listen 8080
+<VirtualHost *:8080>
+    ServerName www.example.org
+    DocumentRoot "C:\Documents and Settings\bigboss\Desktop\is2"
 
-Aca lo que hay que hacer es poner como direccion donde va a estar ubicado los archivos que hacen la aplicacion, es decir, todo este repositorio.
+  <Directory "C:\Documents and Settings\bigboss\Desktop\is2">
+        Options Indexes FollowSymLinks MultiViews
+        AllowOverride All
+        Order allow,deny
+        allow from all
+  </Directory>
 
-Y tambien hay que hacer lo mismo con esta linea ( **205** )
+  ErrorLog "C:\Documents and Settings\bigboss\Desktop\is2\error_efin.log"
+  LogLevel warn
+  CustomLog "C:\Documents and Settings\bigboss\Desktop\is2\access.log" combined
 
-`<Directory "c:\wamp\bla...">`
+</VirtualHost>
+```
+
+Deben cambiar `C:\Documents and Settings\bigboss\Desktop\is2` por la direccion donde tengan puesto este repositiorio.
 
 MySQL credenciales
 -------------------------
