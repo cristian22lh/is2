@@ -135,6 +135,9 @@
 			position: relative;
 			z-index: 100;
 		}
+		.is2-modal-doctor-information strong {
+			margin: 0 0 0 5px;
+		}
 		.is2-modal-doctor-information img {
 			border-radius: 50px;
 			display: block;

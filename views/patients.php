@@ -311,17 +311,17 @@
 				<tr>
 					<th>
 						Apellidos
-						<?php t_lastNameMenu(); ?>
+						<?php t_lastNameMenu( $orderByLastName ); ?>
 					</th>
 					<th>
 						Nombres
-						<?php t_firstNameMenu(); ?>
+						<?php t_firstNameMenu( $orderByFirstName ); ?>
 					</th>
 					<th>DNI</th>
 					<th>
 						<span>Fecha de</span>
 						nacimiento
-						<?php t_birthDateMenu(); ?>
+						<?php t_birthDateMenu( $orderByBirthDate ); ?>
 					</th>
 					<th>Teléfono</th>
 					<th>Obra social</th>
