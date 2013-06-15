@@ -150,7 +150,7 @@
 			};
 			
 			$document.on( 'keyup', function( e ) {
-				// <F11>
+				// F11
 				if( e.keyCode === 122 ) {
 					checkFullScreen();
 				}

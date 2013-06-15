@@ -37,7 +37,7 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 			padding: 10px 5px;
 			text-align: center;
 			font-size: 16px;
-			border-top: 1px solid #ccc;
+			border-top: 1px solid #aaa;
 			text-transform: capitalize;
 			vertical-align: middle;
 		}
@@ -48,9 +48,11 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 		
 		tr.is2-appointment-confirmed td {
 			background: #A0DA8F;
+			border-top: 1px solid #3f832b;
 		}
 		tr.is2-appointment-cancelled td {
 			background: #F89406;
+			border-top: 1px solid #b66c04;
 			color: #fff;
 		}
 		tr.is2-appointment-waiting td {

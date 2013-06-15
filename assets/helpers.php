@@ -27,17 +27,42 @@
 	function __forceUTF8Enconding() {
 		header( 'content-type: text/html; charset=utf-8' );
 	}
+
+// ************** /
+// Minifying process
+// ************* /
+	function __initMinifyingProcess() {
+		ob_start( function( $buffer ) {
+			return 
+				// remove ws outside of all elements
+				preg_replace( '/>(?:\s\s*)?([^<]+)(?:\s\s*)?</s', '>$1<', 
+					// remove ws around block/undisplayed elements
+					preg_replace(
+					'/\s+(<\\/?(?!script|style|pre|textarea)\b[^>]*>)/i', '$1',
+						// trim line start
+						preg_replace( '/^\s\s*/m', '', 
+							// trim line end
+							preg_replace( '/\s\s*$/m', '', 
+								// remove HTML comments (not containing IE conditional comments)
+								preg_replace_callback( 
+									'/<!--([\s\S]*?)-->/', 
+									function( $m ) {
+										return ( 0 === strpos($m[1], '[' ) || false !== strpos( $m[1], '<![' ) ) ? $m[0] : '';
+									},
+									// start point
+									$buffer 
+								)
+							)
+						)
+					)
+				)
+			;
+		} );
+	}
 	
 // ************** /
 // FIREPHP funcionality
 // ************* /
-	function __initDebugging() {
-		global $DEBUG;
-		if( $DEBUG ) {
-			ob_start();
-		}
-	}
-	
 	function ___echoToFirePHP( $type, $args ) {
 		require_once './modules/firephp/FirePHP.class.php';
 		$firephp = FirePHP::getInstance( true );
@@ -72,7 +97,7 @@
 		require_once './modules/phpexcel/PHPExcel.php';
 		
 		header( 'Content-Type: application/vnd.ms-excel' );
-		header( 'Content-Disposition: attachment; filename="' . $filename . ' (' . time() . ').xls' . '"' );
+		header( 'Content-Disposition: attachment; filename="' . $filename . ' (' . $_SERVER['REQUEST_TIME'] . ').xls' . '"' );
 		header( 'Cache-Control: max-age=0' );
 		
 		$excelWriter = PHPExcel_IOFactory::createWriter( $phpExcel, 'Excel5' );
@@ -92,7 +117,7 @@
 	
 	function __echoDOMPDF( $dompdf, $filename ) {
 		$dompdf->render();
-		$dompdf->stream( str_replace( ' ', '.', $filename ) . '_' . time() . '_.pdf' );
+		$dompdf->stream( str_replace( ' ', '.', $filename ) . '_' . $_SERVER['REQUEST_TIME'] . '_.pdf' );
 		
 		die;
 	}

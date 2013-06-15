@@ -79,6 +79,7 @@
 			border: 2px solid #84D2DB;
 			border-radius: 20px;
 			display: inline-block;
+			margin: 0 5px 0 0;
 		}
 		
 		.is2-appointments-export {
@@ -633,10 +634,7 @@
 			
 			$.ajax( {
 				url: '/turnos/' + appointmentID + '/' + this.action,
-				data: {
-					id: appointmentID
-				},
-				type: 'POST',
+				type: 'GET',
 				dataType: 'json',
 				success: this.response,
 				error: this.response,

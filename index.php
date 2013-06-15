@@ -22,7 +22,8 @@
 	DB::init();
 	Router::init();
 	__initSession();
-	__initDebugging();
+	__initMinifyingProcess();
+	
 	// enforce utf8 output
 	__forceUTF8Enconding();
 	
