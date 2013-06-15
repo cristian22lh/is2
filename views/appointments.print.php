@@ -73,7 +73,6 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 		}
 		.is2-print-button {
 			position: fixed;
-			padding: 5px 10px;
 			top: 5px;
 			left: 5px;
 			opacity: .5;
@@ -83,7 +82,7 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 			opacity: 1;
 		}
 		.is2-print-button-trigger {
-			padding: 2px 15px;
+			padding: 2px 7px 5px 3px;
 			background: #f1f1f1;
 			border: 0;
 			font-weight: 600;
@@ -91,17 +90,23 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 			border-radius: 5px;
 			box-shadow: 0 0 10px #000;
 			line-height: 2;
-			color: #000;
+			color: #777;
 			text-shadow: 0 -1px 0 #fff;
 			cursor: pointer;
 		}
-
+		.is2-print-button-trigger > * {
+			vertical-align: middle;
+			margin: 0 5px;
+		}
 		</style>
 	</head>
 	<body>
 	
 			<div class="is2-print-button">
-				<button class="is2-print-button-trigger">Imprimir</button>
+				<button class="is2-print-button-trigger">
+					<img src="/img/icon-printer.png">
+					Imprimir
+				</button>
 			</div>
 		
 			<table>
