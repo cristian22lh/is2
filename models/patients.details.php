@@ -23,6 +23,7 @@
 	$patient = $patientData->fetch();
 	$patient['edad'] = __getPatientOld( $patient['fechaNacimiento'] );
 	$patient['fechaNacimiento'] = __dateISOToLocale( $patient['fechaNacimiento'] );
+	$patient['dni'] = __formatDNI( $patient['dni'] );
 	
 	$appointments = DB::select(
 		'

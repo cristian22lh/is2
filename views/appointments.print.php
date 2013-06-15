@@ -58,6 +58,13 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 		tr.is2-appointment-waiting td {
 		
 		}
+
+		tr .is2-patient-dni {
+			font-size: 10px;
+			margin: 0 0 0 5px;
+			color: #555;
+			vertical-align: middle;
+		}
 		
 		tr.is2-empty-row:first-of-type {
 			display: none;
@@ -98,6 +105,7 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 			vertical-align: middle;
 			margin: 0 5px;
 		}
+
 		</style>
 	</head>
 	<body>
@@ -140,7 +148,7 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 						<td><?php echo __dateISOToLocale( $appointment['fecha'] ); ?></td>
 						<td><?php echo __trimTime( $appointment['hora'] ); ?></td>
 						<td><?php echo $appointment['medicoApellidos'] . ', ' . $appointment['medicoNombres']; ?></td>
-						<td><?php echo $appointment['pacienteApellidos'] . ', ' . $appointment['pacienteNombres']; ?></td>
+						<td><?php echo $appointment['pacienteApellidos'] . ', ' . $appointment['pacienteNombres'] . ' <span class="is2-patient-dni">(' . __formatDNI( $appointment['pacienteDNI'] ) . ')</span>'; ?></td>
 					</tr>
 					
 					<?php $previousAppointmentDate = $appointment['fecha']; ?>

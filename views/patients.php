@@ -338,7 +338,7 @@
 						<td>
 							<span title="<?php echo $patient['nombres']; ?>"><?php echo $patient['nombres']; ?></span>
 						</td>
-						<td><?php echo $patient['dni']; ?></td>
+						<td><?php echo __formatDNI( $patient['dni'] ); ?></td>
 						<td><?php echo __dateISOToLocale( $patient['fechaNacimiento'] ); ?></td>
 						<td>
 							<span title="<?php echo $patient['telefono']; ?>"><?php echo $patient['telefono']; ?></span>

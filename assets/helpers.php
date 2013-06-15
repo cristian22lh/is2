@@ -344,6 +344,10 @@
 		}
 		return $years . ' años';
 	}
+
+	function __formatDNI( $value ) {
+		return preg_replace( '/(?<=\d)(?=(\d{3})+$)/', '.', $value );
+	}
 	
 // ************** /
 // RENDER VIEWS

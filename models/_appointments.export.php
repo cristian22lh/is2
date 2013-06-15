@@ -24,7 +24,7 @@
 				SELECT 
 					t.id, t.fecha, t.hora, t.estado,
 					m.id AS idMedico, m.nombres AS medicoNombres, m.apellidos AS medicoApellidos, m.avatarMini AS medicoAvatar,
-					p.id AS idPaciente, p.nombres AS pacienteNombres, p.apellidos AS pacienteApellidos,
+					p.id AS idPaciente, p.nombres AS pacienteNombres, p.apellidos AS pacienteApellidos, p.dni AS pacienteDNI,
 					os.nombreCorto AS nombreObraSocial
 				FROM turnos AS t 
 					INNER JOIN medicos AS m 
