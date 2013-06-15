@@ -35,6 +35,9 @@
 		.is2-doctor-actions {
 			margin: 10px 0 0 0;
 		}
+		.is2-doctor-actions .btn {
+			margin: 0 5px 0 0;
+		}
 		
 		/* animation effect */
 		@keyframes moveFromBottom {
@@ -264,8 +267,11 @@
 			padding: 0;
 			font-size: 13px;
 		}
-		.is2-doctor-appointments-grid td a {
+		.is2-doctor-appointments-grid .is2-doctor-appointment-link {
 			font-size: 13px;
+		}
+		.is2-doctor-appointments-grid .is2-doctor-appointment-link i {
+			margin: 0 0 0 5px;
 		}
 		.is2-doctor-appointments-grid table {
 			margin: 2px auto 0;

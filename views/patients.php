@@ -61,6 +61,10 @@
 		}
 		.is2-grid td:last-child {
 			width: 95px;
+			white-space: nowrap;
+		}
+		.is2-grid td:last-child .btn:not( :last-child ) {
+			margin: 0 5px 0 0;
 		}
 		.pagination {
 			margin: 20px 0 10px 0;
@@ -109,13 +113,16 @@
 		.is2-modal-details-header h1 {
 			padding: 10px;
 		}
+		.is2-modal-details-header h1 > span:last-child {
+			padding: 0 0 0 10px;
+		}
 		.is2-modal-details-header ul {
 			padding: 0 10px 10px 10px;
 		}
 		.is2-modal-details-header li {
 			list-style-type: none;
 			display: inline-block;
-			margin: 10px 0;
+			padding: 0 10px 0 0;
 		}
 		.is2-modal-details-header:after {
 			border-bottom: 1px solid #ffaa9f;
@@ -134,6 +141,9 @@
 			border-bottom: 1px solid #ccc;
 			line-height: 2;
 			padding: 0 0 0 10px;
+		}
+		.is2-modal-details-body li strong {
+			padding: 0 0 0 5px;
 		}
 		.is2-modal-details-body li:last-child {
 			border-bottom: 0;
@@ -167,6 +177,9 @@
 		}
 		.is2-modal-details-appointments tr:last-child {
 			border-bottom: 0;
+		}
+		.is2-modal-details-appointments tr td span:last-child {
+			padding: 0 0 0 5px;
 		}
 		.is2-modal-details-appointments-empty {
 			text-align: center;

@@ -44,6 +44,10 @@ header .is2-welcome strong {
 	margin: 0 5px;
 }
 
+label > input {
+	margin: 0 5px;
+}
+
 .table td:not( :last-child ) {
 	vertical-align: middle;
 	text-transform: capitalize;

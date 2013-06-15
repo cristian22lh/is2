@@ -34,6 +34,9 @@
 			display: inline-block;
 			margin: 0 0 0 15px;
 		}
+		.is2-insurances-crud > .btn:not( last-child ) {
+			margin: 0 5px 0 0;
+		}
 	</style>
 <?php t_endHead(); ?>
 <?php t_startBody( $username, 'insurances'  ); ?>
@@ -49,10 +52,6 @@
 						<button type="submit" class="btn"><i class="icon-search"></i></button>
 					</div>
 				</form>
-			</div>
-
-			<div class="alert">
-				A continuación se muestran todas las obra sociales cargadas en el sistema
 			</div>
 
 			<div class="is2-crud-messages">

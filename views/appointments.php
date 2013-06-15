@@ -47,8 +47,11 @@
 			width: 220px;
 		}
 		tr.is2-appointments-row td:last-child {
-			width: 206px;
+			width: 205px;
 			white-space: nowrap;
+		}
+		tr.is2-appointments-row td:last-child > div > .btn:not( :last-child ) {
+			margin: 0 5px 0 0;
 		}
 		tr.is2-appointments-monthbreak td {
 			background: #84d2db;

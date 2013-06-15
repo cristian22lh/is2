@@ -11,6 +11,9 @@
 			vertical-align: middle;
 			white-space: nowrap;
 		}
+		.is2-grid td:last-child > .btn:not( :last-child ) {
+			margin: 0 5px 0 0;
+		}
 	</style>
 <?php t_endHead(); ?>
 <?php t_startBody( $username, 'specialities'  ); ?>
@@ -22,10 +25,6 @@
 				<a class="is2-trigger-create btn pull-right btn-warning" href="#is2-modal-theform" data-toggle="modal"><i class="icon-plus"></i> Crear una nueva especialidad</a>
 			</div>
 
-			<div class="alert">
-				A continuación se muestran todas las especialidades cargadas en el sistema
-			</div>
-			
 			<div class="is2-crud-messages">
 				<?php if( $createSuccess ): ?>
 				<div class="alert alert-success">
