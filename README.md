@@ -13,10 +13,12 @@ httpd.conf
 Hay que congiurar el archivo `httpd.conf` de la aplicación Apache, este se abre desde el icono del WampServer haciendole click izquierdo, opcion `Apache` -> `httpd.conf`
 
 Tiene que tener los siguientes modulos cargados
-`LoadModule deflate_module modules/mod_deflate.so`
-`LoadModule expires_module modules/mod_expires.so`
-`LoadModule headers_module modules/mod_headers.so`
-`LoadModule rewrite_module modules/mod_rewrite.so`
+```
+LoadModule deflate_module modules/mod_deflate.so
+LoadModule expires_module modules/mod_expires.so
+LoadModule headers_module modules/mod_headers.so
+LoadModule rewrite_module modules/mod_rewrite.so
+```
 
 Ademas obviamente el modulo necesario para cargar PHP, la mia es
 `LoadModule php5_module "c:/wamp/bin/php/php5.4.3/php5apache2_2.dll`
@@ -44,6 +46,15 @@ Listen 8080
 ```
 
 Deben cambiar `C:\Documents and Settings\bigboss\Desktop\is2` por la direccion donde tengan puesto este repositiorio.
+
+PHP
+-----
+Necesitan tener cargado los modulos (en Windows), desconsco como seran en Linux
+```
+extension=php_mbstring.dll
+extension=php_gd2.dll
+extension=php_pdo_mysql.dll
+```
 
 MySQL credenciales
 -------------------------
