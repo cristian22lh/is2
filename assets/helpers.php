@@ -92,7 +92,9 @@
 	
 	function __echoDOMPDF( $dompdf, $filename ) {
 		$dompdf->render();
-		$dompdf->stream( str_replace( ' ', '.', $filename ) . '_' . time() . '_' );
+		$dompdf->stream( str_replace( ' ', '.', $filename ) . '_' . time() . '_.pdf' );
+		
+		die;
 	}
 	
 // ************** /

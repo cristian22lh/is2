@@ -75,6 +75,7 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 			top: 5px;
 			left: 5px;
 			opacity: .5;
+			transition: all 300ms linear;
 		}
 		.is2-print-button:hover {
 			opacity: 1;
