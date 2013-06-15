@@ -5,6 +5,7 @@
 		}
 		.is2-availability-doctor {
 			width: 250px;
+			margin: 0 5px 0 0;
 		}
 		.is2-patients-search-value {
 			width: 430px;
@@ -79,6 +80,7 @@
 		}
 		.is2-patient-autocompleteitem span {
 			display: inline-block;
+			margin: 0 5px 0 0;
 		}
 		.is2-patient-autocompleteitem .is2-patient-name {
 			font-weight: 600;

@@ -4,9 +4,8 @@
 		<meta charset="utf-8">
 		<title>Iniciar sesión</title>
 		<?php t_setCustomTypeface(); ?>
-		<link href="css/bootstrap.css" rel="stylesheet">
-		<script src="js/jquery-2.0.0.min.js"></script>
-		<script src="js/bootstrap.min.js"></script>
+		<link href="/css/bootstrap.min.css" rel="stylesheet">
+		<script src="/js/jquery.bootstrap.min.js"></script>
 		<style>
 			body {
 				background-color: #eee;

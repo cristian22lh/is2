@@ -40,11 +40,11 @@ header .is2-welcome {
 	padding: 5px;
 	font-size: 12px;
 }
-header .is2-welcome strong {
-	margin: 0 5px;
-}
 
 label > input {
+	margin: 0 5px;
+}
+.alert > * {
 	margin: 0 5px;
 }
 
