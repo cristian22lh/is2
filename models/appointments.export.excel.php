@@ -100,6 +100,6 @@
 		$previousAppointmentDate = $appointment['fecha'];
 	}
 
-	__echoPHPExcel( $phpExcel );
+	__echoPHPExcel( $phpExcel, m_getFilename() );
 	
 ?>

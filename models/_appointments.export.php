@@ -44,5 +44,9 @@
 		);
 
 	}
+	
+	function m_getFilename() {
+		return 'Listado de turnos';
+	}
 
 ?>

@@ -68,11 +68,11 @@
 		return new PHPExcel();
 	}
 	
-	function __echoPHPExcel( $phpExcel ) {
+	function __echoPHPExcel( $phpExcel, $filename ) {
 		require_once './modules/phpexcel/PHPExcel.php';
 		
 		header( 'Content-Type: application/vnd.ms-excel' );
-		header( 'Content-Disposition: attachment; filename="Listado de turnos (' . time() . ').xls' . '"' );
+		header( 'Content-Disposition: attachment; filename="' . $filename . ' (' . time() . ').xls' . '"' );
 		header( 'Cache-Control: max-age=0' );
 		
 		$excelWriter = PHPExcel_IOFactory::createWriter( $phpExcel, 'Excel5' );
@@ -80,6 +80,19 @@
 		$excelWriter->save( 'php://output' );
 		
 		die;
+	}
+	
+// ************** /
+// DOMPDF funcionality
+// ************* /	
+	function __getDOMPDFInstance() {
+		require_once './modules/dompdf/dompdf_config.inc.php';
+		return new DOMPDF();
+	}
+	
+	function __echoDOMPDF( $dompdf, $filename ) {
+		$dompdf->render();
+		$dompdf->stream( str_replace( ' ', '.', $filename ) . '_' . time() . '_' );
 	}
 	
 // ************** /
@@ -98,9 +111,12 @@
 		return count( $_GET ) > 0 && isset( $_GET[$name] ) ? __sanitizeValue( $_GET[$name] ) : false;
 	}
 	
+	/**
+	* TODO: may adding some sanitizing process??
+	*/
 	function __getGETComplete( $skip = '', $append = array() ) {
 		$q = array();
-		$append = count( $append ) == 2 ? __sanitizeValue( implode( '=', $append ) ) : '';
+		$append = count( $append ) == 2 ? implode( '=', $append ) : '';
 		
 		if( count( $_GET ) ) {
 			foreach( $_GET as $name => $value ) {
@@ -111,7 +127,7 @@
 			if( $append ) {
 				$q[] = $append;
 			}
-			return count( $q ) ? '?' . __sanitizeValue( implode( '&', $q ) ) : '';
+			return count( $q ) ? '?' . implode( '&', $q ) : '';
 		}
 		
 		return $append ? '?' . $append : '';

@@ -47,6 +47,7 @@
 		'/turnos/crear' => 'appointments.new',
 		'/turnos/exportar/excel' => 'appointments.export.excel',
 		'/turnos/exportar/imprimir' => 'appointments.export.print',
+		'/turnos/exportar/pdf' =>  'appointments.export.pdf',
 
 // *** MEDICOS *** //
 		'/medicos/comprobar-horarios-disponibilidad' => 'doctors.check.availability',
