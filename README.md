@@ -49,7 +49,9 @@ Deben cambiar `C:\Documents and Settings\bigboss\Desktop\is2` por la direccion d
 
 PHP
 -----
-Necesitan tener cargado los modulos (en Windows), desconsco como seran en Linux
+Necesitan una version mayor ó igual a la **5.3**
+
+Ademas de los modulos (en Windows) habilitados
 ```
 extension=php_mbstring.dll
 extension=php_gd2.dll
