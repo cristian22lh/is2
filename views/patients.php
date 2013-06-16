@@ -311,17 +311,17 @@
 				<tr>
 					<th>
 						Apellidos
-						<?php t_lastNameMenu(); ?>
+						<?php t_lastNameMenu( $orderByLastName ); ?>
 					</th>
 					<th>
 						Nombres
-						<?php t_firstNameMenu(); ?>
+						<?php t_firstNameMenu( $orderByFirstName ); ?>
 					</th>
 					<th>DNI</th>
 					<th>
 						<span>Fecha de</span>
 						nacimiento
-						<?php t_birthDateMenu(); ?>
+						<?php t_birthDateMenu( $orderByBirthDate ); ?>
 					</th>
 					<th>Teléfono</th>
 					<th>Obra social</th>
@@ -338,7 +338,7 @@
 						<td>
 							<span title="<?php echo $patient['nombres']; ?>"><?php echo $patient['nombres']; ?></span>
 						</td>
-						<td><?php echo $patient['dni']; ?></td>
+						<td><?php echo __formatDNI( $patient['dni'] ); ?></td>
 						<td><?php echo __dateISOToLocale( $patient['fechaNacimiento'] ); ?></td>
 						<td>
 							<span title="<?php echo $patient['telefono']; ?>"><?php echo $patient['telefono']; ?></span>

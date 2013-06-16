@@ -29,23 +29,39 @@ Listo ahora, hay que decirle a Apache que en la URL `localhost:8080` va a cargar
 Listen 8080
 <VirtualHost *:8080>
     ServerName www.example.org
-    DocumentRoot "C:\Documents and Settings\bigboss\Desktop\is2"
+    DocumentRoot "C:\Documents and Settings\arcollector\Desktop\is2"
 
-  <Directory "C:\Documents and Settings\bigboss\Desktop\is2">
+  <Directory "C:\Documents and Settings\arcollector\Desktop\is2">
         Options Indexes FollowSymLinks MultiViews
         AllowOverride All
         Order allow,deny
         allow from all
   </Directory>
 
-  ErrorLog "C:\Documents and Settings\bigboss\Desktop\is2\error_efin.log"
+  ErrorLog "C:\Documents and Settings\arcollector\Desktop\is2\error_efin.log"
   LogLevel warn
-  CustomLog "C:\Documents and Settings\bigboss\Desktop\is2\access.log" combined
+  CustomLog "C:\Documents and Settings\arcollector\Desktop\is2\access.log" combined
 
 </VirtualHost>
 ```
 
-Deben cambiar `C:\Documents and Settings\bigboss\Desktop\is2` por la direccion donde tengan puesto este repositiorio.
+Deben cambiar `C:\Documents and Settings\arcollector\Desktop\is2` por la direccion donde tengan puesto este repositiorio.
+
+mod_xsendfile.so (opcional)
+--------------------------
+Esto no es necesario, pero si muy recomendable. **mod_xsendfile.so** es un modulo no oficial para Apache que se usa para el tema de la descarga de archivos, delegando este proceso a este modulo y liberando PHP de esta funcion.
+
+Se lo bajan de [aca](https://github.com/nmaier/mod_xsendfile), busquen el `mod_xsendfile.so` para su version de Apache que estan usando y coloquen este archivo en la carpeta de modulos de Apache, ahora lo que tiene que hacer cargar este modulo desde el `httpd.conf`, lo hacen de la siguiente manera:
+`LoadModule xsendfile_module modules/mod_xsendfile.so`
+
+Ahora en su `<VirtualHost>` ponen el siguiente codigo:
+```
+  <Directory "/">
+    XSendFile On
+    XSendFilePath "C:/Windows/TEMP"
+  </Directory>
+```
+En Linux, deberian poner `/tmp` en la directiva `XSendFilePath`
 
 PHP
 -----

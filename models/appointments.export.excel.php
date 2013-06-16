@@ -72,9 +72,9 @@
 		$phpExcelSheet->getStyle( 'A1:E1' )->applyFromArray( $styleForFieldNames );
 		$phpExcelSheet->setCellValue( 'A1', 'Dia' );
 		$phpExcelSheet->setCellValue( 'B1', 'Hora' );
-		$phpExcelSheet->setCellValue( 'C1', 'Paciente' );
+		$phpExcelSheet->setCellValue( 'C1', 'Médico' );
 		$phpExcelSheet->setCellValue( 'D1', 'Obra social' );
-		$phpExcelSheet->setCellValue( 'E1', 'Médico' );
+		$phpExcelSheet->setCellValue( 'E1', 'Paciente' );
 		
 	} else {
 		$phpExcelSheet->setCellValue( 'A1', 'SIN DATOS DISPONIBLES' );
@@ -93,9 +93,9 @@
 	
 		$phpExcelSheet->setCellValue( 'A' . $cellIndex, __dateISOToLocale( $appointment['fecha'] ) );
 		$phpExcelSheet->setCellValue( 'B' . $cellIndex, __trimTime( $appointment['hora'] ) );
-		$phpExcelSheet->setCellValue( 'C' . $cellIndex, $appointment['pacienteApellidos'] . ', ' . $appointment['pacienteNombres'] );
+		$phpExcelSheet->setCellValue( 'C' . $cellIndex++, $appointment['medicoApellidos'] . ', ' . $appointment['medicoNombres'] );
 		$phpExcelSheet->setCellValue( 'D' . $cellIndex, $appointment['nombreObraSocial'] );
-		$phpExcelSheet->setCellValue( 'E' . $cellIndex++, $appointment['medicoApellidos'] . ', ' . $appointment['medicoNombres'] );
+		$phpExcelSheet->setCellValue( 'E' . $cellIndex, $appointment['pacienteApellidos'] . ', ' . $appointment['pacienteNombres'] . ' (' . __formatDNI( $appointment['pacienteDNI'] ) . ')' );
 		
 		$previousAppointmentDate = $appointment['fecha'];
 	}

@@ -161,6 +161,9 @@ textarea {
     float: right;
     padding: 0;
 }
+.is2-dropdownmenu i {
+	margin: 0 5px 0 -10px;
+}
 .is2-record-new {
 	background: #FCF8E3 !important;
 	color: #C09853 !important;

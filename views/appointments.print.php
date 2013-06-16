@@ -58,6 +58,13 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 		tr.is2-appointment-waiting td {
 		
 		}
+
+		tr .is2-patient-dni {
+			font-size: 10px;
+			margin: 0 0 0 5px;
+			color: #555;
+			vertical-align: middle;
+		}
 		
 		tr.is2-empty-row:first-of-type {
 			display: none;
@@ -73,7 +80,6 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 		}
 		.is2-print-button {
 			position: fixed;
-			padding: 5px 10px;
 			top: 5px;
 			left: 5px;
 			opacity: .5;
@@ -83,7 +89,7 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 			opacity: 1;
 		}
 		.is2-print-button-trigger {
-			padding: 2px 15px;
+			padding: 2px 7px 5px 3px;
 			background: #f1f1f1;
 			border: 0;
 			font-weight: 600;
@@ -91,9 +97,13 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 			border-radius: 5px;
 			box-shadow: 0 0 10px #000;
 			line-height: 2;
-			color: #000;
+			color: #777;
 			text-shadow: 0 -1px 0 #fff;
 			cursor: pointer;
+		}
+		.is2-print-button-trigger > * {
+			vertical-align: middle;
+			margin: 0 5px;
 		}
 
 		</style>
@@ -101,7 +111,10 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 	<body>
 	
 			<div class="is2-print-button">
-				<button class="is2-print-button-trigger">Imprimir</button>
+				<button class="is2-print-button-trigger">
+					<img src="/img/icon-printer.png">
+					Imprimir
+				</button>
 			</div>
 		
 			<table>
@@ -135,7 +148,7 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 						<td><?php echo __dateISOToLocale( $appointment['fecha'] ); ?></td>
 						<td><?php echo __trimTime( $appointment['hora'] ); ?></td>
 						<td><?php echo $appointment['medicoApellidos'] . ', ' . $appointment['medicoNombres']; ?></td>
-						<td><?php echo $appointment['pacienteApellidos'] . ', ' . $appointment['pacienteNombres']; ?></td>
+						<td><?php echo $appointment['pacienteApellidos'] . ', ' . $appointment['pacienteNombres'] . ' <span class="is2-patient-dni">(' . __formatDNI( $appointment['pacienteDNI'] ) . ')</span>'; ?></td>
 					</tr>
 					
 					<?php $previousAppointmentDate = $appointment['fecha']; ?>

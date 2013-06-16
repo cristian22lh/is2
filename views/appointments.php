@@ -30,6 +30,7 @@
 			font-weight: 600;
 			color: #555;
 			text-shadow: 0 -1px 0 #fff;
+			text-transform: none !important;
 		}
 		tr.is2-appointments-newrow:first-of-type {	
 			display: none;
@@ -477,6 +478,9 @@
 				$( 'tr.is2-appointments-row[data-appointment-date="' + appointmentDate + '"], tr.is2-appointments-newrow[data-appointment-date="' + appointmentDate + '"]' )
 			);
 		};
+
+		// select the column
+		IS2.markChosenOrder( '.is2-trigger-date', $el );
 		
 		// ordeno los meses
 		$( 'tr.is2-appointments-monthbreak' ).each( function() {
@@ -508,6 +512,9 @@
 			$row = $row.after( $el ).next();
 		};
 
+		// select the column
+		IS2.markChosenOrder( '.is2-trigger-time', $el );
+
 		while( ( $row = $row.parent() ).length && !$row.hasClass( 'is2-appointments-dayrow' ) );
 		
 		// hay que buscar los times especificos de la $row
@@ -536,6 +543,8 @@
 			fieldValue = $el.attr( 'data-field-value' ),
 			$target = $el,
 			$cells;
+
+		IS2.markChosenOrder( '.is2-trigger-status', $el );	
 			
 		while( ( $target = $target.parent() ).length && !$target.hasClass( 'is2-appointments-dayrow' ) );
 

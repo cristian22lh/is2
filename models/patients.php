@@ -2,24 +2,29 @@
 
 /* {{{ ESTE ES CUANDO VIENE DE SORTEAR LA GRID */
 	$orderByType = false;
+	$orderByLastName = 'ASC';
+	$orderByFirstName = 'ASC';
+	$orderByBirthDate = false;
 	$orderByCustom = array();
 	// se puede ordenar por apellidos y nombres a la vez...
 	if( ( $orderByType = __GETField( 'apellido' ) ) ) {
-		$orderByCustom['apellidos'] = $orderByType;
+		$orderByCustom['apellidos'] = $orderByLastName = strtoupper( $orderByType );
 	}
 	if( ( $orderByType = __GETField( 'nombre' ) ) ) {
-		$orderByCustom['nombres'] = $orderByType;
+		$orderByCustom['nombres'] = $orderByFirstName = strtoupper( $orderByType );
 	}
 	// ..pero no se puede cobinar con fecha-de-nacimiento
 	if( !count( $orderByCustom ) && ( $orderByType = __GETField( 'fecha-de-nacimiento' ) ) ) {
-		$orderByCustom['fechaNacimiento'] = $orderByType;
+		$orderByCustom['fechaNacimiento'] = $orderByBirthDate = strtoupper( $orderByType );
+		$orderByLastName = false;
+		$orderByFirstName = false;
 	}
 	// validate
 	$orderByClause = array();
 	if( count( $orderByCustom ) ) {
 		foreach( $orderByCustom as $orderByCol => $orderByType ) {
 			// si me metio mano, poner ASC
-			if( !in_array( strtoupper( $orderByType ), array( 'ASC', 'DESC' ) ) ) {
+			if( !in_array( $orderByType, array( 'ASC', 'DESC' ) ) ) {
 				$orderByClause[] = ' p.' . $orderByCol . ' ASC ';
 			} else {
 				$orderByClause[] = ' p.' . $orderByCol . ' ' . $orderByType . ' ';
@@ -270,7 +275,10 @@ CASO CONTRARIO LISTO LOS APELLIDO QUE EMPIECEN CON 'A' */
 			'insurances' => $insurances,
 			'persistValues' => $persistValues,
 			'searchQuickError' => $searchQuickError,
-			'quickSearchValue' => $quickSearchValue
+			'quickSearchValue' => $quickSearchValue,
+			'orderByLastName' => $orderByLastName,
+			'orderByFirstName' => $orderByFirstName,
+			'orderByBirthDate' => $orderByBirthDate
 		)
 	);
 /* }}} */

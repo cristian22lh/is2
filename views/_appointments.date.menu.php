@@ -4,10 +4,16 @@
 			</a>
 			<ul class="dropdown-menu">
 				<li>
-					<a tabindex="-1" href="#" class="is2-trigger-date" data-orderby="asc">Ordernar por fecha más antigua</a>
+					<a tabindex="-1" href="#" class="is2-trigger-date" data-orderby="asc">
+						<i class="icon-ok"></i>
+						Ordernar por fecha más antigua
+					</a>
 				</li>
 				<li>
-					<a tabindex="-1" href="#" class="is2-trigger-date" data-orderby="desc">Ordernar por fecha más futura</a>
+					<a tabindex="-1" href="#" class="is2-trigger-date" data-orderby="desc">
+						<i class="icon-ok" style="display:none"></i>
+						Ordernar por fecha más futura
+					</a>
 				</li>
 			</ul>
 		</div>

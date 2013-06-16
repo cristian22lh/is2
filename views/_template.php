@@ -43,15 +43,15 @@
 		require './views/_appointments.row.new.php';
 	}
 	
-	function t_lastNameMenu() {
+	function t_lastNameMenu( $orderByType ) {
 		require './views/_patients.lastname.menu.php';
 	}
 	
-	function t_firstNameMenu() {
+	function t_firstNameMenu( $orderByType ) {
 		require './views/_patients.firstname.menu.php';
 	}
 
-	function t_birthDateMenu() {
+	function t_birthDateMenu( $orderByType ) {
 		require './views/_patients.birthname.menu.php';
 	}
 	

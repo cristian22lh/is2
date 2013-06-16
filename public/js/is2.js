@@ -474,3 +474,8 @@ IS2.CRUD._CreateEdit = {
 	}
 	
 };
+
+IS2.markChosenOrder = function( groupSelector, $el ) {
+	$( groupSelector + ' i' ).hide();
+	$el.find( 'i' ).show();
+};
