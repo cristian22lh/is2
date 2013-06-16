@@ -43,8 +43,6 @@
 		'/turnos/:id/cancelar' => 'appointments.cancel',
 		'/turnos/:id/borrar' => 'appointments.remove',
 		'/turnos/:id/reiniciar' => 'appointments.reset',
-		'/turnos/busqueda-rapida' => 'appointments.search.quick',
-		'/turnos/busqueda-avanzada' => 'appointments.search.advanced',
 		'/turnos/crear' => 'appointments.new',
 		'/turnos/exportar/excel' => 'appointments.export.excel',
 		'/turnos/exportar/imprimir' => 'appointments.export.print',

@@ -143,14 +143,13 @@
 			<div class="is2-pagetitle clearfix">
 				<h3>Turnos</h3>
 				<a class="btn pull-right btn-warning" href="/turnos/crear"><i class="icon-plus"></i> Crear un nuevo turno</a>
-				<form class="form-search pull-right is2-search-quick-form" method="post" action="/turnos/busqueda-rapida">
+				<form class="form-search pull-right is2-search-quick-form">
 					<div class="is2-search-quick-control input-append control-group <?php echo $searchQuickError ? 'error': ''; ?>">
 						<input type="text" class="input-large search-query is2-search-quick-input" placeholder="Búsqueda rápida" name="keyword" value="<?php echo $quickSearchValue; ?>">
 						<button type="submit" class="btn"><i class="icon-search"></i></button>
 					</div>
 				</form>
 			</div>
-			
 			<div id="is2-search-appointments-wrapper" class="accordion">
 				<div class="accordion-group">
 					<div class="accordion-heading">
@@ -159,7 +158,7 @@
 						</a>
 					</div>
 					<div id="is2-search-appointments" class="accordion-body collapse<?php echo $searchError ? ' in ' : ' out'; ?>">
-						<form class="accordion-inner" method="post" action="/turnos/busqueda-avanzada">
+						<form class="accordion-inner is2-search-advanced-form">
 							<fieldset class="form-inline">
 								<legend>Rango de fechas</legend>
 								<div class="alert alert-info">
@@ -577,19 +576,6 @@
 		$( '.is2-patients-custom' ).click();
 	} );
 	
-// *** BUSQUEDA RAPIDA *** //
-	var $searchQuery = $( '.is2-search-quick-input' );
-	var $searchControlGroup = $( '.is2-search-quick-control' );
-	$( '.is2-search-quick-form' ).on( 'submit', function( e ) {
-		var keyword = $searchQuery.val().trim();
-		if( !keyword ) {
-			e.preventDefault();
-			$searchControlGroup.addClass( 'error' );
-			return;
-		}
-		$searchControlGroup.removeClass( 'error' );
-	} );
-	
 // *** APPOINTMENTS AJAX FUNCIONALITY *** //
 	var showAppointmentAction = function( id, type ) {
 	
@@ -688,6 +674,64 @@
 	if( appointmentID && ( $newlyAppointment = $( '.is2-appointments-row[data-appointment-id=' + appointmentID[1] + ']' ) ).length && window.location.search.indexOf( 'exito=crear-turno' ) >= 0 ) {
 		IS2.showNewRecord( $newlyAppointment );
 	}
+
+// *** BUSQUEDA AVANZADA *** //
+	var $advancedForm = $( '.is2-search-advanced-form' );
+	$advancedForm.on( 'submit', function( e ) {
+		/** @todo: validate fields */
+		e.preventDefault();
+
+		var formData = IS2.getFormFields( $advancedForm );
+
+		formData.fromDate = IS2.getISODate( formData.fromDate );
+		formData.toDate = IS2.getISODate( formData.toDate );
+		formData.fromTime = IS2.getISOTime( formData.fromTime );
+		formData.toTime = IS2.getISOTime( formData.toTime );
+
+		formData.patientsList = formData.patientsList ? formData.patientsList.replace( /\./g, '' ).split( /\s+/ ) : [];
+
+		// make the query
+		var query = formData.fromDate + '@' + formData.toDate + '|' + formData.fromTime + '@' + formData.toTime + '|' + ( formData.doctorsList.length ? formData.doctorsList.join( '-' ) : '' ) + '|' + ( formData.patientsList.length ? patientsList.join( '-' ) : '' ) + '|' + formData.status;
+
+		window.location = '/turnos?busqueda-avanzada=' + btoa( query );
+	} );
+
+// *** BUSQUEDA RAPIDA *** //
+	var $searchQuery = $( '.is2-search-quick-input' );
+	var $searchControlGroup = $( '.is2-search-quick-control' );
+	$( '.is2-search-quick-form' ).on( 'submit', function( e ) {
+		e.preventDefault();
+
+		var keyword = $searchQuery.val().trim();
+		if( !keyword ) {
+			e.preventDefault();
+			$searchControlGroup.addClass( 'error' );
+			return;
+		}
+		$searchControlGroup.removeClass( 'error' );
+
+		var field;
+		var value;
+
+		// is a date?
+		if( ( value = IS2.getISODate( keyword ) ) ) {
+			field = 'fecha';
+		
+		// is a time?
+		} else if( ( value = IS2.getISOTime( keyword ) ) ) {
+			field = 'hora';
+		
+		} else if( ( value = keyword.match( /(confirmado|cancelado)s?/ ) ) ) {
+			field = 'estado';
+			value = value[1];
+		
+		} else {
+			field = 'comodin';
+			value = keyword;
+		}
+
+		window.location = '/turnos?busqueda=' + btoa( field + '=' + value );
+	} );
 
 })();
 </script>

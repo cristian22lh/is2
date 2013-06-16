@@ -479,3 +479,45 @@ IS2.markChosenOrder = function( groupSelector, $el ) {
 	$( groupSelector + ' i' ).hide();
 	$el.find( 'i' ).show();
 };
+
+IS2.getFormFields = function( $theForm ) {
+	var $fields = $theForm.find( '[name]' ), $field,
+		i = 0, l = $fields.length,
+		attr, prevAttr = null, val, t = [], data = {};
+
+	for( ; i < l; i++ ) {
+		$field = $fields.eq( i );
+		attr = $field.attr( 'name' );
+		val = $field.val().trim();
+
+		if( attr.indexOf( '[]' ) > 0 ) {
+			prevAttr = attr;
+			if( $field.prop( 'checked' ) ) {
+				t.push( val );
+			}
+
+		} else if( prevAttr ) {
+			data[prevAttr.replace( '[]', '' )] = t;
+			t = [];
+			prevAttr = null;
+
+		} else {
+			if( $field.is( '[type="radio"]' ) && !$field.prop( 'checked' ) ) {
+				continue;
+			}
+			data[attr] = val;
+		}
+	}
+
+	return data;
+};
+
+IS2.getISODate = function( value ) {
+	value = value.split( '/' );
+	return value.length === 3 ? value[2] + '-' + value[1] + '-' + value[0] : '';
+};
+
+IS2.getISOTime = function( value ) {
+	value = value.split( ':' );
+	return value.length === 3 ? value[0] + ':' + value[1] + ':00' : '';
+};
