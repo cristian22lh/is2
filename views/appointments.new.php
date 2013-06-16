@@ -101,9 +101,9 @@
 			color: #fff !important;
 		}
 		.is2-patients-selected .ui-menu-item {
-			white-space: nowrap;
 			text-overflow: ellipsis;
 			white-space: nowrap;
+			line-height: 19px;
 		}
 		.is2-patients-selected .is2-patient-address {
 			display: inline-block;
