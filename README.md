@@ -23,13 +23,12 @@ LoadModule rewrite_module modules/mod_rewrite.so
 En **linux** la tiene mas facil, pongan la consola, loguesenen como **root**, tiren el siguiente comando y listo!
 ```
 # a2enmod deflate expires headers rewrite
-# service apache2 restart
 ```
 
 Ademas obviamente el modulo necesario para cargar PHP, la mia es
 `LoadModule php5_module "c:/wamp/bin/php/php5.4.3/php5apache2_2.dll`
 
-En **linux**, como root hacen (si que estan usando **Ubuntu**):
+En **linux**, como root hacen (y si estan usando **Ubuntu**):
 ```
 # apt-get install libapache-mod-php5
 ```
@@ -81,7 +80,7 @@ PHP
 -----
 Necesitan una version mayor ó igual a la **5.3**
 
-Ademas de los modulos (en Windows) habilitados en el `php.ini`
+Ademas de los modulos habilitados en el `php.ini`
 ```
 extension=php_mbstring.dll
 extension=php_gd2.dll
@@ -91,10 +90,10 @@ En Linux la extension seria `.so`
 
 MySQL credenciales
 -------------------------
-Corran el archivo `mysql.credenciales.bat`, este les creara un archivo llamdo `mysql.ini` necesario para que PHP pueda acceder a la base de datos, si estan usando WampServer, las credenciales que deben usar son:
+Corran el archivo `mysql.credenciales.bat` si estan en Window ó `mysql.credenciales.sh` si estan Linux, este les creara un archivo llamdo `mysql.ini` necesario para que la aplicacion mediante PHP pueda acceder a la base de datos, si estan usando WampServer, MySQL viene con estas credenciales:
 
-1. usuario: `root`
-2. clave: ` ` (nada)
+* usuario: `root`
+* clave: ` ` (nada)
 	
 Creando la base de datos y sus tablas
 ------------------------------------------------
