@@ -85,7 +85,8 @@
 	foreach( $appointments as $appointment ) {
 	
 		if( $previousAppointmentDate != $appointment['fecha'] ) {
-			$phpExcelSheet->getRowDimension( $phpExcelSheet->getCell( $phpExcelSheet->getStyle( 'A' . $cellIndex . ':E' . $cellIndex++ )->applyFromArray( $styleForAppointmentBar )->getActiveCell() )->getRow() )->setRowHeight( 5 );	
+			$phpExcelSheet->getRowDimension( $phpExcelSheet->getCell( $phpExcelSheet->getStyle( 'A' . $cellIndex . ':E' . $cellIndex )->applyFromArray( $styleForAppointmentBar )->getActiveCell() )->getRow() )->setRowHeight( 5 );
+			$cellIndex++;
 		}
 		
 		// set background for the row
@@ -93,9 +94,10 @@
 	
 		$phpExcelSheet->setCellValue( 'A' . $cellIndex, __dateISOToLocale( $appointment['fecha'] ) );
 		$phpExcelSheet->setCellValue( 'B' . $cellIndex, __trimTime( $appointment['hora'] ) );
-		$phpExcelSheet->setCellValue( 'C' . $cellIndex++, $appointment['medicoApellidos'] . ', ' . $appointment['medicoNombres'] );
+		$phpExcelSheet->setCellValue( 'C' . $cellIndex, $appointment['medicoApellidos'] . ', ' . $appointment['medicoNombres'] );
 		$phpExcelSheet->setCellValue( 'D' . $cellIndex, $appointment['nombreObraSocial'] );
 		$phpExcelSheet->setCellValue( 'E' . $cellIndex, $appointment['pacienteApellidos'] . ', ' . $appointment['pacienteNombres'] . ' (' . __formatDNI( $appointment['pacienteDNI'] ) . ')' );
+		$cellIndex++;
 		
 		$previousAppointmentDate = $appointment['fecha'];
 	}

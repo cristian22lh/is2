@@ -56,10 +56,13 @@ Se lo bajan de [aca](https://github.com/nmaier/mod_xsendfile), busquen el `mod_x
 
 Ahora en su `<VirtualHost>` ponen el siguiente codigo:
 ```
-  <Directory "/">
+<Directory "/">
+    Options -Indexes -FollowSymLinks -MultiViews
+    AllowOverride All
+    Order allow,deny
     XSendFile On
-    XSendFilePath "C:/Windows/TEMP"
-  </Directory>
+    XSendFilePath "C:/WINDOWS/TEMP"
+</Directory>
 ```
 En Linux, deberian poner `/tmp` en la directiva `XSendFilePath`
 
