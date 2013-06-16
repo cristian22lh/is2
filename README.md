@@ -48,10 +48,10 @@ Listen 8080
 Deben cambiar `C:\Documents and Settings\arcollector\Desktop\is2` por la direccion donde tengan puesto este repositiorio.
 
 mod_sendfile.so (opcional)
-==========================
+--------------------------
 Esto no es necesario, pero si muy recomendable. **mod_sendfile.so** es un modulo no oficial para Apache que se usa para el tema de la descarga de archivos, delegando este proceso a este modulo y liberando PHP de esta funcion.
 
-Se lo bajan de [aca](https://github.com/nmaier/mod_xsendfile), busquen el `mod_sendfile.so` para su version de Àpache y coloquen este archivo en la carpeta de modulos de Apache, ahora lo que tiene que hacer cargar este modulo desde el `httpd.conf`, lo hacen de la siguiente manera:
+Se lo bajan de [aca](https://github.com/nmaier/mod_xsendfile), busquen el `mod_sendfile.so` para su version de Apache que estan usando y coloquen este archivo en la carpeta de modulos de Apache, ahora lo que tiene que hacer cargar este modulo desde el `httpd.conf`, lo hacen de la siguiente manera:
 `LoadModule xsendfile_module modules/mod_xsendfile.so`
 
 Ahora en su `<VirtualHost>` ponen el siguiente codigo:
