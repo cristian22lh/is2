@@ -245,10 +245,8 @@ CREATE TRIGGER turnos_crearTurno
 				WHERE
 					idMedico = NEW.idMedico AND 
 					NEW.hora >= horaIngreso AND NEW.hora <= horaEgreso AND 
-					dia = ( SELECT CASE
-						WHEN dayNameIndex = 1 THEN 7
-						ELSE dayNameIndex - 1 END )
-						
+					dia = ( SELECT IF( dayNameIndex = 1, 7, dayNameIndex - 1 ) )
+
 		) IS NULL THEN
 			CALL medico_no_antiende_fecha_hora_requerido;
 		END IF;

@@ -192,7 +192,6 @@
 				<button class="btn btn-primary" type="submit">Deshabilitar obra social</button>
 				<span class="is2-preloader is2-preloader-bg pull-left is2-preloader-status"></span>
 			</div>
-			<input class="is2-insurances-status-id" type="hidden" name="id">
 		</form>
 		
 		<form id="is2-modal-status-enable" class="modal hide fade">
@@ -205,7 +204,6 @@
 				<button class="btn btn-primary" type="submit">Habilitar obra social</button>
 				<span class="is2-preloader is2-preloader-bg pull-left is2-preloader-status"></span>
 			</div>
-			<input class="is2-insurances-status-id" type="hidden" name="id">
 		</form>
 
 <?php t_endBody(); ?>
@@ -226,7 +224,6 @@
 	
 // *** habilitar/deshabilitar obra social funcionalidad *** //
 	var $theGrid = $( '.is2-grid-wrapper' );
-	var $insuranceIDForStatus = $( '.is2-insurances-status-id' );
 	var $preloaderForStatus = $( '.is2-preloader-status' );
 	var $closeStatusModal = $( '.is2-insurances-status-close' );
 	var $disableMsg = $( '.is2-status-disable-success' );
@@ -243,7 +240,6 @@
 		toggleStatus = status === 'habilitada' ? 'deshabilitar' : 'habilitar';
 
 		$row.addClass( 'is2-record-new' );
-		$insuranceIDForStatus.val( insuranceID );
 		currentInsuranceID = insuranceID;
 	} );
 	
@@ -285,9 +281,6 @@
 			url: '/obras-sociales/' + currentInsuranceID + '/' + toggleStatus,
 			dataType: 'json',
 			type: 'POST',
-			data: {
-				id: $insuranceIDForStatus.val()
-			},
 			success: statusedInsurance,
 			error: statusedInsurance
 		} );

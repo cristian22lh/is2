@@ -1,13 +1,6 @@
 <?php
-
-	if( !__issetPOST( array( 'id' ) ) ) {
-		__echoJSON( array( 'success' => false ) );
-	}
 	
-	$id = __validateID( $_POST['id'] );
-	if( !$id ) {
-		__echoJSON( array( 'success' => false ) );
-	}
+	$id = Router::seg( 2 );
 	
 	$rowsAffected = DB::update(
 		'
