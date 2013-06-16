@@ -84,6 +84,21 @@
 			___echoToFirePHP( 'error', func_get_args() );
 		}
 	}
+
+// ************** /
+// xsendfile (user wants to download a file) funcionality
+// ************* /
+	function ___isXSendFileAvailable() {
+		return in_array( 'mod_xsendfile', apache_get_modules() );
+	}
+
+	function ___delegateToXSendFile( $filename ) {
+		header( 'X-Sendfile: ' . $filename );
+	}
+
+	function ___getTempPath( $filename ) {
+		return sys_get_temp_dir() . DIRECTORY_SEPARATOR . $filename;	
+	}
 	
 // ************** /
 // PHPEXCEL funcionality
@@ -102,7 +117,16 @@
 		
 		$excelWriter = PHPExcel_IOFactory::createWriter( $phpExcel, 'Excel5' );
 		$excelWriter->setPreCalculateFormulas( false );
-		$excelWriter->save( 'php://output' );
+
+		if( ___isXSendFileAvailable() ) {
+			$filename = ___getTempPath( $filename );
+			$excelWriter->save( $filename );
+			// download
+			___delegateToXSendFile( $filename );
+
+		} else {
+			$excelWriter->save( 'php://output' );
+		}
 		
 		die;
 	}
@@ -116,9 +140,24 @@
 	}
 	
 	function __echoDOMPDF( $dompdf, $filename ) {
+		$filename = str_replace( ' ', '.', $filename ) . '_' . $_SERVER['REQUEST_TIME'] . '_.pdf';
+
 		$dompdf->render();
-		$dompdf->stream( str_replace( ' ', '.', $filename ) . '_' . $_SERVER['REQUEST_TIME'] . '_.pdf' );
-		
+
+		if( ___isXSendFileAvailable() ) {
+			header( 'Content-Type: application/pdf' );
+			header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
+			header( 'Cache-Control: max-age=0' );
+
+			$filePathOnDisk = ___getTempPath( $filename );
+			file_put_contents( $filePathOnDisk, $dompdf->output() );
+			// download
+			___delegateToXSendFile( $filePathOnDisk );
+
+		} else {
+			$dompdf->stream( $filename );
+		}
+
 		die;
 	}
 	
