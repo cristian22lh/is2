@@ -108,7 +108,6 @@
 		.is2-patients-selected .is2-patient-address {
 			display: inline-block;
 		}
-		
 	</style>
 <?php t_endHead(); ?>
 <?php t_startBody( $username, 'appointments'  ); ?>
@@ -325,7 +324,7 @@
 			$.ajax( {
 				url: '/pacientes/buscar-para-turno',
 				dataType: 'json',
-				type: 'POST',
+				type: 'GET',
 				data: {
 					keyword: term
 				},
@@ -442,7 +441,7 @@
 				doctorID: doctorID
 			},
 			dataType: 'json',
-			type: 'POST',
+			type: 'GET',
 			success: checkedAvailability,
 			error: checkedAvailability
 		} );
@@ -450,8 +449,7 @@
 	
 	// reset popover
 	$doctor.on( 'change', function( e ) {
-		$availabilityTrigger.popover( 'destroy' );
-		$availabilityTrigger.popover( { content: defaultMsg } );
+		$availabilityTrigger.popover( 'destroy' ).popover( { content: defaultMsg } );
 	} );
 	
 // *** OTRAS YERBAS *** //

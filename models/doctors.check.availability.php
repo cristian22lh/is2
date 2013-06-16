@@ -1,12 +1,8 @@
 <?php
-
-	if( !__issetPOST( array( 'date', 'time', 'doctorID' ) ) ) {
-		__echoJSON( array( 'success' => false ) );
-	}
 	
-	$date = __toISODate( $_POST['date'] );
-	$time = __toISOTime( $_POST['time'] );
-	$doctorID = __validateID( $_POST['doctorID'] );
+	$date = __toISODate( __GETField( 'date' ) );
+	$time = __toISOTime( __GETField( 'time' ) );
+	$doctorID = __validateID( __GETField( 'doctorID' ) );
 	
 	if( !$date || !$time || !$doctorID ) {
 		__echoJSON( array( 'success' => false ) );

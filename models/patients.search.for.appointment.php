@@ -1,13 +1,12 @@
 <?php
 
-	if( !__issetPOST( array( 'keyword' ) ) ) {
+	if( !( $keyword = trim( __GETField( 'keyword' ) ) ) ) {
 		__echoJSON( array( 'success' => false ) );
 	}
 	
 	$whereClause = array();
 	$replacements = array();
 	$whereOperator = ' OR ';
-	$keyword = trim( $_POST['keyword'] );
 	// is a dni or tel
 	if( ( $m = preg_replace( '/^[^\d]+$/', '', $keyword ) ) && is_numeric( $m ) ) {
 		$whereClause[] = ' p.dni = ? ';
