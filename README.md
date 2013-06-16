@@ -20,8 +20,19 @@ LoadModule headers_module modules/mod_headers.so
 LoadModule rewrite_module modules/mod_rewrite.so
 ```
 
+En **linux** la tiene mas facil, pongan la consola, loguesenen como **root**, tiren el siguiente comando y listo!
+```
+# a2enmod deflate expires headers rewrite
+# service apache2 restart
+```
+
 Ademas obviamente el modulo necesario para cargar PHP, la mia es
 `LoadModule php5_module "c:/wamp/bin/php/php5.4.3/php5apache2_2.dll`
+
+En **linux**, como root hacen (si que estan usando **Ubuntu**):
+```
+# apt-get install libapache-mod-php5
+```
 
 Listo ahora, hay que decirle a Apache que en la URL `localhost:8080` va a cargar nuestra aplicacion, para eso al final del `htppd.conf` ponemos
 
@@ -70,12 +81,13 @@ PHP
 -----
 Necesitan una version mayor ó igual a la **5.3**
 
-Ademas de los modulos (en Windows) habilitados
+Ademas de los modulos (en Windows) habilitados en el `php.ini`
 ```
 extension=php_mbstring.dll
 extension=php_gd2.dll
 extension=php_pdo_mysql.dll
 ```
+En Linux la extension seria `.so`
 
 MySQL credenciales
 -------------------------
