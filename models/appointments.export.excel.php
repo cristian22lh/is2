@@ -1,4 +1,8 @@
 <?php
+
+	if( !__AmI( 5.3 ) ) {
+		__redirect( '/404' );
+	}
 	
 	require './models/_appointments.export.php';
 

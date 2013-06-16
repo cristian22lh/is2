@@ -27,37 +27,43 @@
 	function __forceUTF8Enconding() {
 		header( 'content-type: text/html; charset=utf-8' );
 	}
+	
+	function __AmI( $version ) {
+		return PHP_VERSION >= $version;
+	}
 
 // ************** /
 // Minifying process
 // ************* /
 	function __initMinifyingProcess() {
-		ob_start( function( $buffer ) {
-			return 
-				// remove ws outside of all elements
-				preg_replace( '/>(?:\s\s*)?([^<]+)(?:\s\s*)?</s', '>$1<', 
-					// remove ws around block/undisplayed elements
-					preg_replace(
-					'/\s+(<\\/?(?!script|style|pre|textarea)\b[^>]*>)/i', '$1',
-						// trim line start
-						preg_replace( '/^\s\s*/m', '', 
-							// trim line end
-							preg_replace( '/\s\s*$/m', '', 
-								// remove HTML comments (not containing IE conditional comments)
-								preg_replace_callback( 
-									'/<!--([\s\S]*?)-->/', 
-									function( $m ) {
-										return ( 0 === strpos($m[1], '[' ) || false !== strpos( $m[1], '<![' ) ) ? $m[0] : '';
-									},
-									// start point
-									$buffer 
+		if( __AmI( 5.3 ) ) {
+			ob_start( function( $buffer ) {
+				return 
+					// remove ws outside of all elements
+					preg_replace( '/>(?:\s\s*)?([^<]+)(?:\s\s*)?</s', '>$1<', 
+						// remove ws around block/undisplayed elements
+						preg_replace(
+						'/\s+(<\\/?(?!script|style|pre|textarea)\b[^>]*>)/i', '$1',
+							// trim line start
+							preg_replace( '/^\s\s*/m', '', 
+								// trim line end
+								preg_replace( '/\s\s*$/m', '', 
+									// remove HTML comments (not containing IE conditional comments)
+									preg_replace_callback( 
+										'/<!--([\s\S]*?)-->/', 
+										function( $m ) {
+											return ( 0 === strpos($m[1], '[' ) || false !== strpos( $m[1], '<![' ) ) ? $m[0] : '';
+										},
+										// start point
+										$buffer 
+									)
 								)
 							)
 						)
 					)
-				)
-			;
-		} );
+				;
+			} );
+		}
 	}
 	
 // ************** /
@@ -86,7 +92,7 @@
 	}
 
 // ************** /
-// xsendfile (user wants to download a file) funcionality
+// xsendfile (user download a file) funcionality
 // ************* /
 	function ___isXSendFileAvailable() {
 		return in_array( 'mod_xsendfile', apache_get_modules() );
