@@ -84,7 +84,7 @@
 	$previousAppointmentDate = null;
 	foreach( $appointments as $appointment ) {
 	
-		if( $previousAppointmentDate != $appointment['fecha'] ) {
+		if( $previousAppointmentDate && $previousAppointmentDate != $appointment['fecha'] ) {
 			$phpExcelSheet->getRowDimension( $phpExcelSheet->getCell( $phpExcelSheet->getStyle( 'A' . $cellIndex . ':E' . $cellIndex )->applyFromArray( $styleForAppointmentBar )->getActiveCell() )->getRow() )->setRowHeight( 5 );
 			$cellIndex++;
 		}

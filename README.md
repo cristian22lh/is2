@@ -32,7 +32,7 @@ Listen 8080
     DocumentRoot "C:\Documents and Settings\arcollector\Desktop\is2"
 
   <Directory "C:\Documents and Settings\arcollector\Desktop\is2">
-        Options Indexes FollowSymLinks MultiViews
+        Options -Indexes FollowSymLinks -MultiViews
         AllowOverride All
         Order allow,deny
         allow from all

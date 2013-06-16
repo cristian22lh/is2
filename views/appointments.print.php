@@ -135,7 +135,7 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 				); ?>
 				<?php foreach( $appointments as $appointment ): ?>
 				
-					<?php if( $previousAppointmentDate != $appointment['fecha'] ): ?>
+					<?php if( $previousAppointmentDate && $previousAppointmentDate != $appointment['fecha'] ): ?>
 					<tr class="is2-empty-row">
 						<td></td>
 						<td></td>
