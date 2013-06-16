@@ -12,7 +12,7 @@
 	// global style
 	$phpExcelSheet->getDefaultStyle()->applyFromArray( array(
 		'font' => array(
-			'size' => 15,
+			'size' => 13,
 			'name' => 'Tahoma'
 		)
 	) );
@@ -20,7 +20,7 @@
 	// el title de la solapa
 	$phpExcelSheet->setTitle( 'Listado de turnos' );
 
-	$phpExcelSheet->getStyle( 'A:F' )->getAlignment()->setHorizontal( PHPExcel_Style_Alignment::HORIZONTAL_LEFT );
+	$phpExcelSheet->getStyle( 'A1:E1' )->getAlignment()->setHorizontal( PHPExcel_Style_Alignment::VERTICAL_CENTER );
 		
 	$styleForFieldNames = array(
 		'font' => array(
@@ -68,6 +68,7 @@
 
 	if( $appointments->rowCount() ) {
 		$phpExcelSheet->getColumnDimension( 'C' )->setAutoSize( true );
+		$phpExcelSheet->getColumnDimension( 'D' )->setAutoSize( true );
 		$phpExcelSheet->getColumnDimension( 'E' )->setAutoSize( true );
 		$phpExcelSheet->getStyle( 'A1:E1' )->applyFromArray( $styleForFieldNames );
 		$phpExcelSheet->setCellValue( 'A1', 'Dia' );
