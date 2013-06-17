@@ -489,18 +489,16 @@ IS2.getFormFields = function( $theForm ) {
 		$field = $fields.eq( i );
 		attr = $field.attr( 'name' );
 		val = $field.val().trim();
-
+		if( prevAttr && prevAttr !== attr ) {
+			data[prevAttr.replace( '[]', '' )] = t;
+			t = [];
+			prevAttr = null;
+		}
 		if( attr.indexOf( '[]' ) > 0 ) {
 			prevAttr = attr;
 			if( $field.prop( 'checked' ) ) {
 				t.push( val );
 			}
-
-		} else if( prevAttr ) {
-			data[prevAttr.replace( '[]', '' )] = t;
-			t = [];
-			prevAttr = null;
-
 		} else {
 			if( $field.is( '[type="radio"]' ) && !$field.prop( 'checked' ) ) {
 				continue;
@@ -508,9 +506,8 @@ IS2.getFormFields = function( $theForm ) {
 			data[attr] = val;
 		}
 	}
-
 	return data;
-};
+}; 
 
 IS2.getISODate = function( value ) {
 	value = value.split( '/' );

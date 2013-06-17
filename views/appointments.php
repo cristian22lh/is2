@@ -704,7 +704,6 @@
 
 		var keyword = $searchQuery.val().trim();
 		if( !keyword ) {
-			e.preventDefault();
 			$searchControlGroup.addClass( 'error' );
 			return;
 		}

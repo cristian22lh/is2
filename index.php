@@ -69,8 +69,6 @@
 		'/pacientes/crear' => 'patients.new',
 		'/pacientes/:id/editar' => 'patients.edit',
 		'/pacientes/listar-por-letra/:char' => 'patients',
-		'/pacientes/busqueda-avanzada' => 'patients.search.advanced',
-		'/pacientes/busqueda-rapida' => 'patients.search.quick',
 		'/pacientes/:id' => 'patients.details',
 		'/pacientes/buscar-para-turno' => 'patients.search.for.appointment',
 
