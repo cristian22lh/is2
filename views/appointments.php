@@ -346,9 +346,9 @@
 				<div class="pull-right">
 					<a class="is2-icon is2-icon-print" href="/turnos/exportar/imprimir?<?php echo $listingData; ?>" title="Ver listado en formato imprimible" target="_blank"></a>
 					<?php if( __AmI( 5.3 ) ): ?>
-					<a class="is2-icon is2-icon-excel" href="/turnos/exportar/excel?<?php echo $listingData; ?>" title="Descargar listado en un archivo excel"></a>
+					<a class="is2-icon is2-icon-excel" href="/turnos/exportar/excel?<?php echo $listingData; ?>" title="Descargar listado en un archivo excel" target="_blank"></a>
 					<?php endif; ?>
-					<a class="is2-icon is2-icon-pdf" href="/turnos/exportar/pdf?<?php echo $listingData; ?>" title="Descargar listado en un archivo pdf"></a>
+					<a class="is2-icon is2-icon-pdf" href="/turnos/exportar/pdf?<?php echo $listingData; ?>" title="Descargar listado en un archivo pdf" target="_blank"></a>
 				</div>
 			</div>
 
