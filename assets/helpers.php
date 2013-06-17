@@ -410,14 +410,11 @@
 // ************** /
 // RENDER VIEWS
 // ************* /
-	function __render( $__filename__, $vars = array() ) {
-		
-		$__fullPath__ =  './views/' . $__filename__ . '.php';
-		if( !file_exists( $__fullPath__ ) ) {
-			die( 'Specified view: "' . $__filename__ . '" does not exists at the path: "' . $__fullPath__ . '"' );
-		}
+	function __render( $__viewFilename__, $vars = array() ) {
+		global $PWD;
+		$__viewFilename__ = $PWD . '/views/' . $__viewFilename__ . '.php';
 		
 		extract( $vars );
-		require $__fullPath__;
+		require $__viewFilename__;
 	}
 ?>

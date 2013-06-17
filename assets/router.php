@@ -37,11 +37,7 @@
 			$count = 0;
 			foreach( $routes as $route => $model ) {
 				if( Router::test( $route, $page ) ) {
-					$path = './models/' . $model . '.php';
-					if( !file_exists( $path ) ) {
-						die( 'Specified model "' . $model . '" does not exists at "' . $path . '"' );
-					}
-					return $path;
+					return $model;
 				} else {
 					$count++;
 				}

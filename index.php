@@ -9,19 +9,18 @@
 		ini_set( 'display_startup_errors', 1 );
 		error_reporting( -1 );
 	}
-	// necesario para hacer los inner require
-	$PWD = getcwd();
 	
-	require './assets/db.php';
-	require './assets/router.php';
+	$PWD = getcwd();
+	require $PWD . '/assets/db.php';
+	require $PWD . '/assets/router.php';
 	// las funciones helpers tienen como prefijo __
-	require './assets/helpers.php';
+	require $PWD . '/assets/helpers.php';
 	// las funciones template tienen como prefijo t_
-	require './views/_template.php';
+	require $PWD . '/views/_template.php';
 	// las queries tienen como prefijo q_
-	require './assets/queries.php';
+	require $PWD . '/assets/queries.php';
 	// mi session handler
-	require './assets/session.php';
+	require $PWD . '/assets/session.php';
 	// init some things
 	DB::init();
 	Router::init();
@@ -91,6 +90,6 @@
 		'/obras-sociales/:id/deshabilitar' => 'insurances.status'
 	);
 	
-	require $PWD . Router::start( $routes, '/404' );
+	require $PWD . '/models/' . Router::start( $routes, '/404' ) . '.php';
 
 ?>
