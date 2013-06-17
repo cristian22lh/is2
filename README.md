@@ -71,7 +71,7 @@ Ahora en su `<VirtualHost>` ponen el siguiente codigo:
     AllowOverride All
     Order allow,deny
     XSendFile On
-    XSendFilePath "C:/WINDOWS/TEMP"
+    XSendFilePath "C:/Windows/TEMP"
 </Directory>
 ```
 En Linux, deberian poner `/tmp` en la directiva `XSendFilePath`

@@ -43,8 +43,6 @@
 		'/turnos/:id/cancelar' => 'appointments.cancel',
 		'/turnos/:id/borrar' => 'appointments.remove',
 		'/turnos/:id/reiniciar' => 'appointments.reset',
-		'/turnos/busqueda-rapida' => 'appointments.search.quick',
-		'/turnos/busqueda-avanzada' => 'appointments.search.advanced',
 		'/turnos/crear' => 'appointments.new',
 		'/turnos/exportar/excel' => 'appointments.export.excel',
 		'/turnos/exportar/imprimir' => 'appointments.export.print',
@@ -71,8 +69,6 @@
 		'/pacientes/crear' => 'patients.new',
 		'/pacientes/:id/editar' => 'patients.edit',
 		'/pacientes/listar-por-letra/:char' => 'patients',
-		'/pacientes/busqueda-avanzada' => 'patients.search.advanced',
-		'/pacientes/busqueda-rapida' => 'patients.search.quick',
 		'/pacientes/:id' => 'patients.details',
 		'/pacientes/buscar-para-turno' => 'patients.search.for.appointment',
 

@@ -217,7 +217,7 @@
 			<div class="is2-pagetitle clearfix">
 				<h3>Pacientes</h3>
 				<a class="btn pull-right btn-warning" href="/pacientes/crear"><i class="icon-plus"></i> Crear un nuevo paciente</a>
-				<form class="form-search pull-right is2-search-quick-form" method="post" action="/pacientes/busqueda-rapida">
+				<form class="form-search pull-right is2-search-quick-form">
 					<div class="is2-search-quick-control input-append control-group <?php echo $searchQuickError ? 'error': ''; ?>">
 						<input type="text" class="input-large search-query is2-search-quick-input" placeholder="Búsqueda rápida" name="keyword" value="<?php echo $quickSearchValue; ?>">
 						<button type="submit" class="btn"><i class="icon-search"></i></button>
@@ -233,7 +233,7 @@
 						</a>
 					</div>
 					<div id="is2-search-patients" class="accordion-body collapse out">
-						<form class="accordion-inner" method="post" action="/pacientes/busqueda-avanzada">
+						<form class="accordion-inner is2-search-advanced-form">
 							<div class="alert">
 								Sepa que puede combinar los campos entre si para realizar búsquedas más precisas
 							</div>
@@ -597,6 +597,60 @@
 	if( window.location.search.indexOf( 'id=' ) >= 0 && window.location.search.indexOf( 'exito=crear-paciente' ) >= 0 ) {
 		IS2.showNewRecord( $( '.is2-patients-row' ) );
 	}
+
+// *** BUSQUEDA AVANZADA *** //
+	var $advancedForm = $( '.is2-search-advanced-form' );
+	$advancedForm.on( 'submit', function( e ) {
+		/** @todo: validate fields */
+		e.preventDefault();
+		var formData = IS2.getFormFields( $advancedForm );
+		var lastNames = formData.lastName.split( ' ' ),
+		lastNamesArr = [],
+		i = 0, l = lastNames.length;
+		for( ; i < l; i++ ) {
+			lastNamesArr.push( lastNames[i].trim() );
+		}
+		var firstNames = formData.firstName.split( ' ' ),
+		firstNamesArr = [];
+		for( i = 0, l = firstNames.length; i < l; i++ ) {
+			firstNamesArr.push( firstNames[i].trim() );
+		}
+		formData.birthDateStart = IS2.getISODate( formData.birthDateStart );
+		formData.birthDateEnd = IS2.getISODate( formData.birthDateEnd );
+		formData.patientsList = formData.patientsList ? formData.patientsList.replace( /\./g, '' ).split( /\s+/ ) : [];
+		formData.affiliateInsuranceNumber = formData.affiliateInsuranceNumber.split( /\s+/ );
+		// make the query
+		var query = ( lastNamesArr.length ? lastNamesArr.join( '-' ) : '' ) + '|' + ( firstNamesArr.length ? firstNamesArr.join( '-' ) : '' ) + '|' + formData.birthDateStart + '@' + formData.birthDateEnd + '|' + ( formData.insurancesList.length ? formData.insurancesList.join( '-' ) : '' ) + '|' + ( formData.patientsList.length ? formData.patientsList.join( '-' ) : '' ) + '|' + ( formData.affiliateInsuranceNumber.length ? formData.affiliateInsuranceNumber.join( '-' ) : '' );
+		window.location = '/pacientes?busqueda-avanzada=' + btoa( query );
+	} );
+// *** BUSQUEDA RAPIDA *** //
+	var $searchQuery = $( '.is2-search-quick-input' );
+	var $searchControlGroup = $( '.is2-search-quick-control' );
+	$( '.is2-search-quick-form' ).on( 'submit', function( e ) {
+		e.preventDefault();
+		var keyword = $searchQuery.val().trim();
+		if( !keyword ) {
+			$searchControlGroup.addClass( 'error' );
+			return;
+		}
+		$searchControlGroup.removeClass( 'error' );
+		var field;
+		var value;
+		// is a date?
+		if( ( value = IS2.getISODate( keyword ) ) ) {
+			field = 'fechaNacimiento';
+		// is a dni OR tel?
+		} else if( ( value = keyword.replace( /\./g, '' ) - 0 ) || ( value = keyword.match( /^[^#*\d-()]+$/ ) - 0 ) ) {
+			field = 'dni|telefono';
+		// is a lopez, marcos?
+		} else if( ( value = keyword.split( /\s*,\s*/ ) ) && value.length === 2 ) {
+			field = 'fullname';
+		} else {
+			field = 'comodin';
+			value = keyword;
+		}
+		window.location = '/pacientes?busqueda=' + btoa( field + '=' + value );
+} );
 	
 })();
 </script>
