@@ -344,7 +344,7 @@ IS2.CRUD.prototype.Remove.prototype = {
 		$.ajax( {
 			url: '/' + this.parent.baseClass + '/' + this.parent.currentID + '/borrar',
 			dataType: 'json',
-			type: 'GET',
+			type: 'POST',
 			success: this.reponse,
 			error: this.reponse,
 			context: this

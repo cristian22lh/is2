@@ -65,10 +65,7 @@ html{color:#000;background:#FFF}body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre
 			color: #555;
 			vertical-align: middle;
 		}
-		
-		tr.is2-empty-row:first-of-type {
-			display: none;
-		}
+
 		tr.is2-empty-row td {
 			background: #aaa;
 		}
