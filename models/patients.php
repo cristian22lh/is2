@@ -155,10 +155,12 @@
 		}
 		
 		$field =  $keyword[0];
-		$value = $keyword[1];
+		$value = $quickSearchValue = $keyword[1];
+
 		if( $field == 'fechaNacimiento' ) {
 			$whereClause[] = ' p.fechaNacimiento = ? ';
 			$replacements[] = $value;
+			$quickSearchValue = __dateISOToLocale( $value );
 			
 		} else if( $field == 'dni|telefono' ) {
 			$whereClause[] = ' p.dni = ? OR p.telefono = ? ';
@@ -181,7 +183,6 @@
 			__redirect( '/pacientes?error=buscar-paciente-rapido' );
 		}
 		
-		$quickSearchValue = $value;
 		$isQuickSearch = true;
 		$isSearch = true;
 		
