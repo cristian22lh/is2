@@ -70,7 +70,8 @@
 // FIREPHP funcionality
 // ************* /
 	function ___echoToFirePHP( $type, $args ) {
-		require_once './modules/firephp/FirePHP.class.php';
+		global $PWD;
+		require_once $PWD . '/modules/firephp/FirePHP.class.php';
 		$firephp = FirePHP::getInstance( true );
 		foreach( $args as $arg ) {
 			call_user_func_array( array( $firephp, $type ), array( $arg ) );
@@ -110,12 +111,14 @@
 // PHPEXCEL funcionality
 // ************* /
 	function __getPHPExcelInstance() {
-		require_once './modules/phpexcel/PHPExcel.php';
+		global $PWD;
+		require_once $PWD . '/modules/phpexcel/PHPExcel.php';
 		return new PHPExcel();
 	}
 	
 	function __echoPHPExcel( $phpExcel, $filename ) {
-		require_once './modules/phpexcel/PHPExcel.php';
+		global $PWD;
+		require_once $PWD . '/modules/phpexcel/PHPExcel.php';
 		
 		header( 'Content-Type: application/vnd.ms-excel' );
 		header( 'Content-Disposition: attachment; filename="' . $filename . ' (' . $_SERVER['REQUEST_TIME'] . ').xls' . '"' );
@@ -141,7 +144,8 @@
 // DOMPDF funcionality
 // ************* /	
 	function __getDOMPDFInstance() {
-		require_once './modules/dompdf/dompdf_config.inc.php';
+		global $PWD;
+		require_once $PWD . '/modules/dompdf/dompdf_config.inc.php';
 		return new DOMPDF();
 	}
 	
@@ -209,6 +213,15 @@
 // TODO ESTO HACE USO $_SESSION
 // ************* /
 	function __initSession() {
+		$session = new MyCustomSessionHandler();
+		session_set_save_handler(
+			array( $session, 'open' ),
+			array( $session, 'close' ),
+			array( $session, 'read' ),
+			array( $session, 'write' ),
+			array( $session, 'destroy' ),
+			array( $session, 'gc' )
+		);
 		session_start();
 	}
 	

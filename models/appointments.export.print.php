@@ -1,6 +1,7 @@
 <?php
 	
-	require './models/_appointments.export.php';
+	global $PWD;
+	require_once $PWD . '/models/_appointments.export.php';
 
 	$appointments = m_getAppointments();
 

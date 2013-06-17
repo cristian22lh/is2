@@ -50,9 +50,9 @@
 		}
 		
 		static function select( $query, $replacements = array() ) {
-		
-			self::_log( $query, $replacements );
 			
+			self::_log( $query, $replacements );
+
 			$stmt = null;
 			
 			try {
@@ -61,6 +61,7 @@
 				$stmt->setFetchMode( PDO::FETCH_ASSOC );
 			
 			} catch( PDOException $e ) {
+				
 				self::_err( $e );
 			}
 

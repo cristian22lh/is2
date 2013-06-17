@@ -1,7 +1,8 @@
 <?php
 
 	// both edit and create doctors funtionality share some common things
-	require './models/_doctors.new.edit.php';
+	global $PWD;
+	require_once $PWD . '/models/_doctors.new.edit.php';
 
 /* {{{ CUANDO SE CREAR UN NUEVO MEDICO */
 	if( m_issetPOST() ) {

@@ -20,6 +20,16 @@ INSERT INTO usuarios VALUES( null, 'admin', SHA( 123456 ) ), ( null, 'root', SHA
 /**
 *
 */
+DROP TABLE IF EXISTS sesiones;
+CREATE TABLE sesiones(
+	id CHAR( 26 ) PRIMARY KEY,
+	fechaCreacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	fechaUltimoAcceso TIMESTAMP	,
+	sesionData TEXT NULL
+);
+/**
+*
+*/
 DROP TABLE IF EXISTS turnos;
 CREATE TABLE turnos(
 	id INTEGER PRIMARY KEY AUTO_INCREMENT,

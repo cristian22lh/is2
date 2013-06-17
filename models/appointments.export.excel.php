@@ -4,7 +4,8 @@
 		__redirect( '/404' );
 	}
 	
-	require './models/_appointments.export.php';
+	global $PWD;
+	require_once $PWD . '/models/_appointments.export.php';
 
 	// get the appointments
 	$appointments = m_getAppointments();

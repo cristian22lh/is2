@@ -4,59 +4,73 @@
 // ESTAS FUNCIONES SE USAN EN LAS VIEWS
 // ************* /
 	function t_startHead( $page ) {
-		require './views/_head.start.php';
+		global $PWD;
+		require_once $PWD . '/views/_head.start.php';
 	}
 	
 	function t_endHead() {
-		require './views/_head.end.php';
+		global $PWD;
+		require_once $PWD . '/views/_head.end.php';
 	}
 	
 	function t_startBody( $username, $currentTab ) {
-		require './views/_body.start.php';
+		global $PWD;
+		require_once $PWD . '/views/_body.start.php';
 	}
 	
 	function t_endBody() {
-		require './views/_body.end.php';
+		global $PWD;
+		require_once $PWD . '/views/_body.end.php';
 	}
 	
 	function t_startWrapper() {
-		require './views/_wrapper.start.php';
+		global $PWD;
+		require_once $PWD . '/views/_wrapper.start.php';
 	}
 	
 	function t_endWrapper() {
-		require './views/_wrapper.end.php';
+		global $PWD;
+		require_once $PWD . '/views/_wrapper.end.php';
 	}
 	
 	function t_dateMenu() {
-		require './views/_appointments.date.menu.php';
+		global $PWD;
+		require_once $PWD . '/views/_appointments.date.menu.php';
 	}
 	
 	function t_timeMenu() {
-		require './views/_appointments.time.menu.php';
+		global $PWD;
+		require_once $PWD . '/views/_appointments.time.menu.php';
 	}
 	
 	function t_statusMenu() {
-		require './views/_appointments.status.menu.php';
+		global $PWD;
+		require_once $PWD . '/views/_appointments.status.menu.php';
 	}
 	
 	function t_appointmentNewRow( $appointmentDateLocale ) {
-		require './views/_appointments.row.new.php';
+		global $PWD;
+		require_once $PWD . '/views/_appointments.row.new.php';
 	}
 	
 	function t_lastNameMenu( $orderByType ) {
-		require './views/_patients.lastname.menu.php';
+		global $PWD;
+		require_once $PWD . '/views/_patients.lastname.menu.php';
 	}
 	
 	function t_firstNameMenu( $orderByType ) {
-		require './views/_patients.firstname.menu.php';
+		global $PWD;
+		require_once $PWD . '/views/_patients.firstname.menu.php';
 	}
 
 	function t_birthDateMenu( $orderByType ) {
-		require './views/_patients.birthname.menu.php';
+		global $PWD;
+		require_once $PWD . '/views/_patients.birthname.menu.php';
 	}
 	
 	function t_setCustomTypeface() {
-		require './views/_custom.fontface.php';
+		global $PWD;
+		require_once $PWD . '/views/_custom.fontface.php';
 	}
 
 ?>

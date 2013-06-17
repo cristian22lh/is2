@@ -9,6 +9,8 @@
 		ini_set( 'display_startup_errors', 1 );
 		error_reporting( -1 );
 	}
+	// necesario para hacer los inner require
+	$PWD = getcwd();
 	
 	require './assets/db.php';
 	require './assets/router.php';
@@ -18,6 +20,8 @@
 	require './views/_template.php';
 	// las queries tienen como prefijo q_
 	require './assets/queries.php';
+	// mi session handler
+	require './assets/session.php';
 	// init some things
 	DB::init();
 	Router::init();
@@ -87,6 +91,6 @@
 		'/obras-sociales/:id/deshabilitar' => 'insurances.status'
 	);
 	
-	require Router::start( $routes, '/404' );
+	require $PWD . Router::start( $routes, '/404' );
 
 ?>

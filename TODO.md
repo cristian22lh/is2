@@ -18,3 +18,8 @@ TODO
 * Exportar a CSV
 
 * Hacer la aplicacion compatible con el IPAD
+
+* Poder dar turnos a NO PACIENTES
+
+* Guardar la sesiones en la DB
+	**HECHO**

@@ -1,7 +1,8 @@
 <?php
 
 	// both edit and create patients funtionality share some common things
-	require './models/_patients.new.edit.php';
+	global $PWD;
+	require_once $PWD . '/models/_patients.new.edit.php';
 
 	// get the id seg from /pacientes/122/editar
 	$patientID = Router::seg( 2 );
