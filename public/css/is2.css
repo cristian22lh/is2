@@ -125,6 +125,7 @@ textarea {
 	height: 19px;
 	vertical-align: middle;
 	visibility: hidden;
+	margin: 0 0 0 3px;
 }
 .is2-preloader-bg {
 	background-image: url( /img/preloader-bg-gray.gif );

@@ -60,36 +60,14 @@
 				transform: translateY(0%);
 			}
 		}
-		@-webkit-keyframes moveFromTop {
-			from {
-				opacity: 0;
-				-webkit-transform: translateY(-200%);
-			}
-			to {
-				opacity: 1;
-				-webkit-transform: translateY(0%);
-			}
-		}
-		@-webkit-keyframes moveFromBottom {
-			from {
-				opacity: 0;
-				-webkit-transform: translateY(200%);
-			}
-			to {
-				opacity: 1;
-				-webkit-transform: translateY(0%);
-			}
-		}	
 		.is2-doctor-presentation:hover img {
 			box-shadow: 0 0 10px #32a2c3;
 		}
 		.is2-doctor-presentation:hover .is2-doctor-presentation-name h3 {
 			animation: moveFromTop 300ms ease-in-out;
-			-webkit-animation: moveFromTop 300ms ease-in-out;
 		}
 		.is2-doctor-presentation:hover .is2-doctor-presentation-name-speciality {
 			animation: moveFromBottom 300ms ease-in-out;
-			-webkit-animation: moveFromBottom 300ms ease-in-out;
 		}
 		
 		/* modal */

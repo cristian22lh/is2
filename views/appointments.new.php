@@ -105,6 +105,12 @@
 			white-space: nowrap;
 			line-height: 19px;
 		}
+		.is2-patients-selected .ui-menu-item span.is2-patient-name {
+			text-transform: capitalize;
+		}
+		.is2-patients-selected .ui-menu-item span.is2-patient-insurance {
+			text-transform: uppercase;
+		}
 		.is2-patients-selected .is2-patient-address {
 			display: inline-block;
 		}
@@ -204,7 +210,7 @@
 						<strong>El médico se encuentra de licencia, no puede crear el turno para la fecha requerida</strong>
 					</div>
 					<div class="alert alert-success is2-availability-success is2-popover-template">
-						<strong>¡El médico esta disponible para la fecha y hora especifícado!</strong>
+						<strong>¡El médico esta disponible para la fecha y hora especifícada!</strong>
 					</div>
 				</div>
 				<div class="control-group is2-dni">
@@ -275,7 +281,7 @@
 	var $removeSelectedClient = $( '.is2-patients-search-remove' );
 	$removeSelectedClient.on( 'click', function( e ) {
 		$dni.val( '' );
-		$selectedPatient.hide();
+		$selectedPatient.empty().hide();
 		$patientID.val( '' );
 		$removeSelectedClient.hide();
 		$dni.focus();
@@ -350,6 +356,7 @@
 	// init
 	$dni.autocomplete( {
 		source: searchPatients,
+		// cuando se selecciona un paciente de la lista de sugerencias
 		select: function( e, ui ) {
 			var patient = ui.item.data,
 				$item = $( '.ui-menu-item[data-patient-id=' + patient.id + ']' ).clone();

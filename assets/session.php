@@ -54,9 +54,8 @@
 			
 			if( $res->rowCount() == 1 ) {
 				$creationDate = $res->fetch();
-				$creationDate = $creationDate['fechaCreacion'];
 				$valuesClause = ' ( ?, ?, NOW(), ? ) ';
-				$replacements = array( $sessionID, $creationDate, $sessionData );
+				$replacements = array( $sessionID, $creationDate['fechaCreacion'], $sessionData );
 			} else {
 				$creationDate = null;
 				$valuesClause = ' ( ?, NOW(), NOW(), ? ) ';

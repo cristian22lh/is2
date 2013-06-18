@@ -414,12 +414,12 @@
 						<li class="is2-patient-data" data-field-name="dni"></li>
 						<li class="is2-patient-data" data-field-name="fechaNacimiento"></li>
 						<li class="is2-patient-data" data-field-name="edad"></li>
-						<li class="is2-patient-data" data-field-name="direccion"></li>
 					</ul>
 				</div>
 				<div class="is2-modal-details-body">
 					<ul>
 						<li>Teléfono: <strong class="is2-patient-data" data-field-name="telefono"></strong></li>
+						<li>Dirección: <strong class="is2-patient-data" data-field-name="direccion"></strong></li>
 						<li>Obra social: <strong class="is2-patient-data" data-field-name="obraSocialAbbr"></strong> <strong class="is2-patient-data is2-patient-data-insurance" data-field-name="obraSocialNombre"></strong></li>
 						<li>Número de afiliado: <strong class="is2-patient-data" data-field-name="nroAfiliado"></strong></li>
 					</ul>

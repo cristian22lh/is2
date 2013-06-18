@@ -44,7 +44,7 @@
 		<?php t_startWrapper(); ?>
 		
 			<div class="is2-pagetitle clearfix">
-				<h3>Obra sociales</h3>
+				<h3>Obras sociales</h3>
 				<a class="is2-trigger-create btn pull-right btn-warning" href="#is2-modal-theform" data-toggle="modal"><i class="icon-plus"></i> Crear una nueva obra social</a>
 				<form class="form-search pull-right is2-search-quick-form">
 					<div class="is2-search-quick-control input-append control-group">
