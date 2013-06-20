@@ -213,6 +213,8 @@
 // TODO ESTO HACE USO $_SESSION
 // ************* /
 	function __initSession() {
+		global $PWD;
+		require $PWD . '/assets/session.php';
 		$session = new MyCustomSessionHandler();
 		session_set_save_handler(
 			array( $session, 'open' ),

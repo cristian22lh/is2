@@ -425,7 +425,7 @@ IS2.CRUD._CreateEdit = {
 	
 	bindForm: function( self ) {
 		self.$theForm.off( 'submit' ).off( 'hidden' );
-		self.$theForm.on( 'submit', $.proxy( this.onsubmit, self ) ).on( 'hidden', self.parent.onhidden );
+		self.$theForm.on( 'submit', $.proxy( this.onsubmit, self ) ).on( 'hidden', self.parent.onhidden ).on( 'keypress', $.proxy( this.onkeypress, self ) );
 	},
 	
 	onsubmit: function( e ) {
@@ -471,8 +471,14 @@ IS2.CRUD._CreateEdit = {
 		} else {
 			window.location = this.getSuccessURL() + '&id=' + dataResponse.data.id;		
 		}
-	}
+	},
 	
+	onkeypress: function( e ) {
+		if( e.keyCode === 13 ) {
+			e.preventDefault();
+			this.$theForm.trigger( 'submit' );
+		}
+	}
 };
 
 IS2.markChosenOrder = function( groupSelector, $el ) {

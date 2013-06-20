@@ -18,9 +18,7 @@
 	// las funciones template tienen como prefijo t_
 	require $PWD . '/views/_template.php';
 	// las queries tienen como prefijo q_
-	require $PWD . '/assets/queries.php';
-	// mi session handler
-	require $PWD . '/assets/session.php';
+	require $PWD . '/assets/common.queries.php';
 	// init some things
 	DB::init();
 	Router::init();

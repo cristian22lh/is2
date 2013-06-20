@@ -72,7 +72,7 @@
 		<!-- los modals -->
 		<form id="is2-modal-theform" class="is2-modal-create is2-modal-edit modal hide fade form-horizontal">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<a class="close" data-dismiss="modal">&times;</a>
 				<strong class="is2-edit">Editar especialidad</strong>
 				<strong class="is2-create">Crear especialidad</strong>
 			</div>
@@ -137,6 +137,6 @@
 	new crud.Edit( crud );
 // *** remove *** //
 	new crud.Remove( crud );
-
+	
 })();
 </script>
