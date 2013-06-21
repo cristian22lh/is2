@@ -424,7 +424,7 @@ IS2.CRUD.prototype.Create.prototype = {
 IS2.CRUD._CreateEdit = {
 	
 	bindForm: function( self ) {
-		self.$theForm.off( 'submit' ).off( 'hidden' );
+		self.$theForm.off( 'submit' ).off( 'hidden' ).off( 'keypress' );
 		self.$theForm.on( 'submit', $.proxy( this.onsubmit, self ) ).on( 'hidden', self.parent.onhidden ).on( 'keypress', $.proxy( this.onkeypress, self ) );
 	},
 	
