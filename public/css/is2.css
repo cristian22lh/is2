@@ -117,6 +117,10 @@ textarea {
 .is2-pagetitle .form-search {
 	margin: 0 5px 0 0;
 }
+.is2-pagetitle i {
+	margin: 0 3px 0 -5px;
+	vertical-align: middle;
+}
 
 .is2-preloader {
 	background: url( /img/preloader.gif ) no-repeat;

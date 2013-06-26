@@ -287,6 +287,9 @@
 			height: 250px;
 			overflow-y: scroll;
 		}
+		.is2-licenses-table strong {
+			margin: 0 5px;
+		}
 		.is2-licenses-table td {
 			text-transform: none !important;
 		}
