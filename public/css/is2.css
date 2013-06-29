@@ -102,6 +102,11 @@ textarea {
 	max-height: 100px;
 	min-height: 50px;
 }
+/* fix icon button padding */
+.is2-dropdownmenu i,
+.is2-appointment-status .btn > i {
+	margin: 0 5px 0 -10px;
+}
 
 .is2-pagetitle {
 	margin: 0 0 10px 0;
@@ -117,6 +122,7 @@ textarea {
 .is2-pagetitle .form-search {
 	margin: 0 5px 0 0;
 }
+
 .is2-pagetitle i {
 	margin: 0 3px 0 -5px;
 	vertical-align: middle;
@@ -165,9 +171,6 @@ textarea {
 .is2-dropdownmenu {
     float: right;
     padding: 0;
-}
-.is2-dropdownmenu i {
-	margin: 0 5px 0 -10px;
 }
 .is2-record-new {
 	background: #FCF8E3 !important;

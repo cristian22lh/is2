@@ -101,6 +101,9 @@
 		.is2-modal-details-body h3 {
 			margin: 5px 0 0 0;
 		}
+		.is2-modal-details-body h3 > span {
+			margin: 0 0 0 5px;
+		}
 		
 		.is2-modal-doctor-information {
 			float: left;
@@ -299,6 +302,8 @@
 		.is2-licenses-table td:last-child {
 			text-align: right;
 		}
+		
+		.is2-doctor-appointments-empty,
 		.is2-licenses-record-empty {
 			margin: 5px 10px 0;
 			text-align: center;
@@ -480,6 +485,9 @@
 											</td>
 										</tr>
 									</table>
+									<div class="alert alert-info is2-doctor-appointments-empty" style="display:none">
+										<strong>Médico sin turnos registrados hasta el momento</strong>
+									</div>
 								</div>
 							</div>
 							
@@ -917,6 +925,7 @@
 	var $appointmentsWrapper = $( '.is2-doctor-appointments-table' );
 	var $appointmentRecord = $( '.is2-doctor-appointments-record' ).clone();
 	$( '.is2-doctor-appointments-record' ).remove();
+	var $appointmentsEmpty = $( '.is2-doctor-appointments-empty' );
 	
 	var showAppointmentsHistory = function( dataResponse ) {
 		hidePreloader();
@@ -927,18 +936,24 @@
 		$appointmentsWrapper.hide().empty();
 		var appointments = dataResponse.data, appointment,
 			$fields, $field, i, l;
-			
-		while( appointments.length ) {
-			appointment = appointments.shift();
-			$appointment = $appointmentRecord.clone();
-			$fields = $appointment.find( '.is2-field' );
-			for( i = 0, l = $fields.length; i < l; i++ ) {
-				$field = $fields.eq( i );
-				$field.html( appointment[$field.attr( 'data-field-name' )] );
+		
+		if( appointments.length ) {
+			$appointmentsEmpty.hide();
+			while( appointments.length ) {
+				appointment = appointments.shift();
+				$appointment = $appointmentRecord.clone();
+				$fields = $appointment.find( '.is2-field' );
+				for( i = 0, l = $fields.length; i < l; i++ ) {
+					$field = $fields.eq( i );
+					$field.html( appointment[$field.attr( 'data-field-name' )] );
+				}
+				$appointment.find( '.is2-doctor-appointment-link' ).attr( 'href', '/turnos?id=' + appointment.id );
+				
+				$appointmentsWrapper.append( $appointment );
 			}
-			$appointment.find( '.is2-doctor-appointment-link' ).attr( 'href', '/turnos?id=' + appointment.id );
 			
-			$appointmentsWrapper.append( $appointment );
+		} else {
+			$appointmentsEmpty.show();
 		}
 		$appointmentsWrapper.show();
 	};
@@ -946,7 +961,7 @@
 	$( '.is2-doctor-appointments-trigger' ).on( 'click', function( e ) {
 		e.preventDefault();
 		// dont request agina the appontmets if already has been loaded
-		if( $appointmentsWrapper.find( 'tr.is2-doctor-appointments-record' ).length ) {
+		if( $appointmentsWrapper.find( 'tr.is2-doctor-appointments-record' ).length || $appointmentsEmpty.css( 'display' ) === 'block' ) {
 			return;
 		}
 		
