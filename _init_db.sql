@@ -66,8 +66,10 @@ INSERT INTO medicos VALUES
 	( null, 6, 'Neonazi', 'Delia', '45001212', '153221110', '12 esq 58', '122434/21', '423/12', 'neonazi-delia.mini.png', 'neonazi-delia.png' ),
 	( null, 7, 'Yao', 'Ming', '45001212', '153221110', '12 esq 58', '122434/21', '423/12', 'yao-ming.mini.png', 'yao-ming.png' ),
 	( null, 8, 'Yaranaika', 'desu', '45001212', '153221110', '12 esq 58', '122434/21', '423/12','yaranaika.mini.png', 'yaranaika.png' ),
-	( null, 1, 'Weon', 'Tesla', '45001212', '153221110', '12 esq 58', '122434/21', '423/12', 'tesla.mini.png', 'tesla.png' ),
-	( null, 2, 'Patricio', 'Patricio', '45001212', '153221110', '12 esq 58', '122434/21', '423/12', 'patricio.mini.png', 'patricio.png' )
+	( null, 9, 'Nikola', 'Tesla', '45001212', '153221110', '12 esq 58', '122434/21', '423/12', 'tesla.mini.png', 'tesla.png' ),
+	( null, 10, 'Patricio', 'Patricio', '45001212', '153221110', '12 esq 58', '122434/21', '423/12', 'patricio.mini.png', 'patricio.png' ),
+	( null, 11, 'Nyan', 'Cat', '153216789', '4331123', '6 esq 1230', '12322/12', '122/12', 'nyan-cat.mini.png', 'nyan-cat.png' ),
+	( null, 12, 'Dr.', 'Troll', '667123432', '34432222', 'l33t', '7777/7', '7777', 'doctor-troll.mini.png', 'doctor-troll.png' );
 ;
 /**
 *
@@ -110,7 +112,13 @@ INSERT INTO horarios VALUES
 	( null, 5, '15:00:00', '19:00:00', 7 ),
 	( null, 6, '16:00:00', '19:00:00', 7 ),
 	( null, 7, '08:00:00', '13:00:00', 7 ),
-	( null, 8, '09:00:00', '14:00:00', 7 ) 	
+	( null, 8, '09:00:00', '14:00:00', 7 ),
+	( null, 11, '08:00:00', '12:00:00', 1 ),
+	( null, 11, '08:00:00', '12:00:00', 3 ),
+	( null, 11, '08:00:00', '12:00:00', 5 ),
+	( null, 12, '12:00:00', '18:00:00', 5 ),
+	( null, 12, '12:00:00', '18:00:00', 6 ),
+	( null, 12, '12:00:00', '18:00:00', 7 );
 ;
 /**
 *
@@ -142,7 +150,11 @@ INSERT INTO medicosObrasSociales VALUES
 	( null, 9, 1 ),
 	( null, 9, 2 ),
 	( null, 10, 1 ),
-	( null, 10, 2 )
+	( null, 10, 2 ),
+	( null, 11, 1 ),
+	( null, 11, 2 ),
+	( null, 12, 1 ),
+	( null, 12, 2 );
 ;
 /**
 *

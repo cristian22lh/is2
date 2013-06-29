@@ -142,9 +142,6 @@
 			width: 145px;
 			text-align: center;
 		}
-		.is2-modal-details-tabs .nav a:first-letter {
-			font-weight: 600;
-		}
 		.nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
 			color: #555;
 			text-shadow: none;
@@ -263,6 +260,9 @@
 		}
 		.is2-doctor-appointments-grid td:last-child {
 			width: 110px;
+		}
+		.is2-doctor-appointments-grid table td span {
+			margin: 0 0 0 5px;
 		}
 		
 		#is2-doctor-licenses {
