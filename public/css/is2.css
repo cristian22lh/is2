@@ -232,6 +232,14 @@ textarea {
 	box-shadow: none;
 }
 
+.is2-export {
+    border-radius: 0 0 5px 5px;
+    padding: 5px;
+}
+.is2-export a {
+    margin: 0 10px 0 0;
+    vertical-align: middle;
+}
 .is2-icon {
 	width: 24px;
 	height: 24px;

@@ -85,15 +85,6 @@
 			display: inline-block;
 			margin: 0 5px 0 0;
 		}
-		
-		.is2-appointments-export {
-			border-radius: 0 0 5px 5px;
-			padding: 5px;
-		}
-		.is2-appointments-export a {
-			margin: 0 10px 0 0;
-			vertical-align: middle;
-		}
 	</style>
 
 <?php t_endHead(); ?>
@@ -342,7 +333,7 @@
 				</table>
 			</div>
 			
-			<div class="is2-appointments-export btn-inverse clearfix">
+			<div class="is2-export btn-inverse clearfix">
 				<div class="pull-right">
 					<a class="is2-icon is2-icon-print" href="/turnos/exportar/imprimir?<?php echo $listingData; ?>" title="Ver listado en formato imprimible" target="_blank"></a>
 					<?php if( __AmI( 5.3 ) ): ?>

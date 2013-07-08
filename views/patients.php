@@ -354,6 +354,16 @@
 				<?php endforeach; ?>
 				</table>
 			</div>
+
+			<div class="is2-export btn-inverse clearfix">
+				<div class="pull-right">
+					<a class="is2-icon is2-icon-print" href="/pacientes/exportar/imprimir?<?php echo $listingData; ?>" title="Ver listado en formato imprimible" target="_blank"></a>
+					<?php if( __AmI( 5.3 ) ): ?>
+					<a class="is2-icon is2-icon-excel" href="/pacientes/exportar/excel?<?php echo $listingData; ?>" title="Descargar listado en un archivo excel" target="_blank"></a>
+					<?php endif; ?>
+					<a class="is2-icon is2-icon-pdf" href="/pacientes/exportar/pdf?<?php echo $listingData; ?>" title="Descargar listado en un archivo pdf" target="_blank"></a>
+				</div>
+			</div>
 			
 				<?php if( $isSingle ): ?>
 			<div class="is2-popover">

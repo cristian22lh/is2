@@ -197,7 +197,7 @@
 CASO CONTRARIO LISTO LOS APELLIDO QUE EMPIECEN CON 'A' */
 	} else {
 		$letter = Router::seg( 3 ) ?: 'A';
-		$whereClause[] = ' p.apellidos LIKE ?';
+		$whereClause[] = ' p.apellidos LIKE ? ';
 		$replacements[] = $letter . '%';
 	}
 /* }}} */
@@ -279,7 +279,8 @@ CASO CONTRARIO LISTO LOS APELLIDO QUE EMPIECEN CON 'A' */
 			'quickSearchValue' => $quickSearchValue,
 			'orderByLastName' => $orderByLastName,
 			'orderByFirstName' => $orderByFirstName,
-			'orderByBirthDate' => $orderByBirthDate
+			'orderByBirthDate' => $orderByBirthDate,
+			'listingData' => 'campos=' . base64_encode( implode( '|', $whereClause ) ) . '&valores='  . base64_encode( implode( '|', $replacements ) )
 		)
 	);
 /* }}} */

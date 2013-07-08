@@ -72,6 +72,9 @@
 		'/pacientes/listar-por-letra/:char' => 'patients',
 		'/pacientes/:id' => 'patients.details',
 		'/pacientes/buscar-para-turno' => 'patients.search.for.appointment',
+		'/pacientes/exportar/excel' => 'patients.export.excel',
+		'/pacientes/exportar/imprimir' => 'patients.export.print',
+		'/pacientes/exportar/pdf' =>  'patients.export.pdf',
 
 // *** ESPECIALIDADES *** //
 		'/especialidades' => 'specialities',
